@@ -1,0 +1,21 @@
+rootProject.name = 'imdang'
+include("common")
+include("common:common-domain")
+
+include("insight-service")
+include("insight-service:insight-application")
+include("insight-service:insight-domain")
+include("insight-service:insight-domain:insight-application-service")
+include("insight-service:insight-domain:insight-domain-core")
+
+include("member-service")
+include("member-service:member-application")
+include("member-service:member-domain")
+include("member-service:member-domain:member-application-service")
+include("member-service:member-domain:member-domain-core")
+
+include("setting-service")
+include("setting-service:setting-application")
+include("setting-service:setting-domain")
+include("setting-service:setting-domain:setting-application-service")
+include("setting-service:setting-domain:setting-domain-core")
