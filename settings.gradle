@@ -1,8 +1,11 @@
 rootProject.name = 'imdang'
 include("common")
+include("common:common-application")
 include("common:common-domain")
 
 include("insight-service")
+include("insight-service:insight-messaging")
+include("insight-service:insight-persistence")
 include("insight-service:insight-application")
 include("insight-service:insight-domain")
 include("insight-service:insight-domain:insight-application-service")
