@@ -16,7 +16,7 @@ jar {
 }
 
 subprojects {
-    group = 'com.project'
+    group = 'com.project.imdang'
     version = '0.0.1-SNAPSHOT'
 
     apply plugin: 'java'
@@ -57,6 +57,13 @@ subprojects {
     }
 }
 
+project(':common:common-application') {
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+    }
+}
+
 project(':insight-service:insight-domain:insight-domain-core') {
     dependencies {
         implementation project(':common:common-domain')
@@ -67,13 +74,35 @@ project(':insight-service:insight-domain:insight-application-service') {
     dependencies {
         implementation project(':insight-service:insight-domain:insight-domain-core')
         implementation project(':common:common-domain')
+
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+        implementation 'org.springframework:spring-tx'
     }
 }
 
 project(':insight-service:insight-application') {
     dependencies {
-        implementation project(':insight-service:insight-domain')
+        implementation project(':insight-service:insight-domain:insight-application-service')
+        // TODO - CHECK
+        implementation project(':insight-service:insight-domain:insight-domain-core')
+        implementation project(':common:common-application')
+        implementation project(':common:common-domain')
+
         implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+    }
+}
+
+project(':insight-service:insight-persistence') {
+    dependencies {
+        implementation project(':insight-service:insight-domain:insight-application-service')
+        implementation project(':insight-service:insight-domain:insight-domain-core')
+//        implementation project(':common:common-application')
+        implementation project(':common:common-domain')
+
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+        runtimeOnly 'com.mysql:mysql-connector-j'
     }
 }
 
