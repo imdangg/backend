@@ -119,6 +119,13 @@ project(':member-service:member-domain:member-application-service') {
     }
 }
 
+project(':member-service:member-application') {
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+    }
+}
+
 project(':setting-service:setting-domain:setting-domain-core') {
     dependencies {
         implementation project(':common:common-domain')
