@@ -7,7 +7,7 @@ import com.project.imdang.insight.service.persistence.insight.entity.ExchangeReq
 import org.springframework.stereotype.Component;
 
 @Component
-public class ExchangePersistenceMapper {
+public class ExchangeRequestPersistenceMapper {
 
     public ExchangeRequestEntity exchangeToExchangeEntity(ExchangeRequest exchangeRequest) {
         return ExchangeRequestEntity.builder()
