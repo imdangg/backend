@@ -64,6 +64,12 @@ project(':common:common-application') {
     }
 }
 
+project(':infrastructure:saga') {
+    dependencies {
+        implementation project(':common:common-domain')
+    }
+}
+
 project(':insight-service:insight-domain:insight-domain-core') {
     dependencies {
         implementation project(':common:common-domain')

@@ -1,14 +1,14 @@
 package com.project.imdang.insight.service.domain;
 
-import com.project.imdang.insight.service.domain.dto.AcceptExchangeRequestCommand;
-import com.project.imdang.insight.service.domain.dto.AcceptExchangeRequestResponse;
-import com.project.imdang.insight.service.domain.dto.RejectExchangeRequestCommand;
-import com.project.imdang.insight.service.domain.dto.RejectExchangeRequestResponse;
-import com.project.imdang.insight.service.domain.dto.RequestExchangeInsightCommand;
-import com.project.imdang.insight.service.domain.dto.RequestExchangeInsightResponse;
-import com.project.imdang.insight.service.domain.handler.AcceptExchangeRequestCommandHandler;
-import com.project.imdang.insight.service.domain.handler.RejectExchangeRequestCommandHandler;
-import com.project.imdang.insight.service.domain.handler.RequestExchangeInsightCommandHandler;
+import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExchangeRequestCommand;
+import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExchangeRequestResponse;
+import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestCommand;
+import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestResponse;
+import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightCommand;
+import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightResponse;
+import com.project.imdang.insight.service.domain.handler.exchange.AcceptExchangeRequestCommandHandler;
+import com.project.imdang.insight.service.domain.handler.exchange.RejectExchangeRequestCommandHandler;
+import com.project.imdang.insight.service.domain.handler.exchange.RequestExchangeInsightCommandHandler;
 import com.project.imdang.insight.service.domain.ports.input.service.ExchangeApplicationService;
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +18,16 @@ public class ExchangeApplicationServiceImpl implements ExchangeApplicationServic
     private final RequestExchangeInsightCommandHandler requestExchangeInsightCommandHandler;
     private final AcceptExchangeRequestCommandHandler acceptExchangeRequestCommandHandler;
     private final RejectExchangeRequestCommandHandler rejectExchangeRequestCommandHandler;
+
+    @Override
+    public void listExchangeRequestCreatedByMe() {
+
+    }
+
+    @Override
+    public void listExchangeRequestCreatedByOthers() {
+
+    }
 
     @Override
     public RequestExchangeInsightResponse requestExchangeInsight(RequestExchangeInsightCommand requestExchangeInsightCommand) {

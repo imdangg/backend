@@ -1,4 +1,8 @@
 rootProject.name = 'imdang'
+
+include("infrastructure")
+include("infrastructure:saga")
+
 include("common")
 include("common:common-application")
 include("common:common-domain")
