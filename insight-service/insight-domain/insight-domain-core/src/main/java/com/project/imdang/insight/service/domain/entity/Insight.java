@@ -57,6 +57,9 @@ public class Insight extends AggregateRoot<InsightId> {
     private int accusedCount;
     private int recommendedCount;
     private ZonedDateTime createdAt;
+    
+    // 완성도
+    private int score;
 
     private Insight(MemberId memberId,
                     Address address, ApartmentComplex apartmentComplex,
@@ -85,6 +88,7 @@ public class Insight extends AggregateRoot<InsightId> {
         this.recommendedCount = 0;
         this.version = 1;
         this.createdAt = ZonedDateTime.now();
+        this.score = 0;
     }
 
     // TODO - 동시성 체크
