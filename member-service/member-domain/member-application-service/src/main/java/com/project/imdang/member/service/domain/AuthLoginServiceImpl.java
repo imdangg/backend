@@ -7,14 +7,14 @@ import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginResponse;
 import com.project.imdang.member.service.domain.entity.Member;
 import com.project.imdang.member.service.domain.handler.OAuthLoginParamsCommandHandler;
 import com.project.imdang.member.service.domain.handler.TokenRequestHandler;
-import com.project.imdang.member.service.domain.port.input.service.OAuthLoginService;
+import com.project.imdang.member.service.domain.port.input.service.AuthLoginService;
 import com.project.imdang.member.service.domain.port.output.repository.MemberRespository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-public class OAuthLoginServiceImpl implements OAuthLoginService {
+public class AuthLoginServiceImpl implements AuthLoginService {
 
     private final OAuthLoginParamsCommandHandler oAuthLoginParamsCommandHandler;
     private final TokenRequestHandler tokenRequestHandler;

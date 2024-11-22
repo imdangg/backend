@@ -6,7 +6,7 @@ import com.project.imdang.member.service.domain.dto.oauth.apple.AppleLoginParams
 import com.project.imdang.member.service.domain.dto.oauth.google.GoogleLoginParamsCommand;
 import com.project.imdang.member.service.domain.dto.oauth.kakao.KakaoLoginParamsCommand;
 import com.project.imdang.member.service.domain.port.input.service.JoinService;
-import com.project.imdang.member.service.domain.port.input.service.OAuthLoginService;
+import com.project.imdang.member.service.domain.port.input.service.AuthLoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
-public class OAuthContoller {
+public class AuthContoller {
 
-    private final OAuthLoginService oAuthLoginService;
+    private final AuthLoginService authLoginService;
     private final JoinService joinService;
 
     /**
@@ -24,7 +24,7 @@ public class OAuthContoller {
      */
     @PostMapping("/kakao")
     public ResponseEntity<?> login(@RequestBody KakaoLoginParamsCommand kakaoLoginCommand) {
-        LoginResponse response = oAuthLoginService.login(kakaoLoginCommand);
+        LoginResponse response = authLoginService.login(kakaoLoginCommand);
         return ResponseEntity.ok(response);
     }
 
@@ -33,7 +33,7 @@ public class OAuthContoller {
      */
     @PostMapping("/apple")
     public ResponseEntity<?> login(@RequestBody AppleLoginParamsCommand appleLoginCommand) {
-        LoginResponse response = oAuthLoginService.login(appleLoginCommand);
+        LoginResponse response = authLoginService.login(appleLoginCommand);
         return ResponseEntity.ok(response);
     }
 
@@ -42,7 +42,7 @@ public class OAuthContoller {
      */
     @PostMapping("/google")
     public ResponseEntity<?> login(@RequestBody GoogleLoginParamsCommand googleLoginCommand) {
-        LoginResponse response = oAuthLoginService.login(googleLoginCommand);
+        LoginResponse response = authLoginService.login(googleLoginCommand);
         return ResponseEntity.ok(response);
     }
 
