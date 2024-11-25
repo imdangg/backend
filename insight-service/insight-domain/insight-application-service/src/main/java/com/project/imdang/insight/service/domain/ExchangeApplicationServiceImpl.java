@@ -4,6 +4,7 @@ import com.project.imdang.domain.valueobject.ExchangeRequestId;
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExchangeRequestCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExchangeRequestResponse;
+import com.project.imdang.insight.service.domain.dto.exchange.list.ListExchangeRequestResponse;
 import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestResponse;
 import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightCommand;
@@ -15,6 +16,9 @@ import com.project.imdang.insight.service.domain.handler.exchange.RequestExchang
 import com.project.imdang.insight.service.domain.ports.input.service.ExchangeApplicationService;
 import com.project.imdang.insight.service.domain.ports.output.repository.ExchangeRequestRepository;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 public class ExchangeApplicationServiceImpl implements ExchangeApplicationService {
@@ -48,7 +52,6 @@ public class ExchangeApplicationServiceImpl implements ExchangeApplicationServic
 
     @Override
     public RejectExchangeRequestResponse rejectExchangeRequest(RejectExchangeRequestCommand rejectExchangeRequestCommand) {
-        return rejectExchangeRequestCommandHandler.rejectExchangeRequest(rejectExchangeRequestCommand);
         // 1. 받아온 교환요청ID로 도메인 찾기
         ExchangeRequestId requestId = rejectExchangeCommandHandler.getExchangeRequestId(rejectExchangeRequestCommand);
         ExchangeRequest exchangeRequest = exchangeRequestRepository.findExchangeRequest(requestId);
@@ -58,5 +61,33 @@ public class ExchangeApplicationServiceImpl implements ExchangeApplicationServic
         exchangeRequestRepository.save(acceptedExchangeRequest);
         return new RejectExchangeRequestResponse(acceptedExchangeRequest.getStatus().name());
     }
+
+    @Override
+    public ListExchangeRequestResponse listExchangeRequestCreatedByMe(String memberId) {
+        // 1. 유저ID를 통해 ExchangeReqeust 목록 조회
+        List<ExchangeRequest> exchangeRequestList = exchangeRequestRepository.findAllByMe(new MemberId(UUID.fromString(memberId)));
+
+        // 2. 교환에 해당하는 인사이트 정보 추출
+        // TODO : 연경님이 만드신 상세 기능 활용 예정
+        // List<Insight> insightList = ... //
+
+        // 3. 반환
+        // return new ListExchangeRequestResponse();
+        return null;
+    }
+
+    @Override
+    public ListExchangeRequestResponse listExchangeRequestCreatedByOthers(String memberId) {
+
+        // 1. 유저ID를 통해 ExchangeReqeust 목록 조회
+        List<ExchangeRequest> exchangeRequestList = exchangeRequestRepository.findAllByOther(new MemberId(UUID.fromString(memberId)));
+
+        // 2. 교환에 해당하는 인사이트 정보 추출
+        // TODO : 연경님이 만드신 상세 활용 예정
+        // List<Insight> insightList = ... //
+
+        // 3. 반환
+        // return new ListExchangeRequestResponse();
+        return null;
     }
 }
