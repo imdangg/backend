@@ -12,4 +12,5 @@ public interface ExchangeRequestRepository {
 
 //    Optional<ExchangeRequest> findById(ExchangeRequestId exchangeRequestId);
 //    List<ExchangeRequest> findAll();
+    ExchangeRequest findExchangeRequest(ExchangeRequestId requestId);
 }

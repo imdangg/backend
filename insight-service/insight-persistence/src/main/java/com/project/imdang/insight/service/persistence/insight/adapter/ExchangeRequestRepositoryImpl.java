@@ -30,4 +30,12 @@ public class ExchangeRequestRepositoryImpl implements ExchangeRequestRepository 
     public void deleteById(ExchangeRequestId exchangeRequestId) {
         exchangeRequestJpaRepository.deleteById(exchangeRequestId.getValue());
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public ExchangeRequest findExchangeRequest(ExchangeRequestId requestId) {
+        ExchangeRequestEntity findExchangeRequest = exchangeRequestJpaRepository.findById(requestId.getValue())
+                .orElseThrow(() -> new NoSuchElementException("일치하는 교환요청이 존재하지 않습니다."));
+        return exchangeRequestPersistenceMapper.exchangeEntityToExchange(findExchangeRequest);
+    }
 }
