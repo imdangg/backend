@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 @Getter
 public class ExchangeRequest extends BaseEntity<ExchangeRequestId> {
@@ -32,7 +33,8 @@ public class ExchangeRequest extends BaseEntity<ExchangeRequestId> {
         this.status = status;
     }
 
-    private ExchangeRequest(MemberId requestMemberId, InsightId requestMemberInsightId, InsightId requestedInsightId) {
+    public ExchangeRequest(MemberId requestMemberId, InsightId requestMemberInsightId, InsightId requestedInsightId) {
+        setId(new ExchangeRequestId(UUID.randomUUID()));
         this.requestMemberId = requestMemberId;
         this.requestMemberInsightId = requestMemberInsightId;
         this.requestedInsightId = requestedInsightId;
