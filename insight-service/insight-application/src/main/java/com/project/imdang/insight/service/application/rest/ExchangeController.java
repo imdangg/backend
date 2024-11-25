@@ -24,15 +24,20 @@ public class ExchangeController {
     private final ExchangeApplicationService exchangeApplicationService;
 
     @PostMapping
+    /**
+     * 인사이트 교환 요청
+     */
     public ResponseEntity<RequestExchangeInsightResponse> request(@RequestBody RequestExchangeInsightCommand requestExchangeInsightCommand) {
         log.info("InsightId {} is requested to exchange with insightId {}", requestExchangeInsightCommand.getRequestedInsightId(), requestExchangeInsightCommand.getRequestMemberInsightId());
         RequestExchangeInsightResponse requestExchangeInsightResponse = exchangeApplicationService.requestExchangeInsight(requestExchangeInsightCommand);
-        // TODO : exchange vs exchangeRequest
         log.info("Exchange is created with id : {}", requestExchangeInsightResponse.getExchangeId());
         return ResponseEntity.ok(requestExchangeInsightResponse);
     }
 
     @PostMapping
+    /**
+     * 인사이트 요청 수락
+     */
     public ResponseEntity<AcceptExchangeRequestResponse> accept(@RequestBody AcceptExchangeRequestCommand acceptExchangeRequestCommand) {
         AcceptExchangeRequestResponse acceptExchangeRequestResponse = exchangeApplicationService.acceptExchangeRequest(acceptExchangeRequestCommand);
         log.info("ExchangeId {} is accepted", acceptExchangeRequestCommand.getExchangeId());
@@ -40,6 +45,9 @@ public class ExchangeController {
     }
 
     @PostMapping
+    /**
+     * 인사이트 요청 거절
+     */
     public ResponseEntity<RejectExchangeRequestResponse> reject(@RequestBody RejectExchangeRequestCommand rejectExchangeRequestCommand) {
         RejectExchangeRequestResponse rejectExchangeRequestResponse = exchangeApplicationService.rejectExchangeRequest(rejectExchangeRequestCommand);
         log.info("ExchangeId {} is rejected", rejectExchangeRequestCommand.getExchangeId());
