@@ -10,10 +10,7 @@ import com.project.imdang.insight.service.domain.ports.input.service.ExchangeApp
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RequestMapping("/exchanges")
@@ -23,10 +20,10 @@ public class ExchangeController {
 
     private final ExchangeApplicationService exchangeApplicationService;
 
-    @PostMapping
     /**
      * 인사이트 교환 요청
      */
+    @PostMapping("/request")
     public ResponseEntity<RequestExchangeInsightResponse> request(@RequestBody RequestExchangeInsightCommand requestExchangeInsightCommand) {
         log.info("InsightId {} is requested to exchange with insightId {}", requestExchangeInsightCommand.getRequestedInsightId(), requestExchangeInsightCommand.getRequestMemberInsightId());
         RequestExchangeInsightResponse requestExchangeInsightResponse = exchangeApplicationService.requestExchangeInsight(requestExchangeInsightCommand);
@@ -34,20 +31,20 @@ public class ExchangeController {
         return ResponseEntity.ok(requestExchangeInsightResponse);
     }
 
-    @PostMapping
     /**
      * 인사이트 요청 수락
      */
+    @PostMapping("/accept")
     public ResponseEntity<AcceptExchangeRequestResponse> accept(@RequestBody AcceptExchangeRequestCommand acceptExchangeRequestCommand) {
         AcceptExchangeRequestResponse acceptExchangeRequestResponse = exchangeApplicationService.acceptExchangeRequest(acceptExchangeRequestCommand);
         log.info("ExchangeId {} is accepted", acceptExchangeRequestCommand.getExchangeId());
         return ResponseEntity.ok(acceptExchangeRequestResponse);
     }
 
-    @PostMapping
     /**
      * 인사이트 요청 거절
      */
+    @PostMapping("/reject")
     public ResponseEntity<RejectExchangeRequestResponse> reject(@RequestBody RejectExchangeRequestCommand rejectExchangeRequestCommand) {
         RejectExchangeRequestResponse rejectExchangeRequestResponse = exchangeApplicationService.rejectExchangeRequest(rejectExchangeRequestCommand);
         log.info("ExchangeId {} is rejected", rejectExchangeRequestCommand.getExchangeId());
