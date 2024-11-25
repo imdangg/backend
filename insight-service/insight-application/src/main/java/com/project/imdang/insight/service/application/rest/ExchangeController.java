@@ -2,6 +2,7 @@ package com.project.imdang.insight.service.application.rest;
 
 import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExchangeRequestCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExchangeRequestResponse;
+import com.project.imdang.insight.service.domain.dto.exchange.list.ListExchangeRequestResponse;
 import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestResponse;
 import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightCommand;
@@ -49,5 +50,27 @@ public class ExchangeController {
         RejectExchangeRequestResponse rejectExchangeRequestResponse = exchangeApplicationService.rejectExchangeRequest(rejectExchangeRequestCommand);
         log.info("ExchangeId {} is rejected", rejectExchangeRequestCommand.getExchangeId());
         return ResponseEntity.ok(rejectExchangeRequestResponse);
+    }
+
+    /**
+     * 내가 교환 요청한 인사이트 목록
+     * String memberId 매개변수 -> Spring Security 적용 이후 변경 예정
+     */
+    @GetMapping("/list/me")
+    public ResponseEntity<?> listRequestedByMe(String memberId) {
+        ListExchangeRequestResponse listExchangeRequestResponse = exchangeApplicationService.listExchangeRequestCreatedByMe(memberId);
+        log.info("{} 가 교환 요청한 목록이 조회되었습니다.", memberId);
+        return ResponseEntity.ok(listExchangeRequestResponse);
+    }
+
+    /**
+     * 다른 사람이 나에게 요청한 인사이트 목록
+     * String memberId 매개변수 -> Spring Security 적용 이후 변경 예정
+     */
+    @GetMapping("/list/other")
+    public ResponseEntity<?> listRequestedByOther(String memberId) {
+        ListExchangeRequestResponse listExchangeRequestResponse = exchangeApplicationService.listExchangeRequestCreatedByOthers(memberId);
+        log.info("{} 에게 교환 요청한 목록이 조회되었습니다.", memberId);
+        return ResponseEntity.ok(listExchangeRequestResponse);
     }
 }
