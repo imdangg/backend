@@ -2,13 +2,12 @@ package com.project.imdang.insight.service.domain.dto.exchange.request;
 
 import lombok.Getter;
 
-import java.util.UUID;
-
 @Getter
 public class RequestExchangeInsightResponse {
-    private final UUID exchangeId;
+    //교환 ID
+    private final String exchangeId;
 
-    public RequestExchangeInsightResponse(UUID exchangeId) {
+    public RequestExchangeInsightResponse(String exchangeId) {
         this.exchangeId = exchangeId;
     }
 }
