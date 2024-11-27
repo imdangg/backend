@@ -1,5 +1,5 @@
 package com.project.imdang.insight.service.domain.valueobject;
 
-public enum CouponStatus {
-    USED, UNUSED;
+public enum RequestStatus {
+    PENDING, REJECTED, ACCEPTED
 }

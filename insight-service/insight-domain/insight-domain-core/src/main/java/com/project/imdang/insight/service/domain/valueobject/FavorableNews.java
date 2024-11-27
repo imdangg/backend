@@ -1,23 +1,27 @@
 package com.project.imdang.insight.service.domain.valueobject;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.util.Set;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FavorableNews {
 
     // 교통
-    private final Opinion<Set<Transportation>> transportation;
+    private Opinion<Set<Transportation>> transportation;
     // 개발
-    private final Opinion<Set<Development>> development;
+    private Opinion<Set<Development>> development;
     // 교육
-    private final Opinion<Set<Education>> education;
+    private Opinion<Set<Education>> education;
     // 자연환경
-    private final Opinion<Set<Environment>> environment;
+    private Opinion<Set<Environment>> environment;
     // 문화
-    private final Opinion<Set<Culture>> culture;
+    private Opinion<Set<Culture>> culture;
     // 산업
-    private final Opinion<Set<Industry>> industry;
+    private Opinion<Set<Industry>> industry;
     // 정책
-    private final Opinion<Set<Policy>> policy;
+    private Opinion<Set<Policy>> policy;
 
     public FavorableNews(Opinion<Set<Transportation>> transportation, Opinion<Set<Development>> development, Opinion<Set<Education>> education, Opinion<Set<Environment>> environment, Opinion<Set<Culture>> culture, Opinion<Set<Industry>> industry, Opinion<Set<Policy>> policy) {
         this.transportation = transportation;

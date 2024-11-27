@@ -1,23 +1,27 @@
 package com.project.imdang.insight.service.domain.valueobject;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.util.Set;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Infra {
 
     // 교통
-    private final Opinion<Set<Transportation>> transportation;
+    private Opinion<Set<Transportation>> transportation;
     // 학군
-    private final Opinion<Set<SchoolDistrict>> schoolDistrict;
+    private Opinion<Set<SchoolDistrict>> schoolDistrict;
     // 생활 편의시설
-    private final Opinion<Set<Amenity>> amenity;
+    private Opinion<Set<Amenity>> amenity;
     // 문화 및 여가시설(단지 외부)
-    private final Opinion<Set<Facility>> facility;
+    private Opinion<Set<Facility>> facility;
     // 주변 환경
-    private final Opinion<Set<Surroundings>> surroundings;
+    private Opinion<Set<Surroundings>> surroundings;
     // 랜드마크
-    private final Opinion<Set<Landmark>> landmark;
+    private Opinion<Set<Landmark>> landmark;
     // 기피시설
-    private final Opinion<Set<UnpleasantFacility>> unpleasantFacility;
+    private Opinion<Set<UnpleasantFacility>> unpleasantFacility;
 
     public Infra(Opinion<Set<Transportation>> transportation, Opinion<Set<SchoolDistrict>> schoolDistrict, Opinion<Set<Amenity>> amenity, Opinion<Set<Facility>> facility, Opinion<Set<Surroundings>> surroundings, Opinion<Set<Landmark>> landmark, Opinion<Set<UnpleasantFacility>> unpleasantFacility) {
         this.transportation = transportation;

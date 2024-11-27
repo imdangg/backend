@@ -1,4 +1,4 @@
-package com.project.imdang.insight.service.domain.entity;
+package com.project.imdang.member.service.domain.entity;
 
 
 import com.project.imdang.domain.valueobject.CouponId;
