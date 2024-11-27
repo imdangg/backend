@@ -8,6 +8,7 @@ include("common:common-application")
 include("common:common-domain")
 
 include("insight-service")
+include("insight-service:insight-container")
 include("insight-service:insight-messaging")
 include("insight-service:insight-persistence")
 include("insight-service:insight-application")

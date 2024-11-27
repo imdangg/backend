@@ -2,19 +2,21 @@ package com.project.imdang.insight.service.domain.dto.exchange.request;
 
 import lombok.Getter;
 
+import java.util.UUID;
+
 @Getter
 public class RequestExchangeInsightCommand {
 
     // TODO - CHECK : originalId?
-    private final String requestedInsightId;
+    private final UUID requestedInsightId;
 
     // requestedBy
-    private final String requestMemberId;
+    private final UUID requestMemberId;
 
     // 내가 작성한 인사이트
-    private final String requestMemberInsightId;
+    private final UUID requestMemberInsightId;
 
-    public RequestExchangeInsightCommand(String requestedInsightId, String requestMemberId, String requestMemberInsightId) {
+    public RequestExchangeInsightCommand(UUID requestedInsightId, UUID requestMemberId, UUID requestMemberInsightId) {
         this.requestedInsightId = requestedInsightId;
         this.requestMemberId = requestMemberId;
         this.requestMemberInsightId = requestMemberInsightId;

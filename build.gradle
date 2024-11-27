@@ -43,6 +43,7 @@ subprojects {
 //        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 //        implementation 'org.springframework.boot:spring-boot-starter-security'
 //        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-logging'
         compileOnly 'org.projectlombok:lombok'
 //        developmentOnly 'org.springframework.boot:spring-boot-devtools'
 //        runtimeOnly 'com.mysql:mysql-connector-j'
@@ -109,6 +110,22 @@ project(':insight-service:insight-persistence') {
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         implementation 'org.springframework.boot:spring-boot-starter-jdbc'
         runtimeOnly 'com.mysql:mysql-connector-j'
+
+        implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
+    }
+}
+
+project(':insight-service:insight-container') {
+    dependencies {
+        implementation project(':insight-service:insight-application')
+        implementation project(':insight-service:insight-persistence')
+        implementation project(':insight-service:insight-domain:insight-application-service')
+        implementation project(':insight-service:insight-domain:insight-domain-core')
+//        implementation project(':common:common-application')
+        implementation project(':common:common-domain')
+
+        implementation 'org.springframework.boot:spring-boot-starter'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     }
 }
 

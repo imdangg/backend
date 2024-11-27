@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 public class ExchangeController {
-
+/*
     private final ExchangeApplicationService exchangeApplicationService;
 
     @PostMapping
@@ -44,5 +44,5 @@ public class ExchangeController {
         RejectExchangeRequestResponse rejectExchangeRequestResponse = exchangeApplicationService.rejectExchangeRequest(rejectExchangeRequestCommand);
         log.info("ExchangeId {} is rejected", rejectExchangeRequestCommand.getExchangeId());
         return ResponseEntity.ok(rejectExchangeRequestResponse);
-    }
+    }*/
 }

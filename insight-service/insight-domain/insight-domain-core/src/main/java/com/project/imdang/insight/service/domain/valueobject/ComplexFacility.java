@@ -1,16 +1,20 @@
 package com.project.imdang.insight.service.domain.valueobject;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.util.Set;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ComplexFacility {
     // 가족
-    private final Opinion<Set<Family>> family;
+    private Opinion<Set<Family>> family;
     // 다목적
-    private final Opinion<Set<Multipurpose>> multipurpose;
+    private Opinion<Set<Multipurpose>> multipurpose;
     // 여가(단지 내부)
-    private final Opinion<Set<Leisure>> leisure;
+    private Opinion<Set<Leisure>> leisure;
     // 환경
-    private final Opinion<Surroundings> surroundings;
+    private Opinion<Surroundings> surroundings;
 
     public ComplexFacility(Opinion<Set<Family>> family, Opinion<Set<Multipurpose>> multipurpose, Opinion<Set<Leisure>> leisure, Opinion<Surroundings> surroundings) {
         this.family = family;

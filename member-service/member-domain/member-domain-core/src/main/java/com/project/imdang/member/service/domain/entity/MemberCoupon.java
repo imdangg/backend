@@ -1,9 +1,9 @@
-package com.project.imdang.insight.service.domain.entity;
+package com.project.imdang.member.service.domain.entity;
 
 
 import com.project.imdang.domain.valueobject.CouponId;
+import com.project.imdang.domain.valueobject.MemberCouponId;
 import com.project.imdang.domain.valueobject.MemberId;
-import com.project.imdang.insight.service.domain.valueobject.MemberCouponId;
 
 import java.time.ZonedDateTime;
 
