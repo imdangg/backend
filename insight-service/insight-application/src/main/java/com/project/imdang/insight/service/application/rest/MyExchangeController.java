@@ -3,7 +3,6 @@ package com.project.imdang.insight.service.application.rest;
 import com.project.imdang.insight.service.domain.dto.exchange.list.ListExchangeRequestResponse;
 import com.project.imdang.insight.service.domain.dto.exchange.list.ListExchangeRequestedByMeQuery;
 import com.project.imdang.insight.service.domain.dto.exchange.list.ListExchangeRequestedByOthersQuery;
-import com.project.imdang.insight.service.domain.dto.exchange.list.ListExchangeResponse;
 import com.project.imdang.insight.service.domain.ports.input.service.ExchangeApplicationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
