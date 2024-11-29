@@ -6,7 +6,7 @@ import com.project.imdang.member.service.domain.dto.oauth.apple.AppleLoginParams
 import com.project.imdang.member.service.domain.dto.oauth.google.GoogleLoginParamsCommand;
 import com.project.imdang.member.service.domain.dto.oauth.kakao.KakaoLoginParamsCommand;
 import com.project.imdang.member.service.domain.port.input.service.JoinService;
-import com.project.imdang.member.service.domain.port.input.service.AuthLoginService;
+import com.project.imdang.member.service.domain.port.input.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
-public class AuthContoller {
+public class MemberContoller {
 
-    private final AuthLoginService authLoginService;
+
+    private final MemberService memberService;
     private final JoinService joinService;
 
     /**
@@ -24,7 +25,7 @@ public class AuthContoller {
      */
     @PostMapping("/kakao")
     public ResponseEntity<?> login(@RequestBody KakaoLoginParamsCommand kakaoLoginCommand) {
-        LoginResponse response = authLoginService.login(kakaoLoginCommand);
+        LoginResponse response = memberService.login(kakaoLoginCommand);
         return ResponseEntity.ok(response);
     }
 
@@ -33,7 +34,7 @@ public class AuthContoller {
      */
     @PostMapping("/apple")
     public ResponseEntity<?> login(@RequestBody AppleLoginParamsCommand appleLoginCommand) {
-        LoginResponse response = authLoginService.login(appleLoginCommand);
+        LoginResponse response = memberService.login(appleLoginCommand);
         return ResponseEntity.ok(response);
     }
 
@@ -42,7 +43,7 @@ public class AuthContoller {
      */
     @PostMapping("/google")
     public ResponseEntity<?> login(@RequestBody GoogleLoginParamsCommand googleLoginCommand) {
-        LoginResponse response = authLoginService.login(googleLoginCommand);
+        LoginResponse response = memberService.login(googleLoginCommand);
         return ResponseEntity.ok(response);
     }
 
