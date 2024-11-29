@@ -3,7 +3,7 @@ package com.project.imdang.member.service.domain.handler;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginParamsCommand;
+import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginCommand;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginResponse;
 import com.project.imdang.member.service.domain.dto.oauth.apple.AppleLoginResponse;
 import com.project.imdang.member.service.domain.dto.oauth.apple.AppleTokenResponse;
@@ -59,7 +59,7 @@ public class AppleApiClientHandler implements OAuthApiClientHandler {
      * 엑세스 토큰과 리프레쉬토큰 얻어오기
      */
     @Override
-    public String getAccessToken(OAuthLoginParamsCommand loginCommand) {
+    public String getAccessToken(OAuthLoginCommand loginCommand) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 

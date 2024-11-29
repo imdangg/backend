@@ -1,7 +1,7 @@
 package com.project.imdang.member.service.domain.handler;
 
 import com.project.imdang.member.service.domain.dto.oauth.kakao.KakaoLoginResponse;
-import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginParamsCommand;
+import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginCommand;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginResponse;
 import com.project.imdang.member.service.domain.dto.oauth.kakao.KakaoTokenResponse;
 import com.project.imdang.member.service.domain.valueobject.OAuthType;
@@ -36,7 +36,7 @@ public class KaKaoApiClientHandler implements OAuthApiClientHandler{
     }
 
     @Override
-    public String getAccessToken(OAuthLoginParamsCommand loginCommand) {
+    public String getAccessToken(OAuthLoginCommand loginCommand) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 

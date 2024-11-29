@@ -1,6 +1,6 @@
 package com.project.imdang.member.service.domain.handler;
 
-import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginParamsCommand;
+import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginCommand;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginResponse;
 import com.project.imdang.member.service.domain.dto.oauth.google.GoogleLoginResponse;
 import com.project.imdang.member.service.domain.dto.oauth.google.GoogleTokenResponse;
@@ -43,7 +43,7 @@ public class GoogleApiClientHandler implements OAuthApiClientHandler {
     }
 
     @Override
-    public String getAccessToken(OAuthLoginParamsCommand loginCommand) {
+    public String getAccessToken(OAuthLoginCommand loginCommand) {
         //TODO : code 인코딩 가능성 존재
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);

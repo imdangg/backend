@@ -1,11 +1,11 @@
 package com.project.imdang.member.service.domain.dto.oauth.kakao;
 
-import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginParamsCommand;
+import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginCommand;
 import com.project.imdang.member.service.domain.valueobject.OAuthType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-public class KakaoLoginParamsCommand implements OAuthLoginParamsCommand {
+public class KakaoLoginCommand implements OAuthLoginCommand {
     private String authorizationCode;
     @Override
     public OAuthType oAuthType() {

@@ -1,11 +1,11 @@
 package com.project.imdang.member.service.domain.dto.oauth.google;
 
-import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginParamsCommand;
+import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginCommand;
 import com.project.imdang.member.service.domain.valueobject.OAuthType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-public class GoogleLoginParamsCommand implements OAuthLoginParamsCommand {
+public class GoogleLoginCommand implements OAuthLoginCommand {
     private String authorizationCode;
 
     @Override
