@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 public class MemberContoller {
 
     private final MemberService memberService;
-    private final JoinService joinService;
 
     /**
      * 카카오 로그인
