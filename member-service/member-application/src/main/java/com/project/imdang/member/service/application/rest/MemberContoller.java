@@ -2,10 +2,9 @@ package com.project.imdang.member.service.application.rest;
 
 import com.project.imdang.member.service.domain.dto.JoinCommand;
 import com.project.imdang.member.service.domain.dto.LoginResponse;
-import com.project.imdang.member.service.domain.dto.oauth.apple.AppleLoginParamsCommand;
-import com.project.imdang.member.service.domain.dto.oauth.google.GoogleLoginParamsCommand;
-import com.project.imdang.member.service.domain.dto.oauth.kakao.KakaoLoginParamsCommand;
-import com.project.imdang.member.service.domain.port.input.service.JoinService;
+import com.project.imdang.member.service.domain.dto.oauth.apple.AppleLoginCommand;
+import com.project.imdang.member.service.domain.dto.oauth.google.GoogleLoginCommand;
+import com.project.imdang.member.service.domain.dto.oauth.kakao.KakaoLoginCommand;
 import com.project.imdang.member.service.domain.port.input.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class MemberContoller {
 
-
     private final MemberService memberService;
     private final JoinService joinService;
 
@@ -24,7 +22,7 @@ public class MemberContoller {
      * 카카오 로그인
      */
     @PostMapping("/kakao")
-    public ResponseEntity<?> login(@RequestBody KakaoLoginParamsCommand kakaoLoginCommand) {
+    public ResponseEntity<?> login(@RequestBody KakaoLoginCommand kakaoLoginCommand) {
         LoginResponse response = memberService.login(kakaoLoginCommand);
         return ResponseEntity.ok(response);
     }
@@ -33,7 +31,7 @@ public class MemberContoller {
      * 애플 로그인
      */
     @PostMapping("/apple")
-    public ResponseEntity<?> login(@RequestBody AppleLoginParamsCommand appleLoginCommand) {
+    public ResponseEntity<?> login(@RequestBody AppleLoginCommand appleLoginCommand) {
         LoginResponse response = memberService.login(appleLoginCommand);
         return ResponseEntity.ok(response);
     }
@@ -42,7 +40,7 @@ public class MemberContoller {
      * 구글 로그인
      */
     @PostMapping("/google")
-    public ResponseEntity<?> login(@RequestBody GoogleLoginParamsCommand googleLoginCommand) {
+    public ResponseEntity<?> login(@RequestBody GoogleLoginCommand googleLoginCommand) {
         LoginResponse response = memberService.login(googleLoginCommand);
         return ResponseEntity.ok(response);
     }
