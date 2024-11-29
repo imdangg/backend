@@ -27,6 +27,12 @@ public class Member extends AggregateRoot<MemberId> {
     @Builder
     public Member(MemberId memberId, String nickname, String birthDate, Gender gender, String oAuthId, OAuthType oAuthType) {
         this.memberId = memberId;
+
+    // TODO - CHECK : 데이터를 쌓아서 GROUP BY로?
+    private int rejectedCount;
+
+    @Builder
+    public Member(String nickname, String birthDate, Gender gender, String image) {
         this.nickname = nickname;
         this.birthDate = birthDate;
         this.gender = gender;

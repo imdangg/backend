@@ -1,11 +1,11 @@
 package com.project.imdang.insight.service.application.rest;
 
-import com.project.imdang.insight.service.domain.dto.AcceptExchangeRequestCommand;
-import com.project.imdang.insight.service.domain.dto.AcceptExchangeRequestResponse;
-import com.project.imdang.insight.service.domain.dto.RejectExchangeRequestCommand;
-import com.project.imdang.insight.service.domain.dto.RejectExchangeRequestResponse;
-import com.project.imdang.insight.service.domain.dto.RequestExchangeInsightCommand;
-import com.project.imdang.insight.service.domain.dto.RequestExchangeInsightResponse;
+import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExchangeRequestCommand;
+import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExchangeRequestResponse;
+import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestCommand;
+import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestResponse;
+import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightCommand;
+import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightResponse;
 import com.project.imdang.insight.service.domain.ports.input.service.ExchangeApplicationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 public class ExchangeController {
-
+/*
     private final ExchangeApplicationService exchangeApplicationService;
 
     @PostMapping
@@ -44,5 +44,5 @@ public class ExchangeController {
         RejectExchangeRequestResponse rejectExchangeRequestResponse = exchangeApplicationService.rejectExchangeRequest(rejectExchangeRequestCommand);
         log.info("ExchangeId {} is rejected", rejectExchangeRequestCommand.getExchangeId());
         return ResponseEntity.ok(rejectExchangeRequestResponse);
-    }
+    }*/
 }
