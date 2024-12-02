@@ -27,10 +27,10 @@ public class TokenRequestHandler {
 
         String subject = member.getMemberId().getValue().toString();
         String accessToken = jwtTokenProvider.generateAccessToken(subject, accessTokenExpiredAt);
-        log.info("AccessToken이 발급되었습니다. : {}", accessToken);
+        log.info("Member[id : {}] AccessToken is Generated : {}", member.getMemberId().getValue(), accessToken);
 
         String refreshToken = jwtTokenProvider.generateRefreshToken(refreshTokenExpiredAt);
-        log.info("RefreshToken이 발급되었습니다. : {}", refreshToken);
+        log.info("Member[id : {}] RefreshToken is Generated : {}", member.getMemberId().getValue(), refreshToken);
 
         return new TokenResponse(accessToken, refreshToken,ACCESS_TOKEN_EXPIRE_TIME / 1000L);
     }
