@@ -49,7 +49,7 @@ public class MemberContoller {
      */
     @PutMapping("/join")
     public ResponseEntity<?> join(@RequestHeader(value = "Authorization") String token, @RequestBody JoinCommand joinCommand) {
-        LoginResponse response = joinService.join(token.substring(7), joinCommand);
+        LoginResponse response = memberService.join(token.substring(7), joinCommand);
         return ResponseEntity.ok(response);
     }
 }
