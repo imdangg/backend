@@ -7,6 +7,8 @@ import com.project.imdang.member.service.domain.valueobject.OAuthType;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.UUID;
+
 @Getter
 public class Member extends AggregateRoot<MemberId> {
 
@@ -23,16 +25,26 @@ public class Member extends AggregateRoot<MemberId> {
 //    private List<InsightId> insightIds;
 //    private int insightCount;
     private int exchangeCount;
-
+    public static Member create(String oAuthId, OAuthType oAuthType) {
+        return Member.builder()
+                .memberId(new MemberId(UUID.randomUUID()))
+                .oAuthId(oAuthId)
+                .oAuthType(oAuthType)
+                .build();
+    }
     @Builder
-    public Member(MemberId memberId, String nickname, String birthDate, Gender gender, String oAuthId, OAuthType oAuthType) {
+    private Member(MemberId memberId, String oAuthId, OAuthType oAuthType) {
         this.memberId = memberId;
+        this.oAuthId = oAuthId;
+        this.oAuthType = oAuthType;
+        this.exchangeCount = 0;
+    }
 
     // TODO - CHECK : 데이터를 쌓아서 GROUP BY로?
     private int rejectedCount;
 
     @Builder
-    public Member(String nickname, String birthDate, Gender gender, String image) {
+    public Member(String nickname, String birthDate, Gender gender) {
         this.nickname = nickname;
         this.birthDate = birthDate;
         this.gender = gender;
