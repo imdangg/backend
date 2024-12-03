@@ -2,6 +2,8 @@ package com.project.imdang.insight.service.application.rest;
 
 import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExchangeRequestCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExchangeRequestResponse;
+import com.project.imdang.insight.service.domain.dto.exchange.list.ExchangesRequestedByMeRequest;
+import com.project.imdang.insight.service.domain.dto.exchange.list.ExchangesRequestedByOthersRequest;
 import com.project.imdang.insight.service.domain.dto.exchange.list.ListExchangeRequestResponse;
 import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestResponse;
@@ -12,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @Slf4j
 @RequestMapping("/exchanges")
@@ -57,8 +61,8 @@ public class ExchangeController {
      * String memberId 매개변수 -> Spring Security 적용 이후 변경 예정
      */
     @GetMapping("/reqested-by-me")
-    public ResponseEntity<?> listRequestedByMe(String memberId) {
-        ListExchangeRequestResponse listExchangeRequestResponse = exchangeApplicationService.listExchangeRequestCreatedByMe(memberId);
+    public ResponseEntity<?> listRequestedByMe(UUID memberId) {
+        ListExchangeRequestResponse listExchangeRequestResponse = exchangeApplicationService.exchangesRequestedByMe(new ExchangesRequestedByMeRequest(memberId));
         log.info("Member[id : {}] get Exchanges requested by me", memberId);
         return ResponseEntity.ok(listExchangeRequestResponse);
     }
@@ -68,8 +72,8 @@ public class ExchangeController {
      * String memberId 매개변수 -> Spring Security 적용 이후 변경 예정
      */
     @GetMapping("/requested-by-others")
-    public ResponseEntity<?> listRequestedByOther(String memberId) {
-        ListExchangeRequestResponse listExchangeRequestResponse = exchangeApplicationService.listExchangeRequestCreatedByOthers(memberId);
+    public ResponseEntity<?> listRequestedByOther(UUID memberId) {
+        ListExchangeRequestResponse listExchangeRequestResponse = exchangeApplicationService.exchangesRequestedByOthers(new ExchangesRequestedByOthersRequest(memberId));
         log.info("Member[id : {}] get Exchanges requested by others", memberId);
         return ResponseEntity.ok(listExchangeRequestResponse);
     }
