@@ -59,7 +59,7 @@ public class ExchangeController {
     @GetMapping("/list/me")
     public ResponseEntity<?> listRequestedByMe(String memberId) {
         ListExchangeRequestResponse listExchangeRequestResponse = exchangeApplicationService.listExchangeRequestCreatedByMe(memberId);
-        log.info("Exchanges requested by me [id : {}]", memberId);
+        log.info("Member[id : {}] get Exchanges requested by me", memberId);
         return ResponseEntity.ok(listExchangeRequestResponse);
     }
 
@@ -70,7 +70,7 @@ public class ExchangeController {
     @GetMapping("/list/other")
     public ResponseEntity<?> listRequestedByOther(String memberId) {
         ListExchangeRequestResponse listExchangeRequestResponse = exchangeApplicationService.listExchangeRequestCreatedByOthers(memberId);
-        log.info("Exchanges requested by others [id : {}]", memberId);
+        log.info("Member[id : {}] get Exchanges requested by others", memberId);
         return ResponseEntity.ok(listExchangeRequestResponse);
     }
 }
