@@ -2,11 +2,13 @@ package com.project.imdang.insight.service.domain.dto.exchange.reject;
 
 import lombok.Getter;
 
+import java.util.UUID;
+
 @Getter
 public class RejectExchangeRequestResponse {
-    private final String isRejected;
+    private final UUID insightId;
 
-    public RejectExchangeRequestResponse(String isRejected) {
-        this.isRejected = isRejected;
+    public RejectExchangeRequestResponse(UUID insightId) {
+        this.insightId = insightId;
     }
 }
