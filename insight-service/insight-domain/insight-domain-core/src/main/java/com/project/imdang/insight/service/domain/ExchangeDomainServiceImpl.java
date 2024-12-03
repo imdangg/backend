@@ -8,8 +8,9 @@ import com.project.imdang.insight.service.domain.event.ExchangeRequestRejectedEv
 public class ExchangeDomainServiceImpl implements ExchangeDomainService{
     @Override
     public ExchangeRequestCreatedEvent requestExchange(ExchangeRequest exchangeRequest) {
-        //TODO : 교환 요청 알림
-        return null;
+        // 교환 요청 알림
+        return new ExchangeRequestCreatedEvent(exchangeRequest.getRequestedInsightId().getValue(),
+                 exchangeRequest.getRequestMemberId().getValue());
     }
 
     @Override
