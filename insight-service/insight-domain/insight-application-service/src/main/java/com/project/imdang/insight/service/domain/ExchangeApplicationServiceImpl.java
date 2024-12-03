@@ -30,12 +30,7 @@ public class ExchangeApplicationServiceImpl implements ExchangeApplicationServic
 
     @Override
     public RequestExchangeInsightResponse requestExchangeInsight(RequestExchangeInsightCommand requestExchangeInsightCommand) {
-        // 1. 교환 도메인 생성
-        ExchangeRequest exchangeRequest = requestExchangeCommandHandler.request(requestExchangeInsightCommand);
-
-        // 2. 저장
-        ExchangeRequest savedRequest = exchangeRequestRepository.save(exchangeRequest);
-        return new RequestExchangeInsightResponse(savedRequest.getId().getValue().toString());
+       return requestExchangeCommandHandler.request(requestExchangeInsightCommand);
     }
 
     @Override
