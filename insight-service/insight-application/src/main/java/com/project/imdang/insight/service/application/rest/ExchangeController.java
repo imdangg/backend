@@ -56,7 +56,7 @@ public class ExchangeController {
      * 내가 교환 요청한 인사이트 목록
      * String memberId 매개변수 -> Spring Security 적용 이후 변경 예정
      */
-    @GetMapping("/list/me")
+    @GetMapping("/reqested-by-me")
     public ResponseEntity<?> listRequestedByMe(String memberId) {
         ListExchangeRequestResponse listExchangeRequestResponse = exchangeApplicationService.listExchangeRequestCreatedByMe(memberId);
         log.info("Member[id : {}] get Exchanges requested by me", memberId);
@@ -67,7 +67,7 @@ public class ExchangeController {
      * 다른 사람이 나에게 요청한 인사이트 목록
      * String memberId 매개변수 -> Spring Security 적용 이후 변경 예정
      */
-    @GetMapping("/list/other")
+    @GetMapping("/requested-by-others")
     public ResponseEntity<?> listRequestedByOther(String memberId) {
         ListExchangeRequestResponse listExchangeRequestResponse = exchangeApplicationService.listExchangeRequestCreatedByOthers(memberId);
         log.info("Member[id : {}] get Exchanges requested by others", memberId);
