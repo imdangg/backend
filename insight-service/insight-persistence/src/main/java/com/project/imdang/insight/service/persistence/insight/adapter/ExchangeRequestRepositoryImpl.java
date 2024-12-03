@@ -12,9 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -41,10 +39,9 @@ public class ExchangeRequestRepositoryImpl implements ExchangeRequestRepository 
 
     @Transactional(readOnly = true)
     @Override
-    public ExchangeRequest findExchangeRequest(ExchangeRequestId requestId) {
-        ExchangeRequestEntity findExchangeRequest = exchangeRequestJpaRepository.findById(requestId.getValue())
-                .orElseThrow(() -> new NoSuchElementException("일치하는 교환요청이 존재하지 않습니다."));
-        return exchangeRequestPersistenceMapper.exchangeEntityToExchange(findExchangeRequest);
+    public Optional<ExchangeRequest> find(UUID exchangeRequestId) {
+        Optional<ExchangeRequestEntity> findExchangeRequest = exchangeRequestJpaRepository.findById(exchangeRequestId);
+        return findExchangeRequest.map(exchangeRequestPersistenceMapper::exchangeEntityToExchange);
     }
 
     @Transactional(readOnly = true)
