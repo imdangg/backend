@@ -26,9 +26,9 @@ public class ExchangeController {
      */
     @PostMapping("/request")
     public ResponseEntity<RequestExchangeInsightResponse> request(@RequestBody RequestExchangeInsightCommand requestExchangeInsightCommand) {
-        log.info("InsightId {} is requested to exchange with insightId {}", requestExchangeInsightCommand.getRequestedInsightId(), requestExchangeInsightCommand.getRequestMemberInsightId());
+        log.info("InsightId[id: {}] is requested to exchange with insightId[id: {}]", requestExchangeInsightCommand.getRequestedInsightId(), requestExchangeInsightCommand.getRequestMemberInsightId());
         RequestExchangeInsightResponse requestExchangeInsightResponse = exchangeApplicationService.requestExchangeInsight(requestExchangeInsightCommand);
-        log.info("Exchange is created with id : {}", requestExchangeInsightResponse.getExchangeId());
+        log.info("Exchange is created with id[id : {}]", requestExchangeInsightResponse.getExchangeId());
         return ResponseEntity.ok(requestExchangeInsightResponse);
     }
 
@@ -38,7 +38,7 @@ public class ExchangeController {
     @PostMapping("/accept")
     public ResponseEntity<AcceptExchangeRequestResponse> accept(@RequestBody AcceptExchangeRequestCommand acceptExchangeRequestCommand) {
         AcceptExchangeRequestResponse acceptExchangeRequestResponse = exchangeApplicationService.acceptExchangeRequest(acceptExchangeRequestCommand);
-        log.info("ExchangeId {} is accepted", acceptExchangeRequestCommand.getExchangeId());
+        log.info("ExchangeId[id: {}] is accepted", acceptExchangeRequestCommand.getExchangeId());
         return ResponseEntity.ok(acceptExchangeRequestResponse);
     }
 
@@ -48,7 +48,7 @@ public class ExchangeController {
     @PostMapping("/reject")
     public ResponseEntity<RejectExchangeRequestResponse> reject(@RequestBody RejectExchangeRequestCommand rejectExchangeRequestCommand) {
         RejectExchangeRequestResponse rejectExchangeRequestResponse = exchangeApplicationService.rejectExchangeRequest(rejectExchangeRequestCommand);
-        log.info("ExchangeId {} is rejected", rejectExchangeRequestCommand.getExchangeId());
+        log.info("ExchangeId[id:{}] is rejected", rejectExchangeRequestCommand.getExchangeId());
         return ResponseEntity.ok(rejectExchangeRequestResponse);
     }
 
@@ -59,7 +59,7 @@ public class ExchangeController {
     @GetMapping("/list/me")
     public ResponseEntity<?> listRequestedByMe(String memberId) {
         ListExchangeRequestResponse listExchangeRequestResponse = exchangeApplicationService.listExchangeRequestCreatedByMe(memberId);
-        log.info("{} 가 교환 요청한 목록이 조회되었습니다.", memberId);
+        log.info("Exchanges requested by me [id : {}]", memberId);
         return ResponseEntity.ok(listExchangeRequestResponse);
     }
 
@@ -70,7 +70,7 @@ public class ExchangeController {
     @GetMapping("/list/other")
     public ResponseEntity<?> listRequestedByOther(String memberId) {
         ListExchangeRequestResponse listExchangeRequestResponse = exchangeApplicationService.listExchangeRequestCreatedByOthers(memberId);
-        log.info("{} 에게 교환 요청한 목록이 조회되었습니다.", memberId);
+        log.info("Exchanges requested by others [id : {}]", memberId);
         return ResponseEntity.ok(listExchangeRequestResponse);
     }
 }
