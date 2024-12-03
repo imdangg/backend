@@ -15,13 +15,15 @@ public class ExchangeDomainServiceImpl implements ExchangeDomainService{
 
     @Override
     public ExchangeRequestAcceptedEvent acceptExchangeRequest(ExchangeRequest exchangeRequest) {
+        exchangeRequest.accept();
         // 수락 알림 발생
-        return new ExchangeRequestAcceptedEvent(exchangeRequest.getRequestMemberId().getValue().toString());
+        return new ExchangeRequestAcceptedEvent(exchangeRequest.getRequestedInsightId().getValue(), exchangeRequest.getRequestMemberId().getValue());
     }
 
     @Override
     public ExchangeRequestRejectedEvent rejectExchangeRequest(ExchangeRequest exchangeRequest) {
+        exchangeRequest.reject();
         // 1. 요청한 사용자의 거절 카운트 +1, 거절 알림
-        return new ExchangeRequestRejectedEvent(exchangeRequest.getRequestMemberId().getValue().toString());
+        return new ExchangeRequestRejectedEvent(exchangeRequest.getRequestedInsightId().getValue(), exchangeRequest.getRequestMemberId().getValue());
     }
 }
