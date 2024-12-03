@@ -1,6 +1,7 @@
 package com.project.imdang.insight.service.persistence.insight.adapter;
 
 import com.project.imdang.domain.valueobject.ExchangeRequestId;
+import com.project.imdang.domain.valueobject.InsightId;
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
 import com.project.imdang.insight.service.domain.ports.output.repository.ExchangeRequestRepository;
@@ -46,11 +47,8 @@ public class ExchangeRequestRepositoryImpl implements ExchangeRequestRepository 
 
     @Transactional(readOnly = true)
     @Override
-    public List<ExchangeRequest> findAllByMe(MemberId memberId) {
-        List<ExchangeRequestEntity> findExchangeRequestEntity = exchangeRequestJpaRepository.findAllByRequestMemberId(memberId.getValue())
-                .orElse(new ArrayList<>());
-        log.info("{} 가 요청한 교환 요청 갯수 : {}", memberId.getValue(), findExchangeRequestEntity.size());
-
+    public List<ExchangeRequest> findAllRequestedByMe(UUID memberId) {
+        List<ExchangeRequestEntity> findExchangeRequestEntity = exchangeRequestJpaRepository.findAllByRequestMemberId(memberId);
         return findExchangeRequestEntity.stream()
                 .map(exchangeRequestPersistenceMapper::exchangeEntityToExchange)
                 .collect(Collectors.toList());
@@ -58,14 +56,16 @@ public class ExchangeRequestRepositoryImpl implements ExchangeRequestRepository 
 
     @Transactional(readOnly = true)
     @Override
-    public List<ExchangeRequest> findAllByOther(MemberId memberId) {
+    public List<ExchangeRequest> findAllRequestedByOthers(UUID memberId) {
         // 엔티티 중 요청한 인사이트 ID 속 멤버ID가 == memberId
-        List<ExchangeRequestEntity> findExchangeRequestEntity = exchangeRequestJpaRepository.findAllOtherByRequestMemberId(memberId.getValue())
-                .orElse(new ArrayList<>());
-        log.info("{} 에게 요청한 교환 요청 갯수 : {}", memberId.getValue(), findExchangeRequestEntity.size());
-
+        List<ExchangeRequestEntity> findExchangeRequestEntity = exchangeRequestJpaRepository.findAllOtherByRequestMemberId(memberId);
         return findExchangeRequestEntity.stream()
                 .map(exchangeRequestPersistenceMapper::exchangeEntityToExchange)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean exist(MemberId memberId, InsightId insightId) {
+        return false;
     }
 }

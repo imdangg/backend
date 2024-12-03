@@ -11,8 +11,8 @@ import java.util.UUID;
 
 @Repository
 public interface ExchangeRequestJpaRepository extends JpaRepository<ExchangeRequestEntity, UUID> {
-    Optional<List<ExchangeRequestEntity>> findAllByRequestMemberId(UUID memberId);
+    List<ExchangeRequestEntity> findAllByRequestMemberId(UUID memberId);
 
     @Query("select ex from ExchangeRequestEntity ex inner join InsightEntity i on i.memberId = :memberId and ex.requestedInsightId = i.id")
-    Optional<List<ExchangeRequestEntity>> findAllOtherByRequestMemberId(UUID memberId);
+    List<ExchangeRequestEntity> findAllOtherByRequestMemberId(UUID memberId);
 }

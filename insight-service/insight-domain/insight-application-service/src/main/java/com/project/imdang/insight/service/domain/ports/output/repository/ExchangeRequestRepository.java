@@ -17,9 +17,9 @@ public interface ExchangeRequestRepository {
 
     Optional<ExchangeRequest> find(UUID exchangeRequestId);
 
-    List<ExchangeRequest> findAllByMe(MemberId memberId);
+    List<ExchangeRequest> findAllRequestedByMe(UUID memberId);
 
-    List<ExchangeRequest> findAllByOther(MemberId memberId);
+    List<ExchangeRequest> findAllRequestedByOthers(UUID memberId);
 
     boolean exist(MemberId memberId, InsightId insightId);
 }
