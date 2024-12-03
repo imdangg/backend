@@ -1,6 +1,7 @@
 package com.project.imdang.insight.service.domain.ports.output.repository;
 
 import com.project.imdang.domain.valueobject.ExchangeRequestId;
+import com.project.imdang.domain.valueobject.InsightId;
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
 
@@ -17,4 +18,6 @@ public interface ExchangeRequestRepository {
     List<ExchangeRequest> findAllByMe(MemberId memberId);
 
     List<ExchangeRequest> findAllByOther(MemberId memberId);
+
+    boolean exist(MemberId memberId, InsightId insightId);
 }
