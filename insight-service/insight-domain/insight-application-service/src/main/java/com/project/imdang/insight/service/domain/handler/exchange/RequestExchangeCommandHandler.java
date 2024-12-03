@@ -1,15 +1,19 @@
 package com.project.imdang.insight.service.domain.handler.exchange;
 
-import com.project.imdang.domain.valueobject.MemberId;
+import com.project.imdang.insight.service.domain.ExchangeDomainService;
 import com.project.imdang.insight.service.domain.InsightDomainService;
 import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightCommand;
+import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightResponse;
 import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
-import com.project.imdang.domain.valueobject.InsightId;
+import com.project.imdang.insight.service.domain.event.ExchangeRequestCreatedEvent;
+import com.project.imdang.insight.service.domain.exception.ExchangeDomainException;
+import com.project.imdang.insight.service.domain.mapper.ExchangeRequestDataMapper;
+import com.project.imdang.insight.service.domain.ports.output.repository.ExchangeRequestRepository;
+import com.project.imdang.insight.service.domain.ports.output.repository.InsightRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -17,24 +21,42 @@ import java.util.UUID;
 public class RequestExchangeCommandHandler {
 
     private final InsightDomainService insightDomainService;
+    private final ExchangeDomainService exchangeDomainService;
+    private final ExchangeRequestDataMapper exchangeRequestDataMapper;
+    private final ExchangeRequestRepository exchangeRequestRepository;
+    private final InsightRepository insightRepository;
 
-    public ExchangeRequest request(RequestExchangeInsightCommand requestExchangeInsightCommand) {
-        InsightId requestedInsightId = new InsightId(UUID.fromString(requestExchangeInsightCommand.getRequestedInsightId()));
-        InsightId requestMemberInsightId = new InsightId(UUID.fromString(requestExchangeInsightCommand.getRequestMemberInsightId()));
-        MemberId requestMemberId = new MemberId(UUID.fromString(requestExchangeInsightCommand.getRequestMemberInsightId()));
-        // TODO - CHECK : 동일 글 교환 요청 중복 검사를 해야할까?
-        ExchangeRequest exchangeRequest = new ExchangeRequest(requestMemberId, requestMemberInsightId, requestedInsightId);
-        log.info("-----------");
-        log.info("새로운 인사이트 교환 요청이 생성되었습니다.");
-        log.info("Request ID {}", exchangeRequest.getId().getValue());
-        log.info("Request CreateAt {}", exchangeRequest.getRequestedAt());
-        log.info("-----------");
+    public RequestExchangeInsightResponse request(RequestExchangeInsightCommand requestExchangeInsightCommand) {
+        ExchangeRequest exchangeRequest = exchangeRequestDataMapper.toExchangeRequest(requestExchangeInsightCommand);
+        //1. 중복 검사
+        checkDuplication(exchangeRequest);
+        //2.저장
+        ExchangeRequest savedExchangeRequest = save(exchangeRequest);
+        //3. 알람 이벤트 생성
+        ExchangeRequestCreatedEvent createdEvent = exchangeDomainService.requestExchange(exchangeRequest);
+        //4. publish
 
-        //TODO - publish
-        //Insight insight = checkInsight(requestedInsightId);
+        //5. 응답
+        return new RequestExchangeInsightResponse(savedExchangeRequest.getId().getValue());
         //InsightAccusedEvent insightAccusedEvent = insightDomainService.accuse(insight);
+    }
 
-        //TODO : 1. 알람 이벤트 생성
-        return exchangeRequest;
+    private ExchangeRequest save(ExchangeRequest exchangeRequest) {
+        ExchangeRequest savedExchangeRequest = exchangeRequestRepository.save(exchangeRequest);
+        if(savedExchangeRequest == null) {
+            String errorMessage = "ExchangeReqeust save Failed!";
+            log.error(errorMessage);
+            throw new ExchangeDomainException(errorMessage);
+        }
+        log.info("RequestId[id: {}] is Requested", savedExchangeRequest.getId().getValue());
+        return savedExchangeRequest;
+    }
+    private void checkDuplication(ExchangeRequest exchangeRequest) {
+        // TODO : SnapShot 조회
+       exchangeRequestRepository.exist(exchangeRequest.getRequestMemberId(), exchangeRequest.getRequestedInsightId());
+    }
+
+    private void checkInsight(ExchangeRequest exchangeRequest) {
+
     }
 }
