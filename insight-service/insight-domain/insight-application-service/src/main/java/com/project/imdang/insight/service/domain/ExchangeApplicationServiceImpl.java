@@ -35,26 +35,12 @@ public class ExchangeApplicationServiceImpl implements ExchangeApplicationServic
 
     @Override
     public AcceptExchangeRequestResponse acceptExchangeRequest(AcceptExchangeRequestCommand acceptExchangeRequestCommand) {
-        // 1. 받아온 교환요청ID로 도메인 찾기
-        ExchangeRequestId requestId = acceptExchangeCommandHandler.getExchangeRequestId(acceptExchangeRequestCommand);
-        ExchangeRequest exchangeRequest = exchangeRequestRepository.findExchangeRequest(requestId);
-        // 2. 수락 상태로 정보 업데이트
-        ExchangeRequest acceptedExchangeRequest = acceptExchangeCommandHandler.acceptExchangeRequest(exchangeRequest);
-        // 3. 반환
-        exchangeRequestRepository.save(acceptedExchangeRequest);
-        return new AcceptExchangeRequestResponse(acceptedExchangeRequest.getStatus().name());
+        return acceptExchangeCommandHandler.acceptExchangeRequest(acceptExchangeRequestCommand);
     }
 
     @Override
     public RejectExchangeRequestResponse rejectExchangeRequest(RejectExchangeRequestCommand rejectExchangeRequestCommand) {
-        // 1. 받아온 교환요청ID로 도메인 찾기
-        ExchangeRequestId requestId = rejectExchangeCommandHandler.getExchangeRequestId(rejectExchangeRequestCommand);
-        ExchangeRequest exchangeRequest = exchangeRequestRepository.findExchangeRequest(requestId);
-        // 2. 거절 상태로 정보 업데이트
-        ExchangeRequest acceptedExchangeRequest = rejectExchangeCommandHandler.rejectExchangeRequest(exchangeRequest);
-        // 3. 반환
-        exchangeRequestRepository.save(acceptedExchangeRequest);
-        return new RejectExchangeRequestResponse(acceptedExchangeRequest.getStatus().name());
+       return rejectExchangeCommandHandler.rejectExchangeRequest(rejectExchangeRequestCommand);
     }
 
     @Override
