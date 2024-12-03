@@ -38,7 +38,7 @@ public class ExchangeController {
     @PostMapping("/accept")
     public ResponseEntity<AcceptExchangeRequestResponse> accept(@RequestBody AcceptExchangeRequestCommand acceptExchangeRequestCommand) {
         AcceptExchangeRequestResponse acceptExchangeRequestResponse = exchangeApplicationService.acceptExchangeRequest(acceptExchangeRequestCommand);
-        log.info("ExchangeId[id: {}] is accepted", acceptExchangeRequestCommand.getExchangeId());
+        log.info("ExchangeId[id: {}] is accepted", acceptExchangeRequestCommand.getExchangeRequestId());
         return ResponseEntity.ok(acceptExchangeRequestResponse);
     }
 
@@ -48,7 +48,7 @@ public class ExchangeController {
     @PostMapping("/reject")
     public ResponseEntity<RejectExchangeRequestResponse> reject(@RequestBody RejectExchangeRequestCommand rejectExchangeRequestCommand) {
         RejectExchangeRequestResponse rejectExchangeRequestResponse = exchangeApplicationService.rejectExchangeRequest(rejectExchangeRequestCommand);
-        log.info("ExchangeId[id:{}] is rejected", rejectExchangeRequestCommand.getExchangeId());
+        log.info("ExchangeId[id:{}] is rejected", rejectExchangeRequestCommand.getExchangeRequestId());
         return ResponseEntity.ok(rejectExchangeRequestResponse);
     }
 
