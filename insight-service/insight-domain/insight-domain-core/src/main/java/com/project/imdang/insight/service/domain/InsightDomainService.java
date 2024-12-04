@@ -1,6 +1,8 @@
 package com.project.imdang.insight.service.domain;
 
+import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.entity.Insight;
+import com.project.imdang.insight.service.domain.entity.Snapshot;
 import com.project.imdang.insight.service.domain.event.InsightAccusedEvent;
 import com.project.imdang.insight.service.domain.event.InsightDeletedEvent;
 import com.project.imdang.insight.service.domain.event.InsightUpdatedEvent;
@@ -23,6 +25,9 @@ public interface InsightDomainService {
                                       Infra infra, ComplexEnvironment complexEnvironment, ComplexFacility complexFacility, FavorableNews favorableNews);
     InsightDeletedEvent deleteInsight(Insight insight);
     Insight recommendInsight(Insight insight);
-    InsightAccusedEvent accuseInsight(Insight insight);
+    InsightAccusedEvent accuseInsight(Insight insight, MemberId accusedBy);
 //    InsightRequestedEvent requestInsight(Insight insight);
+
+    // TODO - CHECK
+    Snapshot captureInsight(Insight insight);
 }

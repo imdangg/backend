@@ -1,16 +1,13 @@
 package com.project.imdang.insight.service.persistence.insight.adapter;
 
-import com.project.imdang.domain.valueobject.ExchangeRequestId;
 import com.project.imdang.domain.valueobject.InsightId;
-import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
 import com.project.imdang.insight.service.domain.entity.Insight;
 import com.project.imdang.insight.service.domain.ports.output.repository.InsightRepository;
-import com.project.imdang.insight.service.persistence.insight.entity.ExchangeRequestEntity;
+import com.project.imdang.insight.service.persistence.insight.entity.InsightEntity;
 import com.project.imdang.insight.service.persistence.insight.mapper.InsightPersistenceMapper;
 import com.project.imdang.insight.service.persistence.insight.repository.InsightJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -23,17 +20,22 @@ public class InsightRepositoryImpl implements InsightRepository {
     private final InsightPersistenceMapper insightPersistenceMapper;
 
     @Override
-    public Optional<Insight> findInsight(InsightId insightId) {
-        return Optional.empty();
+    public Optional<Insight> findById(InsightId insightId) {
+        UUID _insightId = insightId.getValue();
+        return insightJpaRepository.findById(_insightId)
+                .map(insightPersistenceMapper::insightEntityToInsight);
     }
 
     @Override
     public Insight save(Insight insight) {
-        return null;
+        InsightEntity insightEntity = insightPersistenceMapper.insightToInsightEntity(insight);
+        InsightEntity saved = insightJpaRepository.save(insightEntity);
+        return insightPersistenceMapper.insightEntityToInsight(saved);
     }
 
     @Override
-    public void deleteInsight(UUID insightId) {
-
+    public void deleteById(InsightId insightId) {
+        UUID _insightId = insightId.getValue();
+        insightJpaRepository.deleteById(_insightId);
     }
 }

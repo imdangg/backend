@@ -1,5 +1,6 @@
 package com.project.imdang.insight.service.domain.dto.insight.recommend;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,5 +13,6 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 public class RecommendInsightCommand {
+    @NotNull
     private UUID insightId;
 }

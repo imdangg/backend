@@ -1,6 +1,9 @@
 package com.project.imdang.insight.service.domain;
 
+import com.project.imdang.domain.valueobject.MemberId;
+import com.project.imdang.insight.service.domain.entity.Accuse;
 import com.project.imdang.insight.service.domain.entity.Insight;
+import com.project.imdang.insight.service.domain.entity.Snapshot;
 import com.project.imdang.insight.service.domain.event.InsightAccusedEvent;
 import com.project.imdang.insight.service.domain.event.InsightDeletedEvent;
 import com.project.imdang.insight.service.domain.event.InsightUpdatedEvent;
@@ -15,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Set;
+
+import static com.project.imdang.insight.service.domain.entity.Snapshot.createNewSnapshot;
 
 @Slf4j
 public class InsightDomainServiceImpl implements InsightDomainService {
@@ -59,9 +64,19 @@ public class InsightDomainServiceImpl implements InsightDomainService {
     }
 
     @Override
-    public InsightAccusedEvent accuseInsight(Insight insight) {
+    public InsightAccusedEvent accuseInsight(Insight insight, MemberId accusedBy) {
         insight.accuse();
         log.info("Insight[id: {}] is accused.", insight.getId().getValue());
-        return new InsightAccusedEvent(insight, ZonedDateTime.now(ZoneId.of("UTC")));
+        Accuse accuse = Accuse.createNewAccuse(accusedBy, insight.getMemberId());
+        // TODO - CHECK : accuse.getCreatedAt()
+        return new InsightAccusedEvent(insight, accuse, ZonedDateTime.now(ZoneId.of("UTC")));
+    }
+
+    @Override
+    public Snapshot captureInsight(Insight insight) {
+//        Snapshot snapshot = insight.capture();
+        Snapshot snapshot = createNewSnapshot(insight);
+        log.info("Insight[id: {}] is captured.", insight.getId().getValue());
+        return snapshot;
     }
 }

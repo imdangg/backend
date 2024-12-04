@@ -1,5 +1,6 @@
 package com.project.imdang.insight.service.domain.dto.insight.recommend;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RecommendInsightResponse {
     private UUID insightId;
 }

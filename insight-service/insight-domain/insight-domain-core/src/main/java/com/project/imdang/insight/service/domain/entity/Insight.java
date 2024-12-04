@@ -57,9 +57,9 @@ public class Insight extends AggregateRoot<InsightId> {
     private ZonedDateTime createdAt;
     // TODO - CHECK : updatedAt;
 
-    private Insight(MemberId memberId, Address address, ApartmentComplex apartmentComplex, String title, String contents, Set<String> images, String summary, ZonedDateTime visitAt, VisitMethod visitMethod, Access access, Infra infra, ComplexEnvironment complexEnvironment, ComplexFacility complexFacility, FavorableNews favorableNews,
-//                    Boolean isDeleted,
-                    int recommendedCount, int accusedCount, int viewCount, int score, ZonedDateTime createdAt) {
+    @Builder
+    public Insight(InsightId id, MemberId memberId, Address address, ApartmentComplex apartmentComplex, String title, String contents, Set<String> images, String summary, ZonedDateTime visitAt, VisitMethod visitMethod, Access access, Infra infra, ComplexEnvironment complexEnvironment, ComplexFacility complexFacility, FavorableNews favorableNews, int recommendedCount, int accusedCount, int viewCount, int score, ZonedDateTime createdAt) {
+        setId(id);
         this.memberId = memberId;
         this.address = address;
         this.apartmentComplex = apartmentComplex;
@@ -74,7 +74,6 @@ public class Insight extends AggregateRoot<InsightId> {
         this.complexEnvironment = complexEnvironment;
         this.complexFacility = complexFacility;
         this.favorableNews = favorableNews;
-//        this.isDeleted = isDeleted;
         this.recommendedCount = recommendedCount;
         this.accusedCount = accusedCount;
         this.viewCount = viewCount;
@@ -82,31 +81,28 @@ public class Insight extends AggregateRoot<InsightId> {
         this.createdAt = createdAt;
     }
 
-    @Builder
-    public Insight(MemberId memberId, int score,
-                   Address address, ApartmentComplex apartmentComplex,
-                   String title, String contents, Set<String> images, String summary,
-                   ZonedDateTime visitAt, VisitMethod visitMethod, Access access,
-                   Infra infra, ComplexEnvironment complexEnvironment, ComplexFacility complexFacility, FavorableNews favorableNews) {
-
-        this.memberId = memberId;
-        this.score = score;
-
-        this.address = address;
-        this.apartmentComplex = apartmentComplex;
-        this.title = title;
-        this.contents = contents;
-        this.images = images;
-        this.summary = summary;
-
-        this.visitAt = visitAt;
-        this.visitMethod = visitMethod;
-        this.access = access;
-
-        this.infra = infra;
-        this.complexEnvironment = complexEnvironment;
-        this.complexFacility = complexFacility;
-        this.favorableNews = favorableNews;
+    public static Insight createNewInsight(MemberId memberId, int score,
+                                           Address address, ApartmentComplex apartmentComplex,
+                                           String title, String contents, Set<String> images, String summary,
+                                           ZonedDateTime visitAt, VisitMethod visitMethod, Access access,
+                                           Infra infra, ComplexEnvironment complexEnvironment, ComplexFacility complexFacility, FavorableNews favorableNews) {
+        return Insight.builder()
+                .memberId(memberId)
+                .score(score)
+                .address(address)
+                .apartmentComplex(apartmentComplex)
+                .title(title)
+                .contents(contents)
+                .images(images)
+                .summary(summary)
+                .visitAt(visitAt)
+                .visitMethod(visitMethod)
+                .access(access)
+                .infra(infra)
+                .complexEnvironment(complexEnvironment)
+                .complexFacility(complexFacility)
+                .favorableNews(favorableNews)
+                .build();
     }
 
     // TODO - CHECK : Reflection?
@@ -117,9 +113,9 @@ public class Insight extends AggregateRoot<InsightId> {
         this.score = 80;
     }
 
-    public Snapshot capture() {
-        return new Snapshot(this);
-    }
+//    public Snapshot capture() {
+//        return new Snapshot(this);
+//    }
 
     public void initialize() {
         InsightId insightId = new InsightId(UUID.randomUUID());

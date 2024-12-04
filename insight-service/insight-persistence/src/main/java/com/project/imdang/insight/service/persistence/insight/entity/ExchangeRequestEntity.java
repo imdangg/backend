@@ -31,6 +31,7 @@ public class ExchangeRequestEntity {
     private UUID requestMemberId;
     private UUID requestMemberInsightId;
     private UUID requestedInsightId;
+    private UUID requestedMemberId;
 
     private ZonedDateTime requestedAt;
     private ZonedDateTime respondedAt;

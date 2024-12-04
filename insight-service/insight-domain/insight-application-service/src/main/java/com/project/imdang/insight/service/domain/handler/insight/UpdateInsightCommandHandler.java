@@ -49,15 +49,15 @@ public class UpdateInsightCommandHandler {
                 updateInsightCommand.getComplexFacility(),
                 updateInsightCommand.getFavorableNews());
         log.info("Insight[id: {}] is updated.", insightUpdatedEvent.getInsight().getId().getValue());
-        // TODO - publish event
-//        Snapshot snapshot = insightUpdatedEvent.getInsight().capture();
-//        saveSnapshot(snapshot);
+
+        Snapshot snapshot = insightDomainService.captureInsight(insightUpdatedEvent.getInsight());
+        saveSnapshot(snapshot);
         return insightDataMapper.insightToUpdateInsightResponse(insightUpdatedEvent.getInsight());
     }
 
     private Insight checkInsight(UUID _insightId) {
         InsightId insightId = new InsightId(_insightId);
-        Optional<Insight> insightResult = insightRepository.findInsight(insightId);
+        Optional<Insight> insightResult = insightRepository.findById(insightId);
         if (insightResult.isEmpty()) {
             throw new InsightNotFoundException(insightId);
         }

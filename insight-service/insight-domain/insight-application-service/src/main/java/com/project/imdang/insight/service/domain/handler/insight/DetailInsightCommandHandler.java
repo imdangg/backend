@@ -25,7 +25,7 @@ public class DetailInsightCommandHandler {
     @Transactional(readOnly = true)
     public DetailInsightResponse detailInsight(DetailInsightQuery detailInsightQuery) {
         InsightId insightId = new InsightId(detailInsightQuery.getInsightId());
-        Optional<Insight> insightResult = insightRepository.findInsight(insightId);
+        Optional<Insight> insightResult = insightRepository.findById(insightId);
         if (insightResult.isEmpty()) {
             throw new InsightNotFoundException(insightId);
         }

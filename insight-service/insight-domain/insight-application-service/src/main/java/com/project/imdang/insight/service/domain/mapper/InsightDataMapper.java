@@ -1,16 +1,13 @@
 package com.project.imdang.insight.service.domain.mapper;
 
-import com.project.imdang.insight.service.domain.dto.insight.accuse.AccuseInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.accuse.AccuseInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.create.CreateInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.create.CreateInsightResponse;
-import com.project.imdang.insight.service.domain.dto.insight.delete.DeleteInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.delete.DeleteInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.detail.DetailInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.evaluate.ValidateAndEvaluateInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.evaluate.ValidateAndEvaluateInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.preview.PreviewInsightResponse;
-import com.project.imdang.insight.service.domain.dto.insight.recommend.RecommendInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.recommend.RecommendInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.update.UpdateInsightResponse;
 import com.project.imdang.insight.service.domain.entity.Insight;
@@ -26,52 +23,80 @@ public class InsightDataMapper {
     }
 
     public CreateInsightResponse insightToCreateInsightResponse(Insight insight) {
-        return new CreateInsightResponse();
+        return CreateInsightResponse.builder()
+                .insightId(insight.getId().getValue())
+                .build();
     }
 
     public UpdateInsightResponse insightToUpdateInsightResponse(Insight insight) {
-        return new UpdateInsightResponse();
+        return UpdateInsightResponse.builder()
+                .insightId(insight.getId().getValue())
+                .build();
     }
 
-    public Insight deleteInsightCommandToInsight(DeleteInsightCommand deleteInsightCommand) {
+    public DeleteInsightResponse insightToDeleteInsightResponse(Insight insight) {
+        return DeleteInsightResponse.builder()
+                .insightId(insight.getId().getValue())
+                .build();
+    }
+
+    public AccuseInsightResponse insightToAccuseInsightResponse(Insight insight) {
+        return AccuseInsightResponse.builder()
+                .insightId(insight.getId().getValue())
+                .build();
+    }
+
+    public RecommendInsightResponse insightToRecommendInsightResponse(Insight insight) {
+        return RecommendInsightResponse.builder()
+                .insightId(insight.getId().getValue())
+                .build();
+    }
+
+    public Insight validateAndEvaluateInsightCommandToInsight(ValidateAndEvaluateInsightCommand validateAndEvaluateInsightCommand) {
         return Insight.builder()
 
                 .build();
     }
 
-    public DeleteInsightResponse insightToDeleteInsightResponse(Insight insight) {
-        return new DeleteInsightResponse();
-    }
-
-    public Insight accuseInsightCommandToInsight(AccuseInsightCommand accuseInsightCommand) {
-        return Insight.builder().build();
-    }
-
-    public AccuseInsightResponse insightToAccuseInsightResponse(Insight insight) {
-        return new AccuseInsightResponse();
-    }
-
-    public Insight recommendInsightCommandToInsight(RecommendInsightCommand recommendInsightCommand) {
-        return Insight.builder().build();
-    }
-
-    public RecommendInsightResponse insightToRecommendInsightResponse(Insight insight) {
-        return new RecommendInsightResponse();
-    }
-
-    public Insight validateAndEvaluateInsightCommandToInsight(ValidateAndEvaluateInsightCommand validateAndEvaluateInsightCommand) {
-        return Insight.builder().build();
-    }
-
     public ValidateAndEvaluateInsightResponse insightToValidateAndEvaluateInsightCommand(Insight insight) {
-        return new ValidateAndEvaluateInsightResponse();
+        return ValidateAndEvaluateInsightResponse.builder()
+                .insightId(insight.getId().getValue())
+                .score(insight.getScore())
+                .build();
     }
 
     public DetailInsightResponse insightToDetailInsightResponse(Insight insight) {
-        return null;
+        return DetailInsightResponse.builder()
+                .memberId(insight.getMemberId().getValue())
+                .insightId(insight.getId().getValue())
+                .recommendedCount(insight.getRecommendedCount())
+                .address(insight.getAddress())
+                .title(insight.getTitle())
+                // TODO - CHECK
+//                .mainImage(null)
+
+//                .member(member)
+                .createdAt(insight.getCreatedAt())
+                .score(insight.getScore())
+                .build();
     }
 
     public PreviewInsightResponse insightToPreviewInsightResponse(Insight insight) {
-        return null;
+//        MemberResponse member = MemberResponse.builder()
+//                .nickname()
+//                .image()
+//                .build();
+        return PreviewInsightResponse.builder()
+                .insightId(insight.getId().getValue())
+                .recommendedCount(insight.getRecommendedCount())
+                .address(insight.getAddress())
+                .title(insight.getTitle())
+                // TODO - CHECK
+                .mainImage(null)
+                .memberId(insight.getMemberId().getValue())
+//                .member(member)
+                .createdAt(insight.getCreatedAt())
+                .score(insight.getScore())
+                .build();
     }
 }
