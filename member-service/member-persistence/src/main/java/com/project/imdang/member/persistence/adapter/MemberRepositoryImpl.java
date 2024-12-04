@@ -4,19 +4,28 @@ import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.member.persistence.entity.MemberEntity;
 import com.project.imdang.member.persistence.mapper.MemberPersistenceMapper;
 import com.project.imdang.member.persistence.repository.MemberJpaRepository;
+import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginResponse;
 import com.project.imdang.member.service.domain.entity.Member;
 import com.project.imdang.member.service.domain.ports.output.MemberRespository;
 import com.project.imdang.member.service.domain.valueobject.OAuthType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Repository
 @RequiredArgsConstructor
 public class MemberRepositoryImpl implements MemberRespository {
 
     private final MemberJpaRepository memberJpaRepository;
     private final MemberPersistenceMapper memberPersistenceMapper;
+
+//    @Override
+//    @Transactional(readOnly = true)
+//    public boolean existByOauthIdAndType(OAuthLoginResponse response) {
+//        return memberJpaRepository.existsByOAuthIdAndOAuthType(response.getId(), response.oAuthType());
+//    }
 
     @Override
     @Transactional
