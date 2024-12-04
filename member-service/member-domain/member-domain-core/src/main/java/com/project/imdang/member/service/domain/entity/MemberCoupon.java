@@ -1,15 +1,15 @@
 package com.project.imdang.member.service.domain.entity;
 
 
+import com.project.imdang.domain.entity.BaseEntity;
 import com.project.imdang.domain.valueobject.CouponId;
 import com.project.imdang.domain.valueobject.MemberCouponId;
 import com.project.imdang.domain.valueobject.MemberId;
 
 import java.time.ZonedDateTime;
 
-public class MemberCoupon {
+public class MemberCoupon extends BaseEntity<MemberCouponId> {
 
-    private MemberCouponId id;
     private final CouponId couponId;
     private final MemberId memberId;
 

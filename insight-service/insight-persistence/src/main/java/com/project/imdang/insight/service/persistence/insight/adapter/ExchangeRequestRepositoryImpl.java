@@ -13,8 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -40,32 +40,23 @@ public class ExchangeRequestRepositoryImpl implements ExchangeRequestRepository 
 
     @Transactional(readOnly = true)
     @Override
-    public Optional<ExchangeRequest> find(UUID exchangeRequestId) {
-        Optional<ExchangeRequestEntity> findExchangeRequest = exchangeRequestJpaRepository.findById(exchangeRequestId);
+    public Optional<ExchangeRequest> findById(ExchangeRequestId exchangeRequestId) {
+        Optional<ExchangeRequestEntity> findExchangeRequest = exchangeRequestJpaRepository.findById(exchangeRequestId.getValue());
         return findExchangeRequest.map(exchangeRequestPersistenceMapper::exchangeEntityToExchange);
     }
 
-    @Transactional(readOnly = true)
     @Override
-    public List<ExchangeRequest> findAllRequestedByMe(UUID memberId) {
-        List<ExchangeRequestEntity> findExchangeRequestEntity = exchangeRequestJpaRepository.findAllByRequestMemberId(memberId);
-        return findExchangeRequestEntity.stream()
-                .map(exchangeRequestPersistenceMapper::exchangeEntityToExchange)
-                .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<ExchangeRequest> findAllRequestedByOthers(UUID memberId) {
-        // 엔티티 중 요청한 인사이트 ID 속 멤버ID가 == memberId
-        List<ExchangeRequestEntity> findExchangeRequestEntity = exchangeRequestJpaRepository.findAllOtherByRequestMemberId(memberId);
-        return findExchangeRequestEntity.stream()
-                .map(exchangeRequestPersistenceMapper::exchangeEntityToExchange)
-                .collect(Collectors.toList());
+    public Optional<ExchangeRequest> findByRequestMemberIdAndRequestedInsightId(MemberId requestMemberId, InsightId requestedInsightId) {
+        return Optional.empty();
     }
 
     @Override
-    public boolean exist(MemberId memberId, InsightId insightId) {
-        return false;
+    public List<ExchangeRequest> findAllByRequestMemberId(MemberId requestMemberId) {
+        return null;
+    }
+
+    @Override
+    public List<ExchangeRequest> findAllByRequestedMemberId(MemberId requestedMemberId) {
+        return null;
     }
 }

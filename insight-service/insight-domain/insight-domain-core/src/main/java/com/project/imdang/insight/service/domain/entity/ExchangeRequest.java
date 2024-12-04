@@ -26,6 +26,7 @@ public class ExchangeRequest extends BaseEntity<ExchangeRequestId> {
 
     @Builder
     public ExchangeRequest(ExchangeRequestId id, MemberId requestMemberId, InsightId requestMemberInsightId, InsightId requestedInsightId, MemberId requestedMemberId, ZonedDateTime requestedAt, ZonedDateTime respondedAt, ExchangeRequestStatus status) {
+        setId(id);
         this.requestMemberId = requestMemberId;
         this.requestMemberInsightId = requestMemberInsightId;
         this.requestedInsightId = requestedInsightId;
@@ -34,7 +35,7 @@ public class ExchangeRequest extends BaseEntity<ExchangeRequestId> {
         this.respondedAt = respondedAt;
         this.status = status;
     }
-
+/*
     public static ExchangeRequest createExchangeRequest(MemberId requestMemberId, InsightId requestMemberInsightId, InsightId requestedInsightId, MemberId requestedMemberId) {
         // TODO - 동일 글 중복 교환 요청 불가 (1개 글에 요청 1번으로 제한)
         // requestMemberId - requestedInsightId UNIQUE
@@ -47,7 +48,7 @@ public class ExchangeRequest extends BaseEntity<ExchangeRequestId> {
                 .requestedAt(ZonedDateTime.now())
                 .status(ExchangeRequestStatus.PENDING)
                 .build();
-    }
+    }*/
 
     public void accept() {
         this.status = ExchangeRequestStatus.ACCEPTED;

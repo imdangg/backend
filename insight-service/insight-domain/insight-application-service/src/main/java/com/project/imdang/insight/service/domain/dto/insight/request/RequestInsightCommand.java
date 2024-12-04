@@ -14,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class RequestInsightCommand {
     @NotNull
-    private UUID insightId;
+    private UUID requestedInsightId;
     @NotNull
     private Long memberCouponId;
     // requestedBy

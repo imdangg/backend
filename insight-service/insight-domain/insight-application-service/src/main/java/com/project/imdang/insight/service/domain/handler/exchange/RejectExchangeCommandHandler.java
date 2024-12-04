@@ -1,5 +1,6 @@
 package com.project.imdang.insight.service.domain.handler.exchange;
 
+import com.project.imdang.domain.valueobject.ExchangeRequestId;
 import com.project.imdang.insight.service.domain.ExchangeDomainService;
 import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestResponse;
@@ -37,8 +38,8 @@ public class RejectExchangeCommandHandler {
     }
 
     private ExchangeRequest checkExchangeRequest(UUID exchangeRequestId) {
-        return exchangeRequestRepository.find(exchangeRequestId)
-                .orElseThrow(() -> new ExchangeRequestNotFoundException("Could not found ExchangeRequest"));
+        return exchangeRequestRepository.findById(new ExchangeRequestId(exchangeRequestId))
+                .orElseThrow(ExchangeRequestNotFoundException::new);
     }
 
     private ExchangeRequest save(ExchangeRequest exchangeRequest) {

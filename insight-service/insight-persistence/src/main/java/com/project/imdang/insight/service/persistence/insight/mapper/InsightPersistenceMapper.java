@@ -59,10 +59,4 @@ public class InsightPersistenceMapper {
                 .createdAt(insightEntity.getCreatedAt())
                 .build();
     }
-
-    // TODO
-    public Insight insightEntityToInsight(InsightEntity insightEntity) {
-        return Insight.builder()
-                .build();
-    }
 }

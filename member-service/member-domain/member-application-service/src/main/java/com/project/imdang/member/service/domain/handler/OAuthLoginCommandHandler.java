@@ -61,7 +61,7 @@ public class OAuthLoginCommandHandler {
             log.error("Could not save Member!");
             throw new MemberDomainException(errorMessage);
         }
-        log.info("Member[id : {}] is created.", member.getMemberId().getValue());
+        log.info("Member[id : {}] is created.", member.getId().getValue());
         return savedMember;
     }
 }

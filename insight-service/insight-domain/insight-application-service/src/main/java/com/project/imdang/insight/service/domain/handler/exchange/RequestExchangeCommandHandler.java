@@ -27,7 +27,7 @@ public class RequestExchangeCommandHandler {
     private final InsightRepository insightRepository;
 
     public RequestExchangeInsightResponse request(RequestExchangeInsightCommand requestExchangeInsightCommand) {
-        ExchangeRequest exchangeRequest = exchangeRequestDataMapper.toExchangeRequest(requestExchangeInsightCommand);
+        ExchangeRequest exchangeRequest = exchangeRequestDataMapper.requestExchangeInsightCommandToExchangeRequest(requestExchangeInsightCommand);
         //1. 중복 검사
         checkDuplication(exchangeRequest);
         //2.저장
@@ -53,7 +53,7 @@ public class RequestExchangeCommandHandler {
     }
     private void checkDuplication(ExchangeRequest exchangeRequest) {
         // TODO : SnapShot 조회
-       exchangeRequestRepository.exist(exchangeRequest.getRequestMemberId(), exchangeRequest.getRequestedInsightId());
+       exchangeRequestRepository.findByRequestMemberIdAndRequestedInsightId(exchangeRequest.getRequestMemberId(), exchangeRequest.getRequestedInsightId());
     }
 
     private void checkInsight(ExchangeRequest exchangeRequest) {

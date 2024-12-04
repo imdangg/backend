@@ -21,7 +21,7 @@ public class MemberPersistenceMapper {
 
     public Member memberEntityToMember(MemberEntity memberEntity) {
         return Member.builder()
-                .memberId(new MemberId(memberEntity.getId()))
+                .id(new MemberId(memberEntity.getId()))
                 .nickname(memberEntity.getNickname())
                 .birthDate(memberEntity.getBirthDate())
                 .gender(memberEntity.getGender())

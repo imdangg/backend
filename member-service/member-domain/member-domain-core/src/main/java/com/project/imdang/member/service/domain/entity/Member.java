@@ -12,7 +12,6 @@ import java.util.UUID;
 @Getter
 public class Member extends AggregateRoot<MemberId> {
 
-    private MemberId memberId;
     private String nickname;
     private String birthDate;
     private Gender gender;
@@ -23,17 +22,17 @@ public class Member extends AggregateRoot<MemberId> {
     // TODO - CHECK : 데이터를 쌓아서 GROUP BY로?
     private int rejectedCount;
 
-    public static Member create(String oAuthId, OAuthType oAuthType) {
+    public static Member createNewMember(String oAuthId, OAuthType oAuthType) {
         return Member.builder()
-                .memberId(new MemberId(UUID.randomUUID()))
+                .id(new MemberId(UUID.randomUUID()))
                 .oAuthId(oAuthId)
                 .oAuthType(oAuthType)
                 .build();
     }
 
     @Builder
-    public Member(MemberId memberId, String nickname, String birthDate, Gender gender, String oAuthId, OAuthType oAuthType, int exchangeCount, int rejectedCount) {
-        this.memberId = memberId;
+    public Member(MemberId id, String nickname, String birthDate, Gender gender, String oAuthId, OAuthType oAuthType, int exchangeCount, int rejectedCount) {
+        setId(id);
         this.nickname = nickname;
         this.birthDate = birthDate;
         this.gender = gender;

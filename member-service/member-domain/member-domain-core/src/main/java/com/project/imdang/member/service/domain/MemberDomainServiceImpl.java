@@ -13,6 +13,6 @@ public class MemberDomainServiceImpl implements MemberDomainService {
 
     @Override
     public Member createMember(String oAuthId, OAuthType oAuthType) {
-        return Member.create(oAuthId, oAuthType);
+        return Member.createNewMember(oAuthId, oAuthType);
     }
 }

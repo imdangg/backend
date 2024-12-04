@@ -25,12 +25,12 @@ public class TokenRequestHandler {
         Date accessTokenExpiredAt = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         Date refreshTokenExpiredAt = new Date(now + REFRESH_TOKEN_EXPIRE_TIME);
 
-        String subject = member.getMemberId().getValue().toString();
+        String subject = member.getId().getValue().toString();
         String accessToken = jwtTokenProvider.generateAccessToken(subject, accessTokenExpiredAt);
-        log.info("Member[id : {}] AccessToken is Generated : {}", member.getMemberId().getValue(), accessToken);
+        log.info("Member[id : {}] AccessToken is Generated : {}", member.getId().getValue(), accessToken);
 
         String refreshToken = jwtTokenProvider.generateRefreshToken(refreshTokenExpiredAt);
-        log.info("Member[id : {}] RefreshToken is Generated : {}", member.getMemberId().getValue(), refreshToken);
+        log.info("Member[id : {}] RefreshToken is Generated : {}", member.getId().getValue(), refreshToken);
 
         return new TokenResponse(accessToken, refreshToken,ACCESS_TOKEN_EXPIRE_TIME / 1000L);
     }

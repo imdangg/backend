@@ -7,7 +7,6 @@ import java.util.UUID;
 @Getter
 public class RequestExchangeInsightCommand {
 
-    // TODO - CHECK : originalId?
     private final UUID requestedInsightId;
 
     // requestedBy

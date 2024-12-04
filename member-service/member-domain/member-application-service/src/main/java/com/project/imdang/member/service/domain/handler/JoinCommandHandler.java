@@ -6,6 +6,7 @@ import com.project.imdang.member.service.domain.dto.JoinCommand;
 import com.project.imdang.member.service.domain.dto.LoginResponse;
 import com.project.imdang.member.service.domain.dto.TokenResponse;
 import com.project.imdang.member.service.domain.entity.Member;
+import com.project.imdang.member.service.domain.exception.MemberNotFoundException;
 import com.project.imdang.member.service.domain.ports.output.MemberRespository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,8 +42,8 @@ public class JoinCommandHandler {
     private Member checkMember(UUID _memberId) {
         MemberId memberId = new MemberId(_memberId);
         Member findMember = memberRespository.findById(memberId)
-                .orElseThrow(MemberNotFoundException::new);
-        log.info("Member[id : {}] logged in.", findMember.getMemberId().getValue());
+                .orElseThrow(() -> new MemberNotFoundException(memberId));
+        log.info("Member[id : {}] logged in.", findMember.getId().getValue());
         return findMember;
     }
 }

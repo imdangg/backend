@@ -16,7 +16,7 @@ public interface ExchangeRequestRepository {
 
     // TODO - REVIEW
     Optional<ExchangeRequest> findById(ExchangeRequestId exchangeRequestId);
-    Optional<ExchangeRequest> findByMemberIdAndInsightId(MemberId memberId, InsightId insightId);
+    Optional<ExchangeRequest> findByRequestMemberIdAndRequestedInsightId(MemberId requestMemberId, InsightId requestedInsightId);
 
     List<ExchangeRequest> findAllByRequestMemberId(MemberId requestMemberId);
     List<ExchangeRequest> findAllByRequestedMemberId(MemberId requestedMemberId);
