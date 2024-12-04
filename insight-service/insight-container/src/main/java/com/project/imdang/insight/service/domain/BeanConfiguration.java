@@ -10,4 +10,15 @@ public class BeanConfiguration {
     public InsightDomainService insightDomainService() {
         return new InsightDomainServiceImpl();
     }
+
+    @Bean
+    public ExchangeDomainService exchangeDomainService() {
+        return new ExchangeDomainServiceImpl() {
+        };
+    }
+
+    @Bean
+    public RequestDomainServiceImpl requestDomainService() {
+        return new RequestDomainServiceImpl();
+    }
 }

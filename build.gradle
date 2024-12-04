@@ -156,6 +156,9 @@ project(':member-service:member-application') {
 
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+        implementation project(':member-service:member-domain:member-application-service')
+//        implementation project(':member-service:member-domain:insight-domain-core')
     }
 }
 

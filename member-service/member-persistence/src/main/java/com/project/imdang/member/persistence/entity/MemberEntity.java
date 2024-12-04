@@ -3,6 +3,7 @@ package com.project.imdang.member.persistence.entity;
 import com.project.imdang.member.service.domain.valueobject.Gender;
 import com.project.imdang.member.service.domain.valueobject.OAuthType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import lombok.Builder;
@@ -21,7 +22,7 @@ public class MemberEntity {
 
     private String oAuthId;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private OAuthType oAuthType;
 
     private String nickname;
