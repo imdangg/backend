@@ -1,16 +1,23 @@
 package com.project.imdang.insight.service.persistence.insight.adapter;
 
 import com.project.imdang.domain.valueobject.ExchangeRequestId;
+import com.project.imdang.domain.valueobject.InsightId;
+import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
 import com.project.imdang.insight.service.domain.ports.output.repository.ExchangeRequestRepository;
 import com.project.imdang.insight.service.persistence.insight.entity.ExchangeRequestEntity;
 import com.project.imdang.insight.service.persistence.insight.mapper.ExchangeRequestPersistenceMapper;
 import com.project.imdang.insight.service.persistence.insight.repository.ExchangeRequestJpaRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
+@Slf4j
 @Component
 public class ExchangeRequestRepositoryImpl implements ExchangeRequestRepository {
 
@@ -29,5 +36,36 @@ public class ExchangeRequestRepositoryImpl implements ExchangeRequestRepository 
     @Override
     public void deleteById(ExchangeRequestId exchangeRequestId) {
         exchangeRequestJpaRepository.deleteById(exchangeRequestId.getValue());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<ExchangeRequest> find(UUID exchangeRequestId) {
+        Optional<ExchangeRequestEntity> findExchangeRequest = exchangeRequestJpaRepository.findById(exchangeRequestId);
+        return findExchangeRequest.map(exchangeRequestPersistenceMapper::exchangeEntityToExchange);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<ExchangeRequest> findAllRequestedByMe(UUID memberId) {
+        List<ExchangeRequestEntity> findExchangeRequestEntity = exchangeRequestJpaRepository.findAllByRequestMemberId(memberId);
+        return findExchangeRequestEntity.stream()
+                .map(exchangeRequestPersistenceMapper::exchangeEntityToExchange)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<ExchangeRequest> findAllRequestedByOthers(UUID memberId) {
+        // 엔티티 중 요청한 인사이트 ID 속 멤버ID가 == memberId
+        List<ExchangeRequestEntity> findExchangeRequestEntity = exchangeRequestJpaRepository.findAllOtherByRequestMemberId(memberId);
+        return findExchangeRequestEntity.stream()
+                .map(exchangeRequestPersistenceMapper::exchangeEntityToExchange)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean exist(MemberId memberId, InsightId insightId) {
+        return false;
     }
 }
