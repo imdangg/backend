@@ -7,7 +7,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface InsightRepository {
-    Optional<Insight> findInsight(InsightId insightId);
+    Optional<Insight> findById(InsightId insightId);
     Insight save(Insight insight);
-    void deleteInsight(UUID insightId);
+    void deleteById(InsightId insightId);
 }

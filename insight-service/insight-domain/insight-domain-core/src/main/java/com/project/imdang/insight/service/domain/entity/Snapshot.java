@@ -13,6 +13,7 @@ import com.project.imdang.insight.service.domain.valueobject.FavorableNews;
 import com.project.imdang.insight.service.domain.valueobject.Infra;
 import com.project.imdang.insight.service.domain.valueobject.SnapshotId;
 import com.project.imdang.insight.service.domain.valueobject.VisitMethod;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
@@ -21,8 +22,8 @@ import java.util.Set;
 @Getter
 public class Snapshot extends BaseEntity<SnapshotId> {
 
-    private InsightId insightId;
-    private MemberId memberId;  // createdBy
+    private final InsightId insightId;
+    private final MemberId memberId;  // createdBy
 
     private final Address address;
     private final ApartmentComplex apartmentComplex;
@@ -45,7 +46,9 @@ public class Snapshot extends BaseEntity<SnapshotId> {
     // (예정된) 호재
     private final FavorableNews favorableNews;
 
-    private Snapshot(InsightId insightId, MemberId memberId, Address address, ApartmentComplex apartmentComplex, String title, String contents, Set<String> images, String summary, ZonedDateTime visitAt, VisitMethod visitMethod, Access access, Infra infra, ComplexEnvironment complexEnvironment, ComplexFacility complexFacility, FavorableNews favorableNews) {
+    @Builder
+    public Snapshot(SnapshotId id, InsightId insightId, MemberId memberId, Address address, ApartmentComplex apartmentComplex, String title, String contents, Set<String> images, String summary, ZonedDateTime visitAt, VisitMethod visitMethod, Access access, Infra infra, ComplexEnvironment complexEnvironment, ComplexFacility complexFacility, FavorableNews favorableNews) {
+        setId(id);
         this.insightId = insightId;
         this.memberId = memberId;
         this.address = address;
@@ -63,7 +66,7 @@ public class Snapshot extends BaseEntity<SnapshotId> {
         this.favorableNews = favorableNews;
     }
 
-    public Snapshot(Insight insight) {
+    private Snapshot(Insight insight) {
         this.insightId = insight.getId();
         this.memberId = insight.getMemberId();
         this.address = insight.getAddress();
@@ -79,5 +82,9 @@ public class Snapshot extends BaseEntity<SnapshotId> {
         this.complexEnvironment = insight.getComplexEnvironment();
         this.complexFacility = insight.getComplexFacility();
         this.favorableNews = insight.getFavorableNews();
+    }
+
+    public static Snapshot createNewSnapshot(Insight insight) {
+        return new Snapshot(insight);
     }
 }

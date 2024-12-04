@@ -1,19 +1,37 @@
 package com.project.imdang.insight.service.domain.dto.insight.preview;
 
+import com.project.imdang.insight.service.domain.dto.insight.list.MemberResponse;
+import com.project.imdang.insight.service.domain.valueobject.Address;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Builder
 @AllArgsConstructor
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PreviewInsightResponse {
+// TODO : vs InsightResponse
+    private UUID insightId;
+    private Integer recommendedCount;
+    private Address address;
+    private String title;
+    private String mainImage;
+
+    // TODO - CHECK
+    private UUID memberId;
+//    private MemberResponse member;
+    private ZonedDateTime createdAt;
+    private Integer score;
 /*
 "data": {
+    // ID
+    "insightId": "insight-id-1",
     // 추천 수
     "recommendedCount": 24,
     // 위치
@@ -35,5 +53,4 @@ public class PreviewInsightResponse {
     "score"
 }
  */
-    private UUID insightId;
 }

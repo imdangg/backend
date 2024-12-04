@@ -37,7 +37,7 @@ public class DeleteInsightCommandHandler {
 
     private Insight checkInsight(UUID _insightId) {
         InsightId insightId = new InsightId(_insightId);
-        Optional<Insight> insightResult = insightRepository.findInsight(insightId);
+        Optional<Insight> insightResult = insightRepository.findById(insightId);
         if (insightResult.isEmpty()) {
             throw new InsightNotFoundException(insightId);
         }
@@ -45,6 +45,6 @@ public class DeleteInsightCommandHandler {
     }
 
     private void deleteInsight(UUID insightId) {
-        insightRepository.deleteInsight(insightId);
+        insightRepository.deleteById(new InsightId(insightId));
     }
 }

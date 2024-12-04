@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor
-public class ListInsightQuery {
-    private int page;
-    private int size;
-    private String sort;
-    private String direction;
+public class MemberResponse {
+
+    private String nickname;
+    private String image;
 }
