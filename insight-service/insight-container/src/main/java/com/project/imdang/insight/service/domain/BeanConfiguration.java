@@ -3,7 +3,7 @@ package com.project.imdang.insight.service.domain;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration("insightBeanConfiguration")
+@Configuration
 public class BeanConfiguration {
 
     @Bean
