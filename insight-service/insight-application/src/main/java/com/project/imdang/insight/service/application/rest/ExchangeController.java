@@ -2,9 +2,6 @@ package com.project.imdang.insight.service.application.rest;
 
 import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExchangeRequestCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExchangeRequestResponse;
-import com.project.imdang.insight.service.domain.dto.exchange.list.ExchangesRequestedByMeRequest;
-import com.project.imdang.insight.service.domain.dto.exchange.list.ExchangesRequestedByOthersRequest;
-import com.project.imdang.insight.service.domain.dto.exchange.list.ListExchangeRequestResponse;
 import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestResponse;
 import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightCommand;
@@ -13,16 +10,17 @@ import com.project.imdang.insight.service.domain.ports.input.service.ExchangeApp
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequestMapping("/exchanges")
 @RequiredArgsConstructor
 @RestController
 public class ExchangeController {
-/*
+
     private final ExchangeApplicationService exchangeApplicationService;
 
     /**
@@ -30,9 +28,9 @@ public class ExchangeController {
      */
     @PostMapping("/request")
     public ResponseEntity<RequestExchangeInsightResponse> request(@RequestBody RequestExchangeInsightCommand requestExchangeInsightCommand) {
-        log.info("InsightId[id: {}] is requested to exchange with insightId[id: {}]", requestExchangeInsightCommand.getRequestedInsightId(), requestExchangeInsightCommand.getRequestMemberInsightId());
+        log.info("Insight[id: {}] is requested to exchange with insight[id: {}].", requestExchangeInsightCommand.getRequestedInsightId(), requestExchangeInsightCommand.getRequestMemberInsightId());
         RequestExchangeInsightResponse requestExchangeInsightResponse = exchangeApplicationService.requestExchangeInsight(requestExchangeInsightCommand);
-        log.info("Exchange is created with id[id : {}]", requestExchangeInsightResponse.getExchangeId());
+        log.info("ExchangeRequest[id : {}] is created.", requestExchangeInsightResponse.getExchangeId());
         return ResponseEntity.ok(requestExchangeInsightResponse);
     }
 
@@ -42,7 +40,7 @@ public class ExchangeController {
     @PostMapping("/accept")
     public ResponseEntity<AcceptExchangeRequestResponse> accept(@RequestBody AcceptExchangeRequestCommand acceptExchangeRequestCommand) {
         AcceptExchangeRequestResponse acceptExchangeRequestResponse = exchangeApplicationService.acceptExchangeRequest(acceptExchangeRequestCommand);
-        log.info("ExchangeId[id: {}] is accepted", acceptExchangeRequestCommand.getExchangeRequestId());
+        log.info("ExchangeRequest[id: {}] is accepted.", acceptExchangeRequestCommand.getExchangeRequestId());
         return ResponseEntity.ok(acceptExchangeRequestResponse);
     }
 
@@ -52,29 +50,7 @@ public class ExchangeController {
     @PostMapping("/reject")
     public ResponseEntity<RejectExchangeRequestResponse> reject(@RequestBody RejectExchangeRequestCommand rejectExchangeRequestCommand) {
         RejectExchangeRequestResponse rejectExchangeRequestResponse = exchangeApplicationService.rejectExchangeRequest(rejectExchangeRequestCommand);
-        log.info("ExchangeId[id:{}] is rejected", rejectExchangeRequestCommand.getExchangeRequestId());
+        log.info("ExchangeRequest[id:{}] is rejected.", rejectExchangeRequestCommand.getExchangeRequestId());
         return ResponseEntity.ok(rejectExchangeRequestResponse);
-    }
-
-    /**
-     * 내가 교환 요청한 인사이트 목록
-     * String memberId 매개변수 -> Spring Security 적용 이후 변경 예정
-     */
-    @GetMapping("/requested-by-me")
-    public ResponseEntity<?> listRequestedByMe(UUID memberId) {
-        ListExchangeRequestResponse listExchangeRequestResponse = exchangeApplicationService.exchangesRequestedByMe(new ExchangesRequestedByMeRequest(memberId));
-        log.info("Member[id : {}] get Exchanges requested by me", memberId);
-        return ResponseEntity.ok(listExchangeRequestResponse);
-    }
-
-    /**
-     * 다른 사람이 나에게 요청한 인사이트 목록
-     * String memberId 매개변수 -> Spring Security 적용 이후 변경 예정
-     */
-    @GetMapping("/requested-by-others")
-    public ResponseEntity<?> listRequestedByOther(UUID memberId) {
-        ListExchangeRequestResponse listExchangeRequestResponse = exchangeApplicationService.exchangesRequestedByOthers(new ExchangesRequestedByOthersRequest(memberId));
-        log.info("Member[id : {}] get Exchanges requested by others", memberId);
-        return ResponseEntity.ok(listExchangeRequestResponse);
     }
 }

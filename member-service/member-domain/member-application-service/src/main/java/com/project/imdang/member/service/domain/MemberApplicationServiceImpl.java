@@ -5,13 +5,13 @@ import com.project.imdang.member.service.domain.dto.LoginResponse;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginCommand;
 import com.project.imdang.member.service.domain.handler.JoinCommandHandler;
 import com.project.imdang.member.service.domain.handler.OAuthLoginCommandHandler;
-import com.project.imdang.member.service.domain.port.input.service.MemberService;
+import com.project.imdang.member.service.domain.ports.input.service.MemberApplicationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
-public class MemberServiceImpl implements MemberService {
+public class MemberApplicationServiceImpl implements MemberApplicationService {
 
     private final OAuthLoginCommandHandler oAuthLoginCommandHandler;
     private final JoinCommandHandler joinCommandHandler;

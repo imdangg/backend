@@ -7,7 +7,6 @@ import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 public interface ExchangeRequestRepository {
 
@@ -15,11 +14,10 @@ public interface ExchangeRequestRepository {
     // TODO - CHECK : 교환요청 삭제
     void deleteById(ExchangeRequestId exchangeRequestId);
 
-    Optional<ExchangeRequest> find(UUID exchangeRequestId);
+    // TODO - REVIEW
+    Optional<ExchangeRequest> findById(ExchangeRequestId exchangeRequestId);
+    Optional<ExchangeRequest> findByMemberIdAndInsightId(MemberId memberId, InsightId insightId);
 
-    List<ExchangeRequest> findAllRequestedByMe(UUID memberId);
-
-    List<ExchangeRequest> findAllRequestedByOthers(UUID memberId);
-
-    boolean exist(MemberId memberId, InsightId insightId);
+    List<ExchangeRequest> findAllByRequestMemberId(MemberId requestMemberId);
+    List<ExchangeRequest> findAllByRequestedMemberId(MemberId requestedMemberId);
 }

@@ -28,7 +28,7 @@ public class AppleLoginResponse implements OAuthLoginResponse {
     }
 
     @Override
-    public OAuthType oAuthType() {
+    public OAuthType getOAuthType() {
         return OAuthType.APPLE;
     }
 }

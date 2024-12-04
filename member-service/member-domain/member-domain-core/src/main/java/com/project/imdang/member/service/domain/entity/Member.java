@@ -12,19 +12,17 @@ import java.util.UUID;
 @Getter
 public class Member extends AggregateRoot<MemberId> {
 
-//    private String name;
     private MemberId memberId;
     private String nickname;
     private String birthDate;
     private Gender gender;
-//    private String image;
 
     private String oAuthId;
     private OAuthType oAuthType;
-
-//    private List<InsightId> insightIds;
-//    private int insightCount;
     private int exchangeCount;
+    // TODO - CHECK : 데이터를 쌓아서 GROUP BY로?
+    private int rejectedCount;
+
     public static Member create(String oAuthId, OAuthType oAuthType) {
         return Member.builder()
                 .memberId(new MemberId(UUID.randomUUID()))
@@ -32,45 +30,22 @@ public class Member extends AggregateRoot<MemberId> {
                 .oAuthType(oAuthType)
                 .build();
     }
+
     @Builder
-    private Member(MemberId memberId, String oAuthId, OAuthType oAuthType) {
+    public Member(MemberId memberId, String nickname, String birthDate, Gender gender, String oAuthId, OAuthType oAuthType, int exchangeCount, int rejectedCount) {
         this.memberId = memberId;
-        this.oAuthId = oAuthId;
-        this.oAuthType = oAuthType;
-        this.exchangeCount = 0;
-    }
-
-    // TODO - CHECK : 데이터를 쌓아서 GROUP BY로?
-    private int rejectedCount;
-
-    @Builder
-    public Member(String nickname, String birthDate, Gender gender) {
         this.nickname = nickname;
         this.birthDate = birthDate;
         this.gender = gender;
         this.oAuthId = oAuthId;
         this.oAuthType = oAuthType;
-        this.exchangeCount = 0;
+        this.exchangeCount = exchangeCount;
+        this.rejectedCount = rejectedCount;
     }
 
-    public Member join(String nickname, String birthDate, String gender) {
+    public void join(String nickname, String birthDate, Gender gender) {
         this.nickname = nickname;
         this.birthDate = birthDate;
-        this.gender = Gender.getGenderType(gender);
-        return this;
+        this.gender = gender;
     }
-
-    /*
-    private void setName(String name) {
-        if (name.length() < 1) {
-            throw new NameNotEnoughLengthException();
-        }
-        this.name = name;
-    }*/
-
-    /*
-    private void setImage(String image) {
-        this.image = image;
-    }
-    */
 }

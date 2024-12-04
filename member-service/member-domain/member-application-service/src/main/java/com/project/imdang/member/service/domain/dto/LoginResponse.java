@@ -9,9 +9,9 @@ public class LoginResponse {
     private String accessToken;
     private String refreshToken;
     private Long expiresIn;
-    private boolean isJoined;
+//    private boolean isJoined;
 
-    public static LoginResponse from(TokenResponse response, boolean isJoined) {
-        return new LoginResponse(response.getAccessToken(), response.getRefreshToken(), response.getExpiresIn(), isJoined);
+    public static LoginResponse from(TokenResponse response) {
+        return new LoginResponse(response.getAccessToken(), response.getRefreshToken(), response.getExpiresIn());
     }
 }

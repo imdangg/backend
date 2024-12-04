@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.security.Key;
 import java.util.Date;
-
-public class JwtTokenProvider {
+// TODO - 클래스 이동
+public final class JwtTokenProvider {
     private final Key key;
 
     public JwtTokenProvider(@Value("${jwt.secret-key}") String secretKey) {

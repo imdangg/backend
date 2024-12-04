@@ -43,7 +43,7 @@ public class KakaoLoginResponse implements OAuthLoginResponse {
     }
 
     @Override
-    public OAuthType oAuthType() {
+    public OAuthType getOAuthType() {
         return OAuthType.KAKAO;
     }
 }

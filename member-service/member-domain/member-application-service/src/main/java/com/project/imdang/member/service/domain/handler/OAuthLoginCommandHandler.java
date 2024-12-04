@@ -7,7 +7,7 @@ import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginCommand;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginResponse;
 import com.project.imdang.member.service.domain.entity.Member;
 import com.project.imdang.member.service.domain.exception.MemberDomainException;
-import com.project.imdang.member.service.domain.port.output.repository.MemberRespository;
+import com.project.imdang.member.service.domain.ports.output.MemberRespository;
 import com.project.imdang.member.service.domain.valueobject.OAuthType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -38,21 +38,20 @@ public class OAuthLoginCommandHandler {
         String accessToken = client.getAccessToken(loginCommand);
         OAuthLoginResponse oAuthInfo = client.getOAuthInfo(accessToken);
 
-        boolean isJoined = memberRespository.existByOauthIdAndType(oAuthInfo);
-        Member member;
+        // TODO - REVIEW
+        Member member = memberRespository.findMemberByOAuthIdAndOAuthType(oAuthInfo.getId(), oAuthInfo.getOAuthType())
+                .orElseGet(() -> {
+                    Member created = memberDomainService.createMember(oAuthInfo.getId(), oAuthInfo.getOAuthType());
+                    saveMember(created);
+                    return created;
+                });
+
         // 1. 로그인
-        if (isJoined) {
-            member = checkMember(oAuthInfo.getId(), oAuthInfo.oAuthType());
-        }
-        else {
-            member = memberDomainService.createMember(oAuthInfo.getId(), oAuthInfo.oAuthType());
-            saveMember(member);
-        }
         // 2. 토큰 생성
         TokenResponse tokenResponse = tokenRequestHandler.generate(member);
         // TODO: 3. RefreshToken 저장
         tokenRequestHandler.storeRefreshToken(member.getOAuthId(), tokenResponse.getRefreshToken());
-        return LoginResponse.from(tokenResponse, isJoined);
+        return LoginResponse.from(tokenResponse);
     }
 
     private Member saveMember(Member member) {
@@ -62,15 +61,7 @@ public class OAuthLoginCommandHandler {
             log.error("Could not save Member!");
             throw new MemberDomainException(errorMessage);
         }
-        log.info("Member[id : {}] is Created", member.getMemberId().getValue());
+        log.info("Member[id : {}] is created.", member.getMemberId().getValue());
         return savedMember;
-    }
-
-    private Member checkMember(String oAuthId, OAuthType oAuthType) {
-        //TODO : 예외
-        Member findMember = memberRespository.findMemberByOAuth(oAuthId, oAuthType)
-                .orElseThrow(() ->new IllegalArgumentException());
-        log.info("Member[id : {}] is Login", findMember.getMemberId().getValue());
-        return findMember;
     }
 }

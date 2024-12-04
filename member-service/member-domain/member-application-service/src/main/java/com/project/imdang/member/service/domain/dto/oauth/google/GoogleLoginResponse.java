@@ -36,7 +36,7 @@ public class GoogleLoginResponse implements OAuthLoginResponse {
     }
 
     @Override
-    public OAuthType oAuthType() {
+    public OAuthType getOAuthType() {
         return OAuthType.GOOGLE;
     }
 }

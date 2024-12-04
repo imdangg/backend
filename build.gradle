@@ -149,6 +149,11 @@ project(':member-service:member-domain:member-application-service') {
 
 project(':member-service:member-application') {
     dependencies {
+        implementation project(':member-service:member-domain:member-application-service')
+        implementation project(':member-service:member-domain:member-domain-core')
+        implementation project(':common:common-application')
+        implementation project(':common:common-domain')
+
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
     }

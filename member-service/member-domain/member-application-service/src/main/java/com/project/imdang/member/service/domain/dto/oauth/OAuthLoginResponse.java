@@ -6,5 +6,5 @@ public interface OAuthLoginResponse {
     String getNickname();
     String getEmail();
     String getId();
-    OAuthType oAuthType();
+    OAuthType getOAuthType();
 }

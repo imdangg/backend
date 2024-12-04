@@ -44,11 +44,11 @@ public class RequestExchangeCommandHandler {
     private ExchangeRequest save(ExchangeRequest exchangeRequest) {
         ExchangeRequest savedExchangeRequest = exchangeRequestRepository.save(exchangeRequest);
         if(savedExchangeRequest == null) {
-            String errorMessage = "ExchangeReqeust save Failed!";
+            String errorMessage = "Could not save ExchangeRequest!";
             log.error(errorMessage);
             throw new ExchangeDomainException(errorMessage);
         }
-        log.info("RequestId[id: {}] is Requested", savedExchangeRequest.getId().getValue());
+        log.info("ExchangeRequest[id: {}] is saved.", savedExchangeRequest.getId().getValue());
         return savedExchangeRequest;
     }
     private void checkDuplication(ExchangeRequest exchangeRequest) {

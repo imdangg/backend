@@ -9,5 +9,5 @@ import java.util.UUID;
 public interface InsightRepository {
     Optional<Insight> findInsight(InsightId insightId);
     Insight save(Insight insight);
-    void deleteInsight(UUID insightId);
+    void deleteInsight(InsightId insightId);
 }

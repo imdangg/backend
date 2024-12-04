@@ -1,14 +1,12 @@
 package com.project.imdang.insight.service.domain.handler.exchange;
 
-import com.project.imdang.domain.valueobject.ExchangeRequestId;
 import com.project.imdang.insight.service.domain.ExchangeDomainService;
 import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestResponse;
 import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
-import com.project.imdang.insight.service.domain.event.ExchangeRequestAcceptedEvent;
 import com.project.imdang.insight.service.domain.event.ExchangeRequestRejectedEvent;
 import com.project.imdang.insight.service.domain.exception.ExchangeDomainException;
-import com.project.imdang.insight.service.domain.exception.ExchangeNotFoundException;
+import com.project.imdang.insight.service.domain.exception.ExchangeRequestNotFoundException;
 import com.project.imdang.insight.service.domain.ports.output.repository.ExchangeRequestRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +29,7 @@ public class RejectExchangeCommandHandler {
         ExchangeRequest exchangeRequest = checkExchangeRequest(exchangeRequestId);
         //1. 요청 거절
         ExchangeRequestRejectedEvent rejectedEvent = exchangeDomainService.rejectExchangeRequest(exchangeRequest);
-        log.info("Exchange[id: {}] is rejected!", exchangeRequest.getId().getValue());
+        log.info("ExchangeRequest[id: {}] is rejected.", exchangeRequest.getId().getValue());
         ExchangeRequest saveExchangeRequest = save(exchangeRequest);
 
         //TODO : 2. publish
@@ -40,17 +38,17 @@ public class RejectExchangeCommandHandler {
 
     private ExchangeRequest checkExchangeRequest(UUID exchangeRequestId) {
         return exchangeRequestRepository.find(exchangeRequestId)
-                .orElseThrow(() -> new ExchangeNotFoundException("Could not found ExchangeRequest"));
+                .orElseThrow(() -> new ExchangeRequestNotFoundException("Could not found ExchangeRequest"));
     }
 
     private ExchangeRequest save(ExchangeRequest exchangeRequest) {
         ExchangeRequest savedExchangeRequest = exchangeRequestRepository.save(exchangeRequest);
         if(savedExchangeRequest == null) {
-            String errorMessage = "ExchangeReqeust save Failed!";
+            String errorMessage = "Could not save ExchangeRequest!";
             log.error(errorMessage);
             throw new ExchangeDomainException(errorMessage);
         }
-        log.info("RequestId[id: {}] is Saved", savedExchangeRequest.getId().getValue());
+        log.info("RequestRequest[id: {}] is saved.", savedExchangeRequest.getId().getValue());
         return savedExchangeRequest;
     }
 
