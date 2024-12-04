@@ -23,6 +23,7 @@ include("member-service:member-domain:member-application-service")
 include("member-service:member-domain:member-domain-core")
 
 include("setting-service")
+include("setting-service:setting-persistence")
 include("setting-service:setting-application")
 include("setting-service:setting-domain")
 include("setting-service:setting-domain:setting-application-service")
