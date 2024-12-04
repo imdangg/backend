@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Component
@@ -19,9 +20,10 @@ public class InsightRepositoryImpl implements InsightRepository {
     private final InsightPersistenceMapper insightPersistenceMapper;
 
     @Override
-    public Optional<Insight> findInsight(InsightId insightId) {
-        Optional<InsightEntity> insightEntity = insightJpaRepository.findById(insightId.getValue());
-        return insightEntity.map(insightPersistenceMapper::insightEntityToInsight);
+    public Optional<Insight> findById(InsightId insightId) {
+        UUID _insightId = insightId.getValue();
+        return insightJpaRepository.findById(_insightId)
+                .map(insightPersistenceMapper::insightEntityToInsight);
     }
 
     @Override
@@ -32,7 +34,8 @@ public class InsightRepositoryImpl implements InsightRepository {
     }
 
     @Override
-    public void deleteInsight(InsightId insightId) {
-        insightJpaRepository.deleteById(insightId.getValue());
+    public void deleteById(InsightId insightId) {
+        UUID _insightId = insightId.getValue();
+        insightJpaRepository.deleteById(_insightId);
     }
 }

@@ -1,6 +1,7 @@
 package com.project.imdang.insight.service.domain.handler.insight;
 
 import com.project.imdang.domain.valueobject.InsightId;
+import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.InsightDomainService;
 import com.project.imdang.insight.service.domain.dto.insight.accuse.AccuseInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.accuse.AccuseInsightResponse;
@@ -35,17 +36,20 @@ public class AccuseInsightCommandHandler {
     @Transactional
     public AccuseInsightResponse accuseInsight(AccuseInsightCommand accuseInsightCommand) {
         Insight insight = checkInsight(accuseInsightCommand.getInsightId());
-        InsightAccusedEvent insightAccusedEvent = insightDomainService.accuseInsight(insight);
-        log.info("Insight[id: {}] is accused.", insightAccusedEvent.getInsight().getId().getValue());
-        // TODO - 신고 횟수에 따른 이벤트 발생
+        MemberId accuseMemberId = new MemberId(accuseInsightCommand.getAccuseMemberId());
+        InsightAccusedEvent insightAccusedEvent = insightDomainService.accuseInsight(insight, accuseMemberId);
+
+        // TODO - 신고 횟수에 따른 이벤트 발생 (+ 어디서 accuse를 저장할까?)
         // TODO - publish event
-//        saveAccuse(accuse);
+        saveAccuse(insightAccusedEvent.getAccuse());
+
+        log.info("Insight[id: {}] is accused by Member[id: {}].", insightAccusedEvent.getInsight().getId().getValue(), insightAccusedEvent.getAccuse().getAccuseMemberId().getValue());
         return insightDataMapper.insightToAccuseInsightResponse(insightAccusedEvent.getInsight());
     }
 
     private Insight checkInsight(UUID _insightId) {
         InsightId insightId = new InsightId(_insightId);
-        Optional<Insight> insightResult = insightRepository.findInsight(insightId);
+        Optional<Insight> insightResult = insightRepository.findById(insightId);
         if (insightResult.isEmpty()) {
             throw new InsightNotFoundException(insightId);
         }

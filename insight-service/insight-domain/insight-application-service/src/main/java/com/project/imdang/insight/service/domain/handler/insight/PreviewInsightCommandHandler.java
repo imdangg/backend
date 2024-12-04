@@ -25,7 +25,7 @@ public class PreviewInsightCommandHandler {
     @Transactional(readOnly = true)
     public PreviewInsightResponse previewInsight(PreviewInsightQuery previewInsightQuery) {
         InsightId insightId = new InsightId(previewInsightQuery.getInsightId());
-        Optional<Insight> insightResult = insightRepository.findInsight(insightId);
+        Optional<Insight> insightResult = insightRepository.findById(insightId);
         if (insightResult.isEmpty()) {
             throw new InsightNotFoundException(insightId);
         }

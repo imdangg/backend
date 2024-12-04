@@ -32,9 +32,11 @@ public class CreateInsightCommandHandler {
         Insight created = insightDomainService.createInsight(insight);
         saveInsight(created);
         log.info("Insight[id: {}] is created.", created.getId().getValue());
+
         // TODO : event
-//        Snapshot snapshot = created.capture();
-//        saveSnapshot(snapshot);
+        // TODO : InsightCreatedEvent
+        Snapshot snapshot = insightDomainService.captureInsight(created);
+        saveSnapshot(snapshot);
         return insightDataMapper.insightToCreateInsightResponse(insight);
     }
 

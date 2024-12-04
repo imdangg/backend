@@ -40,7 +40,7 @@ public class RecommendInsightCommandHandler {
 
     private Insight checkInsight(UUID _insightId) {
         InsightId insightId = new InsightId(_insightId);
-        Optional<Insight> insightResult = insightRepository.findInsight(insightId);
+        Optional<Insight> insightResult = insightRepository.findById(insightId);
         if (insightResult.isEmpty()) {
             throw new InsightNotFoundException(insightId);
         }

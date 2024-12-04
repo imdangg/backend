@@ -10,8 +10,10 @@ import com.project.imdang.insight.service.domain.dto.insight.detail.DetailInsigh
 import com.project.imdang.insight.service.domain.dto.insight.detail.DetailInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.evaluate.ValidateAndEvaluateInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.evaluate.ValidateAndEvaluateInsightResponse;
+import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
+import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightByAddressQuery;
+import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightByApartmentComplexQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightQuery;
-import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.preview.PreviewInsightQuery;
 import com.project.imdang.insight.service.domain.dto.insight.preview.PreviewInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.recommend.RecommendInsightCommand;
@@ -20,9 +22,17 @@ import com.project.imdang.insight.service.domain.dto.insight.request.RequestInsi
 import com.project.imdang.insight.service.domain.dto.insight.request.RequestInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.update.UpdateInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.update.UpdateInsightResponse;
+import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
+
+import java.util.List;
+import java.util.Map;
 
 public interface InsightApplicationService {
-    ListInsightResponse listInsight(ListInsightQuery listInsightQuery);
+    List<InsightResponse> listInsight(ListInsightQuery listInsightQuery);
+    Map<ApartmentComplex, List<InsightResponse>> listInsightByAddress(ListInsightByAddressQuery listInsightByAddressQuery);
+    List<InsightResponse> listInsightByApartmentComplex(ListInsightByApartmentComplexQuery listInsightByApartmentComplexQuery);
+    Map<ApartmentComplex, List<InsightResponse>> listInsightByMyVisitedApartmentComplex(ListInsightQuery listInsightQuery);
+
     PreviewInsightResponse previewInsight(PreviewInsightQuery previewInsightQuery);
     DetailInsightResponse detailInsight(DetailInsightQuery detailInsightQuery);
 
