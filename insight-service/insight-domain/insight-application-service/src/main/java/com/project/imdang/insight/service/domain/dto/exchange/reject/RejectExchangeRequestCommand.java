@@ -6,9 +6,10 @@ import java.util.UUID;
 
 @Getter
 public class RejectExchangeRequestCommand {
-    private UUID exchangeId;
+  
+    private final UUID exchangeRequestId;
 
-    public RejectExchangeRequestCommand(UUID exchangeId) {
-        this.exchangeId = exchangeId;
+    public RejectExchangeRequestCommand(UUID exchangeRequestId) {
+        this.exchangeRequestId = exchangeRequestId;
     }
 }

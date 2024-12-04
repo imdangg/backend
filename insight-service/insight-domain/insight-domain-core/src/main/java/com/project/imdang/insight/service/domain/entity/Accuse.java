@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 @Getter
 public class Accuse extends BaseEntity<AccuseId> {

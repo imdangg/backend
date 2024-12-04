@@ -34,8 +34,8 @@ public class RequestInsightCommandHandler {
     public RequestInsightResponse requestInsight(RequestInsightCommand requestInsightCommand) {
 
         // check
-        UUID insightId = requestInsightCommand.getInsightId();
-        checkInsight(insightId);
+        UUID requestedInsightId = requestInsightCommand.getRequestedInsightId();
+        checkInsight(requestedInsightId);
 
         Request request = requestDataMapper.requestInsightCommandToRequest(requestInsightCommand);
         InsightRequestedEvent insightRequestedEvent = requestDomainService.request(request);

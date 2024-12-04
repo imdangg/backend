@@ -33,7 +33,7 @@ public class Request extends AggregateRoot<RequestId> {
         this.respondedAt = respondedAt;
         this.status = status;
     }
-
+/*
     public static Request createNewRequest(MemberId requestMemberId, MemberCouponId memberCouponId, InsightId requestedInsightId) {
         return Request.builder()
                 .requestMemberId(requestMemberId)
@@ -41,7 +41,7 @@ public class Request extends AggregateRoot<RequestId> {
                 .requestedInsightId(requestedInsightId)
                 .status(RequestStatus.PENDING)
                 .build();
-    }
+    }*/
 
     public void accept() {
         this.status = RequestStatus.ACCEPTED;

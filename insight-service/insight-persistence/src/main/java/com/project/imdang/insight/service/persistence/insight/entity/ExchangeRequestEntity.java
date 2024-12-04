@@ -20,7 +20,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 @Table(name = "exchange_request")
 @Entity
 public class ExchangeRequestEntity {

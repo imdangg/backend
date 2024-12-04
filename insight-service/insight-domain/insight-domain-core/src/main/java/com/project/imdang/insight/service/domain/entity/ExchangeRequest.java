@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 @Getter
 public class ExchangeRequest extends BaseEntity<ExchangeRequestId> {
@@ -17,41 +18,37 @@ public class ExchangeRequest extends BaseEntity<ExchangeRequestId> {
     private final InsightId requestMemberInsightId;
 
     private final InsightId requestedInsightId;
+    private final MemberId requestedMemberId;
 
     private final ZonedDateTime requestedAt;
     private ZonedDateTime respondedAt;
     private ExchangeRequestStatus status;
 
     @Builder
-    public ExchangeRequest(MemberId requestMemberId, InsightId requestMemberInsightId, InsightId requestedInsightId, ZonedDateTime requestedAt, ZonedDateTime respondedAt, ExchangeRequestStatus status) {
+    public ExchangeRequest(ExchangeRequestId id, MemberId requestMemberId, InsightId requestMemberInsightId, InsightId requestedInsightId, MemberId requestedMemberId, ZonedDateTime requestedAt, ZonedDateTime respondedAt, ExchangeRequestStatus status) {
+        setId(id);
         this.requestMemberId = requestMemberId;
         this.requestMemberInsightId = requestMemberInsightId;
         this.requestedInsightId = requestedInsightId;
+        this.requestedMemberId = requestedMemberId;
         this.requestedAt = requestedAt;
         this.respondedAt = respondedAt;
         this.status = status;
     }
-
-    private ExchangeRequest(MemberId requestMemberId, InsightId requestMemberInsightId, InsightId requestedInsightId) {
-        this.requestMemberId = requestMemberId;
-        this.requestMemberInsightId = requestMemberInsightId;
-        this.requestedInsightId = requestedInsightId;
-
-        this.requestedAt = ZonedDateTime.now();
-        this.status = ExchangeRequestStatus.PENDING;
-    }
-
-    // TODO - CHECK : vs Builder
-//    public static ExchangeRequest createNewExchangeRequest(MemberId requestMemberId, InsightId requestMemberInsightId, InsightId requestedInsightId) {
-//        // TODO - 동일 글 중복 교환 요청 불가 (1개 글에 요청 1번으로 제한)
-//        // requestMemberId - requestedInsightId UNIQUE
-//        return new ExchangeRequest(requestMemberId, requestMemberInsightId, requestedInsightId);
-//    }
-
-    // request
-//    public void initiateExchange() {
-//        this.status = ExchangeStatus.PENDING;
-//    }
+/*
+    public static ExchangeRequest createExchangeRequest(MemberId requestMemberId, InsightId requestMemberInsightId, InsightId requestedInsightId, MemberId requestedMemberId) {
+        // TODO - 동일 글 중복 교환 요청 불가 (1개 글에 요청 1번으로 제한)
+        // requestMemberId - requestedInsightId UNIQUE
+        return ExchangeRequest.builder()
+                .id(new ExchangeRequestId(UUID.randomUUID()))
+                .requestMemberId(requestMemberId)
+                .requestMemberInsightId(requestMemberInsightId)
+                .requestedInsightId(requestedInsightId)
+                .requestedMemberId(requestedMemberId)
+                .requestedAt(ZonedDateTime.now())
+                .status(ExchangeRequestStatus.PENDING)
+                .build();
+    }*/
 
     public void accept() {
         this.status = ExchangeRequestStatus.ACCEPTED;

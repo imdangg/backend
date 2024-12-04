@@ -20,29 +20,37 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 public class ExchangeController {
-/*
+
     private final ExchangeApplicationService exchangeApplicationService;
 
-    @PostMapping
+    /**
+     * 인사이트 교환 요청
+     */
+    @PostMapping("/request")
     public ResponseEntity<RequestExchangeInsightResponse> request(@RequestBody RequestExchangeInsightCommand requestExchangeInsightCommand) {
-        log.info("InsightId {} is requested to exchange with insightId {}", requestExchangeInsightCommand.getRequestedInsightId(), requestExchangeInsightCommand.getRequestMemberInsightId());
+        log.info("Insight[id: {}] is requested to exchange with insight[id: {}].", requestExchangeInsightCommand.getRequestedInsightId(), requestExchangeInsightCommand.getRequestMemberInsightId());
         RequestExchangeInsightResponse requestExchangeInsightResponse = exchangeApplicationService.requestExchangeInsight(requestExchangeInsightCommand);
-        // TODO : exchange vs exchangeRequest
-        log.info("Exchange is created with id : {}", requestExchangeInsightResponse.getExchangeId());
+        log.info("ExchangeRequest[id : {}] is created.", requestExchangeInsightResponse.getExchangeId());
         return ResponseEntity.ok(requestExchangeInsightResponse);
     }
 
-    @PostMapping
+    /**
+     * 인사이트 요청 수락
+     */
+    @PostMapping("/accept")
     public ResponseEntity<AcceptExchangeRequestResponse> accept(@RequestBody AcceptExchangeRequestCommand acceptExchangeRequestCommand) {
         AcceptExchangeRequestResponse acceptExchangeRequestResponse = exchangeApplicationService.acceptExchangeRequest(acceptExchangeRequestCommand);
-        log.info("ExchangeId {} is accepted", acceptExchangeRequestCommand.getExchangeId());
+        log.info("ExchangeRequest[id: {}] is accepted.", acceptExchangeRequestCommand.getExchangeRequestId());
         return ResponseEntity.ok(acceptExchangeRequestResponse);
     }
 
-    @PostMapping
+    /**
+     * 인사이트 요청 거절
+     */
+    @PostMapping("/reject")
     public ResponseEntity<RejectExchangeRequestResponse> reject(@RequestBody RejectExchangeRequestCommand rejectExchangeRequestCommand) {
         RejectExchangeRequestResponse rejectExchangeRequestResponse = exchangeApplicationService.rejectExchangeRequest(rejectExchangeRequestCommand);
-        log.info("ExchangeId {} is rejected", rejectExchangeRequestCommand.getExchangeId());
+        log.info("ExchangeRequest[id:{}] is rejected.", rejectExchangeRequestCommand.getExchangeRequestId());
         return ResponseEntity.ok(rejectExchangeRequestResponse);
-    }*/
+    }
 }

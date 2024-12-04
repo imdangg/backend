@@ -80,7 +80,7 @@ public class Insight extends AggregateRoot<InsightId> {
         this.score = score;
         this.createdAt = createdAt;
     }
-
+/*
     public static Insight createNewInsight(MemberId memberId, int score,
                                            Address address, ApartmentComplex apartmentComplex,
                                            String title, String contents, Set<String> images, String summary,
@@ -103,7 +103,7 @@ public class Insight extends AggregateRoot<InsightId> {
                 .complexFacility(complexFacility)
                 .favorableNews(favorableNews)
                 .build();
-    }
+    }*/
 
     // TODO - CHECK : Reflection?
     // 완성도 평가

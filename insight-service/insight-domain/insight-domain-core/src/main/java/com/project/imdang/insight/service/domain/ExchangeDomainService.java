@@ -9,4 +9,5 @@ public interface ExchangeDomainService {
     ExchangeRequestCreatedEvent requestExchange(ExchangeRequest exchangeRequest);
     ExchangeRequestAcceptedEvent acceptExchangeRequest(ExchangeRequest exchangeRequest);
     ExchangeRequestRejectedEvent rejectExchangeRequest(ExchangeRequest exchangeRequest);
+
 }

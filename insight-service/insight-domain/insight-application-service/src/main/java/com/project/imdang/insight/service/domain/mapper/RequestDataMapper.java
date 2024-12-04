@@ -12,11 +12,11 @@ import org.springframework.stereotype.Component;
 public class RequestDataMapper {
 
     public Request requestInsightCommandToRequest(RequestInsightCommand requestInsightCommand) {
-        return Request.createNewRequest(
-                new MemberId(requestInsightCommand.getRequestMemberId()),
-                new MemberCouponId(requestInsightCommand.getMemberCouponId()),
-                new InsightId(requestInsightCommand.getInsightId())
-        );
+        return Request.builder()
+                .requestedInsightId(new InsightId(requestInsightCommand.getRequestedInsightId()))
+                .requestMemberId(new MemberId(requestInsightCommand.getRequestMemberId()))
+                .memberCouponId(new MemberCouponId(requestInsightCommand.getMemberCouponId()))
+                .build();
     }
 
     public RequestInsightResponse requestToRequestInsightResponse(Request request) {

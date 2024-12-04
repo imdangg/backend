@@ -29,7 +29,7 @@ public class DeleteInsightCommandHandler {
     public DeleteInsightResponse deleteInsight(DeleteInsightCommand deleteInsightCommand) {
         Insight insight = checkInsight(deleteInsightCommand.getInsightId());
         InsightDeletedEvent insightDeletedEvent = insightDomainService.deleteInsight(insight);
-        deleteInsight(insightDeletedEvent.getInsight().getId().getValue());
+        deleteInsight(insightDeletedEvent.getInsight().getId());
         log.info("Insight[id: {}] is deleted.", insightDeletedEvent.getInsight().getId().getValue());
         // TODO - publish event
         return insightDataMapper.insightToDeleteInsightResponse(insightDeletedEvent.getInsight());
@@ -44,7 +44,7 @@ public class DeleteInsightCommandHandler {
         return insightResult.get();
     }
 
-    private void deleteInsight(UUID insightId) {
-        insightRepository.deleteById(new InsightId(insightId));
+    private void deleteInsight(InsightId insightId) {
+        insightRepository.deleteById(insightId);
     }
 }
