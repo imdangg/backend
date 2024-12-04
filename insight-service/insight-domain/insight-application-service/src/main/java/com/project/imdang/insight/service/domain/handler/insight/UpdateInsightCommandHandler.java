@@ -1,18 +1,76 @@
 package com.project.imdang.insight.service.domain.handler.insight;
 
+import com.project.imdang.domain.valueobject.InsightId;
+import com.project.imdang.insight.service.domain.InsightDomainService;
+import com.project.imdang.insight.service.domain.dto.insight.update.UpdateInsightCommand;
+import com.project.imdang.insight.service.domain.dto.insight.update.UpdateInsightResponse;
+import com.project.imdang.insight.service.domain.entity.Insight;
+import com.project.imdang.insight.service.domain.entity.Snapshot;
+import com.project.imdang.insight.service.domain.event.InsightUpdatedEvent;
+import com.project.imdang.insight.service.domain.exception.InsightDomainException;
+import com.project.imdang.insight.service.domain.exception.InsightNotFoundException;
+import com.project.imdang.insight.service.domain.mapper.InsightDataMapper;
+import com.project.imdang.insight.service.domain.ports.output.repository.InsightRepository;
+import com.project.imdang.insight.service.domain.ports.output.repository.SnapshotRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+import java.util.UUID;
+
+@Slf4j
+@RequiredArgsConstructor
+@Component
 public class UpdateInsightCommandHandler {
-    // 교환 완료 시점의 인사이트 내용 유지
-    // 교환 후 해당 인사이트가 수정되어도 수정사항 반영 X
-    // insight가 수정되면 copy & new Insight
-    // insightId - originalId + version                 isLatest        deleted         createdBy
-    //      1    -      1           1       (원본)          f              O                user1  <-> user2
-    //      2    -      1           2       (수정)          f              O                user1
-    //      3    -      1           3       (수정)          t              O                user1
-    //      4    -      4           1       (원본)          t              X
-    // TODO - CHECK : 가장 최신 버전임을 어떻게 아는가? - isLatest 컬럼 추가
+    private final InsightDomainService insightDomainService;
+    private final InsightRepository insightRepository;
+    private final SnapshotRepository snapshotRepository;
 
-    // exchange
-    // ExchangeRequest 엔티티
-    // accept/reject
+    private final InsightDataMapper insightDataMapper;
 
+    @Transactional
+    public UpdateInsightResponse updateInsight(UpdateInsightCommand updateInsightCommand) {
+        UUID insightId = updateInsightCommand.getInsightId();
+        Insight insight = checkInsight(insightId);
+        InsightUpdatedEvent insightUpdatedEvent = insightDomainService.updateInsight(
+                insight,
+                updateInsightCommand.getScore(),
+                updateInsightCommand.getTitle(),
+                updateInsightCommand.getContents(),
+                updateInsightCommand.getImages(),
+                updateInsightCommand.getSummary(),
+                updateInsightCommand.getVisitAt(),
+                updateInsightCommand.getVisitMethod(),
+                updateInsightCommand.getAccess(),
+                updateInsightCommand.getInfra(),
+                updateInsightCommand.getComplexEnvironment(),
+                updateInsightCommand.getComplexFacility(),
+                updateInsightCommand.getFavorableNews());
+        log.info("Insight[id: {}] is updated.", insightUpdatedEvent.getInsight().getId().getValue());
+        // TODO - publish event
+//        Snapshot snapshot = insightUpdatedEvent.getInsight().capture();
+//        saveSnapshot(snapshot);
+        return insightDataMapper.insightToUpdateInsightResponse(insightUpdatedEvent.getInsight());
+    }
+
+    private Insight checkInsight(UUID _insightId) {
+        InsightId insightId = new InsightId(_insightId);
+        Optional<Insight> insightResult = insightRepository.findInsight(insightId);
+        if (insightResult.isEmpty()) {
+            throw new InsightNotFoundException(insightId);
+        }
+        return insightResult.get();
+    }
+
+    private void saveSnapshot(Snapshot snapshot) {
+        Snapshot saved = snapshotRepository.save(snapshot);
+        if (saved == null) {
+            String errorMessage = "Could not save snapshot!";
+            log.error(errorMessage);
+            throw new InsightDomainException(errorMessage);
+        }
+        log.info("Snapshot[id: {}] is saved.", saved.getId().getValue());
+    }
 }

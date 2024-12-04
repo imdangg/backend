@@ -1,21 +1,20 @@
 package com.project.imdang.insight.service.domain.dto.insight.request;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
+@Builder
+@AllArgsConstructor
 @Getter
+@NoArgsConstructor
 public class RequestInsightCommand {
 
-    // TODO - CHECK : originalId?
-    private final String requestedInsightId;
-
+    private UUID insightId;
+    private UUID memberCouponId;
     // requestedBy
-    private final String requestMemberId;
-
-    private final String memberCouponId;
-
-    public RequestInsightCommand(String requestedInsightId, String requestMemberId, String memberCouponId) {
-        this.requestedInsightId = requestedInsightId;
-        this.requestMemberId = requestMemberId;
-        this.memberCouponId = memberCouponId;
-    }
+//    private UUID requestMemberId;
 }

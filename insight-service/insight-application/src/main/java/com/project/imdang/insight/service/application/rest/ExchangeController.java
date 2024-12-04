@@ -22,7 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RestController
 public class ExchangeController {
-
+/*
     private final ExchangeApplicationService exchangeApplicationService;
 
     /**
@@ -60,7 +60,7 @@ public class ExchangeController {
      * 내가 교환 요청한 인사이트 목록
      * String memberId 매개변수 -> Spring Security 적용 이후 변경 예정
      */
-    @GetMapping("/reqested-by-me")
+    @GetMapping("/requested-by-me")
     public ResponseEntity<?> listRequestedByMe(UUID memberId) {
         ListExchangeRequestResponse listExchangeRequestResponse = exchangeApplicationService.exchangesRequestedByMe(new ExchangesRequestedByMeRequest(memberId));
         log.info("Member[id : {}] get Exchanges requested by me", memberId);

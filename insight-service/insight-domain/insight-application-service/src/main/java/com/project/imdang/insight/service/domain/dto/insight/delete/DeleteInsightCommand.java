@@ -3,10 +3,14 @@ package com.project.imdang.insight.service.domain.dto.insight.delete;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Builder
-@Getter
 @AllArgsConstructor
+@Getter
+@NoArgsConstructor
 public class DeleteInsightCommand {
-    private final String insightId;
+    private UUID insightId;
 }

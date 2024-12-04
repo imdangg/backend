@@ -1,4 +1,11 @@
 package com.project.imdang.insight.service.domain.event;
 
-public class InsightAccusedEvent {
+import com.project.imdang.insight.service.domain.entity.Insight;
+
+import java.time.ZonedDateTime;
+
+public class InsightAccusedEvent extends InsightEvent {
+    public InsightAccusedEvent(Insight insight, ZonedDateTime createdAt) {
+        super(insight, createdAt);
+    }
 }

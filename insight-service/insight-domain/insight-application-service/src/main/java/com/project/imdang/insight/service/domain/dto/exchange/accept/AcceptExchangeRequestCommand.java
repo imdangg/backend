@@ -6,6 +6,7 @@ import java.util.UUID;
 
 @Getter
 public class AcceptExchangeRequestCommand {
+
     private final UUID exchangeRequestId;
 
     public AcceptExchangeRequestCommand(UUID exchangeRequestId) {

@@ -43,6 +43,7 @@ subprojects {
 //        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 //        implementation 'org.springframework.boot:spring-boot-starter-security'
 //        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-logging'
         compileOnly 'org.projectlombok:lombok'
 //        developmentOnly 'org.springframework.boot:spring-boot-devtools'
 //        runtimeOnly 'com.mysql:mysql-connector-j'
@@ -109,6 +110,22 @@ project(':insight-service:insight-persistence') {
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         implementation 'org.springframework.boot:spring-boot-starter-jdbc'
         runtimeOnly 'com.mysql:mysql-connector-j'
+
+        implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
+    }
+}
+
+project(':insight-service:insight-container') {
+    dependencies {
+        implementation project(':insight-service:insight-application')
+        implementation project(':insight-service:insight-persistence')
+        implementation project(':insight-service:insight-domain:insight-application-service')
+        implementation project(':insight-service:insight-domain:insight-domain-core')
+//        implementation project(':common:common-application')
+        implementation project(':common:common-domain')
+
+        implementation 'org.springframework.boot:spring-boot-starter'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     }
 }
 
@@ -120,8 +137,45 @@ project(':member-service:member-domain:member-domain-core') {
 
 project(':member-service:member-domain:member-application-service') {
     dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        //JWT
+        implementation 'io.jsonwebtoken:jjwt:0.12.6'
+        implementation 'com.auth0:java-jwt:4.0.0'
+        implementation 'org.bouncycastle:bcpkix-jdk18on:1.72'
         implementation project(':member-service:member-domain:member-domain-core')
         implementation project(':common:common-domain')
+    }
+}
+
+project(':member-service:member-application') {
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+    }
+}
+
+project(':member-service:member-persistence') {
+    dependencies {
+        implementation project(':member-service:member-domain:member-application-service')
+        implementation project(':member-service:member-domain:member-domain-core')
+        implementation project(':common:common-domain')
+
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+        runtimeOnly 'com.mysql:mysql-connector-j'
+    }
+}
+
+project(':member-service:member-container') {
+    dependencies {
+        implementation project(':member-service:member-application')
+        implementation project(':member-service:member-persistence')
+        implementation project(':member-service:member-domain:member-application-service')
+        implementation project(':member-service:member-domain:member-domain-core')
+        implementation project(':common:common-domain')
+
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     }
 }
 
