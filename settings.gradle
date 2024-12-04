@@ -17,6 +17,8 @@ include("insight-service:insight-domain:insight-application-service")
 include("insight-service:insight-domain:insight-domain-core")
 
 include("member-service")
+include("member-service:member-container")
+include("member-service:member-persistence")
 include("member-service:member-application")
 include("member-service:member-domain")
 include("member-service:member-domain:member-application-service")
@@ -27,3 +29,4 @@ include("setting-service:setting-application")
 include("setting-service:setting-domain")
 include("setting-service:setting-domain:setting-application-service")
 include("setting-service:setting-domain:setting-domain-core")
+
