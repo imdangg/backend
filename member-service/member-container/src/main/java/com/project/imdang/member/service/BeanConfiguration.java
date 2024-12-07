@@ -1,4 +1,4 @@
-package com.project.imddang.member.service;
+package com.project.imdang.member.service;
 
 import com.project.imdang.member.service.domain.MemberDomainService;
 import com.project.imdang.member.service.domain.MemberDomainServiceImpl;
@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class BeanConfiguration {
     @Bean
-    public RestTemplate getRestTemplete() {
+    public RestTemplate restTemplate() {
         return new RestTemplate();
     }
 

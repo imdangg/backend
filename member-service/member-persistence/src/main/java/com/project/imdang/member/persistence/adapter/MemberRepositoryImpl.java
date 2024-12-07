@@ -5,7 +5,7 @@ import com.project.imdang.member.persistence.entity.MemberEntity;
 import com.project.imdang.member.persistence.mapper.MemberPersistenceMapper;
 import com.project.imdang.member.persistence.repository.MemberJpaRepository;
 import com.project.imdang.member.service.domain.entity.Member;
-import com.project.imdang.member.service.domain.ports.output.MemberRespository;
+import com.project.imdang.member.service.domain.ports.output.MemberRepository;
 import com.project.imdang.member.service.domain.valueobject.OAuthType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class MemberRepositoryImpl implements MemberRespository {
+public class MemberRepositoryImpl implements MemberRepository {
 
     private final MemberJpaRepository memberJpaRepository;
     private final MemberPersistenceMapper memberPersistenceMapper;

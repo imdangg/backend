@@ -1,17 +1,11 @@
 package com.project.imdang.insight.service.domain.dto.insight.list;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.project.imdang.domain.dto.PagingQuery;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Builder
-@AllArgsConstructor
 @Getter
-@NoArgsConstructor
-public class ListInsightQuery {
-    private int page;
-    private int size;
-    private String sort;
-    private String direction;
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class ListInsightQuery extends PagingQuery {
 }

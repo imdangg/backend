@@ -67,22 +67,24 @@ project(':common:common-application') {
 
 project(':infrastructure:saga') {
     dependencies {
-        implementation project(':common:common-domain')
+        implementation project(':common:common-domain:common-domain-core')
     }
 }
 
 project(':insight-service:insight-domain:insight-domain-core') {
     dependencies {
-        implementation project(':common:common-domain')
+        implementation project(':common:common-domain:common-domain-core')
     }
 }
 
 project(':insight-service:insight-domain:insight-application-service') {
     dependencies {
         implementation project(':insight-service:insight-domain:insight-domain-core')
-        implementation project(':common:common-domain')
+        implementation project(':common:common-domain:common-application-service')
+        implementation project(':common:common-domain:common-domain-core')
 
         implementation 'org.springframework.boot:spring-boot-starter-validation'
+        implementation 'org.springframework.data:spring-data-commons'
         implementation 'org.springframework:spring-tx'
     }
 }
@@ -93,10 +95,11 @@ project(':insight-service:insight-application') {
         // TODO - CHECK
         implementation project(':insight-service:insight-domain:insight-domain-core')
         implementation project(':common:common-application')
-        implementation project(':common:common-domain')
+        implementation project(':common:common-domain:common-domain-core')
 
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
+        implementation 'org.springframework.data:spring-data-commons'
     }
 }
 
@@ -105,7 +108,7 @@ project(':insight-service:insight-persistence') {
         implementation project(':insight-service:insight-domain:insight-application-service')
         implementation project(':insight-service:insight-domain:insight-domain-core')
 //        implementation project(':common:common-application')
-        implementation project(':common:common-domain')
+        implementation project(':common:common-domain:common-domain-core')
 
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         implementation 'org.springframework.boot:spring-boot-starter-jdbc'
@@ -122,7 +125,7 @@ project(':insight-service:insight-container') {
         implementation project(':insight-service:insight-domain:insight-application-service')
         implementation project(':insight-service:insight-domain:insight-domain-core')
 //        implementation project(':common:common-application')
-        implementation project(':common:common-domain')
+        implementation project(':common:common-domain:common-domain-core')
 
         implementation 'org.springframework.boot:spring-boot-starter'
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -131,7 +134,7 @@ project(':insight-service:insight-container') {
 
 project(':member-service:member-domain:member-domain-core') {
     dependencies {
-        implementation project(':common:common-domain')
+        implementation project(':common:common-domain:common-domain-core')
     }
 }
 
@@ -143,7 +146,8 @@ project(':member-service:member-domain:member-application-service') {
         implementation 'com.auth0:java-jwt:4.0.0'
         implementation 'org.bouncycastle:bcpkix-jdk18on:1.72'
         implementation project(':member-service:member-domain:member-domain-core')
-        implementation project(':common:common-domain')
+        implementation project(':common:common-domain:common-application-service')
+        implementation project(':common:common-domain:common-domain-core')
     }
 }
 
@@ -152,10 +156,11 @@ project(':member-service:member-application') {
         implementation project(':member-service:member-domain:member-application-service')
         implementation project(':member-service:member-domain:member-domain-core')
         implementation project(':common:common-application')
-        implementation project(':common:common-domain')
+        implementation project(':common:common-domain:common-domain-core')
 
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
+        implementation 'org.springframework.data:spring-data-commons'
     }
 }
 
@@ -163,7 +168,7 @@ project(':member-service:member-persistence') {
     dependencies {
         implementation project(':member-service:member-domain:member-application-service')
         implementation project(':member-service:member-domain:member-domain-core')
-        implementation project(':common:common-domain')
+        implementation project(':common:common-domain:common-domain-core')
 
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         implementation 'org.springframework.boot:spring-boot-starter-jdbc'
@@ -177,7 +182,7 @@ project(':member-service:member-container') {
         implementation project(':member-service:member-persistence')
         implementation project(':member-service:member-domain:member-application-service')
         implementation project(':member-service:member-domain:member-domain-core')
-        implementation project(':common:common-domain')
+        implementation project(':common:common-domain:common-domain-core')
 
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -186,14 +191,15 @@ project(':member-service:member-container') {
 
 project(':setting-service:setting-domain:setting-domain-core') {
     dependencies {
-        implementation project(':common:common-domain')
+        implementation project(':common:common-domain:common-domain-core')
     }
 }
 
 project(':setting-service:setting-domain:setting-application-service') {
     dependencies {
         implementation project(':setting-service:setting-domain:setting-domain-core')
-        implementation project(':common:common-domain')
+        implementation project(':common:common-domain:common-application-service')
+        implementation project(':common:common-domain:common-domain-core')
 
         implementation 'org.springframework.boot:spring-boot-starter-validation'
         implementation 'org.springframework:spring-tx'
@@ -205,10 +211,11 @@ project(':setting-service:setting-application') {
         implementation project(':setting-service:setting-domain:setting-application-service')
         implementation project(':setting-service:setting-domain:setting-domain-core')
         implementation project(':common:common-application')
-        implementation project(':common:common-domain')
+        implementation project(':common:common-domain:common-domain-core')
 
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
+        implementation 'org.springframework.data:spring-data-commons'
     }
 }
 
@@ -217,7 +224,7 @@ project(':setting-service:setting-persistence') {
         implementation project(':setting-service:setting-domain:setting-application-service')
         implementation project(':setting-service:setting-domain:setting-domain-core')
 //        implementation project(':common:common-application')
-        implementation project(':common:common-domain')
+        implementation project(':common:common-domain:common-domain-core')
 
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         implementation 'org.springframework.boot:spring-boot-starter-jdbc'

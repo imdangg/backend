@@ -26,6 +26,7 @@ import com.project.imdang.insight.service.domain.ports.input.service.InsightAppl
 import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -35,7 +36,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -52,29 +52,29 @@ public class InsightController {
     // 최신순, 인기순(추천수 순)
     // /insights?page=1&size=20&sort=createdAt,desc
     @GetMapping
-    public ResponseEntity<List<InsightResponse>> list(@ModelAttribute ListInsightQuery listInsightQuery) {
-        List<InsightResponse> insightResponses = insightApplicationService.listInsight(listInsightQuery);
+    public ResponseEntity<Page<InsightResponse>> list(@ModelAttribute ListInsightQuery listInsightQuery) {
+        Page<InsightResponse> insightResponses = insightApplicationService.listInsight(listInsightQuery);
         return ResponseEntity.ok(insightResponses);
     }
 
     // 목록
     @GetMapping("/by-address")
-    public ResponseEntity<Map<ApartmentComplex, List<InsightResponse>>> listByAddress(@ModelAttribute ListInsightByAddressQuery listInsightByAddressQuery) {
-        Map<ApartmentComplex, List<InsightResponse>> apartmentComplexInsightResponsesMap = insightApplicationService.listInsightByAddress(listInsightByAddressQuery);
+    public ResponseEntity<Map<ApartmentComplex, Page<InsightResponse>>> listByAddress(@ModelAttribute ListInsightByAddressQuery listInsightByAddressQuery) {
+        Map<ApartmentComplex, Page<InsightResponse>> apartmentComplexInsightResponsesMap = insightApplicationService.listInsightByAddress(listInsightByAddressQuery);
         return ResponseEntity.ok(apartmentComplexInsightResponsesMap);
     }
 
     @GetMapping("/by-apartment-complex")
-    public ResponseEntity<List<InsightResponse>> listByApartmentComplex(@ModelAttribute ListInsightByApartmentComplexQuery listInsightByApartmentComplexQuery) {
-        List<InsightResponse> insightResponses = insightApplicationService.listInsightByApartmentComplex(listInsightByApartmentComplexQuery);
+    public ResponseEntity<Page<InsightResponse>> listByApartmentComplex(@ModelAttribute ListInsightByApartmentComplexQuery listInsightByApartmentComplexQuery) {
+        Page<InsightResponse> insightResponses = insightApplicationService.listInsightByApartmentComplex(listInsightByApartmentComplexQuery);
         return ResponseEntity.ok(insightResponses);
     }
 
     // 내가 다녀온 단지
     @GetMapping("/by-my-visited-apartment-complex")
-    public ResponseEntity<Map<ApartmentComplex, List<InsightResponse>>> listByMyVisitedApartmentComplex(@ModelAttribute ListInsightQuery listInsightQuery) {
+    public ResponseEntity<Map<ApartmentComplex, Page<InsightResponse>>> listByMyVisitedApartmentComplex(@ModelAttribute ListInsightQuery listInsightQuery) {
         // "다녀온 단지가 없어요. 단지에 임장을 다녀오고 인사이트를 남겨보세요."
-        Map<ApartmentComplex, List<InsightResponse>> apartmentComplexInsightResponsesMap = insightApplicationService.listInsightByMyVisitedApartmentComplex(listInsightQuery);
+        Map<ApartmentComplex, Page<InsightResponse>> apartmentComplexInsightResponsesMap = insightApplicationService.listInsightByMyVisitedApartmentComplex(listInsightQuery);
         return ResponseEntity.ok(apartmentComplexInsightResponsesMap);
     }
 

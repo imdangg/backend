@@ -1,7 +1,6 @@
 package com.project.imdang.insight.service.domain.handler.exchange;
 
 import com.project.imdang.insight.service.domain.ExchangeDomainService;
-import com.project.imdang.insight.service.domain.InsightDomainService;
 import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightResponse;
 import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
@@ -9,10 +8,10 @@ import com.project.imdang.insight.service.domain.event.ExchangeRequestCreatedEve
 import com.project.imdang.insight.service.domain.exception.ExchangeDomainException;
 import com.project.imdang.insight.service.domain.mapper.ExchangeRequestDataMapper;
 import com.project.imdang.insight.service.domain.ports.output.repository.ExchangeRequestRepository;
-import com.project.imdang.insight.service.domain.ports.output.repository.InsightRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Slf4j
@@ -20,25 +19,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class RequestExchangeCommandHandler {
 
-    private final InsightDomainService insightDomainService;
     private final ExchangeDomainService exchangeDomainService;
-    private final ExchangeRequestDataMapper exchangeRequestDataMapper;
     private final ExchangeRequestRepository exchangeRequestRepository;
-    private final InsightRepository insightRepository;
+    private final ExchangeRequestDataMapper exchangeRequestDataMapper;
 
+    @Transactional
     public RequestExchangeInsightResponse request(RequestExchangeInsightCommand requestExchangeInsightCommand) {
         ExchangeRequest exchangeRequest = exchangeRequestDataMapper.requestExchangeInsightCommandToExchangeRequest(requestExchangeInsightCommand);
-        //1. 중복 검사
-        checkDuplication(exchangeRequest);
-        //2.저장
-        ExchangeRequest savedExchangeRequest = save(exchangeRequest);
-        //3. 알람 이벤트 생성
-        ExchangeRequestCreatedEvent createdEvent = exchangeDomainService.requestExchange(exchangeRequest);
-        //4. publish
+        checkIsAlreadyExistedExchangeRequest(exchangeRequest);
+        ExchangeRequestCreatedEvent exchangeRequestCreatedEvent = exchangeDomainService.requestExchange(exchangeRequest);
+        ExchangeRequest saved = save(exchangeRequestCreatedEvent.getExchangeRequest());
 
-        //5. 응답
-        return new RequestExchangeInsightResponse(savedExchangeRequest.getId().getValue());
-        //InsightAccusedEvent insightAccusedEvent = insightDomainService.accuse(insight);
+        // TODO - publish
+
+        return exchangeRequestDataMapper.exchangeRequestToRequestExchangeInsightResponse(saved);
     }
 
     private ExchangeRequest save(ExchangeRequest exchangeRequest) {
@@ -51,12 +45,9 @@ public class RequestExchangeCommandHandler {
         log.info("ExchangeRequest[id: {}] is saved.", savedExchangeRequest.getId().getValue());
         return savedExchangeRequest;
     }
-    private void checkDuplication(ExchangeRequest exchangeRequest) {
+
+    private void checkIsAlreadyExistedExchangeRequest(ExchangeRequest exchangeRequest) {
         // TODO : SnapShot 조회
-       exchangeRequestRepository.findByRequestMemberIdAndRequestedInsightId(exchangeRequest.getRequestMemberId(), exchangeRequest.getRequestedInsightId());
-    }
-
-    private void checkInsight(ExchangeRequest exchangeRequest) {
-
+        exchangeRequestRepository.findByRequestMemberIdAndRequestedInsightId(exchangeRequest.getRequestMemberId(), exchangeRequest.getRequestedInsightId());
     }
 }

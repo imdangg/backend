@@ -1,15 +1,18 @@
 package com.project.imdang.insight.service.domain.dto.exchange.accept;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+@Builder
+@AllArgsConstructor
 @Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AcceptExchangeRequestCommand {
 
-    private final UUID exchangeRequestId;
-
-    public AcceptExchangeRequestCommand(UUID exchangeRequestId) {
-        this.exchangeRequestId = exchangeRequestId;
-    }
+    private UUID exchangeRequestId;
 }

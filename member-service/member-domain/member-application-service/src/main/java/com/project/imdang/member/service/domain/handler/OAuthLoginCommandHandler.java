@@ -7,26 +7,27 @@ import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginCommand;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginResponse;
 import com.project.imdang.member.service.domain.entity.Member;
 import com.project.imdang.member.service.domain.exception.MemberDomainException;
-import com.project.imdang.member.service.domain.ports.output.MemberRespository;
+import com.project.imdang.member.service.domain.ports.output.MemberRepository;
 import com.project.imdang.member.service.domain.valueobject.OAuthType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
 @Slf4j
 public class OAuthLoginCommandHandler {
-    private final MemberRespository memberRespository;
+    private final MemberRepository memberRepository;
     private final TokenRequestHandler tokenRequestHandler;
     private final Map<OAuthType, OAuthApiClientHandler> apiClients;
     private final MemberDomainService memberDomainService;
 
-    public OAuthLoginCommandHandler(MemberRespository memberRespository, TokenRequestHandler tokenRequestHandler, List<OAuthApiClientHandler> apiClients, MemberDomainService memberDomainService) {
-        this.memberRespository = memberRespository;
+    public OAuthLoginCommandHandler(MemberRepository memberRepository, TokenRequestHandler tokenRequestHandler, List<OAuthApiClientHandler> apiClients, MemberDomainService memberDomainService) {
+        this.memberRepository = memberRepository;
         this.tokenRequestHandler = tokenRequestHandler;
         this.apiClients = apiClients.stream()
                 .collect(Collectors.toUnmodifiableMap(OAuthApiClientHandler::oAuthType, Function.identity()));
@@ -39,23 +40,27 @@ public class OAuthLoginCommandHandler {
         OAuthLoginResponse oAuthInfo = client.getOAuthInfo(accessToken);
 
         // TODO - REVIEW
-        Member member = memberRespository.findMemberByOAuthIdAndOAuthType(oAuthInfo.getId(), oAuthInfo.getOAuthType())
-                .orElseGet(() -> {
-                    Member created = memberDomainService.createMember(oAuthInfo.getId(), oAuthInfo.getOAuthType());
-                    saveMember(created);
-                    return created;
-                });
+        Optional<Member> optional = memberRepository.findMemberByOAuthIdAndOAuthType(oAuthInfo.getId(), oAuthInfo.getOAuthType());
+        Member member;
+        boolean isJoined = false;
+        if (optional.isEmpty()) {
+            member = memberDomainService.createMember(oAuthInfo.getId(), oAuthInfo.getOAuthType());
+            saveMember(member);
+            isJoined = true;
+        } else {
+            member = optional.get();
+        }
 
         // 1. 로그인
         // 2. 토큰 생성
         TokenResponse tokenResponse = tokenRequestHandler.generate(member);
         // TODO: 3. RefreshToken 저장
         tokenRequestHandler.storeRefreshToken(member.getOAuthId(), tokenResponse.getRefreshToken());
-        return LoginResponse.from(tokenResponse);
+        return LoginResponse.from(tokenResponse, isJoined);
     }
 
     private Member saveMember(Member member) {
-        Member savedMember =  memberRespository.save(member);
+        Member savedMember =  memberRepository.save(member);
         if (savedMember == null) {
             String errorMessage = "Could not save Member!";
             log.error("Could not save Member!");

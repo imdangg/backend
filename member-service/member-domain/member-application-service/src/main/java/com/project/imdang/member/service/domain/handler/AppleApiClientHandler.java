@@ -64,8 +64,8 @@ public class AppleApiClientHandler implements OAuthApiClientHandler {
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         MultiValueMap<String, String> body = loginCommand.makeBody();
-        body.add("grand_type", GRANT_TYPE);
-        body.add("cliend_id", clientId);
+        body.add("grant_type", GRANT_TYPE);
+        body.add("client_id", clientId);
         body.add("client_secret", generateClientSecret());
 
         HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);

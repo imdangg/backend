@@ -6,10 +6,11 @@ import com.project.imdang.insight.service.domain.mapper.InsightDataMapper;
 import com.project.imdang.insight.service.domain.ports.output.repository.InsightRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -20,7 +21,12 @@ public class ListInsightByApartmentComplexCommandHandler {
     private final InsightDataMapper insightDataMapper;
 
     @Transactional(readOnly = true)
-    public List<InsightResponse> listInsightByApartmentComplex(ListInsightByApartmentComplexQuery listInsightByApartmentComplexQuery) {
-        return null;
+    public Page<InsightResponse> listInsightByApartmentComplex(ListInsightByApartmentComplexQuery listInsightByApartmentComplexQuery) {
+
+        Sort sort = Sort.by(Sort.Direction.valueOf(listInsightByApartmentComplexQuery.getDirection()), listInsightByApartmentComplexQuery.getProperties());
+        PageRequest pageRequest = PageRequest.of(listInsightByApartmentComplexQuery.getPageNumber(), listInsightByApartmentComplexQuery.getPageSize(), sort);
+
+        return insightRepository.findAllByApartmentComplex(listInsightByApartmentComplexQuery.getApartmentComplex(), pageRequest)
+                .map(insightDataMapper::insightToInsightResponse);
     }
 }

@@ -1,13 +1,12 @@
 package com.project.imdang.insight.service.domain.event;
 
-import java.util.UUID;
+import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
 
-public class ExchangeRequestCreatedEvent {
-    private final UUID InsightId;
-    private final UUID RequestMemberId;
+import java.time.ZonedDateTime;
 
-    public ExchangeRequestCreatedEvent(UUID insightId, UUID requestMemberId) {
-        InsightId = insightId;
-        RequestMemberId = requestMemberId;
+public class ExchangeRequestCreatedEvent extends ExchangeRequestEvent {
+
+    public ExchangeRequestCreatedEvent(ExchangeRequest exchangeRequest, ZonedDateTime createdAt) {
+        super(exchangeRequest, createdAt);
     }
 }

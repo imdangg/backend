@@ -9,15 +9,14 @@ import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExcha
 import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface ExchangeApplicationService {
     RequestExchangeInsightResponse requestExchangeInsight(RequestExchangeInsightCommand requestExchangeInsightCommand);
     AcceptExchangeRequestResponse acceptExchangeRequest(AcceptExchangeRequestCommand acceptExchangeRequestCommand);
     RejectExchangeRequestResponse rejectExchangeRequest(RejectExchangeRequestCommand rejectExchangeRequestCommand);
     // 내가 요청한 내역
-    List<InsightResponse> listExchangeRequestedByMe(ListExchangeRequestedByMeQuery listExchangeRequestedByMeQuery) ;
+    Page<InsightResponse> listExchangeRequestedByMe(ListExchangeRequestedByMeQuery listExchangeRequestedByMeQuery) ;
     // 다른 사람이 요청한 내역
-    List<InsightResponse> listExchangeRequestedByOthers(ListExchangeRequestedByOthersQuery listExchangeRequestedByOthersQuery);
+    Page<InsightResponse> listExchangeRequestedByOthers(ListExchangeRequestedByOthersQuery listExchangeRequestedByOthersQuery);
 }

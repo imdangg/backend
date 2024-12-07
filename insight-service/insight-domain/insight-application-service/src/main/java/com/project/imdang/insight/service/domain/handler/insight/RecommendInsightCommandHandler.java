@@ -5,6 +5,7 @@ import com.project.imdang.insight.service.domain.InsightDomainService;
 import com.project.imdang.insight.service.domain.dto.insight.recommend.RecommendInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.recommend.RecommendInsightResponse;
 import com.project.imdang.insight.service.domain.entity.Insight;
+import com.project.imdang.insight.service.domain.exception.InsightDomainException;
 import com.project.imdang.insight.service.domain.exception.InsightNotFoundException;
 import com.project.imdang.insight.service.domain.mapper.InsightDataMapper;
 import com.project.imdang.insight.service.domain.ports.output.repository.InsightRepository;
@@ -32,8 +33,8 @@ public class RecommendInsightCommandHandler {
         UUID insightId = recommendInsightCommand.getInsightId();
         Insight insight = checkInsight(insightId);
 
-        // TODO - CHECK : 트랜잭션 확인 필요
         Insight recommended = insightDomainService.recommendInsight(insight);
+        saveInsight(recommended);
         log.info("Insight[id: {}] is recommended.", recommended.getId().getValue());
         return insightDataMapper.insightToRecommendInsightResponse(recommended);
     }
@@ -45,5 +46,16 @@ public class RecommendInsightCommandHandler {
             throw new InsightNotFoundException(insightId);
         }
         return insightResult.get();
+    }
+
+    private Insight saveInsight(Insight insight) {
+        Insight saved = insightRepository.save(insight);
+        if (saved == null) {
+            String errorMessage = "Could not save insight!";
+            log.error(errorMessage);
+            throw new InsightDomainException(errorMessage);
+        }
+        log.info("Insight[id: {}] is saved.", saved.getId().getValue());
+        return saved;
     }
 }

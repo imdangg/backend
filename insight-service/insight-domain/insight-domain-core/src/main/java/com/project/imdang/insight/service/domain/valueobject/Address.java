@@ -1,10 +1,12 @@
 package com.project.imdang.insight.service.domain.valueobject;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
+@Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Address {
     private String siGunGu;

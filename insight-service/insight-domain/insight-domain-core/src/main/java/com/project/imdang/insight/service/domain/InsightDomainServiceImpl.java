@@ -19,8 +19,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Set;
 
-import static com.project.imdang.insight.service.domain.entity.Snapshot.createNewSnapshot;
-
 @Slf4j
 public class InsightDomainServiceImpl implements InsightDomainService {
 // TODO - CHECK : 왜 DomainServiceImpl을 bean으로 등록하는가?
@@ -65,17 +63,15 @@ public class InsightDomainServiceImpl implements InsightDomainService {
 
     @Override
     public InsightAccusedEvent accuseInsight(Insight insight, MemberId accusedBy) {
-        insight.accuse();
+        Accuse accuse = insight.accuse(accusedBy);
         log.info("Insight[id: {}] is accused.", insight.getId().getValue());
-        Accuse accuse = Accuse.createNewAccuse(accusedBy, insight.getMemberId());
         // TODO - CHECK : accuse.getCreatedAt()
         return new InsightAccusedEvent(insight, accuse, ZonedDateTime.now(ZoneId.of("UTC")));
     }
 
     @Override
     public Snapshot captureInsight(Insight insight) {
-//        Snapshot snapshot = insight.capture();
-        Snapshot snapshot = createNewSnapshot(insight);
+        Snapshot snapshot = insight.capture();
         log.info("Insight[id: {}] is captured.", insight.getId().getValue());
         return snapshot;
     }

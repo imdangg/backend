@@ -8,6 +8,7 @@ import com.project.imdang.insight.service.domain.valueobject.ComplexFacility;
 import com.project.imdang.insight.service.domain.valueobject.FavorableNews;
 import com.project.imdang.insight.service.domain.valueobject.Infra;
 import com.project.imdang.insight.service.domain.valueobject.VisitMethod;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +20,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ValidateAndEvaluateInsightCommand {
 
     private Address address;

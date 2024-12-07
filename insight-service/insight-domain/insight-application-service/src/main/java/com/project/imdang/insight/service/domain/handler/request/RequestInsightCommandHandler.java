@@ -6,7 +6,7 @@ import com.project.imdang.insight.service.domain.dto.insight.request.RequestInsi
 import com.project.imdang.insight.service.domain.dto.insight.request.RequestInsightResponse;
 import com.project.imdang.insight.service.domain.entity.Insight;
 import com.project.imdang.insight.service.domain.entity.Request;
-import com.project.imdang.insight.service.domain.event.InsightRequestedEvent;
+import com.project.imdang.insight.service.domain.event.RequestCreatedEvent;
 import com.project.imdang.insight.service.domain.exception.InsightNotFoundException;
 import com.project.imdang.insight.service.domain.exception.RequestDomainException;
 import com.project.imdang.insight.service.domain.mapper.RequestDataMapper;
@@ -38,9 +38,9 @@ public class RequestInsightCommandHandler {
         checkInsight(requestedInsightId);
 
         Request request = requestDataMapper.requestInsightCommandToRequest(requestInsightCommand);
-        InsightRequestedEvent insightRequestedEvent = requestDomainService.request(request);
+        RequestCreatedEvent requestCreatedEvent = requestDomainService.request(request);
         saveRequest(request);
-        log.info("Insight[id: {}] is requested.", insightRequestedEvent.getInsight().getId().getValue());
+        log.info("Insight[id: {}] is requested.", request.getRequestedInsightId());
         // TODO - publish event
         return requestDataMapper.requestToRequestInsightResponse(request);
     }
@@ -53,7 +53,7 @@ public class RequestInsightCommandHandler {
         }
     }
 
-    private void saveRequest(Request request) {
+    private Request saveRequest(Request request) {
         Request saved = requestRepository.save(request);
         if (saved == null) {
             String errorMessage = "Could not save request!";
@@ -61,5 +61,6 @@ public class RequestInsightCommandHandler {
             throw new RequestDomainException(errorMessage);
         }
         log.info("Request[id: {}] is saved.", saved.getId().getValue());
+        return saved;
     }
 }

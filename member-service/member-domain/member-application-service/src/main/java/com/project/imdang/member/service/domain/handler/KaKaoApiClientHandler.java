@@ -1,8 +1,8 @@
 package com.project.imdang.member.service.domain.handler;
 
-import com.project.imdang.member.service.domain.dto.oauth.kakao.KakaoLoginResponse;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginCommand;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginResponse;
+import com.project.imdang.member.service.domain.dto.oauth.kakao.KakaoLoginResponse;
 import com.project.imdang.member.service.domain.dto.oauth.kakao.KakaoTokenResponse;
 import com.project.imdang.member.service.domain.valueobject.OAuthType;
 import lombok.RequiredArgsConstructor;
@@ -41,8 +41,8 @@ public class KaKaoApiClientHandler implements OAuthApiClientHandler{
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         MultiValueMap<String, String> body = loginCommand.makeBody();
-        body.add("grand_type", GRANT_TYPE);
-        body.add("cliend_id", clientId);
+        body.add("grant_type", GRANT_TYPE);
+        body.add("client_id", clientId);
 
         HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
         KakaoTokenResponse response = restTemplate.postForObject(authUrl, request, KakaoTokenResponse.class);

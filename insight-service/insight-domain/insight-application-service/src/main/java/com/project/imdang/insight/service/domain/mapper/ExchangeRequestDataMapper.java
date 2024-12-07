@@ -2,7 +2,10 @@ package com.project.imdang.insight.service.domain.mapper;
 
 import com.project.imdang.domain.valueobject.InsightId;
 import com.project.imdang.domain.valueobject.MemberId;
+import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExchangeRequestResponse;
+import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestResponse;
 import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightCommand;
+import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightResponse;
 import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
 import org.springframework.stereotype.Component;
 
@@ -15,5 +18,23 @@ public class ExchangeRequestDataMapper {
                .requestMemberId(new MemberId(requestExchangeInsightCommand.getRequestMemberId()))
                .requestMemberInsightId(new InsightId(requestExchangeInsightCommand.getRequestMemberInsightId()))
                .build();
+    }
+
+    public RequestExchangeInsightResponse exchangeRequestToRequestExchangeInsightResponse(ExchangeRequest exchangeRequest) {
+        return RequestExchangeInsightResponse.builder()
+                .exchangeRequestId(exchangeRequest.getId().getValue())
+                .build();
+    }
+
+    public AcceptExchangeRequestResponse exchangeRequestToAcceptExchangeRequestResponse(ExchangeRequest exchangeRequest) {
+        return AcceptExchangeRequestResponse.builder()
+                .exchangeRequestId(exchangeRequest.getId().getValue())
+                .build();
+    }
+
+    public RejectExchangeRequestResponse exchangeRequestToRejectExchangeRequestResponse(ExchangeRequest exchangeRequest) {
+        return RejectExchangeRequestResponse.builder()
+                .exchangeRequestId(exchangeRequest.getId().getValue())
+                .build();
     }
 }

@@ -12,6 +12,7 @@ import java.time.ZonedDateTime;
 public class Notification extends AggregateRoot<NotificationId> {
 // TODO - CHECK : AggregateRoot vs BaseEntity
 
+    // todo - receiver
     private NotificationCategory category;
 //    private String title;
 
@@ -32,14 +33,14 @@ public class Notification extends AggregateRoot<NotificationId> {
         this.checked = checked;
         this.checkedAt = checkedAt;
     }
-
+/*
     public static Notification createNewNotification(NotificationCategory category, String message) {
         return Notification.builder()
                 .category(category)
                 .message(message)
                 .createdAt(ZonedDateTime.now())
                 .build();
-    }
+    }*/
 
     public void check() {
         if (Boolean.TRUE.equals(this.checked)) {
