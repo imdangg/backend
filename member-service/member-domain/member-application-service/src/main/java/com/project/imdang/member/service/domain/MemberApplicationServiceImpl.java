@@ -9,8 +9,10 @@ import com.project.imdang.member.service.domain.handler.OAuthLoginCommandHandler
 import com.project.imdang.member.service.domain.ports.input.service.MemberApplicationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Slf4j
+@Service
 @RequiredArgsConstructor
 public class MemberApplicationServiceImpl implements MemberApplicationService {
 
