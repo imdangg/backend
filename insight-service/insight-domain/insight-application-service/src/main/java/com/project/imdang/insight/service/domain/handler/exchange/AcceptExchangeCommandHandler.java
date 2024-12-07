@@ -8,10 +8,12 @@ import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
 import com.project.imdang.insight.service.domain.event.ExchangeRequestAcceptedEvent;
 import com.project.imdang.insight.service.domain.exception.ExchangeDomainException;
 import com.project.imdang.insight.service.domain.exception.ExchangeRequestNotFoundException;
+import com.project.imdang.insight.service.domain.mapper.ExchangeRequestDataMapper;
 import com.project.imdang.insight.service.domain.ports.output.repository.ExchangeRequestRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -22,18 +24,19 @@ public class AcceptExchangeCommandHandler {
 
     private final ExchangeDomainService exchangeDomainService;
     private final ExchangeRequestRepository exchangeRequestRepository;
+    private final ExchangeRequestDataMapper exchangeRequestDataMapper;
 
 
+    @Transactional
     public AcceptExchangeRequestResponse acceptExchangeRequest(AcceptExchangeRequestCommand acceptExchangeRequestCommand) {
         UUID exchangeRequestId = acceptExchangeRequestCommand.getExchangeRequestId();
         ExchangeRequest exchangeRequest = checkExchangeRequest(exchangeRequestId);
-        //1. 요청 수락
-        ExchangeRequestAcceptedEvent acceptedEvent = exchangeDomainService.acceptExchangeRequest(exchangeRequest);
+        ExchangeRequestAcceptedEvent exchangeRequestAcceptedEvent = exchangeDomainService.acceptExchangeRequest(exchangeRequest);
         log.info("ExchangeRequest[id: {}] is accepted.", exchangeRequest.getId().getValue());
-        ExchangeRequest saveExchangeRequest = save(exchangeRequest);
-        //TODO : 2. publish
+        ExchangeRequest saved = save(exchangeRequest);
+        // TODO : publish
 
-        return new AcceptExchangeRequestResponse(saveExchangeRequest.getId().getValue());
+        return exchangeRequestDataMapper.exchangeRequestToAcceptExchangeRequestResponse(saved);
     }
 
     private ExchangeRequest checkExchangeRequest(UUID exchangeRequestId) {

@@ -8,10 +8,12 @@ import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
 import com.project.imdang.insight.service.domain.event.ExchangeRequestRejectedEvent;
 import com.project.imdang.insight.service.domain.exception.ExchangeDomainException;
 import com.project.imdang.insight.service.domain.exception.ExchangeRequestNotFoundException;
+import com.project.imdang.insight.service.domain.mapper.ExchangeRequestDataMapper;
 import com.project.imdang.insight.service.domain.ports.output.repository.ExchangeRequestRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -24,17 +26,17 @@ public class RejectExchangeCommandHandler {
 // 교환 요청한 상대방의 rejectedCount + 1 → 횟수 비교해서 쿠폰 발급
     private final ExchangeDomainService exchangeDomainService;
     private final ExchangeRequestRepository exchangeRequestRepository;
+    private final ExchangeRequestDataMapper exchangeRequestDataMapper;
 
+    @Transactional
     public RejectExchangeRequestResponse rejectExchangeRequest(RejectExchangeRequestCommand rejectExchangeRequestCommand) {
         UUID exchangeRequestId = rejectExchangeRequestCommand.getExchangeRequestId();
         ExchangeRequest exchangeRequest = checkExchangeRequest(exchangeRequestId);
-        //1. 요청 거절
-        ExchangeRequestRejectedEvent rejectedEvent = exchangeDomainService.rejectExchangeRequest(exchangeRequest);
+        ExchangeRequestRejectedEvent exchangeRequestRejectedEvent = exchangeDomainService.rejectExchangeRequest(exchangeRequest);
         log.info("ExchangeRequest[id: {}] is rejected.", exchangeRequest.getId().getValue());
-        ExchangeRequest saveExchangeRequest = save(exchangeRequest);
-
-        //TODO : 2. publish
-        return new RejectExchangeRequestResponse(saveExchangeRequest.getRequestedInsightId().getValue());
+        ExchangeRequest saved = save(exchangeRequest);
+        // TODO : publish
+        return exchangeRequestDataMapper.exchangeRequestToRejectExchangeRequestResponse(saved);
     }
 
     private ExchangeRequest checkExchangeRequest(UUID exchangeRequestId) {

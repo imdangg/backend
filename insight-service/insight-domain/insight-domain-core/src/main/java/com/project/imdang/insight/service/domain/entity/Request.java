@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 @Getter
 public class Request extends AggregateRoot<RequestId> {
@@ -19,7 +20,7 @@ public class Request extends AggregateRoot<RequestId> {
     private final InsightId requestedInsightId;
 
     // TODO - CHECK : vs createdAt
-    private final ZonedDateTime requestedAt;
+    private ZonedDateTime requestedAt;
     private ZonedDateTime respondedAt;
     private RequestStatus status;
 
@@ -33,15 +34,13 @@ public class Request extends AggregateRoot<RequestId> {
         this.respondedAt = respondedAt;
         this.status = status;
     }
-/*
-    public static Request createNewRequest(MemberId requestMemberId, MemberCouponId memberCouponId, InsightId requestedInsightId) {
-        return Request.builder()
-                .requestMemberId(requestMemberId)
-                .memberCouponId(memberCouponId)
-                .requestedInsightId(requestedInsightId)
-                .status(RequestStatus.PENDING)
-                .build();
-    }*/
+
+    public void initialize() {
+        RequestId id = new RequestId(UUID.randomUUID());
+        setId(id);
+        this.status = RequestStatus.PENDING;
+        this.requestedAt = ZonedDateTime.now();
+    }
 
     public void accept() {
         this.status = RequestStatus.ACCEPTED;

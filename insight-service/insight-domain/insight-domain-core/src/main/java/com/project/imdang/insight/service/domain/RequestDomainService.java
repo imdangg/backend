@@ -1,8 +1,8 @@
 package com.project.imdang.insight.service.domain;
 
 import com.project.imdang.insight.service.domain.entity.Request;
-import com.project.imdang.insight.service.domain.event.InsightRequestedEvent;
+import com.project.imdang.insight.service.domain.event.RequestCreatedEvent;
 
 public interface RequestDomainService {
-    InsightRequestedEvent request(Request request);
+    RequestCreatedEvent request(Request request);
 }

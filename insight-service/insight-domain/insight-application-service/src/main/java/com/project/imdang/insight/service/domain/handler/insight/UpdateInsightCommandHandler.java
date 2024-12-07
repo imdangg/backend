@@ -48,7 +48,9 @@ public class UpdateInsightCommandHandler {
                 updateInsightCommand.getComplexEnvironment(),
                 updateInsightCommand.getComplexFacility(),
                 updateInsightCommand.getFavorableNews());
-        log.info("Insight[id: {}] is updated.", insightUpdatedEvent.getInsight().getId().getValue());
+        Insight updated = insightUpdatedEvent.getInsight();
+        log.info("Insight[id: {}] is updated.", updated.getId().getValue());
+        saveInsight(updated);
 
         Snapshot snapshot = insightDomainService.captureInsight(insightUpdatedEvent.getInsight());
         saveSnapshot(snapshot);
@@ -62,6 +64,17 @@ public class UpdateInsightCommandHandler {
             throw new InsightNotFoundException(insightId);
         }
         return insightResult.get();
+    }
+
+    private Insight saveInsight(Insight insight) {
+        Insight saved = insightRepository.save(insight);
+        if (saved == null) {
+            String errorMessage = "Could not save insight!";
+            log.error(errorMessage);
+            throw new InsightDomainException(errorMessage);
+        }
+        log.info("Insight[id: {}] is saved.", saved.getId().getValue());
+        return saved;
     }
 
     private void saveSnapshot(Snapshot snapshot) {

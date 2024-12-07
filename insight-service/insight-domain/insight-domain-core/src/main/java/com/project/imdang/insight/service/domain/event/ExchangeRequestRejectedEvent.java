@@ -1,13 +1,12 @@
 package com.project.imdang.insight.service.domain.event;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
 
-import java.util.UUID;
+import java.time.ZonedDateTime;
 
-@Getter
-@AllArgsConstructor
-public class ExchangeRequestRejectedEvent {
-    private UUID insightId;
-    private UUID reqeustMemberId;
+public class ExchangeRequestRejectedEvent extends ExchangeRequestEvent {
+
+    public ExchangeRequestRejectedEvent(ExchangeRequest exchangeRequest, ZonedDateTime createdAt) {
+        super(exchangeRequest, createdAt);
+    }
 }

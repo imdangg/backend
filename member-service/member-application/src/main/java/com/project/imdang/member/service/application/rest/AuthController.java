@@ -53,8 +53,8 @@ public class AuthController {
      * 회원가입
      */
     @PutMapping("/join")
-    public ResponseEntity<LoginResponse> join(@RequestHeader(value = "Authorization") String token, @RequestBody JoinCommand joinCommand) {
-        LoginResponse response = memberApplicationService.join(token.substring(7), joinCommand);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<Void> join(@RequestHeader(value = "Authorization") String token, @RequestBody JoinCommand joinCommand) {
+        memberApplicationService.join(token.substring(7), joinCommand);
+        return ResponseEntity.ok().build();
     }
 }

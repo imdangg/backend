@@ -12,8 +12,7 @@ import com.project.imdang.insight.service.domain.dto.insight.list.InsightRespons
 import com.project.imdang.insight.service.domain.handler.exchange.*;
 import com.project.imdang.insight.service.domain.ports.input.service.ExchangeApplicationService;
 import lombok.RequiredArgsConstructor;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 @RequiredArgsConstructor
 public class ExchangeApplicationServiceImpl implements ExchangeApplicationService {
@@ -40,12 +39,12 @@ public class ExchangeApplicationServiceImpl implements ExchangeApplicationServic
     }
 
     @Override
-    public List<InsightResponse> listExchangeRequestedByMe(ListExchangeRequestedByMeQuery listExchangeRequestedByMeQuery) {
+    public Page<InsightResponse> listExchangeRequestedByMe(ListExchangeRequestedByMeQuery listExchangeRequestedByMeQuery) {
         return listExchangeRequestedByMeHandler.list(listExchangeRequestedByMeQuery);
     }
 
     @Override
-    public List<InsightResponse> listExchangeRequestedByOthers(ListExchangeRequestedByOthersQuery listExchangeRequestedByOthersQuery) {
+    public Page<InsightResponse> listExchangeRequestedByOthers(ListExchangeRequestedByOthersQuery listExchangeRequestedByOthersQuery) {
         return listExchangeRequestedByOthersHandler.list(listExchangeRequestedByOthersQuery);
     }
 }

@@ -84,7 +84,7 @@ public class Snapshot extends BaseEntity<SnapshotId> {
         this.favorableNews = insight.getFavorableNews();
     }
 
-    public static Snapshot createNewSnapshot(Insight insight) {
+    static Snapshot createNewSnapshot(Insight insight) {
         return new Snapshot(insight);
     }
 }

@@ -24,7 +24,7 @@ public class Accuse extends BaseEntity<AccuseId> {
         this.createdAt = createdAt;
     }
 
-    public static Accuse createNewAccuse(MemberId accuseMemberId, MemberId accusedMemberId) {
+    static Accuse createNewAccuse(MemberId accuseMemberId, MemberId accusedMemberId) {
         return Accuse.builder()
                 .accuseMemberId(accuseMemberId)
                 .accusedMemberId(accusedMemberId)

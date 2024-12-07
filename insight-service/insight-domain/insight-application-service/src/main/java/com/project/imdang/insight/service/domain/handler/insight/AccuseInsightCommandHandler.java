@@ -38,7 +38,7 @@ public class AccuseInsightCommandHandler {
         Insight insight = checkInsight(accuseInsightCommand.getInsightId());
         MemberId accuseMemberId = new MemberId(accuseInsightCommand.getAccuseMemberId());
         InsightAccusedEvent insightAccusedEvent = insightDomainService.accuseInsight(insight, accuseMemberId);
-
+        saveInsight(insightAccusedEvent.getInsight());
         // TODO - 신고 횟수에 따른 이벤트 발생 (+ 어디서 accuse를 저장할까?)
         // TODO - publish event
         saveAccuse(insightAccusedEvent.getAccuse());
@@ -54,6 +54,16 @@ public class AccuseInsightCommandHandler {
             throw new InsightNotFoundException(insightId);
         }
         return insightResult.get();
+    }
+
+    private void saveInsight(Insight insight) {
+        Insight saved = insightRepository.save(insight);
+        if (saved == null) {
+            String errorMessage = "Could not save insight!";
+            log.error(errorMessage);
+            throw new InsightDomainException(errorMessage);
+        }
+        log.info("Insight[id: {}] is saved.", saved.getId().getValue());
     }
 
     private void saveAccuse(Accuse accuse) {

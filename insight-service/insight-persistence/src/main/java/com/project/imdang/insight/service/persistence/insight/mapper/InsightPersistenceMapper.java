@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class InsightPersistenceMapper {
 
-    // TODO
     public InsightEntity insightToInsightEntity(Insight insight) {
         return InsightEntity.builder()
                 .id(insight.getId().getValue())

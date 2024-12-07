@@ -30,7 +30,7 @@ public class ExchangeController {
     public ResponseEntity<RequestExchangeInsightResponse> request(@RequestBody RequestExchangeInsightCommand requestExchangeInsightCommand) {
         log.info("Insight[id: {}] is requested to exchange with insight[id: {}].", requestExchangeInsightCommand.getRequestedInsightId(), requestExchangeInsightCommand.getRequestMemberInsightId());
         RequestExchangeInsightResponse requestExchangeInsightResponse = exchangeApplicationService.requestExchangeInsight(requestExchangeInsightCommand);
-        log.info("ExchangeRequest[id : {}] is created.", requestExchangeInsightResponse.getExchangeId());
+        log.info("ExchangeRequest[id : {}] is created.", requestExchangeInsightResponse.getExchangeRequestId());
         return ResponseEntity.ok(requestExchangeInsightResponse);
     }
 

@@ -14,6 +14,8 @@ import com.project.imdang.insight.service.domain.dto.insight.list.InsightRespons
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightByAddressQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightByApartmentComplexQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightQuery;
+import com.project.imdang.insight.service.domain.dto.insight.list.ListMyInsightByAddressQuery;
+import com.project.imdang.insight.service.domain.dto.insight.list.SnapshotResponse;
 import com.project.imdang.insight.service.domain.dto.insight.preview.PreviewInsightQuery;
 import com.project.imdang.insight.service.domain.dto.insight.preview.PreviewInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.recommend.RecommendInsightCommand;
@@ -30,6 +32,7 @@ import com.project.imdang.insight.service.domain.handler.insight.ListInsightByAd
 import com.project.imdang.insight.service.domain.handler.insight.ListInsightByApartmentComplexCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.ListInsightByMyVisitedApartmentComplexCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.ListInsightCommandHandler;
+import com.project.imdang.insight.service.domain.handler.insight.ListMyInsightByAddressCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.PreviewInsightCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.RecommendInsightCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.UpdateInsightCommandHandler;
@@ -38,10 +41,10 @@ import com.project.imdang.insight.service.domain.handler.request.RequestInsightC
 import com.project.imdang.insight.service.domain.ports.input.service.InsightApplicationService;
 import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.List;
 import java.util.Map;
 
 @Validated
@@ -53,6 +56,7 @@ public class InsightApplicationServiceImpl implements InsightApplicationService 
     private final ListInsightByAddressCommandHandler listInsightByAddressCommandHandler;
     private final ListInsightByApartmentComplexCommandHandler listInsightByApartmentComplexCommandHandler;
     private final ListInsightByMyVisitedApartmentComplexCommandHandler listInsightByMyVisitedApartmentComplexCommandHandler;
+    private final ListMyInsightByAddressCommandHandler listMyInsightByAddressCommandHandler;
 
     private final PreviewInsightCommandHandler previewInsightCommandHandler;
     private final DetailInsightCommandHandler detailInsightCommandHandler;
@@ -67,23 +71,28 @@ public class InsightApplicationServiceImpl implements InsightApplicationService 
     private final AccuseInsightCommandHandler accuseInsightCommandHandler;
 
     @Override
-    public List<InsightResponse> listInsight(ListInsightQuery listInsightQuery) {
+    public Page<InsightResponse> listInsight(ListInsightQuery listInsightQuery) {
         return listInsightCommandHandler.listInsight(listInsightQuery);
     }
 
     @Override
-    public Map<ApartmentComplex, List<InsightResponse>> listInsightByAddress(ListInsightByAddressQuery listInsightByAddressQuery) {
+    public Map<ApartmentComplex, Page<InsightResponse>> listInsightByAddress(ListInsightByAddressQuery listInsightByAddressQuery) {
         return listInsightByAddressCommandHandler.listInsightByAddress(listInsightByAddressQuery);
     }
 
     @Override
-    public List<InsightResponse> listInsightByApartmentComplex(ListInsightByApartmentComplexQuery listInsightByApartmentComplexQuery) {
+    public Page<InsightResponse> listInsightByApartmentComplex(ListInsightByApartmentComplexQuery listInsightByApartmentComplexQuery) {
         return listInsightByApartmentComplexCommandHandler.listInsightByApartmentComplex(listInsightByApartmentComplexQuery);
     }
 
     @Override
-    public Map<ApartmentComplex, List<InsightResponse>> listInsightByMyVisitedApartmentComplex(ListInsightQuery listInsightQuery) {
+    public Map<ApartmentComplex, Page<InsightResponse>> listInsightByMyVisitedApartmentComplex(ListInsightQuery listInsightQuery) {
         return listInsightByMyVisitedApartmentComplexCommandHandler.listInsightByMyVisitedApartmentComplex(listInsightQuery);
+    }
+
+    @Override
+    public Map<ApartmentComplex, Page<SnapshotResponse>> listMyInsightByAddress(ListMyInsightByAddressQuery listMyInsightByAddressQuery) {
+        return listMyInsightByAddressCommandHandler.listMyInsightByAddress(listMyInsightByAddressQuery);
     }
 
     @Override

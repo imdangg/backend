@@ -113,9 +113,9 @@ public class Insight extends AggregateRoot<InsightId> {
         this.score = 80;
     }
 
-//    public Snapshot capture() {
-//        return new Snapshot(this);
-//    }
+    public Snapshot capture() {
+        return Snapshot.createNewSnapshot(this);
+    }
 
     public void initialize() {
         InsightId insightId = new InsightId(UUID.randomUUID());
@@ -163,8 +163,9 @@ public class Insight extends AggregateRoot<InsightId> {
     }
 
     // TODO - 동시성 체크
-    public void accuse() {
+    public Accuse accuse(MemberId accusedBy) {
         this.accusedCount++;
+        return Accuse.createNewAccuse(accusedBy, this.memberId);
     }
     
     // TODO - 동시성 체크

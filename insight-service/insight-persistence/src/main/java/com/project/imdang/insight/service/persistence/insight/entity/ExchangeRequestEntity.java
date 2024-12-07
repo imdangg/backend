@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table(name = "exchange_request")
 @Entity
