@@ -39,19 +39,19 @@ public class OAuthLoginCommandHandler {
         String accessToken = client.getAccessToken(loginCommand);
         OAuthLoginResponse oAuthInfo = client.getOAuthInfo(accessToken);
 
+        // 1. 로그인
         // TODO - REVIEW
+        boolean isJoined = true;
         Optional<Member> optional = memberRepository.findMemberByOAuthIdAndOAuthType(oAuthInfo.getId(), oAuthInfo.getOAuthType());
         Member member;
-        boolean isJoined = false;
         if (optional.isEmpty()) {
             member = memberDomainService.createMember(oAuthInfo.getId(), oAuthInfo.getOAuthType());
             saveMember(member);
-            isJoined = true;
+            isJoined = false;
         } else {
             member = optional.get();
         }
 
-        // 1. 로그인
         // 2. 토큰 생성
         TokenResponse tokenResponse = tokenRequestHandler.generate(member);
         // TODO: 3. RefreshToken 저장
