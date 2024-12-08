@@ -14,8 +14,8 @@ public class MemberPersistenceMapper {
                 .nickname(member.getNickname())
                 .birthDate(member.getBirthDate())
                 .gender(member.getGender())
-                .oAuthId(member.getOAuthId())
-                .oAuthType(member.getOAuthType())
+                .authId(member.getOAuthId())
+                .authType(member.getOAuthType())
                 .build();
     }
 
@@ -25,8 +25,8 @@ public class MemberPersistenceMapper {
                 .nickname(memberEntity.getNickname())
                 .birthDate(memberEntity.getBirthDate())
                 .gender(memberEntity.getGender())
-                .oAuthId(memberEntity.getOAuthId())
-                .oAuthType(memberEntity.getOAuthType())
+                .oAuthId(memberEntity.getAuthId())
+                .oAuthType(memberEntity.getAuthType())
                 .build();
     }
 }

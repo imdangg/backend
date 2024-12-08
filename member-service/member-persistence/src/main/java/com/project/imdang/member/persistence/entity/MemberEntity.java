@@ -27,9 +27,9 @@ public class MemberEntity {
     @Id
     private UUID id;
 
-    private String oAuthId;
+    private String authId;
     @Enumerated(EnumType.STRING)
-    private OAuthType oAuthType;
+    private OAuthType authType;
 
     private String nickname;
     private String birthDate;

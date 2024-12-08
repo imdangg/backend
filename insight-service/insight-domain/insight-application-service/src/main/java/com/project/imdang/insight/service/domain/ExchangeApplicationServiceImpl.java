@@ -13,7 +13,9 @@ import com.project.imdang.insight.service.domain.handler.exchange.*;
 import com.project.imdang.insight.service.domain.ports.input.service.ExchangeApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
 
+@Service
 @RequiredArgsConstructor
 public class ExchangeApplicationServiceImpl implements ExchangeApplicationService {
 

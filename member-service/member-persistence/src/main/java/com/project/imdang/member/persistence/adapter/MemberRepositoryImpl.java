@@ -23,7 +23,7 @@ public class MemberRepositoryImpl implements MemberRepository {
     @Override
     @Transactional
     public Optional<Member> findMemberByOAuthIdAndOAuthType(String oAuthId, OAuthType oAuthType) {
-        Optional<MemberEntity> memberEntity = memberJpaRepository.findByOAuthIdAndOAuthType(oAuthId, oAuthType);
+        Optional<MemberEntity> memberEntity = memberJpaRepository.findByAuthIdAndAuthType(oAuthId, oAuthType);
         return memberEntity.map(memberPersistenceMapper::memberEntityToMember);
     }
 

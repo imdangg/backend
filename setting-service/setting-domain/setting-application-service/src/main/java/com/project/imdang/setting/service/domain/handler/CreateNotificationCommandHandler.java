@@ -15,13 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 public class CreateNotificationCommandHandler {
 
-    private final NotificationDomainService notificationDomainService;
+//    private final NotificationDomainService notificationDomainService;
     private final NotificationRepository notificationRepository;
     private final NotificationDataMapper notificationDataMapper;
 
     @Transactional
     public void createNotification(CreateNotificationCommand createNotificationCommand) {
         Notification notification = notificationDataMapper.createNotificationCommandToNotification(createNotificationCommand);
-        notificationDomainService.createNotification(notification);
+//        notificationDomainService.createNotification(notification);
     }
 }

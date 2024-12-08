@@ -35,19 +35,19 @@ public class AppleApiClientHandler implements OAuthApiClientHandler {
     private final RestTemplate restTemplate;
     private static final String GRANT_TYPE = "authorization_code";
 
-    @Value("${ouath.apple.url.auth}")
+    @Value("${oauth.apple.url.auth}")
     private String authUrl;
 
-    @Value("${ouath.apple.client-id}")
+    @Value("${oauth.apple.client-id}")
     private String clientId;
 
-    @Value("${ouath.apple.login-key}")
+    @Value("${oauth.apple.login-key}")
     private String keyId;
 
-    @Value("${ouath.apple.team-id}")
+    @Value("${oauth.apple.team-id}")
     private String teamId;
 
-    @Value("${ouath.apple.key-path}")
+    @Value("${oauth.apple.key-path}")
     private String keyPath;
     @Override
     public OAuthType oAuthType() {

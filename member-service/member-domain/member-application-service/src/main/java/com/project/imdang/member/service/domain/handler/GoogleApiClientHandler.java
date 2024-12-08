@@ -9,9 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,19 +22,19 @@ public class GoogleApiClientHandler implements OAuthApiClientHandler {
     private final RestTemplate restTemplate;
     private static final String GRANT_TYPE = "authorization_code";
 
-    @Value("${ouath.google.url.auth}")
+    @Value("${oauth.google.url.auth}")
     private String authUrl;
 
-    @Value("${ouath.google.url.api}")
+    @Value("${oauth.google.url.api}")
     private String apiUrl;
 
-    @Value("${ouath.kakao.url.redirect}")
+    @Value("${oauth.google.url.redirect}")
     private String redirectUrl;
 
-    @Value("${ouath.google.client-id}")
+    @Value("${oauth.google.client-id}")
     private String clientId;
 
-    @Value("${ouath.google.client-secret}")
+    @Value("${oauth.google.client-secret}")
     private String clientSecret;
 
     @Override
@@ -66,8 +66,8 @@ public class GoogleApiClientHandler implements OAuthApiClientHandler {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
 
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
-        return restTemplate.postForObject(apiUrl, request, GoogleLoginResponse.class);
+//        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        HttpEntity<?> request = new HttpEntity<>(httpHeaders);
+        return restTemplate.exchange(apiUrl, HttpMethod.GET, request, GoogleLoginResponse.class).getBody();
     }
 }
