@@ -1,5 +1,5 @@
-#*.yml
-#*.p8
+*.yml
+*.p8
 
 # Compiled class file
 *.class
