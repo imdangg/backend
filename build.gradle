@@ -58,6 +58,33 @@ subprojects {
     }
 }
 
+project(':imdang-container') {
+    dependencies {
+        implementation project(':insight-service:insight-container')
+        implementation project(':insight-service:insight-application')
+        implementation project(':insight-service:insight-persistence')
+        implementation project(':insight-service:insight-domain:insight-application-service')
+        implementation project(':insight-service:insight-domain:insight-domain-core')
+
+        implementation project(':member-service:member-container')
+        implementation project(':member-service:member-application')
+        implementation project(':member-service:member-persistence')
+        implementation project(':member-service:member-domain:member-application-service')
+        implementation project(':member-service:member-domain:member-domain-core')
+
+//        implementation project(':setting-service:setting-container')
+        implementation project(':setting-service:setting-application')
+        implementation project(':setting-service:setting-persistence')
+        implementation project(':setting-service:setting-domain:setting-application-service')
+        implementation project(':setting-service:setting-domain:setting-domain-core')
+
+        implementation project(':common:common-domain:common-domain-core')
+
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    }
+}
+
 project(':common:common-application') {
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-validation'

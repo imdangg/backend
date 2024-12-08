@@ -1,3 +1,6 @@
-tasks.named('bootBuildImage') {
-    imageName = "${project.group}/insight.service:${project.version}"
+bootJar {
+    enabled = false
+}
+jar {
+    enabled = true
 }
