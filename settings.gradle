@@ -6,6 +6,7 @@ include("infrastructure")
 include("infrastructure:saga")
 
 include("common")
+include("common:common-container")
 include("common:common-application")
 include("common:common-domain")
 include("common:common-domain:common-application-service")

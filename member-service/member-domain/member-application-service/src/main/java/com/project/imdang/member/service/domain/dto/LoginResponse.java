@@ -1,5 +1,6 @@
 package com.project.imdang.member.service.domain.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,10 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Schema(description = "로그인 응답")
 public class LoginResponse {
     private String accessToken;
     private String refreshToken;
     private Long expiresIn;
+    @Schema(description = "온보딩 여부")
     private boolean isJoined;
 
     public static LoginResponse from(TokenResponse response, boolean isJoined) {

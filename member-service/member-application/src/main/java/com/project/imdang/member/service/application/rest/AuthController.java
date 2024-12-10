@@ -6,6 +6,11 @@ import com.project.imdang.member.service.domain.dto.oauth.apple.AppleLoginComman
 import com.project.imdang.member.service.domain.dto.oauth.google.GoogleLoginCommand;
 import com.project.imdang.member.service.domain.dto.oauth.kakao.KakaoLoginCommand;
 import com.project.imdang.member.service.domain.ports.input.service.MemberApplicationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
+@Tag(name = "AuthController", description = "로그인 및 온보딩 API")
 public class AuthController {
 
     private final MemberApplicationService memberApplicationService;
@@ -21,6 +27,9 @@ public class AuthController {
     /**
      * 카카오 로그인
      */
+    @Operation(description = "카카오 로그인 API")
+    @ApiResponse(responseCode = "200", description = "카카오 로그인이 성공하였습니다.",
+            content = @Content(schema = @Schema(implementation = LoginResponse.class)))
     @PostMapping("/kakao")
     public ResponseEntity<LoginResponse> login(@RequestBody KakaoLoginCommand kakaoLoginCommand) {
         LoginResponse response = memberApplicationService.login(kakaoLoginCommand);
@@ -30,6 +39,9 @@ public class AuthController {
     /**
      * 애플 로그인
      */
+    @Operation(description = "애플 로그인 API")
+    @ApiResponse(responseCode = "200", description = "애플 로그인이 성공하였습니다.",
+            content = @Content(schema = @Schema(implementation = LoginResponse.class)))
     @PostMapping("/apple")
     public ResponseEntity<LoginResponse> login(@RequestBody AppleLoginCommand appleLoginCommand) {
         LoginResponse response = memberApplicationService.login(appleLoginCommand);
@@ -39,6 +51,9 @@ public class AuthController {
     /**
      * 구글 로그인
      */
+    @Operation(description = "구글 로그인 API")
+    @ApiResponse(responseCode = "200", description = "구글 로그인이 성공하였습니다.",
+            content = @Content(schema = @Schema(implementation = LoginResponse.class)))
     @PostMapping("/google")
     public ResponseEntity<LoginResponse> login(@RequestBody GoogleLoginCommand googleLoginCommand) {
         LoginResponse response = memberApplicationService.login(googleLoginCommand);
@@ -48,6 +63,8 @@ public class AuthController {
     /**
      * 회원가입
      */
+    @Operation(description = "온보딩 API")
+    @ApiResponse(responseCode = "200", description = "온보딩이 완료되었습니다.")
     @PutMapping("/join")
     public ResponseEntity<Void> join(@RequestHeader(value = "Authorization") String token, @RequestBody JoinCommand joinCommand) {
         memberApplicationService.join(token.substring(7), joinCommand);
