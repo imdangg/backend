@@ -1,5 +1,6 @@
 package com.project.imdang.member.service.domain.handler;
 
+import com.project.imdang.common.common.container.security.jwt.JwtTokenProvider;
 import com.project.imdang.member.service.domain.dto.TokenResponse;
 import com.project.imdang.member.service.domain.entity.Member;
 import lombok.RequiredArgsConstructor;
