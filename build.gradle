@@ -40,16 +40,11 @@ subprojects {
     }
 
     dependencies {
-//        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//        implementation 'org.springframework.boot:spring-boot-starter-security'
-//        implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-logging'
         compileOnly 'org.projectlombok:lombok'
 //        developmentOnly 'org.springframework.boot:spring-boot-devtools'
-//        runtimeOnly 'com.mysql:mysql-connector-j'
         annotationProcessor 'org.projectlombok:lombok'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//        testImplementation 'org.springframework.security:spring-security-test'
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
 
@@ -82,6 +77,14 @@ project(':imdang-container') {
 
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    }
+}
+
+project(':common:common-container') {
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-security'
+        implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+        testImplementation 'org.springframework.security:spring-security-test'
     }
 }
 
