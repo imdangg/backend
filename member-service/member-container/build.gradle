@@ -1,3 +1,6 @@
-tasks.named('bootBuildImage') {
-    imageName = "member.service:${project.version}"
+bootJar {
+    enabled = false
+}
+jar {
+    enabled = true
 }

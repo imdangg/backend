@@ -21,12 +21,6 @@ public class MemberRepositoryImpl implements MemberRepository {
     private final MemberJpaRepository memberJpaRepository;
     private final MemberPersistenceMapper memberPersistenceMapper;
 
-//    @Override
-//    @Transactional(readOnly = true)
-//    public boolean existByOauthIdAndType(OAuthLoginResponse response) {
-//        return memberJpaRepository.existsByOAuthIdAndOAuthType(response.getId(), response.oAuthType());
-//    }
-
     @Override
     @Transactional
     public Optional<Member> findMemberByOAuthIdAndOAuthType(String oAuthId, OAuthType oAuthType) {
