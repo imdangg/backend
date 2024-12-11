@@ -7,10 +7,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Builder
-@AllArgsConstructor
+//@Builder
+//@AllArgsConstructor
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ListNotificationQuery extends PagingQuery {
-    private Boolean checked;
 }

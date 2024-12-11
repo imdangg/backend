@@ -34,6 +34,6 @@ public class NotificationEntity {
     private NotificationCategory category;
     private String message;
     private ZonedDateTime createdAt;
-    private Boolean checked;
+    private Boolean isChecked;
     private ZonedDateTime checkedAt;
 }
