@@ -13,7 +13,7 @@ public class NotificationPersistenceMapper {
                 .category(notification.getCategory())
                 .message(notification.getMessage())
                 .createdAt(notification.getCreatedAt())
-                .checked(notification.getChecked())
+                .isChecked(notification.getIsChecked())
                 .checkedAt(notification.getCheckedAt())
                 .build();
     }
@@ -24,7 +24,7 @@ public class NotificationPersistenceMapper {
                 .category(notificationEntity.getCategory())
                 .message(notificationEntity.getMessage())
                 .createdAt(notificationEntity.getCreatedAt())
-                .checked(notificationEntity.getChecked())
+                .isChecked(notificationEntity.getIsChecked())
                 .checkedAt(notificationEntity.getCheckedAt())
                 .build();
     }

@@ -6,6 +6,8 @@ import com.project.imdang.setting.service.persistence.notification.entity.Notifi
 import com.project.imdang.setting.service.persistence.notification.mapper.NotificationPersistenceMapper;
 import com.project.imdang.setting.service.persistence.notification.repository.NotificationJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,19 +21,20 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     private final NotificationPersistenceMapper notificationPersistenceMapper;
 
     @Override
-    public List<Notification> findAll() {
-        return null;
-    }
-
-    @Override
-    public List<Notification> findByChecked(Boolean checked) {
-        return notificationJpaRepository.findByChecked(checked).stream()
+    public List<Notification> findAllByIds(List<Long> notificationIds) {
+        return notificationJpaRepository.findAllById(notificationIds).stream()
                 .map(notificationPersistenceMapper::notificationEntityToNotification)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Notification createNotification(Notification notification) {
+    public Page<Notification> findAllByIsChecked(Boolean checked, PageRequest pageRequest) {
+        return notificationJpaRepository.findAllByIsChecked(checked, pageRequest)
+                .map(notificationPersistenceMapper::notificationEntityToNotification);
+    }
+
+    @Override
+    public Notification save(Notification notification) {
         NotificationEntity notificationEntity = notificationPersistenceMapper.notificationToNotificationEntity(notification);
         NotificationEntity saved = notificationJpaRepository.save(notificationEntity);
         return notificationPersistenceMapper.notificationEntityToNotification(saved);
