@@ -25,5 +25,6 @@ public class TermsEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
-    private String contents;
+    private String url;
+    private Boolean isEssential;
 }
