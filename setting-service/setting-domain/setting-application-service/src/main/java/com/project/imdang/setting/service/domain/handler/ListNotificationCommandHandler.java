@@ -6,10 +6,11 @@ import com.project.imdang.setting.service.domain.mapper.NotificationDataMapper;
 import com.project.imdang.setting.service.domain.ports.output.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -20,7 +21,10 @@ public class ListNotificationCommandHandler {
     private final NotificationDataMapper notificationDataMapper;
 
     @Transactional(readOnly = true)
-    public List<NotificationResponse> listNotification(ListNotificationQuery listNotificationQuery) {
-        return null;
+    public Page<NotificationResponse> listUncheckedNotification(ListNotificationQuery listNotificationQuery) {
+        Sort sort = Sort.by(Sort.Direction.valueOf(listNotificationQuery.getDirection()), listNotificationQuery.getProperties());
+        PageRequest pageRequest = PageRequest.of(listNotificationQuery.getPageNumber(), listNotificationQuery.getPageSize(), sort);
+        return notificationRepository.findAllByIsChecked(false, pageRequest)
+                .map(notificationDataMapper::notificationToNotificationResponse);
     }
 }
