@@ -9,12 +9,13 @@ import org.springframework.stereotype.Component;
 
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
 public class AuthenticationUtil {
 
-    public static String getUserSocialId() {
+    public static UUID getUserSocialId() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return user.getMemberId();
     }
