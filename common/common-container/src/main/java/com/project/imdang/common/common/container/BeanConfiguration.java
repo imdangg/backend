@@ -3,7 +3,7 @@ package com.project.imdang.common.common.container;
 
 import com.project.imdang.common.common.container.security.filter.JwtAuthFilter;
 import com.project.imdang.common.common.container.security.jwt.JwtAuthenticationEntryPoint;
-import com.project.imdang.common.common.container.security.jwt.JwtTokenProvider;
+import com.project.imdang.domain.jwt.JwtTokenProvider;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -18,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 
 @Configuration("commonBeanConfiguration")
 @EnableWebSecurity(debug = true)
