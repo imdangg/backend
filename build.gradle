@@ -86,13 +86,11 @@ project(':common:common-container') {
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-security'
         implementation 'org.springframework.boot:spring-boot-starter-web'
-        //JWT
         implementation 'io.jsonwebtoken:jjwt:0.12.6'
-        implementation 'com.auth0:java-jwt:4.0.0'
-        implementation 'org.bouncycastle:bcpkix-jdk18on:1.72'
         testImplementation 'org.springframework.security:spring-security-test'
 
         implementation project(':common:common-application')
+        implementation project(':common:common-domain:common-application-service')
     }
 }
 
@@ -100,6 +98,15 @@ project(':common:common-application') {
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-validation'
         implementation 'org.springframework.boot:spring-boot-starter-web'
+    }
+}
+
+project(':common:common-domain:common-application-service') {
+    dependencies {
+        //JWT
+        implementation 'io.jsonwebtoken:jjwt:0.12.6'
+        implementation 'com.auth0:java-jwt:4.0.0'
+        implementation 'org.bouncycastle:bcpkix-jdk18on:1.72'
     }
 }
 
@@ -118,7 +125,7 @@ project(':insight-service:insight-domain:insight-domain-core') {
 project(':insight-service:insight-domain:insight-application-service') {
     dependencies {
         implementation project(':insight-service:insight-domain:insight-domain-core')
-        implementation project(':common:common-container')
+//        implementation project(':common:common-container')
         implementation project(':common:common-domain:common-application-service')
         implementation project(':common:common-domain:common-domain-core')
 
@@ -135,7 +142,7 @@ project(':insight-service:insight-application') {
         implementation project(':insight-service:insight-domain:insight-domain-core')
         implementation project(':common:common-application')
         implementation project(':common:common-domain:common-domain-core')
-        implementation project(':common:common-container')
+//        implementation project(':common:common-container')
 
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -186,7 +193,7 @@ project(':member-service:member-domain:member-application-service') {
         implementation 'org.bouncycastle:bcpkix-jdk18on:1.72'
 
         implementation project(':member-service:member-domain:member-domain-core')
-        implementation project(':common:common-container')
+//        implementation project(':common:common-container')
         implementation project(':common:common-domain:common-application-service')
         implementation project(':common:common-domain:common-domain-core')
     }
@@ -198,7 +205,6 @@ project(':member-service:member-application') {
         implementation project(':member-service:member-domain:member-domain-core')
         implementation project(':common:common-application')
         implementation project(':common:common-domain:common-domain-core')
-        implementation project(':common:common-container')
 
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
