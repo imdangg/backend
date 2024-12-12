@@ -6,12 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Getter
 public class User {
-    private String memberId;
+    private UUID memberId;
     private List<String> roles;
 }
