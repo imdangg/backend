@@ -1,7 +1,7 @@
 package com.project.imdang.common.common.container.security.filter;
 
 import com.project.imdang.common.common.container.security.util.ErrorCode;
-import com.project.imdang.common.common.container.security.jwt.JwtTokenProvider;
+import com.project.imdang.domain.jwt.JwtTokenProvider;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
