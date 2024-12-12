@@ -24,6 +24,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 public class BeanConfiguration {
+    private static final String ACCESS_KEY = "Authorization";
+    private static final String REFRESH_KEY = "Authorization-Refresh";
 
     /**
      * Security
@@ -57,12 +59,10 @@ public class BeanConfiguration {
      */
     @Bean
     public OpenAPI openAPI() {
-        String key = "Authorization";
-        String refreshKey = "Authorization-refresh";
 
         SecurityRequirement securityRequirement = new SecurityRequirement()
-                .addList(key)
-                .addList(refreshKey);
+                .addList(ACCESS_KEY);
+//                .addList(REFRESH_KEY);
 
         //Access Token 검증
         SecurityScheme accessTokenSecurityScheme = new SecurityScheme()
@@ -79,7 +79,7 @@ public class BeanConfiguration {
 //                .name(refreshKey);
 
         Components components = new Components()
-                .addSecuritySchemes(key, accessTokenSecurityScheme);
+                .addSecuritySchemes(ACCESS_KEY, accessTokenSecurityScheme);
 
         return new OpenAPI()
                 .info(apiInfo())
