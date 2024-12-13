@@ -20,22 +20,9 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class GoogleApiClientHandler implements OAuthApiClientHandler {
     private final RestTemplate restTemplate;
-    private static final String GRANT_TYPE = "authorization_code";
-
-    @Value("${oauth.google.url.auth}")
-    private String authUrl;
 
     @Value("${oauth.google.url.api}")
     private String apiUrl;
-
-    @Value("${oauth.google.url.redirect}")
-    private String redirectUrl;
-
-    @Value("${oauth.google.client-id}")
-    private String clientId;
-
-    @Value("${oauth.google.client-secret}")
-    private String clientSecret;
 
     @Override
     public OAuthType oAuthType() {
@@ -44,20 +31,8 @@ public class GoogleApiClientHandler implements OAuthApiClientHandler {
 
     @Override
     public String getAccessToken(OAuthLoginCommand loginCommand) {
-        //TODO : code 인코딩 가능성 존재
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
         MultiValueMap<String, String> body = loginCommand.makeBody();
-        body.add("grant_type", GRANT_TYPE);
-        body.add("client_id", clientId);
-        body.add("client_secret", clientSecret);
-        body.add("redirect_uri", redirectUrl);
-
-        HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
-        GoogleTokenResponse response = restTemplate.postForObject(authUrl, request, GoogleTokenResponse.class);
-        //TODO null 체크
-        return response.getAccessToken();
+        return body.getFirst("code");
     }
 
     @Override
@@ -66,7 +41,6 @@ public class GoogleApiClientHandler implements OAuthApiClientHandler {
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
 
-//        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         HttpEntity<?> request = new HttpEntity<>(httpHeaders);
         return restTemplate.exchange(apiUrl, HttpMethod.GET, request, GoogleLoginResponse.class).getBody();
     }

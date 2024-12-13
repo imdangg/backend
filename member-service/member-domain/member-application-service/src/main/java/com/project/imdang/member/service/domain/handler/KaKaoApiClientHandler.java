@@ -19,19 +19,9 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class KaKaoApiClientHandler implements OAuthApiClientHandler{
     private final RestTemplate restTemplate;
-    private static final String GRANT_TYPE = "authorization_code";
-
-    @Value("${oauth.kakao.url.auth}")
-    private String authUrl;
 
     @Value("${oauth.kakao.url.api}")
     private String apiUrl;
-
-    @Value("${oauth.kakao.url.redirect}")
-    private String redirectUrI;
-
-    @Value("${oauth.kakao.client-id}")
-    private String clientId;
 
     @Override
     public OAuthType oAuthType() {
@@ -40,18 +30,8 @@ public class KaKaoApiClientHandler implements OAuthApiClientHandler{
 
     @Override
     public String getAccessToken(OAuthLoginCommand loginCommand) {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
         MultiValueMap<String, String> body = loginCommand.makeBody();
-        body.add("grant_type", GRANT_TYPE);
-        body.add("redirect_uri", redirectUrI);
-        body.add("client_id", clientId);
-
-        HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
-        KakaoTokenResponse response = restTemplate.postForObject(authUrl, request, KakaoTokenResponse.class);
-        //TODO null 체크
-        return response.getAccessToken();
+        return body.getFirst("code");
     }
 
     @Override

@@ -15,7 +15,7 @@ import org.springframework.util.MultiValueMap;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GoogleLoginCommand implements OAuthLoginCommand {
-    private String authorizationCode;
+    private String accessToken;
 
     @Override
     public OAuthType oAuthType() {
@@ -25,7 +25,7 @@ public class GoogleLoginCommand implements OAuthLoginCommand {
     @Override
     public MultiValueMap<String, String> makeBody() {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("code", authorizationCode);
+        body.add("code", accessToken);
         return body;
     }
 }
