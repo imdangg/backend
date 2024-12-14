@@ -37,6 +37,7 @@ public class Notification extends AggregateRoot<NotificationId> {
 
     public void initialize() {
         this.createdAt = ZonedDateTime.now();
+        this.isChecked = Boolean.FALSE;
     }
 
     public void check() {
