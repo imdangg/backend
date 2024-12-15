@@ -1,5 +1,6 @@
 package com.project.imdang.setting.service.domain.handler;
 
+import com.project.imdang.domain.utils.PagingUtils;
 import com.project.imdang.setting.service.domain.dto.ListNotificationQuery;
 import com.project.imdang.setting.service.domain.dto.NotificationResponse;
 import com.project.imdang.setting.service.domain.mapper.NotificationDataMapper;
@@ -8,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +22,8 @@ public class ListNotificationCommandHandler {
 
     @Transactional(readOnly = true)
     public Page<NotificationResponse> listUncheckedNotification(ListNotificationQuery listNotificationQuery) {
-        Sort sort = Sort.by(Sort.Direction.valueOf(listNotificationQuery.getDirection()), listNotificationQuery.getProperties());
-        PageRequest pageRequest = PageRequest.of(listNotificationQuery.getPageNumber(), listNotificationQuery.getPageSize(), sort);
+        PageRequest pageRequest = PagingUtils.getPageRequest(
+                listNotificationQuery.getPageNumber(), listNotificationQuery.getPageSize(), listNotificationQuery.getDirection(), listNotificationQuery.getProperties());
         return notificationRepository.findAllByIsChecked(false, pageRequest)
                 .map(notificationDataMapper::notificationToNotificationResponse);
     }

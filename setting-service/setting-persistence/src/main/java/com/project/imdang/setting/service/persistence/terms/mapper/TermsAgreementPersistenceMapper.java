@@ -7,12 +7,14 @@ import com.project.imdang.setting.service.domain.valueobject.TermsId;
 import com.project.imdang.setting.service.persistence.terms.entity.TermsAgreementEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component
 public class TermsAgreementPersistenceMapper {
 
     public TermsAgreementEntity termsAgreementToTermsAgreementEntity(TermsAgreement termsAgreement) {
         return TermsAgreementEntity.builder()
-                .id(termsAgreement.getId().getValue())
+                .id(!Objects.isNull(termsAgreement.getId()) ? termsAgreement.getId().getValue() : null)
                 .termsId(termsAgreement.getTermsId().getValue())
                 .memberId(termsAgreement.getMemberId().getValue())
                 .createdAt(termsAgreement.getCreatedAt())
