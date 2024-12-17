@@ -82,18 +82,6 @@ project(':imdang-container') {
     }
 }
 
-project(':common:common-container') {
-    dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter-security'
-        implementation 'org.springframework.boot:spring-boot-starter-web'
-        implementation 'io.jsonwebtoken:jjwt:0.12.6'
-        testImplementation 'org.springframework.security:spring-security-test'
-
-        implementation project(':common:common-application')
-        implementation project(':common:common-domain:common-application-service')
-    }
-}
-
 project(':common:common-application') {
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-validation'
