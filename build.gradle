@@ -68,13 +68,13 @@ project(':imdang-container') {
         implementation project(':member-service:member-domain:member-application-service')
         implementation project(':member-service:member-domain:member-domain-core')
 
-//        implementation project(':setting-service:setting-container')
+        implementation project(':setting-service:setting-container')
         implementation project(':setting-service:setting-application')
         implementation project(':setting-service:setting-persistence')
         implementation project(':setting-service:setting-domain:setting-application-service')
         implementation project(':setting-service:setting-domain:setting-domain-core')
 
-        implementation project(':common:common-container')
+        implementation project(':common:common-application')
         implementation project(':common:common-domain:common-domain-core')
 
         implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -84,8 +84,14 @@ project(':imdang-container') {
 
 project(':common:common-application') {
     dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-security'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'io.jsonwebtoken:jjwt:0.12.6'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
         implementation 'org.springframework.boot:spring-boot-starter-web'
+        testImplementation 'org.springframework.security:spring-security-test'
+
+        implementation project(':common:common-domain:common-application-service')
     }
 }
 
@@ -199,6 +205,7 @@ project(':member-service:member-application') {
         implementation project(':common:common-application')
         implementation project(':common:common-domain:common-domain-core')
 
+        implementation 'org.springframework.boot:spring-boot-starter-security'
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
         implementation 'org.springframework.data:spring-data-commons'

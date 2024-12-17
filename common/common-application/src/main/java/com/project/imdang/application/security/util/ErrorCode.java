@@ -1,4 +1,4 @@
-package com.project.imdang.common.common.container.security.util;
+package com.project.imdang.application.security.util;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
