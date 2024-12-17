@@ -20,10 +20,7 @@ public class InsightGlobalExceptionHandler extends GlobalExceptionHandler {
     public ErrorDTO handleException(InsightDomainException insightDomainException) {
         String message = insightDomainException.getMessage();
         log.error(message, insightDomainException);
-        return ErrorDTO.builder()
-                .code(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .message(message)
-                .build();
+        return ErrorDTO.of(HttpStatus.BAD_REQUEST, message);
     }
 
     @ResponseBody
@@ -32,9 +29,6 @@ public class InsightGlobalExceptionHandler extends GlobalExceptionHandler {
     public ErrorDTO handleException(InsightNotFoundException insightNotFoundException) {
         String message = insightNotFoundException.getMessage();
         log.error(message, insightNotFoundException);
-        return ErrorDTO.builder()
-                .code(HttpStatus.NOT_FOUND.getReasonPhrase())
-                .message(message)
-                .build();
+        return ErrorDTO.of(HttpStatus.NOT_FOUND, message);
     }
 }
