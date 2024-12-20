@@ -15,7 +15,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
-import java.util.Set;
 import java.util.UUID;
 
 @Builder
@@ -24,6 +23,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SnapshotResponse {
 
+    private Long snapshotId;
     private UUID insightId;
     private UUID memberId;
 
@@ -32,7 +32,7 @@ public class SnapshotResponse {
 
     private String title;
     private String contents;
-    private Set<String> images;
+    private String mainImage;
     private String summary;
 
     private ZonedDateTime visitAt;

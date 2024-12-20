@@ -1,6 +1,7 @@
 package com.project.imdang.insight.service.domain.handler.insight;
 
 import com.project.imdang.domain.valueobject.InsightId;
+import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.InsightDomainService;
 import com.project.imdang.insight.service.domain.dto.insight.delete.DeleteInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.delete.DeleteInsightResponse;
@@ -28,7 +29,9 @@ public class DeleteInsightCommandHandler {
     @Transactional
     public DeleteInsightResponse deleteInsight(DeleteInsightCommand deleteInsightCommand) {
         Insight insight = checkInsight(deleteInsightCommand.getInsightId());
-        InsightDeletedEvent insightDeletedEvent = insightDomainService.deleteInsight(insight);
+        // validation
+        MemberId deletedBy = new MemberId(deleteInsightCommand.getMemberId());
+        InsightDeletedEvent insightDeletedEvent = insightDomainService.deleteInsight(insight, deletedBy);
         deleteInsight(insightDeletedEvent.getInsight().getId());
         log.info("Insight[id: {}] is deleted.", insightDeletedEvent.getInsight().getId().getValue());
         // TODO - publish event

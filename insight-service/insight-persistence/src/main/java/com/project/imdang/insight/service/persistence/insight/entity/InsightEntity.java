@@ -26,6 +26,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -38,8 +40,18 @@ import java.util.UUID;
 @Entity
 public class InsightEntity {
 
+    // TODO - CHECK : BINARY VS CHAR
+//    @Convert(converter = UUIDBinaryConverter.class)
+//    @Column(columnDefinition = "BINARY(16)")
+    @Column(columnDefinition = "CHAR(36)")
+    @JdbcTypeCode(SqlTypes.CHAR)
     @Id
     private UUID id;
+
+//    @Convert(converter = UUIDBinaryConverter.class)
+//    @Column(columnDefinition = "BINARY(16)")
+    @Column(columnDefinition = "CHAR(36)")
+    @JdbcTypeCode(SqlTypes.CHAR)
     private UUID memberId;
 
     @Embedded
@@ -50,8 +62,7 @@ public class InsightEntity {
     private String title;
     private String contents;
 
-    // TODO - CHECK : 별도 테이블 VS JSON
-//    private Set<String> images;
+    private String mainImage;
     private String summary;
 
     private ZonedDateTime visitAt;

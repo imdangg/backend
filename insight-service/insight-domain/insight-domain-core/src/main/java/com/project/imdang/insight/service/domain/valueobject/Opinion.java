@@ -1,13 +1,17 @@
 package com.project.imdang.insight.service.domain.valueobject;
 
 import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Opinion<T> {
     private T choice;
     private String text;
 
+    @Builder
     public Opinion(T choice, String text) {
         if (choice == null) {
             // TODO - CHECK

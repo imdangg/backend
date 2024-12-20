@@ -16,7 +16,5 @@ import java.util.UUID;
 public interface InsightJpaRepository extends JpaRepository<InsightEntity, UUID>, JpaSpecificationExecutor<InsightEntity> {
 
     Page<InsightEntity> findAll(Specification specification, Pageable pageable);
-    // TODO - CHECK
-//    Page<InsightEntity> findAllByIdIn(Set<UUID> ids, Pageable pageable);
     List<InsightEntity> findAllByIdIn(Set<UUID> ids);
 }

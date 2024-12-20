@@ -1,6 +1,7 @@
 package com.project.imdang.insight.service.domain.handler.insight;
 
 import com.project.imdang.domain.valueobject.InsightId;
+import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.InsightDomainService;
 import com.project.imdang.insight.service.domain.dto.insight.update.UpdateInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.update.UpdateInsightResponse;
@@ -33,13 +34,17 @@ public class UpdateInsightCommandHandler {
     @Transactional
     public UpdateInsightResponse updateInsight(UpdateInsightCommand updateInsightCommand) {
         UUID insightId = updateInsightCommand.getInsightId();
+
+        // validation check
+        MemberId updatedBy = new MemberId(updateInsightCommand.getMemberId());
         Insight insight = checkInsight(insightId);
         InsightUpdatedEvent insightUpdatedEvent = insightDomainService.updateInsight(
                 insight,
+                updatedBy,
                 updateInsightCommand.getScore(),
                 updateInsightCommand.getTitle(),
                 updateInsightCommand.getContents(),
-                updateInsightCommand.getImages(),
+                updateInsightCommand.getMainImage(),
                 updateInsightCommand.getSummary(),
                 updateInsightCommand.getVisitAt(),
                 updateInsightCommand.getVisitMethod(),

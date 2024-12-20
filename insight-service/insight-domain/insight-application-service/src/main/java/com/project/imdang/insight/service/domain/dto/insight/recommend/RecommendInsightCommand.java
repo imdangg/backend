@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
@@ -16,4 +17,6 @@ import java.util.UUID;
 public class RecommendInsightCommand {
     @NotNull
     private UUID insightId;
+    @Setter
+    private UUID memberId;  // recommendedBy
 }

@@ -1,8 +1,8 @@
-package com.project.imdang.common.common.container.security.jwt;
+package com.project.imdang.application.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.imdang.application.handler.ErrorDTO;
-import com.project.imdang.common.common.container.security.util.ErrorCode;
+import com.project.imdang.application.security.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;

@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
@@ -15,8 +16,11 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ListExchangeRequestedByMeQuery extends PagingQuery {
+public class ListExchangeRequestedByMeQuery {
+    // TODO - PagingQuery 클래스 이동
+//        extends PagingQuery {
 
+    @Setter
     private UUID requestMemberId;
     // 대기, 거절, 완료
     private ExchangeRequestStatus exchangeRequestStatus;

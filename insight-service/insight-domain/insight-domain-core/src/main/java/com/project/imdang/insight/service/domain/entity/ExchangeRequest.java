@@ -4,8 +4,10 @@ package com.project.imdang.insight.service.domain.entity;
 import com.project.imdang.domain.entity.AggregateRoot;
 import com.project.imdang.domain.valueobject.ExchangeRequestId;
 import com.project.imdang.domain.valueobject.InsightId;
+import com.project.imdang.domain.valueobject.MemberCouponId;
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.valueobject.ExchangeRequestStatus;
+import com.project.imdang.insight.service.domain.valueobject.SnapshotId;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,9 +18,16 @@ import java.util.UUID;
 @Getter
 public class ExchangeRequest extends AggregateRoot<ExchangeRequestId> {
     private final MemberId requestMemberId;
+
+    ////////////////////////////////////////////////////////////
     private final InsightId requestMemberInsightId;
+    private final SnapshotId requestMemberSnapshotId;
+    // OR
+    private MemberCouponId memberCouponId;
+    ////////////////////////////////////////////////////////////
 
     private final InsightId requestedInsightId;
+    private final SnapshotId requestedSnapshotId;
     private final MemberId requestedMemberId;
 
     private ZonedDateTime requestedAt;

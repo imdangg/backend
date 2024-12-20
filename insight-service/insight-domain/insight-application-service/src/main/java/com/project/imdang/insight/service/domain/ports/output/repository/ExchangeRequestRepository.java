@@ -18,6 +18,7 @@ public interface ExchangeRequestRepository {
 
     Optional<ExchangeRequest> findById(ExchangeRequestId exchangeRequestId);
     Optional<ExchangeRequest> findByRequestMemberIdAndRequestedInsightId(MemberId requestMemberId, InsightId requestedInsightId);
+    Optional<ExchangeRequest> findByRequestMemberIdAndRequestedInsightIdAndExchangeRequestStatus(MemberId requestMemberId, InsightId requestedInsightId, ExchangeRequestStatus exchangeRequestStatus);
 
     Page<ExchangeRequest> findAllByRequestMemberIdAndExchangeRequestStatus(MemberId requestMemberId, ExchangeRequestStatus exchangeRequestStatus, PageRequest pageRequest);
     Page<ExchangeRequest> findAllByRequestedMemberIdAndExchangeRequestStatus(MemberId requestedMemberId, ExchangeRequestStatus exchangeRequestStatus, PageRequest pageRequest);

@@ -6,12 +6,15 @@ import com.project.imdang.insight.service.domain.valueobject.AccuseId;
 import com.project.imdang.insight.service.persistence.insight.entity.AccuseEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+import java.util.UUID;
+
 @Component
 public class AccusePersistenceMapper {
 
     public AccuseEntity accuseToAccuseEntity(Accuse accuse) {
         return AccuseEntity.builder()
-                .id(accuse.getId().getValue())
+                .id(!Objects.isNull(accuse.getId()) ? accuse.getId().getValue() : null)
                 .accuseMemberId(accuse.getAccuseMemberId().getValue())
                 .accusedMemberId(accuse.getAccusedMemberId().getValue())
                 .createdAt(accuse.getCreatedAt())

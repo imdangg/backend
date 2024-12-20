@@ -14,5 +14,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ListInsightByAddressQuery extends PagingQuery {
     // 주소/단지별
-    private Address address;
+    private String siGunGu;
+    private String dong;
 }

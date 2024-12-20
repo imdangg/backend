@@ -36,6 +36,9 @@ public class RequestInsightCommandHandler {
         // check
         UUID requestedInsightId = requestInsightCommand.getRequestedInsightId();
         checkInsight(requestedInsightId);
+        UUID requestedBy = requestInsightCommand.getMemberId();
+
+        // TODO - CHECK : insightId - memberId(requestedBy)로 중복 요청 여부 체크
 
         Request request = requestDataMapper.requestInsightCommandToRequest(requestInsightCommand);
         RequestCreatedEvent requestCreatedEvent = requestDomainService.request(request);

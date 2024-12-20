@@ -86,7 +86,7 @@ public class InsightRepositoryImpl implements InsightRepository {
 
     @Override
     public Page<Insight> findAllByApartmentComplex(ApartmentComplex apartmentComplex, PageRequest pageRequest) {
-        Specification<Insight> specification = Specification.where(InsightSpecification.equalsApartmentComplex(apartmentComplex.getName()));
+        Specification<InsightEntity> specification = Specification.where(InsightSpecification.equalsApartmentComplex(apartmentComplex.getName()));
         return insightJpaRepository.findAll(specification, pageRequest)
                 .map(insightPersistenceMapper::insightEntityToInsight);
     }

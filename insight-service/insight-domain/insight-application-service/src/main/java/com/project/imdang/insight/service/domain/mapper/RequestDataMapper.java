@@ -14,7 +14,7 @@ public class RequestDataMapper {
     public Request requestInsightCommandToRequest(RequestInsightCommand requestInsightCommand) {
         return Request.builder()
                 .requestedInsightId(new InsightId(requestInsightCommand.getRequestedInsightId()))
-                .requestMemberId(new MemberId(requestInsightCommand.getRequestMemberId()))
+                .requestMemberId(new MemberId(requestInsightCommand.getMemberId()))
                 .memberCouponId(new MemberCouponId(requestInsightCommand.getMemberCouponId()))
                 .build();
     }

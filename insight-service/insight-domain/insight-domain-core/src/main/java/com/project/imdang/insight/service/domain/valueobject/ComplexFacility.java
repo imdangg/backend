@@ -1,10 +1,16 @@
 package com.project.imdang.insight.service.domain.valueobject;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
+@Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ComplexFacility {
     // 가족
@@ -14,14 +20,7 @@ public class ComplexFacility {
     // 여가(단지 내부)
     private Opinion<Set<Leisure>> leisure;
     // 환경
-    private Opinion<Surroundings> surroundings;
-
-    public ComplexFacility(Opinion<Set<Family>> family, Opinion<Set<Multipurpose>> multipurpose, Opinion<Set<Leisure>> leisure, Opinion<Surroundings> surroundings) {
-        this.family = family;
-        this.multipurpose = multipurpose;
-        this.leisure = leisure;
-        this.surroundings = surroundings;
-    }
+    private Opinion<Set<Surroundings>> surroundings;
 
     // TODO - CHECK : DB
     public enum Family {
