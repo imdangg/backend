@@ -19,6 +19,7 @@ public class Member extends AggregateRoot<MemberId> {
     private String oAuthId;
     private OAuthType oAuthType;
     private int exchangeCount;
+    private int insightCount;
     // TODO - CHECK : 데이터를 쌓아서 GROUP BY로?
     private int rejectedCount;
 
@@ -31,7 +32,7 @@ public class Member extends AggregateRoot<MemberId> {
     }
 
     @Builder
-    public Member(MemberId id, String nickname, String birthDate, Gender gender, String oAuthId, OAuthType oAuthType, int exchangeCount, int rejectedCount) {
+    public Member(MemberId id, String nickname, String birthDate, Gender gender, String oAuthId, OAuthType oAuthType, int exchangeCount,int insightCount, int rejectedCount) {
         setId(id);
         this.nickname = nickname;
         this.birthDate = birthDate;
@@ -39,6 +40,7 @@ public class Member extends AggregateRoot<MemberId> {
         this.oAuthId = oAuthId;
         this.oAuthType = oAuthType;
         this.exchangeCount = exchangeCount;
+        this.insightCount = insightCount;
         this.rejectedCount = rejectedCount;
     }
 

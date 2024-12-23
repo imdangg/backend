@@ -16,6 +16,8 @@ public class MemberPersistenceMapper {
                 .gender(member.getGender())
                 .authId(member.getOAuthId())
                 .authType(member.getOAuthType())
+                .insightCount(member.getInsightCount())
+                .exchangeCount(member.getExchangeCount())
                 .build();
     }
 
@@ -27,6 +29,8 @@ public class MemberPersistenceMapper {
                 .gender(memberEntity.getGender())
                 .oAuthId(memberEntity.getAuthId())
                 .oAuthType(memberEntity.getAuthType())
+                .exchangeCount(memberEntity.getExchangeCount())
+                .insightCount(memberEntity.getInsightCount())
                 .build();
     }
 }
