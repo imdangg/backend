@@ -22,7 +22,7 @@ import java.util.UUID;
 @RestController
 public class ApartmentComplexController {
 
-    private final String API_KEY = "x8e7QL6TKG5nFWtrCX7dCsN4t08qXjD29Uyd2coXStLfW4oG/KmZ4XE58clGt2Ea/pkvzNklTxn+z/WSXbqHBg==";
+    private final String API_KEY = "api-key";
     private final ApartmentComplexApiRestClient apartmentComplexApiRestClient;
     private final InsightApplicationService insightApplicationService;
 
