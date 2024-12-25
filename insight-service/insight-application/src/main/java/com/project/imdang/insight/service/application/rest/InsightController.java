@@ -13,8 +13,6 @@ import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightByA
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightQuery;
 import com.project.imdang.insight.service.domain.dto.insight.recommend.RecommendInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.recommend.RecommendInsightResponse;
-import com.project.imdang.insight.service.domain.dto.insight.request.RequestInsightCommand;
-import com.project.imdang.insight.service.domain.dto.insight.request.RequestInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.update.UpdateInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.update.UpdateInsightResponse;
 import com.project.imdang.insight.service.domain.ports.input.service.InsightApplicationService;
@@ -60,18 +58,6 @@ public class InsightController {
         return ResponseEntity.ok(insightResponses);
     }
 
-    // TODO - 주소에 해당하는 apartmentComplexName 리스트 API
-/*
-    // 목록
-    @Operation(description = "주소별 인사이트 목록 조회 API")
-    @ApiResponse(responseCode = "200", description = "주소별 인사이트 목록이 조회되었습니다.",
-            content = @Content(schema = @Schema(implementation = InsightResponse.class)))
-    @GetMapping("/by-address")
-    public ResponseEntity<Map<ApartmentComplex, Page<InsightResponse>>> listByAddress(@ModelAttribute ListInsightByAddressQuery listInsightByAddressQuery) {
-        Map<ApartmentComplex, Page<InsightResponse>> apartmentComplexInsightResponsesMap = insightApplicationService.listInsightByAddress(listInsightByAddressQuery);
-        return ResponseEntity.ok(apartmentComplexInsightResponsesMap);
-    }*/
-
     @Operation(description = "아파트 단지별 인사이트 목록 조회 API")
     @ApiResponse(responseCode = "200", description = "아파트 단지별 인사이트 목록이 조회되었습니다.",
             content = @Content(schema = @Schema(implementation = InsightResponse.class)))
@@ -81,21 +67,6 @@ public class InsightController {
         return ResponseEntity.ok(insightResponses);
     }
 
-    // TODO - 내가 다녀온 apartmentComplexName 리스트 API → MyInsightController
-/*
-    // 내가 다녀온 단지
-    @Operation(description = "내가 작성한 아파트 단지별 인사이트 목록 조회 API")
-    @ApiResponse(responseCode = "200", description = "내가 작성한 아파트 단지별 인사이트 목록이 조회되었습니다")
-    @GetMapping("/by-my-visited-apartment-complex")
-    public ResponseEntity<Map<ApartmentComplex, Page<InsightResponse>>> listByMyVisitedApartmentComplex(@ModelAttribute ListInsightQuery listInsightQuery) {
-        // "다녀온 단지가 없어요. 단지에 임장을 다녀오고 인사이트를 남겨보세요."
-        Map<ApartmentComplex, Page<InsightResponse>> apartmentComplexInsightResponsesMap = insightApplicationService.listInsightByMyVisitedApartmentComplex(listInsightQuery);
-        return ResponseEntity.ok(apartmentComplexInsightResponsesMap);
-    }*/
-
-    // TODO - CHECK : 본인 인사이트 조회인가? 교환한 인사이트 조회인가?
-    // TODO - detail/preview를 권한 체크해서 분리해야 할 듯
-    // detail은 snapshot에서, preview는 insight에서 조회
     // 상세, 프리뷰
     @Operation(description = "인사이트 상세 조회 API")
     @ApiResponse(responseCode = "200", description = "인사이트가 조회 되었습니다.",
@@ -169,20 +140,9 @@ public class InsightController {
             content = @Content(schema = @Schema(implementation = AccuseInsightResponse.class)))
     @PostMapping("/accuse")
     public ResponseEntity<AccuseInsightResponse> accuseInsight(@AuthenticationPrincipal UUID memberId, @RequestBody AccuseInsightCommand accuseInsightCommand) {
-        accuseInsightCommand.setMemberId(memberId);
+        accuseInsightCommand.setAccuseMemberId(memberId);
         AccuseInsightResponse accuseInsightResponse = insightApplicationService.accuseInsight(accuseInsightCommand);
         log.info("Insight[id: {}] is accused.", accuseInsightResponse.getInsightId());
         return ResponseEntity.ok(accuseInsightResponse);
-    }
-
-    @Operation(description = "쿠폰으로 인사이트 요청 API")
-    @ApiResponse(responseCode = "200", description = "쿠폰으로 인사이트가 요청되었습니다.",
-            content = @Content(schema = @Schema(implementation = RequestInsightResponse.class)))
-    @PostMapping("/request")
-    public ResponseEntity<RequestInsightResponse> requestInsight(@AuthenticationPrincipal UUID memberId, @RequestBody RequestInsightCommand requestInsightCommand) {
-        requestInsightCommand.setMemberId(memberId);
-        RequestInsightResponse requestInsightResponse = insightApplicationService.requestInsight(requestInsightCommand);
-        log.info("Insight[id: {}] is requested.", requestInsightResponse.getInsightId());
-        return ResponseEntity.ok(requestInsightResponse);
     }
 }

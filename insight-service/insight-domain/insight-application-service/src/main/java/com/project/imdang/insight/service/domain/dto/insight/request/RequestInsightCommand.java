@@ -22,5 +22,5 @@ public class RequestInsightCommand {
 
     @Setter
     @NotNull
-    private UUID memberId;       // requestedBy
+    private UUID requestMemberId;       // requestedBy
 }

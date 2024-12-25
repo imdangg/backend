@@ -21,5 +21,5 @@ public class AccuseInsightCommand {
 
     @Setter
     @NotNull
-    private UUID memberId;    // accusedBy : 신고한 memberId
+    private UUID accuseMemberId;    // accusedBy : 신고한 memberId
 }

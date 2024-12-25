@@ -1,8 +1,6 @@
 package com.project.imdang.insight.service.persistence.insight.entity;
 
-import com.project.imdang.insight.service.persistence.insight.converter.UUIDStringConverter;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -37,6 +35,10 @@ public class MemberSnapshotEntity {
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID memberId;
     private Long snapshotId;
+
+    @Column(columnDefinition = "CHAR(36)")
+    @JdbcTypeCode(SqlTypes.CHAR)
+    private UUID insightId;
 
     private ZonedDateTime createdAt;
 }

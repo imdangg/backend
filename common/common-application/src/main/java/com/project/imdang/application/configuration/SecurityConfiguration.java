@@ -34,7 +34,7 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/kakao", "/auth/google", "/auth/apple",
-                                "/swagger-resources/**", "/swagger-ui/**","/v3/api-docs/**").permitAll()
+                                "/swagger-resources/**", "/swagger-ui/**","/v3/api-docs/**", "/apartment-complexes").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(new JwtAuthFilter(jwtTokenUtil), UsernamePasswordAuthenticationFilter.class)
                 .build();

@@ -12,6 +12,7 @@ import com.project.imdang.insight.service.domain.exception.InsightDomainExceptio
 import com.project.imdang.insight.service.domain.exception.InsightNotFoundException;
 import com.project.imdang.insight.service.domain.mapper.InsightDataMapper;
 import com.project.imdang.insight.service.domain.ports.output.repository.InsightRepository;
+import com.project.imdang.insight.service.domain.ports.output.repository.MemberSnapshotRepository;
 import com.project.imdang.insight.service.domain.ports.output.repository.SnapshotRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,12 +28,13 @@ public class UpdateInsightCommandHandler {
     private final InsightDomainService insightDomainService;
     private final InsightRepository insightRepository;
     private final SnapshotRepository snapshotRepository;
+    private final MemberSnapshotRepository memberSnapshotRepository;
 
     private final InsightDataMapper insightDataMapper;
 
     @Transactional
     public UpdateInsightResponse updateInsight(UpdateInsightCommand updateInsightCommand) {
-        UUID insightId = updateInsightCommand.getInsightId();
+        InsightId insightId = new InsightId(updateInsightCommand.getInsightId());
 
         // validation check
         MemberId updatedBy = new MemberId(updateInsightCommand.getMemberId());
@@ -58,12 +59,15 @@ public class UpdateInsightCommandHandler {
         saveInsight(updated);
 
         Snapshot snapshot = insightDomainService.captureInsight(insightUpdatedEvent.getInsight());
-        saveSnapshot(snapshot);
+        Snapshot saved = saveSnapshot(snapshot);
+
+        // memberSnapshot에 update
+        memberSnapshotRepository.updateSnapshotIdByMemberIdAndInsightId(saved.getId(), updatedBy, insightId);
+
         return insightDataMapper.insightToUpdateInsightResponse(insightUpdatedEvent.getInsight());
     }
 
-    private Insight checkInsight(UUID _insightId) {
-        InsightId insightId = new InsightId(_insightId);
+    private Insight checkInsight(InsightId insightId) {
         Optional<Insight> insightResult = insightRepository.findById(insightId);
         if (insightResult.isEmpty()) {
             throw new InsightNotFoundException(insightId);
@@ -82,7 +86,7 @@ public class UpdateInsightCommandHandler {
         return saved;
     }
 
-    private void saveSnapshot(Snapshot snapshot) {
+    private Snapshot saveSnapshot(Snapshot snapshot) {
         Snapshot saved = snapshotRepository.save(snapshot);
         if (saved == null) {
             String errorMessage = "Could not save snapshot!";
@@ -90,5 +94,6 @@ public class UpdateInsightCommandHandler {
             throw new InsightDomainException(errorMessage);
         }
         log.info("Snapshot[id: {}] is saved.", saved.getId().getValue());
+        return saved;
     }
 }

@@ -1,24 +1,20 @@
 package com.project.imdang.insight.service.application.rest;
 
-import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
-import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightQuery;
-import com.project.imdang.insight.service.domain.valueobject.Address;
+import com.project.imdang.insight.service.application.client.ApartmentComplexApiResponse;
+import com.project.imdang.insight.service.application.client.ApartmentComplexApiRestClient;
+import com.project.imdang.insight.service.domain.ports.input.service.InsightApplicationService;
 import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RequestMapping("/apartment-complexes")
@@ -26,15 +22,27 @@ import java.util.List;
 @RestController
 public class ApartmentComplexController {
 
+    private final String API_KEY = "x8e7QL6TKG5nFWtrCX7dCsN4t08qXjD29Uyd2coXStLfW4oG/KmZ4XE58clGt2Ea/pkvzNklTxn+z/WSXbqHBg==";
+    private final ApartmentComplexApiRestClient apartmentComplexApiRestClient;
+    private final InsightApplicationService insightApplicationService;
+
     // 주소에 해당하는 apartmentComplexName 리스트 API
     @GetMapping
-    public ResponseEntity<List<ApartmentComplex>> listByAddress(@ModelAttribute Address address) {
-
+    public ResponseEntity<ApartmentComplexApiResponse> listByAddress(
+            @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+            @RequestParam(name = "address") String address) {
+        ApartmentComplexApiResponse response = apartmentComplexApiRestClient.getApartmentInfoList(pageNumber, pageSize, API_KEY, address);
+        return ResponseEntity.ok(response);
     }
 
     // 내가 다녀온 apartmentComplexName 리스트 API
     @GetMapping("/my-visited")
-    public ResponseEntity<List<ApartmentComplex>> listByMyVisited(@ModelAttribute ListInsightQuery listInsightQuery) {
-
+    public ResponseEntity<List<ApartmentComplex>> listByMyVisited(@AuthenticationPrincipal UUID memberId
+//            @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
+//            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
+    ) {
+        List<ApartmentComplex> apartmentComplexes = insightApplicationService.listMyVisitedApartmentComplex(memberId);
+        return ResponseEntity.ok(apartmentComplexes);
     }
 }

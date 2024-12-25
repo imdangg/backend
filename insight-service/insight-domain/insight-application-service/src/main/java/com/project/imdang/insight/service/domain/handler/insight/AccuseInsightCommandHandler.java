@@ -36,7 +36,7 @@ public class AccuseInsightCommandHandler {
     @Transactional
     public AccuseInsightResponse accuseInsight(AccuseInsightCommand accuseInsightCommand) {
         Insight insight = checkInsight(accuseInsightCommand.getInsightId());
-        MemberId accusedBy = new MemberId(accuseInsightCommand.getMemberId());
+        MemberId accusedBy = new MemberId(accuseInsightCommand.getAccuseMemberId());
 
         // TODO - CHECK : insightId - memberId(accusedBy)로 중복 신고 여부 체크
         

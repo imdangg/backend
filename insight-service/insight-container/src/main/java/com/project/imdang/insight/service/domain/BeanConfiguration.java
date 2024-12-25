@@ -24,8 +24,4 @@ public class BeanConfiguration {
     public ExchangeDomainService exchangeDomainService() {
         return new ExchangeDomainServiceImpl();
     }
-    @Bean
-    public RequestDomainService requestDomainService() {
-        return new RequestDomainServiceImpl();
-    }
 }

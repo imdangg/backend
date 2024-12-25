@@ -12,6 +12,8 @@ import com.project.imdang.insight.service.persistence.insight.converter.ComplexE
 import com.project.imdang.insight.service.persistence.insight.converter.ComplexFacilityConverter;
 import com.project.imdang.insight.service.persistence.insight.converter.FavorableNewsConverter;
 import com.project.imdang.insight.service.persistence.insight.converter.InfraConverter;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Embedded;
@@ -56,7 +58,12 @@ public class SnapshotEntity {
 
     @Embedded
     private Address address;
+
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "key", column = @Column(name = "complex_key")),
+            @AttributeOverride(name = "name", column = @Column(name = "complex_name")),
+    })
     private ApartmentComplex apartmentComplex;
 
     private String title;

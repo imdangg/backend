@@ -2,7 +2,6 @@ package com.project.imdang.insight.service.application.rest;
 
 import com.project.imdang.insight.service.domain.dto.exchange.list.ListExchangeRequestedByMeQuery;
 import com.project.imdang.insight.service.domain.dto.exchange.list.ListExchangeRequestedByOthersQuery;
-import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
 import com.project.imdang.insight.service.domain.ports.input.service.ExchangeApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,7 +35,8 @@ public class MyExchangeController {
     @ApiResponse(responseCode = "200", description = "내가 요청한 인사이트 교환 목록 조회 성공",
             content = @Content(schema = @Schema(implementation = InsightResponse.class)))
     @GetMapping("/requested-by-me")
-    public ResponseEntity<Page<InsightResponse>> listRequestedByMe(@AuthenticationPrincipal UUID memberId, @ModelAttribute ListExchangeRequestedByMeQuery listExchangeRequestedByMeQuery) {
+    public ResponseEntity<Page<InsightResponse>> listRequestedByMe(@AuthenticationPrincipal UUID memberId,
+                                                                   @ModelAttribute ListExchangeRequestedByMeQuery listExchangeRequestedByMeQuery) {
         listExchangeRequestedByMeQuery.setRequestMemberId(memberId);
         Page<InsightResponse> paged = exchangeApplicationService.listExchangeRequestedByMe(listExchangeRequestedByMeQuery);
         log.info("List my[id : {}] exchanges requested by me.", memberId);
@@ -48,9 +48,9 @@ public class MyExchangeController {
     @ApiResponse(responseCode = "200", description = "다른 사람이 요청한 인사이트 교환 목록 조회 성공",
             content = @Content(schema = @Schema(implementation = InsightResponse.class)))
     @GetMapping("/requested-by-others")
-    public ResponseEntity<Page<InsightResponse>> listRequestedByOthers(@AuthenticationPrincipal UUID memberId, @ModelAttribute ListExchangeRequestedByOthersQuery listExchangeRequestedByOthersQuery) {
-        // TODO - Spring Security, PagingQuery
-        UUID memberId = null;
+    public ResponseEntity<Page<InsightResponse>> listRequestedByOthers(@AuthenticationPrincipal UUID memberId,
+                                                                       @ModelAttribute ListExchangeRequestedByOthersQuery listExchangeRequestedByOthersQuery) {
+        listExchangeRequestedByOthersQuery.setRequestedMemberId(memberId);
         Page<InsightResponse> paged = exchangeApplicationService.listExchangeRequestedByOthers(listExchangeRequestedByOthersQuery);
         log.info("List my[id : {}] exchanges requested by others.", memberId);
         return ResponseEntity.ok(paged);

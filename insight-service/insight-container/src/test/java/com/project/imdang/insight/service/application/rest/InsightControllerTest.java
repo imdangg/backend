@@ -2,7 +2,6 @@ package com.project.imdang.insight.service.application.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.imdang.domain.jwt.JwtTokenProvider;
-import com.project.imdang.insight.service.domain.InsightServiceApplication;
 import com.project.imdang.insight.service.domain.dto.insight.accuse.AccuseInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.create.CreateInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.delete.DeleteInsightCommand;
@@ -39,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-@SpringBootTest(classes = InsightServiceApplication.class)
+@SpringBootTest(classes = TestConfiguration.class)
 class InsightControllerTest {
 
     @Autowired

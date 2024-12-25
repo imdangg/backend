@@ -12,6 +12,8 @@ import com.project.imdang.insight.service.persistence.insight.converter.ComplexE
 import com.project.imdang.insight.service.persistence.insight.converter.ComplexFacilityConverter;
 import com.project.imdang.insight.service.persistence.insight.converter.FavorableNewsConverter;
 import com.project.imdang.insight.service.persistence.insight.converter.InfraConverter;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Embedded;
@@ -41,22 +43,23 @@ import java.util.UUID;
 public class InsightEntity {
 
     // TODO - CHECK : BINARY VS CHAR
-//    @Convert(converter = UUIDBinaryConverter.class)
-//    @Column(columnDefinition = "BINARY(16)")
     @Column(columnDefinition = "CHAR(36)")
     @JdbcTypeCode(SqlTypes.CHAR)
     @Id
     private UUID id;
 
-//    @Convert(converter = UUIDBinaryConverter.class)
-//    @Column(columnDefinition = "BINARY(16)")
     @Column(columnDefinition = "CHAR(36)")
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID memberId;
 
     @Embedded
     private Address address;
+
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "key", column = @Column(name = "complex_key")),
+            @AttributeOverride(name = "name", column = @Column(name = "complex_name")),
+    })
     private ApartmentComplex apartmentComplex;
 
     private String title;

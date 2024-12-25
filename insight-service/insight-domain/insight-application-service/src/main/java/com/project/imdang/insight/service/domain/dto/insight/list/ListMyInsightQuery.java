@@ -1,19 +1,23 @@
 package com.project.imdang.insight.service.domain.dto.insight.list;
 
-import com.project.imdang.domain.dto.PagingQuery;
-import com.project.imdang.insight.service.domain.valueobject.Address;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Builder
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ListInsightByAddressQuery extends PagingQuery {
-    // 주소/단지별
-    private String siGunGu;
-    private String dong;
+public class ListMyInsightQuery {
+        // extends PagingQuery {
+//    @Setter
+    private UUID memberId;
+    private Integer pageNumber;
+    private Integer pageSize;
+    private String direction;
+    private String[] properties;
 }

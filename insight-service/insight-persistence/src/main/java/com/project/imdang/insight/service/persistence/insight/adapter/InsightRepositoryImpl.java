@@ -2,6 +2,7 @@ package com.project.imdang.insight.service.persistence.insight.adapter;
 
 import com.project.imdang.domain.valueobject.BaseId;
 import com.project.imdang.domain.valueobject.InsightId;
+import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.entity.Insight;
 import com.project.imdang.insight.service.domain.ports.output.repository.InsightRepository;
 import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
@@ -63,26 +64,6 @@ public class InsightRepositoryImpl implements InsightRepository {
                 .map(insightPersistenceMapper::insightEntityToInsight)
                 .toList();
     }
-/*
-    @Override
-    public Page<Insight> findAllByAddress(Address address, PagingRequest pagingRequest) {
-        PageRequest pageRequest = PageRequest.of(pagingRequest.getPageNumber(), pagingRequest.getPageSize(), Sort.Direction.valueOf(pagingRequest.getDirection()), pagingRequest.getProperties());
-        Specification<Insight> specification = Specification
-                .where(InsightSpecification.equalsSiGunGu(address.getSiGunGu()))
-                .and(InsightSpecification.equalsDong(address.getDong()));
-        Page<InsightEntity> pagedInsightEntities = insightJpaRepository.findAll(specification, pageRequest);
-        List<Insight> insights = pagedInsightEntities.getContent().stream()
-                .map(insightPersistenceMapper::insightEntityToInsight)
-                .toList();
-        return Paged.<Insight>builder()
-                .contents(insights)
-                .number(pagedInsightEntities.getNumber())
-                .size(pagedInsightEntities.getSize())
-                .numberOfElements(pagedInsightEntities.getNumberOfElements())
-                .totalPages(pagedInsightEntities.getTotalPages())
-                .totalElements(pagedInsightEntities.getTotalElements())
-                .build();
-    }*/
 
     @Override
     public Page<Insight> findAllByApartmentComplex(ApartmentComplex apartmentComplex, PageRequest pageRequest) {
@@ -109,5 +90,10 @@ public class InsightRepositoryImpl implements InsightRepository {
     public void deleteById(InsightId insightId) {
         UUID _insightId = insightId.getValue();
         insightJpaRepository.deleteById(_insightId);
+    }
+
+    @Override
+    public List<ApartmentComplex> findDistinctApartmentComplexByMemberId(MemberId memberId) {
+        return insightJpaRepository.findDistinctApartmentComplexByMemberId(memberId.getValue());
     }
 }
