@@ -18,5 +18,5 @@ public interface MemberCouponApplicationService {
     // memberCoupon used 상태 변경 : 요청 시 (거절 당하면 상태 재변경 필요) vs 요청 완료 후 "수락되면"
     // 쿠폰 사용
     UseMemberCouponCommandResponse useMemberCoupon(UseMemberCouponCommand useMemberCouponCommand);
-    void cancleMemberCoupon(CancleMemberCouponCommand cancleMemberCouponCommand);
+    void cancleMemberCoupon(CancelMemberCouponCommand cancelMemberCouponCommand);
 }

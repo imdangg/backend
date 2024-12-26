@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class CancleMemberCouponCommand {
+public class CancelMemberCouponCommand {
      private Long memberCouponId;
 }
 

@@ -1,7 +1,7 @@
 package com.project.imdang.member.service.domain;
 
 import com.project.imdang.member.service.domain.dto.coupon.*;
-import com.project.imdang.member.service.domain.handler.coupon.CancleMemberCouponCommandHandler;
+import com.project.imdang.member.service.domain.handler.coupon.CancelMemberCouponCommandHandler;
 import com.project.imdang.member.service.domain.handler.coupon.IssueMemberCouponCommandHandler;
 import com.project.imdang.member.service.domain.handler.coupon.ListMemberCouponHandler;
 import com.project.imdang.member.service.domain.handler.coupon.UseMemberCouponCommandHandler;
@@ -17,7 +17,7 @@ public class MemberCouponApplicationServiceImpl implements MemberCouponApplicati
 
     private final IssueMemberCouponCommandHandler issueMemberCouponCommandHandler;
     private final UseMemberCouponCommandHandler useMemberCouponCommandHandler;
-    private final CancleMemberCouponCommandHandler cancleMemberCouponCommandHandler;
+    private final CancelMemberCouponCommandHandler cancelMemberCouponCommandHandler;
     private final ListMemberCouponHandler listMemberCouponHandler;
     @Override
     public ListMemberCouponResponse listMemberCoupon(UUID memberId) {
@@ -35,7 +35,7 @@ public class MemberCouponApplicationServiceImpl implements MemberCouponApplicati
     }
 
     @Override
-    public void cancleMemberCoupon(CancleMemberCouponCommand cancleMemberCouponCommand) {
-        cancleMemberCouponCommandHandler.cancle(cancleMemberCouponCommand);
+    public void cancleMemberCoupon(CancelMemberCouponCommand cancelMemberCouponCommand) {
+        cancelMemberCouponCommandHandler.cancle(cancelMemberCouponCommand);
     }
 }

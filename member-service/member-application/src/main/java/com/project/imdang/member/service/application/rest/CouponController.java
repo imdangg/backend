@@ -1,7 +1,5 @@
 package com.project.imdang.member.service.application.rest;
 
-import com.project.imdang.domain.valueobject.MemberId;
-import com.project.imdang.member.service.domain.dto.LoginResponse;
 import com.project.imdang.member.service.domain.dto.coupon.*;
 import com.project.imdang.member.service.domain.ports.input.service.MemberCouponApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -54,9 +52,9 @@ public class CouponController {
 
     @Operation(description = "쿠폰 사용 취소 API")
     @ApiResponse(responseCode = "200", description = "쿠폰 사용 취소 성공")
-    @PostMapping("/cancle")
-    public ResponseEntity<Void> cancleCoupon(@RequestBody CancleMemberCouponCommand cancleMemberCouponCommand) {
-        memberCouponApplicationService.cancleMemberCoupon(cancleMemberCouponCommand);
+    @PostMapping("/cancel")
+    public ResponseEntity<Void> cancelCoupon(@RequestBody CancelMemberCouponCommand cancelMemberCouponCommand) {
+        memberCouponApplicationService.cancleMemberCoupon(cancelMemberCouponCommand);
         return ResponseEntity.ok().build();
     }
 }
