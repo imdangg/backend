@@ -72,12 +72,4 @@ public class AuthController {
         memberApplicationService.join(memberId, joinCommand);
         return ResponseEntity.ok().build();
     }
-
-    /**
-     * Test
-     */
-    @GetMapping("/test")
-    public ResponseEntity<Void> test() {
-        return ResponseEntity.ok().build();
-    }
 }

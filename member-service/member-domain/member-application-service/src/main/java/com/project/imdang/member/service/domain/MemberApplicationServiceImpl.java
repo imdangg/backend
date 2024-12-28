@@ -37,14 +37,6 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
         joinCommandHandler.join(memberId, joinCommand);
     }
 
-    @Override
-    public TokenResponse test() {
-        Member member = Member.builder()
-                .id(new MemberId(UUID.randomUUID()))
-                .nickname("imdang").build();
-        log.info("memberID : {}", member.getId().getValue());
-        return tokenRequestHandler.generate(member);
-    }
 
     @Override
     public DetailMyPageResponse detailMyPage(DetailMyPageQuery detailMyPageQuery) {

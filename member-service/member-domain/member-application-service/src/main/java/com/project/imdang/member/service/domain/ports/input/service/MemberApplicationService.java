@@ -17,6 +17,4 @@ public interface MemberApplicationService {
     DetailMyPageResponse detailMyPage(DetailMyPageQuery detailMyPageQuery);
 
     void join(UUID memberId, JoinCommand joinCommand);
-
-    TokenResponse test();
 }
