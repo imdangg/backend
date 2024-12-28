@@ -1,10 +1,13 @@
 package com.project.imdang.member.service.domain;
 
-import com.project.imdang.domain.valueobject.MemberId;
+import com.project.imdang.member.service.domain.dto.DetailMyPageQuery;
+import com.project.imdang.member.service.domain.dto.DetailMyPageResponse;
 import com.project.imdang.member.service.domain.dto.JoinCommand;
 import com.project.imdang.member.service.domain.dto.LoginResponse;
 import com.project.imdang.member.service.domain.dto.TokenResponse;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginCommand;
+import com.project.imdang.member.service.domain.entity.Member;
+import com.project.imdang.member.service.domain.handler.DetailMyPageCommandHandler;
 import com.project.imdang.member.service.domain.handler.JoinCommandHandler;
 import com.project.imdang.member.service.domain.handler.OAuthLoginCommandHandler;
 import com.project.imdang.member.service.domain.handler.TokenRequestHandler;
@@ -22,7 +25,7 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
 
     private final OAuthLoginCommandHandler oAuthLoginCommandHandler;
     private final JoinCommandHandler joinCommandHandler;
-    private final TokenRequestHandler tokenRequestHandler;
+    private final DetailMyPageCommandHandler detailMyPageCommandHandler;
 
     @Override
     public LoginResponse login(OAuthLoginCommand loginCommand) {
@@ -34,12 +37,9 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
         joinCommandHandler.join(memberId, joinCommand);
     }
 
+
     @Override
-    public TokenResponse test() {
-        Member member = Member.builder()
-                .id(new MemberId(UUID.randomUUID()))
-                .nickname("imdang").build();
-        log.info("memberID : {}", member.getId().getValue());
-        return tokenRequestHandler.generate(member);
+    public DetailMyPageResponse detailMyPage(DetailMyPageQuery detailMyPageQuery) {
+        return detailMyPageCommandHandler.detailMyPage(detailMyPageQuery);
     }
 }
