@@ -27,7 +27,7 @@ public class ExchangeApplicationServiceImpl implements ExchangeApplicationServic
 
     @Override
     public RequestExchangeInsightResponse requestExchangeInsight(RequestExchangeInsightCommand requestExchangeInsightCommand) {
-       return requestExchangeCommandHandler.request(requestExchangeInsightCommand);
+       return requestExchangeCommandHandler.requestExchange(requestExchangeInsightCommand);
     }
 
     @Override

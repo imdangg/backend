@@ -74,7 +74,6 @@ project(':imdang-container') {
         implementation project(':setting-service:setting-domain:setting-application-service')
         implementation project(':setting-service:setting-domain:setting-domain-core')
 
-        implementation project(':common:common-container')
         implementation project(':common:common-domain:common-domain-core')
 
         implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -82,22 +81,14 @@ project(':imdang-container') {
     }
 }
 
-project(':common:common-container') {
-    dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter-security'
-        implementation 'org.springframework.boot:spring-boot-starter-web'
-        implementation 'io.jsonwebtoken:jjwt:0.12.6'
-        testImplementation 'org.springframework.security:spring-security-test'
-
-        implementation project(':common:common-application')
-        implementation project(':common:common-domain:common-application-service')
-    }
-}
-
 project(':common:common-application') {
     dependencies {
+        implementation project(':common:common-domain:common-application-service')
         implementation 'org.springframework.boot:spring-boot-starter-validation'
         implementation 'org.springframework.boot:spring-boot-starter-web'
+
+        implementation 'org.springframework.boot:spring-boot-starter-security'
+        testImplementation 'org.springframework.security:spring-security-test'
     }
 }
 
@@ -107,6 +98,8 @@ project(':common:common-domain:common-application-service') {
         implementation 'io.jsonwebtoken:jjwt:0.12.6'
         implementation 'com.auth0:java-jwt:4.0.0'
         implementation 'org.bouncycastle:bcpkix-jdk18on:1.72'
+
+        implementation 'org.springframework.data:spring-data-commons'
     }
 }
 
@@ -125,7 +118,6 @@ project(':insight-service:insight-domain:insight-domain-core') {
 project(':insight-service:insight-domain:insight-application-service') {
     dependencies {
         implementation project(':insight-service:insight-domain:insight-domain-core')
-//        implementation project(':common:common-container')
         implementation project(':common:common-domain:common-application-service')
         implementation project(':common:common-domain:common-domain-core')
 
@@ -142,11 +134,12 @@ project(':insight-service:insight-application') {
         implementation project(':insight-service:insight-domain:insight-domain-core')
         implementation project(':common:common-application')
         implementation project(':common:common-domain:common-domain-core')
-//        implementation project(':common:common-container')
 
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
         implementation 'org.springframework.data:spring-data-commons'
+
+        implementation 'org.springframework.boot:spring-boot-starter-security'
     }
 }
 
@@ -171,11 +164,15 @@ project(':insight-service:insight-container') {
         implementation project(':insight-service:insight-persistence')
         implementation project(':insight-service:insight-domain:insight-application-service')
         implementation project(':insight-service:insight-domain:insight-domain-core')
-//        implementation project(':common:common-application')
+
+        implementation project(':common:common-domain:common-application-service')
         implementation project(':common:common-domain:common-domain-core')
 
         implementation 'org.springframework.boot:spring-boot-starter'
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+        implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+        implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
     }
 }
 
@@ -193,7 +190,6 @@ project(':member-service:member-domain:member-application-service') {
         implementation 'org.bouncycastle:bcpkix-jdk18on:1.72'
 
         implementation project(':member-service:member-domain:member-domain-core')
-//        implementation project(':common:common-container')
         implementation project(':common:common-domain:common-application-service')
         implementation project(':common:common-domain:common-domain-core')
     }
@@ -265,6 +261,8 @@ project(':setting-service:setting-application') {
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
         implementation 'org.springframework.data:spring-data-commons'
+
+        implementation 'org.springframework.boot:spring-boot-starter-security'
     }
 }
 
@@ -280,5 +278,23 @@ project(':setting-service:setting-persistence') {
         runtimeOnly 'com.mysql:mysql-connector-j'
 
         implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
+    }
+}
+
+project(':setting-service:setting-container') {
+    dependencies {
+        implementation project(':setting-service:setting-application')
+        implementation project(':setting-service:setting-persistence')
+        implementation project(':setting-service:setting-domain:setting-application-service')
+        implementation project(':setting-service:setting-domain:setting-domain-core')
+
+        implementation project(':common:common-domain:common-application-service')
+        implementation project(':common:common-domain:common-domain-core')
+
+        implementation 'org.springframework.boot:spring-boot-starter'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
+        testImplementation 'org.springframework.security:spring-security-test'
     }
 }

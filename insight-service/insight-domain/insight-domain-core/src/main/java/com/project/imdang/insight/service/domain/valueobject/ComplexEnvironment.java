@@ -1,8 +1,14 @@
 package com.project.imdang.insight.service.domain.valueobject;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ComplexEnvironment {
     // 건물
@@ -13,11 +19,4 @@ public class ComplexEnvironment {
     private Opinion<ObjectiveItem> childrenFacility;
     // 경로 시설
     private Opinion<ObjectiveItem> seniorFacility;
-
-    public ComplexEnvironment(Opinion<ObjectiveItem> buildingCondition, Opinion<ObjectiveItem> security, Opinion<ObjectiveItem> childrenFacility, Opinion<ObjectiveItem> seniorFacility) {
-        this.buildingCondition = buildingCondition;
-        this.security = security;
-        this.childrenFacility = childrenFacility;
-        this.seniorFacility = seniorFacility;
-    }
 }

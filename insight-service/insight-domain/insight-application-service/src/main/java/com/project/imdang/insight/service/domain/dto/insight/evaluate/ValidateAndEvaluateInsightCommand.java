@@ -15,7 +15,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
-import java.util.Set;
 
 @Builder
 @AllArgsConstructor
@@ -27,7 +26,7 @@ public class ValidateAndEvaluateInsightCommand {
     private ApartmentComplex apartmentComplex;
     private String title;
     private String contents;
-    private Set<String> images;
+    private String mainImage;
     private String summary;
 
     private ZonedDateTime visitAt;

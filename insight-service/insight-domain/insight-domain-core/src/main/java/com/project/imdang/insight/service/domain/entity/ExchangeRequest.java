@@ -4,8 +4,10 @@ package com.project.imdang.insight.service.domain.entity;
 import com.project.imdang.domain.entity.AggregateRoot;
 import com.project.imdang.domain.valueobject.ExchangeRequestId;
 import com.project.imdang.domain.valueobject.InsightId;
+import com.project.imdang.domain.valueobject.MemberCouponId;
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.valueobject.ExchangeRequestStatus;
+import com.project.imdang.insight.service.domain.valueobject.SnapshotId;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,40 +17,67 @@ import java.util.UUID;
 
 @Getter
 public class ExchangeRequest extends AggregateRoot<ExchangeRequestId> {
-    private final MemberId requestMemberId;
+    private MemberId requestMemberId;
+
+    ////////////////////////////////////////////////////////////
     private final InsightId requestMemberInsightId;
+    private SnapshotId requestMemberSnapshotId;
+    // OR
+    private MemberCouponId memberCouponId;
+    ////////////////////////////////////////////////////////////
 
     private final InsightId requestedInsightId;
-    private final MemberId requestedMemberId;
+    private SnapshotId requestedSnapshotId;
+    private MemberId requestedMemberId;
 
     private ZonedDateTime requestedAt;
     private ZonedDateTime respondedAt;
     private ExchangeRequestStatus status;
 
     @Builder
-    public ExchangeRequest(ExchangeRequestId id, MemberId requestMemberId, InsightId requestMemberInsightId, InsightId requestedInsightId, MemberId requestedMemberId, ZonedDateTime requestedAt, ZonedDateTime respondedAt, ExchangeRequestStatus status) {
+    public ExchangeRequest(ExchangeRequestId id,
+                           MemberId requestMemberId,
+                           InsightId requestMemberInsightId,
+                           SnapshotId requestMemberSnapshotId,
+                           MemberCouponId memberCouponId,
+                           InsightId requestedInsightId,
+                           SnapshotId requestedSnapshotId,
+                           MemberId requestedMemberId,
+                           ZonedDateTime requestedAt,
+                           ZonedDateTime respondedAt,
+                           ExchangeRequestStatus status) {
         setId(id);
         this.requestMemberId = requestMemberId;
         this.requestMemberInsightId = requestMemberInsightId;
+        this.requestMemberSnapshotId = requestMemberSnapshotId;
+        this.memberCouponId = memberCouponId;
         this.requestedInsightId = requestedInsightId;
+        this.requestedSnapshotId = requestedSnapshotId;
         this.requestedMemberId = requestedMemberId;
         this.requestedAt = requestedAt;
         this.respondedAt = respondedAt;
         this.status = status;
     }
 
-    public void initialize() {
+    public void initialize(Snapshot requestedSnapshot, Snapshot requestMemberSnapshot) {
         
-        if (Objects.isNull(requestMemberId) || Objects.isNull(requestMemberInsightId)
-                || Objects.isNull(requestedInsightId) || Objects.isNull(requestedMemberId)) {
-            // TODO - 예외 처리
-            throw new IllegalArgumentException();
-        }
+        // TODO - validation 체크
 
         // TODO - 동일 글 중복 교환 요청 불가 (1개 글에 요청 1번으로 제한)
         // requestMemberId - requestedInsightId UNIQUE
         ExchangeRequestId id = new ExchangeRequestId(UUID.randomUUID());
         setId(id);
+
+        if (requestMemberSnapshot != null) {
+            this.requestMemberId = requestMemberSnapshot.getMemberId();
+            this.requestMemberSnapshotId = requestMemberSnapshot.getId();
+        } else {
+            // TODO : 쿠폰
+        }
+
+        this.requestedMemberId = requestedSnapshot.getMemberId();
+        this.requestedSnapshotId = requestedSnapshot.getId();
+
         this.requestedAt = ZonedDateTime.now();
         this.status = ExchangeRequestStatus.PENDING;
     }

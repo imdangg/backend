@@ -14,16 +14,15 @@ import com.project.imdang.insight.service.domain.valueobject.Infra;
 import com.project.imdang.insight.service.domain.valueobject.VisitMethod;
 
 import java.time.ZonedDateTime;
-import java.util.Set;
 
 public interface InsightDomainService {
-    Insight validateAndEvaluateInsight(Insight insight);
+//    Insight validateAndEvaluateInsight(Insight insight);
     Insight createInsight(Insight insight);
-    InsightUpdatedEvent updateInsight(Insight insight, int score,
-                                      String title, String contents, Set<String> images, String summary,
+    InsightUpdatedEvent updateInsight(Insight insight, MemberId updatedBy, int score,
+                                      String title, String contents, String mainImage, String summary,
                                       ZonedDateTime visitAt, VisitMethod visitMethod, Access access,
                                       Infra infra, ComplexEnvironment complexEnvironment, ComplexFacility complexFacility, FavorableNews favorableNews);
-    InsightDeletedEvent deleteInsight(Insight insight);
+    InsightDeletedEvent deleteInsight(Insight insight, MemberId deletedBy);
     Insight recommendInsight(Insight insight);
     InsightAccusedEvent accuseInsight(Insight insight, MemberId accusedBy);
 //    InsightRequestedEvent requestInsight(Insight insight);

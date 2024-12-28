@@ -36,8 +36,11 @@ public class AccuseInsightCommandHandler {
     @Transactional
     public AccuseInsightResponse accuseInsight(AccuseInsightCommand accuseInsightCommand) {
         Insight insight = checkInsight(accuseInsightCommand.getInsightId());
-        MemberId accuseMemberId = new MemberId(accuseInsightCommand.getAccuseMemberId());
-        InsightAccusedEvent insightAccusedEvent = insightDomainService.accuseInsight(insight, accuseMemberId);
+        MemberId accusedBy = new MemberId(accuseInsightCommand.getAccuseMemberId());
+
+        // TODO - CHECK : insightId - memberId(accusedBy)로 중복 신고 여부 체크
+        
+        InsightAccusedEvent insightAccusedEvent = insightDomainService.accuseInsight(insight, accusedBy);
         saveInsight(insightAccusedEvent.getInsight());
         // TODO - 신고 횟수에 따른 이벤트 발생 (+ 어디서 accuse를 저장할까?)
         // TODO - publish event
