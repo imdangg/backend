@@ -1,5 +1,7 @@
 package com.project.imdang.member.service;
 
+import com.project.imdang.member.service.domain.MemberCouponDomainService;
+import com.project.imdang.member.service.domain.MemberCouponDomainServiceImpl;
 import com.project.imdang.member.service.domain.MemberDomainService;
 import com.project.imdang.member.service.domain.MemberDomainServiceImpl;
 import org.springframework.context.annotation.Bean;
@@ -16,5 +18,10 @@ public class BeanConfiguration {
     @Bean
     public MemberDomainService memberDomainService() {
         return new MemberDomainServiceImpl();
+    }
+
+    @Bean
+    public MemberCouponDomainService memberCouponDomainService() {
+        return new MemberCouponDomainServiceImpl();
     }
 }

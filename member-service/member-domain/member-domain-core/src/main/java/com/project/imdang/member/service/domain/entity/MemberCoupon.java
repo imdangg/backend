@@ -18,7 +18,7 @@ public class MemberCoupon extends BaseEntity<MemberCouponId> {
     private final MemberId memberId;
 
     // TODO - CHECK : only 사용/미사용 + 사용 취소
-    private ZonedDateTime expiredAt;
+    //private ZonedDateTime expiredAt;
 
     private String remark;  // reason
     private ZonedDateTime createdAt;
@@ -27,15 +27,19 @@ public class MemberCoupon extends BaseEntity<MemberCouponId> {
     private ZonedDateTime usedAt;
 
     @Builder
-    public MemberCoupon(MemberCouponId id, CouponId couponId, MemberId memberId, ZonedDateTime expiredAt, String remark, ZonedDateTime createdAt, Boolean used, ZonedDateTime usedAt) {
+    public MemberCoupon(MemberCouponId id, CouponId couponId, MemberId memberId, String remark, ZonedDateTime createdAt, Boolean used, ZonedDateTime usedAt) {
         setId(id);
         this.couponId = couponId;
         this.memberId = memberId;
-        this.expiredAt = expiredAt;
+//        this.expiredAt = expiredAt;
         this.remark = remark;
         this.createdAt = createdAt;
         this.used = used;
         this.usedAt = usedAt;
+    }
+
+    public void initialize() {
+        this.createdAt = ZonedDateTime.now();
     }
 
     public void use() {
@@ -44,5 +48,13 @@ public class MemberCoupon extends BaseEntity<MemberCouponId> {
         }
         this.used = Boolean.TRUE;
         this.usedAt = ZonedDateTime.now();
+    }
+
+    public void cancle() {
+        if (Boolean.FALSE.equals(used)) {
+            throw new MemberCouponDomainException("Not used memberCoupon!");
+        }
+        this.used = Boolean.FALSE;
+        this.usedAt = null;
     }
 }
