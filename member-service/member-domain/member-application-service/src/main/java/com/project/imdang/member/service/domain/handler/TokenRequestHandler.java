@@ -2,7 +2,7 @@ package com.project.imdang.member.service.domain.handler;
 
 import com.project.imdang.domain.jwt.JwtTokenProvider;
 import com.project.imdang.member.service.domain.dto.TokenResponse;
-import com.project.imdang.member.service.domain.entity.Member;
+import com.project.imdang.domain.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

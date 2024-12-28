@@ -1,6 +1,7 @@
 package com.project.imdang.insight.service.domain;
 
 import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
+import com.project.imdang.insight.service.domain.entity.Snapshot;
 import com.project.imdang.insight.service.domain.event.ExchangeRequestAcceptedEvent;
 import com.project.imdang.insight.service.domain.event.ExchangeRequestCreatedEvent;
 import com.project.imdang.insight.service.domain.event.ExchangeRequestRejectedEvent;
@@ -12,8 +13,8 @@ import java.time.ZonedDateTime;
 public class ExchangeDomainServiceImpl implements ExchangeDomainService {
 
     @Override
-    public ExchangeRequestCreatedEvent requestExchange(ExchangeRequest exchangeRequest) {
-        exchangeRequest.initialize();
+    public ExchangeRequestCreatedEvent requestExchange(ExchangeRequest exchangeRequest, Snapshot requestedSnapshot, Snapshot requestMemberSnapshot) {
+        exchangeRequest.initialize(requestedSnapshot, requestMemberSnapshot);
         log.info("ExchangeRequest[id: {}] is initialized.", exchangeRequest.getId().getValue());
         return new ExchangeRequestCreatedEvent(exchangeRequest, ZonedDateTime.now());
     }

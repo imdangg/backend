@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
@@ -17,7 +18,8 @@ public class AccuseInsightCommand {
     // insightId - accuseMemberId UNIQUE
     @NotNull
     private UUID insightId;
-    // accusedBy : 신고한 memberId
+
+    @Setter
     @NotNull
-    private UUID accuseMemberId;
+    private UUID accuseMemberId;    // accusedBy : 신고한 memberId
 }

@@ -17,7 +17,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
-import java.util.Set;
 
 @Getter
 public class Snapshot extends BaseEntity<SnapshotId> {
@@ -30,8 +29,7 @@ public class Snapshot extends BaseEntity<SnapshotId> {
 
     private final String title;
     private final String contents;
-    // TODO - 대표사진
-    private final Set<String> images;
+    private final String mainImage;
     private final String summary;
 
     private final ZonedDateTime visitAt;
@@ -47,7 +45,7 @@ public class Snapshot extends BaseEntity<SnapshotId> {
     private final FavorableNews favorableNews;
 
     @Builder
-    public Snapshot(SnapshotId id, InsightId insightId, MemberId memberId, Address address, ApartmentComplex apartmentComplex, String title, String contents, Set<String> images, String summary, ZonedDateTime visitAt, VisitMethod visitMethod, Access access, Infra infra, ComplexEnvironment complexEnvironment, ComplexFacility complexFacility, FavorableNews favorableNews) {
+    public Snapshot(SnapshotId id, InsightId insightId, MemberId memberId, Address address, ApartmentComplex apartmentComplex, String title, String contents, String mainImage, String summary, ZonedDateTime visitAt, VisitMethod visitMethod, Access access, Infra infra, ComplexEnvironment complexEnvironment, ComplexFacility complexFacility, FavorableNews favorableNews) {
         setId(id);
         this.insightId = insightId;
         this.memberId = memberId;
@@ -55,7 +53,7 @@ public class Snapshot extends BaseEntity<SnapshotId> {
         this.apartmentComplex = apartmentComplex;
         this.title = title;
         this.contents = contents;
-        this.images = images;
+        this.mainImage = mainImage;
         this.summary = summary;
         this.visitAt = visitAt;
         this.visitMethod = visitMethod;
@@ -73,7 +71,7 @@ public class Snapshot extends BaseEntity<SnapshotId> {
         this.apartmentComplex = insight.getApartmentComplex();
         this.title = insight.getTitle();
         this.contents = insight.getContents();
-        this.images = insight.getImages();
+        this.mainImage = insight.getMainImage();
         this.summary = insight.getSummary();
         this.visitAt = insight.getVisitAt();
         this.visitMethod = insight.getVisitMethod();

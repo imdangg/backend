@@ -32,6 +32,11 @@ public class RejectExchangeCommandHandler {
     public RejectExchangeRequestResponse rejectExchangeRequest(RejectExchangeRequestCommand rejectExchangeRequestCommand) {
         UUID exchangeRequestId = rejectExchangeRequestCommand.getExchangeRequestId();
         ExchangeRequest exchangeRequest = checkExchangeRequest(exchangeRequestId);
+        // check
+        if (!exchangeRequest.getRequestedMemberId().getValue().equals(rejectExchangeRequestCommand.getRequestedMemberId())) {
+            throw new RuntimeException();
+        }
+
         ExchangeRequestRejectedEvent exchangeRequestRejectedEvent = exchangeDomainService.rejectExchangeRequest(exchangeRequest);
         log.info("ExchangeRequest[id: {}] is rejected.", exchangeRequest.getId().getValue());
         ExchangeRequest saved = save(exchangeRequest);

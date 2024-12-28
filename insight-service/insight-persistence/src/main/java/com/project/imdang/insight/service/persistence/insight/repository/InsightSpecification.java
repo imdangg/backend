@@ -1,6 +1,6 @@
 package com.project.imdang.insight.service.persistence.insight.repository;
 
-import com.project.imdang.insight.service.domain.entity.Insight;
+import com.project.imdang.insight.service.persistence.insight.entity.InsightEntity;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
@@ -10,8 +10,8 @@ import java.util.UUID;
 
 public final class InsightSpecification {
 
-    public static Specification<Insight> equalsMemberId(UUID memberId) {
-        return (Root<Insight> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {
+    public static Specification<InsightEntity> equalsMemberId(String memberId) {
+        return (Root<InsightEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {
             if (memberId == null) {
                 return criteriaBuilder.conjunction();
             }
@@ -19,8 +19,8 @@ public final class InsightSpecification {
         };
     }
 
-    public static Specification<Insight> equalsSiGunGu(String siGunGu) {
-        return (Root<Insight> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {
+    public static Specification<InsightEntity> equalsSiGunGu(String siGunGu) {
+        return (Root<InsightEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {
             if (siGunGu == null || siGunGu.isEmpty()) {
                 return criteriaBuilder.conjunction();
             }
@@ -28,8 +28,8 @@ public final class InsightSpecification {
         };
     }
 
-    public static Specification<Insight> equalsDong(String dong) {
-        return (Root<Insight> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {
+    public static Specification<InsightEntity> equalsDong(String dong) {
+        return (Root<InsightEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {
             if (dong == null || dong.isEmpty()) {
                 return criteriaBuilder.conjunction();
             }
@@ -37,12 +37,12 @@ public final class InsightSpecification {
         };
     }
 
-    public static Specification<Insight> equalsApartmentComplex(String apartComplexName) {
-        return (Root<Insight> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {
+    public static Specification<InsightEntity> equalsApartmentComplex(String apartComplexName) {
+        return (Root<InsightEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {
             if (apartComplexName == null || apartComplexName.isEmpty()) {
                 return criteriaBuilder.conjunction();
             }
-            return criteriaBuilder.equal(root.get("apartComplex").get("name"), apartComplexName);
+            return criteriaBuilder.equal(root.get("apartmentComplex").get("name"), apartComplexName);
         };
     }
 }

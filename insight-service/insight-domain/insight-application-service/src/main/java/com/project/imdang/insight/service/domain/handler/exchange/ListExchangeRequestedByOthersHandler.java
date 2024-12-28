@@ -1,5 +1,6 @@
 package com.project.imdang.insight.service.domain.handler.exchange;
 
+import com.project.imdang.domain.utils.PagingUtils;
 import com.project.imdang.domain.valueobject.InsightId;
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.dto.exchange.list.ListExchangeRequestedByOthersQuery;
@@ -35,8 +36,9 @@ public class ListExchangeRequestedByOthersHandler {
     public Page<InsightResponse> list(ListExchangeRequestedByOthersQuery listExchangeRequestedByOthersQuery) {
 
         UUID requestedMemberId = listExchangeRequestedByOthersQuery.getRequestedMemberId();
-        Sort sort = Sort.by(Sort.Direction.valueOf(listExchangeRequestedByOthersQuery.getDirection()), listExchangeRequestedByOthersQuery.getProperties());
-        PageRequest pageRequest = PageRequest.of(listExchangeRequestedByOthersQuery.getPageNumber(), listExchangeRequestedByOthersQuery.getPageSize(), sort);
+        PageRequest pageRequest = PagingUtils.getPageRequest(
+                listExchangeRequestedByOthersQuery.getPageNumber(), listExchangeRequestedByOthersQuery.getPageSize(),
+                listExchangeRequestedByOthersQuery.getDirection(), listExchangeRequestedByOthersQuery.getProperties());
 
         ExchangeRequestStatus exchangeRequestStatus = listExchangeRequestedByOthersQuery.getExchangeRequestStatus();
         Page<ExchangeRequest> paged

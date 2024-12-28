@@ -5,8 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Builder
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AgreeTermsCommand {
-    private List<Long> termsIds;
-    private UUID memberId;
+    private Set<Long> termsIds;
+    @Setter
+    private UUID memberId;  // agreedBy
 }

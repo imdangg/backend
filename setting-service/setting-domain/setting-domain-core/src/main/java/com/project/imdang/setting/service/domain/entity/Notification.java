@@ -2,6 +2,7 @@ package com.project.imdang.setting.service.domain.entity;
 
 import com.project.imdang.domain.entity.AggregateRoot;
 import com.project.imdang.domain.valueobject.MemberId;
+import com.project.imdang.setting.service.domain.exception.NotificationDomainException;
 import com.project.imdang.setting.service.domain.valueobject.NotificationCategory;
 import com.project.imdang.setting.service.domain.valueobject.NotificationId;
 import lombok.Builder;
@@ -42,7 +43,7 @@ public class Notification extends AggregateRoot<NotificationId> {
 
     public void check() {
         if (Boolean.TRUE.equals(this.isChecked)) {
-//            throw new NotificationDomainException();
+            throw new NotificationDomainException("Already checked!");
         }
         this.isChecked = Boolean.TRUE;
         this.checkedAt = ZonedDateTime.now();
