@@ -14,5 +14,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ListInsightByApartmentComplexQuery extends PagingQuery {
 
-    private ApartmentComplex apartmentComplex;
+    private String apartmentComplexName;
 }

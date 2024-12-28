@@ -1,10 +1,16 @@
 package com.project.imdang.insight.service.domain.valueobject;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
+@Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Infra {
 
@@ -22,16 +28,6 @@ public class Infra {
     private Opinion<Set<Landmark>> landmark;
     // 기피시설
     private Opinion<Set<UnpleasantFacility>> unpleasantFacility;
-
-    public Infra(Opinion<Set<Transportation>> transportation, Opinion<Set<SchoolDistrict>> schoolDistrict, Opinion<Set<Amenity>> amenity, Opinion<Set<Facility>> facility, Opinion<Set<Surroundings>> surroundings, Opinion<Set<Landmark>> landmark, Opinion<Set<UnpleasantFacility>> unpleasantFacility) {
-        this.transportation = transportation;
-        this.schoolDistrict = schoolDistrict;
-        this.amenity = amenity;
-        this.facility = facility;
-        this.surroundings = surroundings;
-        this.landmark = landmark;
-        this.unpleasantFacility = unpleasantFacility;
-    }
 
     public enum Transportation {
         주차_편리, 지하철역_가까움, 버스정류장_가까움

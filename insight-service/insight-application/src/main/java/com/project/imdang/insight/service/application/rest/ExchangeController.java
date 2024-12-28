@@ -6,7 +6,6 @@ import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExcha
 import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestResponse;
 import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightResponse;
-import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
 import com.project.imdang.insight.service.domain.ports.input.service.ExchangeApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -16,10 +15,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
 
 @Slf4j
 @RequestMapping("/exchanges")
@@ -37,9 +39,21 @@ public class ExchangeController {
     @ApiResponse(responseCode = "200", description = "인사이트 교환 요청 성공",
             content = @Content(schema = @Schema(implementation = RequestExchangeInsightResponse.class)))
     @PostMapping("/request")
-    public ResponseEntity<RequestExchangeInsightResponse> request(@RequestBody RequestExchangeInsightCommand requestExchangeInsightCommand) {
-        log.info("Insight[id: {}] is requested to exchange with insight[id: {}].", requestExchangeInsightCommand.getRequestedInsightId(), requestExchangeInsightCommand.getRequestMemberInsightId());
-        RequestExchangeInsightResponse requestExchangeInsightResponse = exchangeApplicationService.requestExchangeInsight(requestExchangeInsightCommand);
+    public ResponseEntity<RequestExchangeInsightResponse> request(@AuthenticationPrincipal UUID memberId,
+                                                                  @RequestBody RequestExchangeInsightCommand requestExchangeInsightCommand) {
+
+        requestExchangeInsightCommand.setRequestMemberId(memberId);
+        if (requestExchangeInsightCommand.getRequestMemberInsightId() != null) {
+            log.info("Insight[id: {}] is requested to exchange with insight[id: {}].",
+                    requestExchangeInsightCommand.getRequestedInsightId(), requestExchangeInsightCommand.getRequestMemberInsightId());
+        } else {
+            // 쿠폰
+            log.info("Insight[id: {}] is requested with memberCoupon[id: {}].",
+                    requestExchangeInsightCommand.getRequestedInsightId(), requestExchangeInsightCommand.getMemberCouponId());
+        }
+
+        RequestExchangeInsightResponse requestExchangeInsightResponse
+                = exchangeApplicationService.requestExchangeInsight(requestExchangeInsightCommand);
         log.info("ExchangeRequest[id : {}] is created.", requestExchangeInsightResponse.getExchangeRequestId());
         return ResponseEntity.ok(requestExchangeInsightResponse);
     }
@@ -51,7 +65,8 @@ public class ExchangeController {
     @ApiResponse(responseCode = "200", description = "인사이트 교환 수락 성공",
             content = @Content(schema = @Schema(implementation = AcceptExchangeRequestResponse.class)))
     @PostMapping("/accept")
-    public ResponseEntity<AcceptExchangeRequestResponse> accept(@RequestBody AcceptExchangeRequestCommand acceptExchangeRequestCommand) {
+    public ResponseEntity<AcceptExchangeRequestResponse> accept(@AuthenticationPrincipal UUID memberId, @RequestBody AcceptExchangeRequestCommand acceptExchangeRequestCommand) {
+        acceptExchangeRequestCommand.setRequestedMemberId(memberId);
         AcceptExchangeRequestResponse acceptExchangeRequestResponse = exchangeApplicationService.acceptExchangeRequest(acceptExchangeRequestCommand);
         log.info("ExchangeRequest[id: {}] is accepted.", acceptExchangeRequestCommand.getExchangeRequestId());
         return ResponseEntity.ok(acceptExchangeRequestResponse);
@@ -64,7 +79,8 @@ public class ExchangeController {
     @ApiResponse(responseCode = "200", description = "인사이트 교환 거절 성공",
             content = @Content(schema = @Schema(implementation = RejectExchangeRequestResponse.class)))
     @PostMapping("/reject")
-    public ResponseEntity<RejectExchangeRequestResponse> reject(@RequestBody RejectExchangeRequestCommand rejectExchangeRequestCommand) {
+    public ResponseEntity<RejectExchangeRequestResponse> reject(@AuthenticationPrincipal UUID memberId, @RequestBody RejectExchangeRequestCommand rejectExchangeRequestCommand) {
+        rejectExchangeRequestCommand.setRequestedMemberId(memberId);
         RejectExchangeRequestResponse rejectExchangeRequestResponse = exchangeApplicationService.rejectExchangeRequest(rejectExchangeRequestCommand);
         log.info("ExchangeRequest[id:{}] is rejected.", rejectExchangeRequestCommand.getExchangeRequestId());
         return ResponseEntity.ok(rejectExchangeRequestResponse);

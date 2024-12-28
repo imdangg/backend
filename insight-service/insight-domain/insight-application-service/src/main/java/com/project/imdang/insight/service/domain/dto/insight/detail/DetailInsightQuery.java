@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
@@ -14,4 +15,7 @@ import java.util.UUID;
 public class DetailInsightQuery {
     @NotNull
     private UUID insightId;
+
+//    @Setter
+    private UUID memberId;  // requestedBy
 }
