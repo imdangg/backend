@@ -1,5 +1,6 @@
 package com.project.imdang.application.handler;
 
+import com.project.imdang.application.security.ErrorCode;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,13 @@ public class ErrorDTO {
         return ErrorDTO.builder()
                 .code(status.getReasonPhrase())
                 .message(message)
+                .build();
+    }
+
+    public static ErrorDTO of(ErrorCode errorCode) {
+        return ErrorDTO.builder()
+                .code(errorCode.getErrorCode())
+                .message(errorCode.getMessage())
                 .build();
     }
 }

@@ -1,10 +1,6 @@
-package com.project.imdang.application.security.filter;
+package com.project.imdang.application.security;
 
-import com.project.imdang.application.security.util.ErrorCode;
 import com.project.imdang.domain.jwt.JwtTokenProvider;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +17,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.UUID;
+
+import static com.project.imdang.application.security.ErrorCode.ADDITIONAL_REQUIRED_TOKEN;
+import static com.project.imdang.application.security.ErrorCode.ILLEGAL_TOKEN;
+import static com.project.imdang.application.security.ErrorCode.MAL_FORMED_TOKEN;
+import static com.project.imdang.application.security.ErrorCode.UNKNOWN_ERROR;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -46,27 +47,28 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 log.debug("Authentication[id:{}] saved in Security Context", memberId);
             }
             else {
-                request.setAttribute("exception", ErrorCode.ADDITIONAL_REQUIRED_TOKEN.getErrorCode());
+                request.setAttribute("exception", ADDITIONAL_REQUIRED_TOKEN.getErrorCode());
                 log.info("JwtAuthFilter: Caught Exception {}", request.getAttribute("exception"));
             }
-        } catch (SecurityException | MalformedJwtException e) {
-            request.setAttribute("exception", ErrorCode.MAL_FORMED_TOKEN.getErrorCode());
+        } catch (SecurityException e) {
+//                 | MalformedJwtException e) {
+            request.setAttribute("exception", MAL_FORMED_TOKEN.getErrorCode());
             log.info("JwtAuthFilter: Caught MalformedJwtException {}", request.getAttribute("exception"));
 
-        } catch (ExpiredJwtException e) {
-            request.setAttribute("exception", ErrorCode.EXPIRED_TOKEN.getErrorCode());
-            log.info("JwtAuthFilter: Caught ExpiredJwtException {}", request.getAttribute("exception"));
-
-        } catch (UnsupportedJwtException e) {
-            request.setAttribute("exception", ErrorCode.UNSUPPORTED_TOKEN.getErrorCode());
-            log.info("JwtAuthFilter: Caught UnsupportedJwtException {}", request.getAttribute("exception"));
+//        } catch (ExpiredJwtException e) {
+//            request.setAttribute("exception", EXPIRED_TOKEN.getErrorCode());
+//            log.info("JwtAuthFilter: Caught ExpiredJwtException {}", request.getAttribute("exception"));
+//
+//        } catch (UnsupportedJwtException e) {
+//            request.setAttribute("exception", UNSUPPORTED_TOKEN.getErrorCode());
+//            log.info("JwtAuthFilter: Caught UnsupportedJwtException {}", request.getAttribute("exception"));
 
         } catch (IllegalArgumentException e) {
-            request.setAttribute("exception", ErrorCode.ILLEGAL_TOKEN.getErrorCode());
+            request.setAttribute("exception", ILLEGAL_TOKEN.getErrorCode());
             log.info("JwtAuthFilter: Caught IllegalArgumentException {}", request.getAttribute("exception"));
 
         } catch (Exception e) {
-            request.setAttribute("exception", ErrorCode.UNKNOWN_ERROR.getErrorCode());
+            request.setAttribute("exception", UNKNOWN_ERROR.getErrorCode());
             log.info("JwtAuthFilter: Caught Exception {}", request.getAttribute("exception"));
             log.info("Exception Message : {}", e.getMessage());
         }
