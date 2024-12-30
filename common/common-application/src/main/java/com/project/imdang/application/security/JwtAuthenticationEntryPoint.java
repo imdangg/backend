@@ -51,10 +51,10 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     }
 
     private void setResponse(HttpServletResponse response, ErrorCode exceptionCode) throws IOException {
-//        response.setContentType("application/json;charset=UTF-8");
-//        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//
-//        ErrorDTO errorDTO = new ErrorDTO(exceptionCode.getErrorCode(), exceptionCode.getMessage());
-//        response.getWriter().print(new ObjectMapper().writeValueAsString(errorDTO));
+        response.setContentType("application/json;charset=UTF-8");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+        ErrorDTO errorDTO = new ErrorDTO(exceptionCode.getErrorCode(), exceptionCode.getMessage());
+        response.getWriter().print(new ObjectMapper().writeValueAsString(errorDTO));
     }
 }
