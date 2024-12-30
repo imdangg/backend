@@ -7,9 +7,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration("objectMapperConfiguration")
 public class ObjectMapperConfiguration {
-
     @Bean
-    public ObjectMapper insightObjectMapper() {
+    public ObjectMapper objectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule()); // Java 8 날짜/시간 모듈 등록
         objectMapper.configure(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false); // ISO 8601 포맷 사용
