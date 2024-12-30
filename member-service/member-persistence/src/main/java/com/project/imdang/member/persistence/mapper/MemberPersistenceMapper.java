@@ -3,7 +3,7 @@ package com.project.imdang.member.persistence.mapper;
 
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.member.persistence.entity.MemberEntity;
-import com.project.imdang.domain.entity.Member;
+import com.project.imdang.member.service.domain.entity.Member;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,7 +1,7 @@
 package com.project.imdang.application.configuration;
 
-import com.project.imdang.application.security.JwtAuthFilter;
 import com.project.imdang.application.security.JwtAuthenticationEntryPoint;
+import com.project.imdang.application.security.filter.JwtAuthFilter;
 import com.project.imdang.domain.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
