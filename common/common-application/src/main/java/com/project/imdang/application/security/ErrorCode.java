@@ -18,4 +18,14 @@ public enum ErrorCode {
     private final String errorCode;
     private final HttpStatus httpStatus;
     private final String message;
+
+    public static ErrorCode getErrorCode(String code) {
+        for (ErrorCode errorCode : ErrorCode.values()) {
+            if (errorCode.getErrorCode().equals(code)) {
+                return errorCode;
+            }
+        }
+        // TODO - 예외 처리
+        throw new RuntimeException();
+    }
 }
