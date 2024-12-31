@@ -2,11 +2,9 @@ package com.project.imdang.insight.service.application.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.imdang.domain.jwt.JwtTokenProvider;
-import com.project.imdang.domain.valueobject.InsightId;
 import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExchangeRequestCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightCommand;
-import com.project.imdang.insight.service.domain.ports.output.repository.SnapshotRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +14,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Optional;
 import java.util.UUID;
 
-import static com.project.imdang.insight.service.application.rest.TestData.memberCouponId;
 import static com.project.imdang.insight.service.application.rest.TestData.requestMemberId;
-import static com.project.imdang.insight.service.application.rest.TestData.requestMemberInsightId;
-import static com.project.imdang.insight.service.application.rest.TestData.requestMemberSnapshot;
-import static com.project.imdang.insight.service.application.rest.TestData.requestedInsightId;
 import static com.project.imdang.insight.service.application.rest.TestData.requestedMemberId;
-import static com.project.imdang.insight.service.application.rest.TestData.requestedSnapshot;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -42,8 +34,6 @@ public class ExchangeControllerTest {
 
     @MockBean
     private JwtTokenProvider jwtTokenProvider;
-    @MockBean
-    private SnapshotRepository snapshotRepository;
 
     private String requestMemberToken = "request-member-token";
     private String requestedMemberToken = "requested-member-token";
@@ -61,20 +51,15 @@ public class ExchangeControllerTest {
                 .thenReturn(true);
         Mockito.when(jwtTokenProvider.extractSubject(requestedMemberToken))
                 .thenReturn(String.valueOf(requestedMemberId));
-
-        Mockito.when(snapshotRepository.findLatestByInsightId(new InsightId(requestedInsightId)))
-                .thenReturn(Optional.ofNullable(requestedSnapshot));
-        Mockito.when(snapshotRepository.findLatestByInsightId(new InsightId(requestMemberInsightId)))
-                .thenReturn(Optional.ofNullable(requestMemberSnapshot));
     }
 
 //    @Test
     public void request() throws Exception {
-        RequestExchangeInsightCommand requestExchangeInsightCommand = RequestExchangeInsightCommand.builder()
-                .requestedInsightId(requestedInsightId)
-                .requestMemberId(requestMemberId)
-                .requestMemberInsightId(requestMemberInsightId)
-                .build();
+        UUID insightId = UUID.fromString("111512ab-a7b6-43f9-bd61-16ee2cded7d9");
+        UUID requestMemberInsightId = UUID.fromString("fc16cf45-2e8d-4cf2-b260-f7cac33820da");
+        RequestExchangeInsightCommand requestExchangeInsightCommand
+                = new TestData(insightId).requestExchangeInsightCommand(requestMemberInsightId, null) ;
+
         mockMvc.perform(post("/exchanges/request")
                         .header("Authorization", "Bearer " + requestMemberToken)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -85,11 +70,10 @@ public class ExchangeControllerTest {
 
 //    @Test
     public void request_with_coupon() throws Exception {
-        RequestExchangeInsightCommand requestExchangeInsightCommand = RequestExchangeInsightCommand.builder()
-                .requestedInsightId(requestedInsightId)
-                .requestMemberId(requestMemberId)
-                .memberCouponId(memberCouponId)
-                .build();
+        UUID insightId = UUID.fromString("111512ab-a7b6-43f9-bd61-16ee2cded7d9");
+        RequestExchangeInsightCommand requestExchangeInsightCommand
+                = new TestData(insightId).requestExchangeInsightCommand(null, 1L) ;
+
         mockMvc.perform(post("/exchanges/request")
                         .header("Authorization", "Bearer " + requestMemberToken)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -101,7 +85,7 @@ public class ExchangeControllerTest {
 //    @Test
     public void accept() throws Exception {
         AcceptExchangeRequestCommand acceptExchangeRequestCommand = AcceptExchangeRequestCommand.builder()
-                .exchangeRequestId(UUID.fromString("6e12ef7b-4a0a-4ae2-a3c2-492a96e0da21"))
+                .exchangeRequestId(UUID.fromString("a4c9a9e8-2577-4a4d-9bf1-3f76687336dd"))
                 .requestedMemberId(requestedMemberId)
                 .build();
         mockMvc.perform(post("/exchanges/accept")
@@ -115,7 +99,7 @@ public class ExchangeControllerTest {
 //    @Test
     public void reject() throws Exception {
         RejectExchangeRequestCommand rejectExchangeRequestCommand = RejectExchangeRequestCommand.builder()
-                .exchangeRequestId(UUID.fromString("6e12ef7b-4a0a-4ae2-a3c2-492a96e0da21"))
+                .exchangeRequestId(UUID.fromString("a4c9a9e8-2577-4a4d-9bf1-3f76687336dd"))
                 .requestedMemberId(requestedMemberId)
                 .build();
         mockMvc.perform(post("/exchanges/reject")

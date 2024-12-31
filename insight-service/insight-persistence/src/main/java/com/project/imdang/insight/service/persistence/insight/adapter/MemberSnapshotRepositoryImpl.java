@@ -14,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Component
 public class MemberSnapshotRepositoryImpl implements MemberSnapshotRepository {
@@ -29,9 +31,25 @@ public class MemberSnapshotRepositoryImpl implements MemberSnapshotRepository {
 
     @Override
     public Page<MemberSnapshot> findAllByMemberIdAndApartmentComplex(MemberId memberId, ApartmentComplex apartmentComplex, PageRequest pageRequest) {
-        return null;
-//        return memberSnapshotJpaRepository.findAllByMemberIdAndApartmentComplex(memberId.getValue(), apartmentComplex.getKey(), pageRequest)
-//                .map(memberSnapshotPersistenceMapper::memberSnapshotEntityToMemberSnapshot);
+        return memberSnapshotJpaRepository.findAllByMemberIdAndApartmentComplex(memberId.getValue(), apartmentComplex.getKey(), pageRequest)
+                .map(memberSnapshotPersistenceMapper::memberSnapshotEntityToMemberSnapshot);
+    }
+
+    @Override
+    public Page<MemberSnapshot> findAllByMemberIdAndSnapshotMemberId(MemberId memberId, MemberId snapshotMemberId, PageRequest pageRequest) {
+        return memberSnapshotJpaRepository.findAllByMemberIdAndSnapshotMemberId(memberId.getValue(), snapshotMemberId.getValue(), pageRequest)
+                .map(memberSnapshotPersistenceMapper::memberSnapshotEntityToMemberSnapshot);
+    }
+
+    @Override
+    public Page<MemberSnapshot> findAllByMemberIdAndApartmentComplexAndSnapshotMemberId(MemberId memberId, ApartmentComplex apartmentComplex, MemberId snapshotMemberId, PageRequest pageRequest) {
+        return memberSnapshotJpaRepository.findAllByMemberIdAndApartmentComplexAndSnapshotMemberId(memberId.getValue(), apartmentComplex.getKey(), snapshotMemberId.getValue(), pageRequest)
+                .map(memberSnapshotPersistenceMapper::memberSnapshotEntityToMemberSnapshot);
+    }
+
+    @Override
+    public List<ApartmentComplex> findAllDistinctApartmentComplexByMemberId(MemberId memberId) {
+        return memberSnapshotJpaRepository.findAllDistinctApartmentComplexByMemberId(memberId.getValue());
     }
 
     @Override

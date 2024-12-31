@@ -3,6 +3,7 @@ package com.project.imdang.insight.service.application.rest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.imdang.domain.jwt.JwtTokenProvider;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,7 +20,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest(classes = TestConfiguration.class)
-public class MyExchangeControllerTest {
+public class MyInsightControllerTest {
+
 
     @Autowired
     private MockMvc mockMvc;
@@ -46,14 +48,11 @@ public class MyExchangeControllerTest {
                 .thenReturn(String.valueOf(requestedMemberId));
     }
 
-    // 내가 요청한 내역
-//    @Test
-    void listRequestedByMe() throws Exception {
-        mockMvc.perform(get("/my-exchanges/requested-by-me")
+    @Test
+    void list() throws Exception {
+        mockMvc.perform(get("/my-insights")
                         .header("Authorization", "Bearer " + requestMemberToken)
-                        .param("exchangeRequestStatus", "PENDING")
-//                        .param("pageNumber", "0")
-//                        .param("pageSize", "10")
+                        .param("onlyMine", "TRUE")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
 //                .andExpect(jsonPath("$.content.length()").value(1))
@@ -61,17 +60,12 @@ public class MyExchangeControllerTest {
                 .andReturn();
     }
 
-    // 다른 사람이 요청한 내역
-//    @Test
-    void listRequestedByOthers() throws Exception {
-        mockMvc.perform(get("/my-exchanges/requested-by-others")
-                        .header("Authorization", "Bearer " + requestedMemberToken)
-                        .param("exchangeRequestStatus", "PENDING")
-//                        .param("pageNumber", "0")
-//                        .param("pageSize", "10")
+    @Test
+    void listMyApartmentComplex() throws Exception {
+        mockMvc.perform(get("/my-insights/apartment-complexes")
+                        .header("Authorization", "Bearer " + requestMemberToken)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.content.length()").value(1))
                 .andDo(print())
                 .andReturn();
     }

@@ -36,7 +36,7 @@ public class SnapshotRepositoryImpl implements SnapshotRepository {
 
     @Override
     public Optional<Snapshot> findLatestByInsightId(InsightId insightId) {
-        return snapshotJpaRepository.findTopByInsightIdOrderByIdDesc(insightId.getValue())
+        return snapshotJpaRepository.findTopByInsightIdEqualsOrderByIdDesc(insightId.getValue())
                 .map(snapshotPersistenceMapper::snapshotEntityToSnapshot);
     }
 

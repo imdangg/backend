@@ -9,5 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface SnapshotJpaRepository extends JpaRepository<SnapshotEntity, Long> {
-    Optional<SnapshotEntity> findTopByInsightIdOrderByIdDesc(UUID insightId);
+    Optional<SnapshotEntity> findTopByInsightIdEqualsOrderByIdDesc(UUID insightId);
 }

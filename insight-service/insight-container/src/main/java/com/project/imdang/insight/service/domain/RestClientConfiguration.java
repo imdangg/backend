@@ -18,6 +18,8 @@ public class RestClientConfiguration {
 
     private final String API_KEY = "api-key";
 
+    // TODO - 주소 API
+
     // TODO - CHECK : VS 국토교통부
     // 한국부동산원
     @Bean

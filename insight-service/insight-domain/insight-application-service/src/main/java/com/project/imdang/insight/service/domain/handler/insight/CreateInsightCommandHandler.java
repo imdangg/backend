@@ -43,12 +43,12 @@ public class CreateInsightCommandHandler {
         // TODO : InsightCreatedEvent
         Snapshot snapshot = insightDomainService.captureInsight(saved);
         // TODO : snapshotDomainService(?)
-        saveSnapshot(snapshot);
+        Snapshot savedSnapshot = saveSnapshot(snapshot);
         // memberSnapshot에 insert
         MemberSnapshot memberSnapshot = MemberSnapshot.builder()
                 .memberId(new MemberId(createInsightCommand.getMemberId()))
-                .snapshotId(new SnapshotId(snapshot.getId().getValue()))
-                .insightId(new InsightId(snapshot.getInsightId().getValue()))
+                .snapshotId(new SnapshotId(savedSnapshot.getId().getValue()))
+                .insightId(new InsightId(savedSnapshot.getInsightId().getValue()))
                 .createdAt(created.getCreatedAt())
                 .build();
         saveMemberSnapshot(memberSnapshot);
@@ -67,7 +67,7 @@ public class CreateInsightCommandHandler {
         return saved;
     }
 
-    private void saveSnapshot(Snapshot snapshot) {
+    private Snapshot saveSnapshot(Snapshot snapshot) {
         Snapshot saved = snapshotRepository.save(snapshot);
         if (saved == null) {
             String errorMessage = "Could not save snapshot!";
@@ -75,6 +75,7 @@ public class CreateInsightCommandHandler {
             throw new InsightDomainException(errorMessage);
         }
         log.info("Snapshot[id: {}] is saved.", saved.getId().getValue());
+        return saved;
     }
 
     private void saveMemberSnapshot(MemberSnapshot memberSnapshot) {

@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 
 @Slf4j
@@ -51,6 +52,9 @@ public class RequestExchangeCommandHandler {
                     .orElseThrow(() -> new SnapshotNotFoundException(requestedInsightId));
         } else {
             // 쿠폰 사용
+            // TODO - 쿠폰 확인
+            Assert.notNull(requestExchangeInsightCommand.getMemberCouponId(), "MemberCouponId must not be null!");
+
 
         }
 
