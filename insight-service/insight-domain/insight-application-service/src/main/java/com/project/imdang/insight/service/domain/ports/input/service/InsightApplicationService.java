@@ -11,7 +11,6 @@ import com.project.imdang.insight.service.domain.dto.insight.detail.DetailInsigh
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightByApartmentComplexQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightQuery;
-import com.project.imdang.insight.service.domain.dto.insight.list.ListMyInsightByApartmentComplexQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListMyInsightQuery;
 import com.project.imdang.insight.service.domain.dto.insight.recommend.RecommendInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.recommend.RecommendInsightResponse;
@@ -31,7 +30,6 @@ public interface InsightApplicationService {
     // TODO : vs listMyStoredInsight()
     Page<InsightResponse> listMyInsight(ListMyInsightQuery listMyInsightQuery);
     List<ApartmentComplex> listMyApartmentComplex(UUID memberId);
-    Page<InsightResponse> listMyInsightByApartmentComplex(ListMyInsightByApartmentComplexQuery listMyInsightByApartmentComplexQuery);
 
     DetailInsightResponse detailInsight(DetailInsightQuery detailInsightQuery);
 
