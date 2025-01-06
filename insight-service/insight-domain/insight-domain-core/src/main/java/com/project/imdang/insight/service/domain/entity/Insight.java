@@ -4,6 +4,7 @@ package com.project.imdang.insight.service.domain.entity;
 import com.project.imdang.domain.entity.AggregateRoot;
 import com.project.imdang.domain.valueobject.InsightId;
 import com.project.imdang.domain.valueobject.MemberId;
+import com.project.imdang.insight.service.domain.exception.InsightDomainException;
 import com.project.imdang.insight.service.domain.valueobject.Access;
 import com.project.imdang.insight.service.domain.valueobject.Address;
 import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
@@ -16,7 +17,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
-import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -29,8 +29,7 @@ public class Insight extends AggregateRoot<InsightId> {
 
     private String title;
     private String contents;
-    // TODO - 대표사진
-    private Set<String> images;
+    private String mainImage;
     private String summary;
 
     private ZonedDateTime visitAt;
@@ -58,14 +57,14 @@ public class Insight extends AggregateRoot<InsightId> {
     // TODO - CHECK : updatedAt;
 
     @Builder
-    public Insight(InsightId id, MemberId memberId, Address address, ApartmentComplex apartmentComplex, String title, String contents, Set<String> images, String summary, ZonedDateTime visitAt, VisitMethod visitMethod, Access access, Infra infra, ComplexEnvironment complexEnvironment, ComplexFacility complexFacility, FavorableNews favorableNews, int recommendedCount, int accusedCount, int viewCount, int score, ZonedDateTime createdAt) {
+    public Insight(InsightId id, MemberId memberId, Address address, ApartmentComplex apartmentComplex, String title, String contents, String mainImage, String summary, ZonedDateTime visitAt, VisitMethod visitMethod, Access access, Infra infra, ComplexEnvironment complexEnvironment, ComplexFacility complexFacility, FavorableNews favorableNews, int recommendedCount, int accusedCount, int viewCount, int score, ZonedDateTime createdAt) {
         setId(id);
         this.memberId = memberId;
         this.address = address;
         this.apartmentComplex = apartmentComplex;
         this.title = title;
         this.contents = contents;
-        this.images = images;
+        this.mainImage = mainImage;
         this.summary = summary;
         this.visitAt = visitAt;
         this.visitMethod = visitMethod;
@@ -80,38 +79,8 @@ public class Insight extends AggregateRoot<InsightId> {
         this.score = score;
         this.createdAt = createdAt;
     }
-/*
-    public static Insight createNewInsight(MemberId memberId, int score,
-                                           Address address, ApartmentComplex apartmentComplex,
-                                           String title, String contents, Set<String> images, String summary,
-                                           ZonedDateTime visitAt, VisitMethod visitMethod, Access access,
-                                           Infra infra, ComplexEnvironment complexEnvironment, ComplexFacility complexFacility, FavorableNews favorableNews) {
-        return Insight.builder()
-                .memberId(memberId)
-                .score(score)
-                .address(address)
-                .apartmentComplex(apartmentComplex)
-                .title(title)
-                .contents(contents)
-                .images(images)
-                .summary(summary)
-                .visitAt(visitAt)
-                .visitMethod(visitMethod)
-                .access(access)
-                .infra(infra)
-                .complexEnvironment(complexEnvironment)
-                .complexFacility(complexFacility)
-                .favorableNews(favorableNews)
-                .build();
-    }*/
 
-    // TODO - CHECK : Reflection?
-    // 완성도 평가
-    public void validateAndEvaluate() {
-        // 1. 필수 항목 미작성
-        // 2. 완료율 80% 미만/이상
-        this.score = 80;
-    }
+//    public void validateAndEvaluate() { }
 
     public Snapshot capture() {
         return Snapshot.createNewSnapshot(this);
@@ -127,19 +96,23 @@ public class Insight extends AggregateRoot<InsightId> {
         this.createdAt = ZonedDateTime.now();
     }
 
-    public Insight update(int score,
+    public Insight update(MemberId updatedBy, int score,
 //                          Address address, ApartmentComplex apartmentComplex,
-                          String title, String contents, Set<String> images, String summary,
+                          String title, String contents, String mainImage, String summary,
                           ZonedDateTime visitAt, VisitMethod visitMethod, Access access,
                           Infra infra, ComplexEnvironment complexEnvironment, ComplexFacility complexFacility, FavorableNews favorableNews) {
         // 교환 완료 시점의 인사이트 내용 유지
         // 교환 후 해당 인사이트가 수정되어도 수정사항 반영 X
         // insight가 수정되면 snapshot 생성 및 저장
 
+        if (!updatedBy.equals(this.memberId)) {
+            throw new InsightDomainException("Author does not match!");
+        }
+
         this.score = score;
         this.title = title;
         this.contents = contents;
-        this.images = images;
+        this.mainImage = mainImage;
         this.summary = summary;
         this.visitAt = visitAt;
         this.visitMethod = visitMethod;

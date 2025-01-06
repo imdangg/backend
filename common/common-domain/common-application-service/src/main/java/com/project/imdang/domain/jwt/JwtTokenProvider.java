@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.UUID;
 
 // TODO - 클래스 이동
 @Slf4j
@@ -55,7 +56,7 @@ public final class JwtTokenProvider implements InitializingBean {
     public boolean verifyToken(String token) {
         try {
             Jws<Claims> claims = Jwts.parser()
-                    .setSigningKey(secretKey).build()
+                    .setSigningKey(key).build()
                     .parseClaimsJws(token);
 
             return claims.getBody().getExpiration().after(new Date());

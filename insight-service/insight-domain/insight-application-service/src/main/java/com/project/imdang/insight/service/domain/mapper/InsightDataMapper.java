@@ -9,7 +9,6 @@ import com.project.imdang.insight.service.domain.dto.insight.detail.DetailInsigh
 import com.project.imdang.insight.service.domain.dto.insight.evaluate.ValidateAndEvaluateInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.evaluate.ValidateAndEvaluateInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
-import com.project.imdang.insight.service.domain.dto.insight.preview.PreviewInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.recommend.RecommendInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.update.UpdateInsightResponse;
 import com.project.imdang.insight.service.domain.entity.Insight;
@@ -24,8 +23,7 @@ public class InsightDataMapper {
                 .recommendedCount(insight.getRecommendedCount())
                 .address(insight.getAddress())
                 .title(insight.getTitle())
-                // TODO - CHECK
-                .mainImage(insight.getImages().stream().findFirst().get())
+                .mainImage(insight.getMainImage())
                 .memberId(insight.getMemberId().getValue())
                 .build();
     }
@@ -38,7 +36,7 @@ public class InsightDataMapper {
                 .apartmentComplex(createInsightCommand.getApartmentComplex())
                 .title(createInsightCommand.getTitle())
                 .contents(createInsightCommand.getContents())
-                .images(createInsightCommand.getImages())
+                .mainImage(createInsightCommand.getMainImage())
                 .summary(createInsightCommand.getSummary())
                 .visitAt(createInsightCommand.getVisitAt())
                 .visitMethod(createInsightCommand.getVisitMethod())
@@ -86,7 +84,7 @@ public class InsightDataMapper {
                 .apartmentComplex(validateAndEvaluateInsightCommand.getApartmentComplex())
                 .title(validateAndEvaluateInsightCommand.getTitle())
                 .contents(validateAndEvaluateInsightCommand.getContents())
-                .images(validateAndEvaluateInsightCommand.getImages())
+                .mainImage(validateAndEvaluateInsightCommand.getMainImage())
                 .summary(validateAndEvaluateInsightCommand.getSummary())
                 .visitAt(validateAndEvaluateInsightCommand.getVisitAt())
                 .visitMethod(validateAndEvaluateInsightCommand.getVisitMethod())
@@ -110,9 +108,10 @@ public class InsightDataMapper {
                 .memberId(insight.getMemberId().getValue())
                 .insightId(insight.getId().getValue())
                 .address(insight.getAddress())
+                .apartmentComplex(insight.getApartmentComplex())
                 .title(insight.getTitle())
                 .contents(insight.getContents())
-                .images(insight.getImages())
+                .mainImage(insight.getMainImage())
                 .summary(insight.getSummary())
                 .visitAt(insight.getVisitAt())
                 .visitMethod(insight.getVisitMethod())
@@ -126,21 +125,6 @@ public class InsightDataMapper {
                 .viewCount(insight.getViewCount())
                 .score(insight.getScore())
                 .createdAt(insight.getCreatedAt())
-                .build();
-    }
-
-    public PreviewInsightResponse insightToPreviewInsightResponse(Insight insight) {
-        return PreviewInsightResponse.builder()
-                .insightId(insight.getId().getValue())
-                .recommendedCount(insight.getRecommendedCount())
-                .address(insight.getAddress())
-                .title(insight.getTitle())
-                // TODO - CHECK
-                .mainImage(insight.getImages().stream().findFirst().get())
-                .memberId(insight.getMemberId().getValue())
-//                .member(member)
-                .createdAt(insight.getCreatedAt())
-                .score(insight.getScore())
                 .build();
     }
 }

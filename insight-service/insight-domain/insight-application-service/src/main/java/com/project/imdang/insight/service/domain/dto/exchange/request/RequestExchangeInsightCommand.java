@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
@@ -17,8 +18,13 @@ public class RequestExchangeInsightCommand {
     private UUID requestedInsightId;
 
     // requestedBy
+    @Setter
     private UUID requestMemberId;
 
+    /////////////////////////////////////////////////
     // 내가 작성한 인사이트
     private UUID requestMemberInsightId;
+    // OR
+    private Long memberCouponId;
+    /////////////////////////////////////////////////
 }

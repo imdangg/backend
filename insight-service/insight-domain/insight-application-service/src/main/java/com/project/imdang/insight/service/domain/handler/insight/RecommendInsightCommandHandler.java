@@ -33,6 +33,8 @@ public class RecommendInsightCommandHandler {
         UUID insightId = recommendInsightCommand.getInsightId();
         Insight insight = checkInsight(insightId);
 
+        // TODO - CHECK : insightId - memberId(recommendedBy)로 중복 추천 여부 체크
+
         Insight recommended = insightDomainService.recommendInsight(insight);
         saveInsight(recommended);
         log.info("Insight[id: {}] is recommended.", recommended.getId().getValue());

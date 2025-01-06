@@ -4,11 +4,11 @@ import com.project.imdang.insight.service.domain.dto.insight.list.InsightRespons
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightQuery;
 import com.project.imdang.insight.service.domain.mapper.InsightDataMapper;
 import com.project.imdang.insight.service.domain.ports.output.repository.InsightRepository;
+import com.project.imdang.domain.utils.PagingUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +22,8 @@ public class ListInsightCommandHandler {
 
     @Transactional(readOnly = true)
     public Page<InsightResponse> listInsight(ListInsightQuery listInsightQuery) {
-        Sort sort = Sort.by(Sort.Direction.valueOf(listInsightQuery.getDirection()), listInsightQuery.getProperties());
-        PageRequest pageRequest = PageRequest.of(listInsightQuery.getPageNumber(), listInsightQuery.getPageSize(), sort);
+        PageRequest pageRequest = PagingUtils.getPageRequest(
+                listInsightQuery.getPageNumber(), listInsightQuery.getPageSize(), listInsightQuery.getDirection(), listInsightQuery.getProperties());
         return insightRepository.findAll(pageRequest)
                 .map(insightDataMapper::insightToInsightResponse);
     }

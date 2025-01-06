@@ -1,5 +1,8 @@
 package com.project.imdang.insight.service.domain;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,9 +16,5 @@ public class BeanConfiguration {
     @Bean
     public ExchangeDomainService exchangeDomainService() {
         return new ExchangeDomainServiceImpl();
-    }
-    @Bean
-    public RequestDomainService requestDomainService() {
-        return new RequestDomainServiceImpl();
     }
 }

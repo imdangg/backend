@@ -17,6 +17,7 @@ public class InsightPersistenceMapper {
                 .apartmentComplex(insight.getApartmentComplex())
                 .title(insight.getTitle())
                 .contents(insight.getContents())
+                .mainImage(insight.getMainImage())
                 .summary(insight.getSummary())
                 .visitAt(insight.getVisitAt())
                 .visitMethod(insight.getVisitMethod())
@@ -41,8 +42,7 @@ public class InsightPersistenceMapper {
                 .apartmentComplex(insightEntity.getApartmentComplex())
                 .title(insightEntity.getTitle())
                 .contents(insightEntity.getContents())
-                // TODO - CHECK
-                .images(null)
+                .mainImage(insightEntity.getMainImage())
                 .summary(insightEntity.getSummary())
                 .visitAt(insightEntity.getVisitAt())
                 .visitMethod(insightEntity.getVisitMethod())

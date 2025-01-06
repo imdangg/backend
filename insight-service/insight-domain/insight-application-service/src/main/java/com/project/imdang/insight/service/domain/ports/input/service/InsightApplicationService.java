@@ -8,39 +8,32 @@ import com.project.imdang.insight.service.domain.dto.insight.delete.DeleteInsigh
 import com.project.imdang.insight.service.domain.dto.insight.delete.DeleteInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.detail.DetailInsightQuery;
 import com.project.imdang.insight.service.domain.dto.insight.detail.DetailInsightResponse;
-import com.project.imdang.insight.service.domain.dto.insight.evaluate.ValidateAndEvaluateInsightCommand;
-import com.project.imdang.insight.service.domain.dto.insight.evaluate.ValidateAndEvaluateInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
-import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightByAddressQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightByApartmentComplexQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightQuery;
-import com.project.imdang.insight.service.domain.dto.insight.list.ListMyInsightByAddressQuery;
-import com.project.imdang.insight.service.domain.dto.insight.list.SnapshotResponse;
-import com.project.imdang.insight.service.domain.dto.insight.preview.PreviewInsightQuery;
-import com.project.imdang.insight.service.domain.dto.insight.preview.PreviewInsightResponse;
+import com.project.imdang.insight.service.domain.dto.insight.list.ListMyInsightQuery;
 import com.project.imdang.insight.service.domain.dto.insight.recommend.RecommendInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.recommend.RecommendInsightResponse;
-import com.project.imdang.insight.service.domain.dto.insight.request.RequestInsightCommand;
-import com.project.imdang.insight.service.domain.dto.insight.request.RequestInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.update.UpdateInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.update.UpdateInsightResponse;
 import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
 import org.springframework.data.domain.Page;
 
-import java.util.Map;
+import java.util.List;
+import java.util.UUID;
 
 public interface InsightApplicationService {
     Page<InsightResponse> listInsight(ListInsightQuery listInsightQuery);
-    Map<ApartmentComplex, Page<InsightResponse>> listInsightByAddress(ListInsightByAddressQuery listInsightByAddressQuery);
     Page<InsightResponse> listInsightByApartmentComplex(ListInsightByApartmentComplexQuery listInsightByApartmentComplexQuery);
-    Map<ApartmentComplex, Page<InsightResponse>> listInsightByMyVisitedApartmentComplex(ListInsightQuery listInsightQuery);
+    List<ApartmentComplex> listMyVisitedApartmentComplex(UUID memberId);
 
-    Map<ApartmentComplex, Page<SnapshotResponse>> listMyInsightByAddress(ListMyInsightByAddressQuery listMyInsightByAddressQuery);
+    // TODO : vs listMyStoredInsight()
+    Page<InsightResponse> listMyInsight(ListMyInsightQuery listMyInsightQuery);
+    List<ApartmentComplex> listMyApartmentComplex(UUID memberId);
 
-    PreviewInsightResponse previewInsight(PreviewInsightQuery previewInsightQuery);
     DetailInsightResponse detailInsight(DetailInsightQuery detailInsightQuery);
 
-    ValidateAndEvaluateInsightResponse validateAndEvaluateInsight(ValidateAndEvaluateInsightCommand validateAndEvaluateInsightCommand);
+//    ValidateAndEvaluateInsightResponse validateAndEvaluateInsight(ValidateAndEvaluateInsightCommand validateAndEvaluateInsightCommand);
     // = uploadInsight
     CreateInsightResponse createInsight(CreateInsightCommand createInsightCommand);
     UpdateInsightResponse updateInsight(UpdateInsightCommand updateInsightCommand);
@@ -48,5 +41,4 @@ public interface InsightApplicationService {
 
     RecommendInsightResponse recommendInsight(RecommendInsightCommand recommendInsightCommand);
     AccuseInsightResponse accuseInsight(AccuseInsightCommand accuseInsightCommand);
-    RequestInsightResponse requestInsight(RequestInsightCommand requestInsightCommand);
 }

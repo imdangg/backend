@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
@@ -18,7 +19,8 @@ public class RequestInsightCommand {
     private UUID requestedInsightId;
     @NotNull
     private Long memberCouponId;
-    // requestedBy
+
+    @Setter
     @NotNull
-    private UUID requestMemberId;
+    private UUID requestMemberId;       // requestedBy
 }

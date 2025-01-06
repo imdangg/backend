@@ -13,6 +13,7 @@ import java.util.UUID;
 @Repository
 public interface ExchangeRequestJpaRepository extends JpaRepository<ExchangeRequestEntity, UUID> {
     Optional<ExchangeRequestEntity> findByRequestMemberIdAndRequestedInsightId(UUID requestMemberId, UUID requestedInsightId);
+    Optional<ExchangeRequestEntity> findByRequestMemberIdAndRequestedInsightIdAndStatus(UUID requestMemberId, UUID requestedInsightId, ExchangeRequestStatus status);
     Page<ExchangeRequestEntity> findAllByRequestMemberIdAndStatus(UUID requestMemberId, ExchangeRequestStatus status, Pageable pageable);
     Page<ExchangeRequestEntity> findAllByRequestedMemberIdAndStatus(UUID requestedMemberId, ExchangeRequestStatus status, Pageable pageable);
 }

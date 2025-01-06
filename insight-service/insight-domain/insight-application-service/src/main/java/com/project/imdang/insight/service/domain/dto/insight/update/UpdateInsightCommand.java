@@ -11,9 +11,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.ZonedDateTime;
-import java.util.Set;
 import java.util.UUID;
 
 @Builder
@@ -23,11 +23,14 @@ import java.util.UUID;
 public class UpdateInsightCommand {
     // TODO - 수정 가능한 항목
     private UUID insightId;
+    // TODO - validation
+    @Setter
+    private UUID memberId;
 
     private int score;
     private String title;
     private String contents;
-    private Set<String> images;
+    private String mainImage;
     private String summary;
 
     private ZonedDateTime visitAt;

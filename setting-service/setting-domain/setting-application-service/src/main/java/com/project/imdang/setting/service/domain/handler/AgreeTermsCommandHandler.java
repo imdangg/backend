@@ -34,7 +34,7 @@ public class AgreeTermsCommandHandler {
         MemberId memberId = new MemberId(agreeTermsCommand.getMemberId());
         List<Terms> terms = termsRepository.findAllByIds(termsIds);
         // TODO - 일괄 동의 or ASYNC
-        terms.stream().forEach(agreed -> {
+        terms.forEach(agreed -> {
             TermsAgreement termsAgreement = termsDomainService.agreeTerms(agreed, memberId);
             // TODO - CHECK : TermsAgreement 도메인을 꼭 생성해야 하는가?
             save(termsAgreement);

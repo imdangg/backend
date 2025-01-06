@@ -11,10 +11,12 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -66,16 +68,8 @@ public class AuthController {
     @Operation(description = "온보딩 API")
     @ApiResponse(responseCode = "200", description = "온보딩이 완료되었습니다.")
     @PutMapping("/join")
-    public ResponseEntity<Void> join(@RequestHeader(value = "Authorization") String token, @RequestBody JoinCommand joinCommand) {
-        memberApplicationService.join(token.substring(7), joinCommand);
-        return ResponseEntity.ok().build();
-    }
-
-    /**
-     * Test
-     */
-    @GetMapping("/test")
-    public ResponseEntity<Void> test() {
+    public ResponseEntity<Void> join(@AuthenticationPrincipal UUID memberId, @RequestBody JoinCommand joinCommand) {
+        memberApplicationService.join(memberId, joinCommand);
         return ResponseEntity.ok().build();
     }
 }

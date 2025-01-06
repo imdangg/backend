@@ -1,10 +1,16 @@
 package com.project.imdang.insight.service.domain.valueobject;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
+@Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FavorableNews {
 
@@ -22,16 +28,6 @@ public class FavorableNews {
     private Opinion<Set<Industry>> industry;
     // 정책
     private Opinion<Set<Policy>> policy;
-
-    public FavorableNews(Opinion<Set<Transportation>> transportation, Opinion<Set<Development>> development, Opinion<Set<Education>> education, Opinion<Set<Environment>> environment, Opinion<Set<Culture>> culture, Opinion<Set<Industry>> industry, Opinion<Set<Policy>> policy) {
-        this.transportation = transportation;
-        this.development = development;
-        this.education = education;
-        this.environment = environment;
-        this.culture = culture;
-        this.industry = industry;
-        this.policy = policy;
-    }
 
     public enum Transportation {
         잘_모르겠어요, 지하철_개통, 고속철도역_신설, 교통_허브_지정

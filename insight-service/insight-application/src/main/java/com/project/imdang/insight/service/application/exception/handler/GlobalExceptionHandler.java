@@ -22,10 +22,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorDTO handleException(Exception exception) {
         log.error(exception.getMessage(), exception);
-        return ErrorDTO.builder()
-                .code(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
-                .message("Unexpected Error!")
-                .build();
+        return ErrorDTO.of(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected Error!");
     }
 
     @ResponseBody
@@ -36,17 +33,11 @@ public class GlobalExceptionHandler {
         if (validationException instanceof ConstraintViolationException) {
             String violations = extractViolationsFromException((ConstraintViolationException) validationException);
             log.error(violations, validationException);
-            errorDTO = ErrorDTO.builder()
-                    .code(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                    .message(violations)
-                    .build();
+            errorDTO = ErrorDTO.of(HttpStatus.BAD_REQUEST, violations);
         } else {
             String exceptionMessage = validationException.getMessage();
             log.error(exceptionMessage, validationException);
-            errorDTO = ErrorDTO.builder()
-                    .code(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                    .message(exceptionMessage)
-                    .build();
+            errorDTO = ErrorDTO.of(HttpStatus.BAD_REQUEST, exceptionMessage);
         }
         return errorDTO;
     }

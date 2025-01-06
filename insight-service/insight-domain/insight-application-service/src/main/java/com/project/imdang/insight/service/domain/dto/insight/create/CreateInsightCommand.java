@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
@@ -26,14 +27,15 @@ public class CreateInsightCommand {
     // TODO : 모든 요소 필수값
     // TODO : 최소 1글자 최대 20글자
 
-    private UUID memberId;
+    @Setter
+    private UUID memberId;  // createdBy
     private int score;
 
     private Address address;
     private ApartmentComplex apartmentComplex;
     private String title;
     private String contents;
-    private Set<String> images;
+    private String mainImage;
     private String summary;
 
     private ZonedDateTime visitAt;

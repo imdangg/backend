@@ -7,6 +7,7 @@ import com.project.imdang.insight.service.domain.entity.Snapshot;
 import com.project.imdang.insight.service.domain.event.InsightAccusedEvent;
 import com.project.imdang.insight.service.domain.event.InsightDeletedEvent;
 import com.project.imdang.insight.service.domain.event.InsightUpdatedEvent;
+import com.project.imdang.insight.service.domain.exception.InsightDomainException;
 import com.project.imdang.insight.service.domain.valueobject.Access;
 import com.project.imdang.insight.service.domain.valueobject.ComplexEnvironment;
 import com.project.imdang.insight.service.domain.valueobject.ComplexFacility;
@@ -17,18 +18,17 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Set;
 
 @Slf4j
 public class InsightDomainServiceImpl implements InsightDomainService {
 // TODO - CHECK : 왜 DomainServiceImpl을 bean으로 등록하는가?
-
+/*
     @Override
     public Insight validateAndEvaluateInsight(Insight insight) {
         insight.validateAndEvaluate();
         log.info("Insight[id: {}] is validated.", insight.getId().getValue());
         return insight;
-    }
+    }*/
 
     @Override
     public Insight createInsight(Insight insight) {
@@ -38,17 +38,21 @@ public class InsightDomainServiceImpl implements InsightDomainService {
     }
 
     @Override
-    public InsightUpdatedEvent updateInsight(Insight insight, int score,
-                                             String title, String contents, Set<String> images, String summary,
+    public InsightUpdatedEvent updateInsight(Insight insight, MemberId memberId, int score,
+                                             String title, String contents, String mainImage, String summary,
                                              ZonedDateTime visitAt, VisitMethod visitMethod, Access access,
                                              Infra infra, ComplexEnvironment complexEnvironment, ComplexFacility complexFacility, FavorableNews favorableNews) {
-        insight.update(score, title, contents, images, summary, visitAt, visitMethod, access, infra, complexEnvironment, complexFacility, favorableNews);
+        insight.update(memberId, score, title, contents, mainImage, summary, visitAt, visitMethod, access, infra, complexEnvironment, complexFacility, favorableNews);
         log.info("Insight[id: {}] is updated.", insight.getId().getValue());
         return new InsightUpdatedEvent(insight, ZonedDateTime.now(ZoneId.of("UTC")));
     }
 
     @Override
-    public InsightDeletedEvent deleteInsight(Insight insight) {
+    public InsightDeletedEvent deleteInsight(Insight insight, MemberId deletedBy) {
+
+        if (!deletedBy.equals(insight.getMemberId())) {
+            throw new InsightDomainException("Author does not match!");
+        }
 //        insight.delete();
         log.info("Insight[id: {}] is deleted.", insight.getId().getValue());
         return new InsightDeletedEvent(insight, ZonedDateTime.now(ZoneId.of("UTC")));

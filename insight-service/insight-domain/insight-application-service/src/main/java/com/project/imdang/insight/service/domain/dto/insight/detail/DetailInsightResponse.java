@@ -2,6 +2,7 @@ package com.project.imdang.insight.service.domain.dto.insight.detail;
 
 import com.project.imdang.insight.service.domain.valueobject.Access;
 import com.project.imdang.insight.service.domain.valueobject.Address;
+import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
 import com.project.imdang.insight.service.domain.valueobject.ComplexEnvironment;
 import com.project.imdang.insight.service.domain.valueobject.ComplexFacility;
 import com.project.imdang.insight.service.domain.valueobject.FavorableNews;
@@ -14,7 +15,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
-import java.util.Set;
 import java.util.UUID;
 
 @Builder
@@ -26,11 +26,14 @@ public class DetailInsightResponse {
     private UUID memberId;
 //    private MemberResponse member;
     private UUID insightId;
+    private Long snapshotId;
 
     private Address address;
+    private ApartmentComplex apartmentComplex;
+
     private String title;
     private String contents;
-    private Set<String> images;
+    private String mainImage;
     private String summary;
 
     private ZonedDateTime visitAt;
@@ -48,4 +51,20 @@ public class DetailInsightResponse {
 
     private Integer score;
     private ZonedDateTime createdAt;
+
+    public DetailInsightResponse toPreviewInsightResponse() {
+        return DetailInsightResponse.builder()
+                .insightId(insightId)
+                .snapshotId(snapshotId)
+                .recommendedCount(recommendedCount)
+                .address(address)
+                .apartmentComplex(apartmentComplex)
+                .title(title)
+                .mainImage(mainImage)
+                .memberId(memberId)
+//                .member(member)
+                .createdAt(createdAt)
+                .score(score)
+                .build();
+    }
 }

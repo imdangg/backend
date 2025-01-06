@@ -1,15 +1,22 @@
 package com.project.imdang.setting.service.domain.dto;
 
-import com.project.imdang.domain.dto.PagingQuery;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-//@Builder
-//@AllArgsConstructor
+import java.util.List;
+import java.util.UUID;
+
+@Builder
+@AllArgsConstructor
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ListNotificationQuery extends PagingQuery {
+public class ListNotificationQuery {
+    private UUID receiverId;
+    private Integer pageNumber;
+    private Integer pageSize;
+    private String direction;
+    private String[] properties;
 }

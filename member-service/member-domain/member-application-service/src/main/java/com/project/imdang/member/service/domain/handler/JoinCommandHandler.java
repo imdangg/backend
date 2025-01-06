@@ -22,9 +22,9 @@ public class JoinCommandHandler {
     private final TokenRequestHandler tokenRequestHandler;
     private final MemberRepository memberRepository;
 
-    public void join(String accessToken, JoinCommand joinCommand) {
+    public void join(UUID memberId, JoinCommand joinCommand) {
         // 1. 토큰에서 유저 정보 추출 후 검증
-        Member member = checkMember(tokenRequestHandler.extractMemberId(accessToken));
+        Member member = checkMember(memberId);
         // TODO : 2. 닉네임 중복검사
 
         // 3. 회원가입 (입력 정보 업데이트)
