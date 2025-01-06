@@ -75,6 +75,7 @@ project(':imdang-container') {
         implementation project(':setting-service:setting-domain:setting-domain-core')
 
         implementation project(':common:common-application')
+        implementation project(':common:common-domain:common-application-service')
         implementation project(':common:common-domain:common-domain-core')
 
         implementation 'org.springframework.boot:spring-boot-starter-web'
