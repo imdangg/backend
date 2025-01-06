@@ -1,5 +1,6 @@
 package com.project.imdang.insight.service.domain.valueobject;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,12 +15,16 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ComplexFacility {
     // 가족
+    @Schema(description = "가족")
     private Opinion<Set<Family>> family;
     // 다목적
+    @Schema(description = "다목적")
     private Opinion<Set<Multipurpose>> multipurpose;
     // 여가(단지 내부)
+    @Schema(description = "여가(단지 내부)")
     private Opinion<Set<Leisure>> leisure;
     // 환경
+    @Schema(description = "환경")
     private Opinion<Set<Surroundings>> surroundings;
 
     // TODO - CHECK : DB

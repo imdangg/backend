@@ -1,6 +1,7 @@
 package com.project.imdang.insight.service.domain.dto.exchange.list;
 
 import com.project.imdang.insight.service.domain.valueobject.ExchangeRequestStatus;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,8 +21,10 @@ public class ListExchangeRequestedByMeQuery {
 //        extends PagingQuery {
 
     @Setter
+    @Schema(description = "요청한 사용자 ID")
     private UUID requestMemberId;
     // 대기, 거절, 완료
+    @Schema(description = "교환 요청 상태")
     private ExchangeRequestStatus exchangeRequestStatus;
 
     private Integer pageNumber;
