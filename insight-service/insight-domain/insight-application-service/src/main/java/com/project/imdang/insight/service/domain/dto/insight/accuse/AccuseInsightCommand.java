@@ -1,5 +1,6 @@
 package com.project.imdang.insight.service.domain.dto.insight.accuse;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -17,9 +18,11 @@ import java.util.UUID;
 public class AccuseInsightCommand {
     // insightId - accuseMemberId UNIQUE
     @NotNull
+    @Schema(description = "인사이트ID")
     private UUID insightId;
 
     @Setter
     @NotNull
+    @Schema(description = "신고한 사용자ID")
     private UUID accuseMemberId;    // accusedBy : 신고한 memberId
 }

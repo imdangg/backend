@@ -1,5 +1,6 @@
 package com.project.imdang.insight.service.domain.valueobject;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,18 +16,25 @@ import java.util.Set;
 public class FavorableNews {
 
     // 교통
+    @Schema(description = "교통")
     private Opinion<Set<Transportation>> transportation;
     // 개발
+    @Schema(description = "개발")
     private Opinion<Set<Development>> development;
     // 교육
+    @Schema(description = "교육")
     private Opinion<Set<Education>> education;
     // 자연환경
+    @Schema(description = "자연 환경")
     private Opinion<Set<Environment>> environment;
     // 문화
+    @Schema(description = "문화")
     private Opinion<Set<Culture>> culture;
     // 산업
+    @Schema(description = "산업")
     private Opinion<Set<Industry>> industry;
     // 정책
+    @Schema(description = "정책")
     private Opinion<Set<Policy>> policy;
 
     public enum Transportation {

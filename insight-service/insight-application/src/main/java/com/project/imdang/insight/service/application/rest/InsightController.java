@@ -50,8 +50,7 @@ public class InsightController {
     // 최신순, 인기순(추천수 순)
     // /insights?page=1&size=20&sort=createdAt,desc
     @Operation(description = "오늘 새롭게 올라온 인사이트 목록 조회 API")
-    @ApiResponse(responseCode = "200", description = "인사이트 목록이 조회되었습니다.",
-            content = @Content(schema = @Schema(implementation = InsightResponse.class)))
+    @ApiResponse(responseCode = "200", description = "인사이트 목록이 조회되었습니다.")
     @GetMapping
     public ResponseEntity<Page<InsightResponse>> list(@ModelAttribute ListInsightQuery listInsightQuery) {
         Page<InsightResponse> insightResponses = insightApplicationService.listInsight(listInsightQuery);
@@ -59,8 +58,7 @@ public class InsightController {
     }
 
     @Operation(description = "아파트 단지별 인사이트 목록 조회 API")
-    @ApiResponse(responseCode = "200", description = "아파트 단지별 인사이트 목록이 조회되었습니다.",
-            content = @Content(schema = @Schema(implementation = InsightResponse.class)))
+    @ApiResponse(responseCode = "200", description = "아파트 단지별 인사이트 목록이 조회되었습니다.")
     @GetMapping("/by-apartment-complex")
     public ResponseEntity<Page<InsightResponse>> listByApartmentComplex(@ModelAttribute ListInsightByApartmentComplexQuery listInsightByApartmentComplexQuery) {
         Page<InsightResponse> insightResponses = insightApplicationService.listInsightByApartmentComplex(listInsightByApartmentComplexQuery);
@@ -92,7 +90,7 @@ public class InsightController {
     }*/
 
     @Operation(description = "인사이트 작성 API")
-    @ApiResponse(responseCode = "200", description = "인사이트가 작성되었습니다.",
+    @ApiResponse(responseCode = "200", description = "인사이트가 작성 완료",
             content = @Content(schema = @Schema(implementation = CreateInsightResponse.class)))
     @PostMapping("/create")
     public ResponseEntity<CreateInsightResponse> createInsight(@AuthenticationPrincipal UUID memberId, @RequestBody CreateInsightCommand createInsightCommand) {
