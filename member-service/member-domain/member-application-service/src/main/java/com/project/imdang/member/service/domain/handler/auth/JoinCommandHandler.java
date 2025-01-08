@@ -1,4 +1,4 @@
-package com.project.imdang.member.service.domain.handler;
+package com.project.imdang.member.service.domain.handler.auth;
 
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.member.service.domain.MemberDomainService;
@@ -19,7 +19,6 @@ import java.util.UUID;
 public class JoinCommandHandler {
 
     private final MemberDomainService memberDomainService;
-    private final TokenRequestHandler tokenRequestHandler;
     private final MemberRepository memberRepository;
 
     public void join(UUID memberId, JoinCommand joinCommand) {
@@ -28,7 +27,7 @@ public class JoinCommandHandler {
         // TODO : 2. 닉네임 중복검사
 
         // 3. 회원가입 (입력 정보 업데이트)
-        Member updatedMember = memberDomainService.join(member, joinCommand.getNickname(), joinCommand.getBirthDate(), joinCommand.getGender());
+        Member updatedMember = memberDomainService.join(member, joinCommand.getNickname(), joinCommand.getBirthDate(), joinCommand.getGender(), joinCommand.getDeviceToken());
         // 4. 저장
         saveMember(updatedMember);
     }
