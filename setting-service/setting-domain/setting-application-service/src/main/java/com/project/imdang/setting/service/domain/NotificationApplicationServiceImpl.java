@@ -2,9 +2,11 @@ package com.project.imdang.setting.service.domain;
 
 import com.project.imdang.setting.service.domain.dto.CreateNotificationCommand;
 import com.project.imdang.setting.service.domain.dto.ListNotificationQuery;
+import com.project.imdang.setting.service.domain.dto.NotificationRequest;
 import com.project.imdang.setting.service.domain.dto.NotificationResponse;
 import com.project.imdang.setting.service.domain.handler.CreateNotificationCommandHandler;
 import com.project.imdang.setting.service.domain.handler.ListNotificationCommandHandler;
+import com.project.imdang.setting.service.domain.handler.SendNotificationHandler;
 import com.project.imdang.setting.service.domain.handler.UpdateNotificationAsCheckedHandler;
 import com.project.imdang.setting.service.domain.ports.input.service.NotificationApplicationService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class NotificationApplicationServiceImpl implements NotificationApplicati
     private final ListNotificationCommandHandler listNotificationCommandHandler;
     private final CreateNotificationCommandHandler createNotificationCommandHandler;
     private final UpdateNotificationAsCheckedHandler updateNotificationAsCheckedHandler;
+    private final SendNotificationHandler sendNotificationHandler;
 
     @Override
     public Page<NotificationResponse> listUncheckedNotification(ListNotificationQuery listNotificationQuery) {
@@ -38,6 +41,11 @@ public class NotificationApplicationServiceImpl implements NotificationApplicati
     @Override
     public void updateNotificationAsChecked(List<Long> notificationIds) {
         updateNotificationAsCheckedHandler.updateAsChecked(notificationIds);
+    }
+
+    @Override
+    public void sendNotification(NotificationRequest notificationRequest) {
+        sendNotificationHandler.send(notificationRequest);
     }
 
     // 조회 API 실행 시
