@@ -7,7 +7,7 @@ import com.project.imdang.member.service.domain.valueobject.OAuthType;
 
 public interface MemberDomainService {
 
-    Member join(Member member, String nickname, String birthDate, Gender gender);
+    Member join(Member member, String nickname, String birthDate, Gender gender, String deviceToken);
 
     Member createMember(String id, OAuthType oAuthType);
 }
