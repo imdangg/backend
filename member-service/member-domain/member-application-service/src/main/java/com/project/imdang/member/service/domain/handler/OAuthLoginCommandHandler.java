@@ -41,22 +41,22 @@ public class OAuthLoginCommandHandler {
 
         // 1. 로그인
         // TODO - REVIEW
-        boolean isJoined = true;
+        boolean isJoined = false;
         Optional<Member> optional = memberRepository.findMemberByOAuthIdAndOAuthType(oAuthInfo.getId(), oAuthInfo.getOAuthType());
         Member member;
         if (optional.isEmpty()) {
             member = memberDomainService.createMember(oAuthInfo.getId(), oAuthInfo.getOAuthType());
             saveMember(member);
-            isJoined = false;
         } else {
             member = optional.get();
+            isJoined = (member.getNickname() != null);
         }
 
         // 2. 토큰 생성
         TokenResponse tokenResponse = tokenRequestHandler.generate(member);
         // TODO: 3. RefreshToken 저장
         tokenRequestHandler.storeRefreshToken(member.getOAuthId(), tokenResponse.getRefreshToken());
-        return LoginResponse.from(tokenResponse, isJoined);
+        return LoginResponse.from(tokenResponse, isJoined, member.getId().getValue());
     }
 
     private Member saveMember(Member member) {

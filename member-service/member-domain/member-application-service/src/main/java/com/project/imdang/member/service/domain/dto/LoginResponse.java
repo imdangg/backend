@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Builder
 @AllArgsConstructor
 @Getter
@@ -18,8 +20,9 @@ public class LoginResponse {
     private Long expiresIn;
     @Schema(description = "온보딩 여부")
     private boolean isJoined;
+    private UUID memberId;
 
-    public static LoginResponse from(TokenResponse response, boolean isJoined) {
-        return new LoginResponse(response.getAccessToken(), response.getRefreshToken(), response.getExpiresIn(), isJoined);
+    public static LoginResponse from(TokenResponse response, boolean isJoined, UUID memberId) {
+        return new LoginResponse(response.getAccessToken(), response.getRefreshToken(), response.getExpiresIn(), isJoined, memberId);
     }
 }
