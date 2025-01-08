@@ -1,7 +1,7 @@
 package com.project.imdang.application.configuration;
 
 import com.project.imdang.application.security.JwtAuthenticationEntryPoint;
-import com.project.imdang.application.security.filter.JwtAuthFilter;
+import com.project.imdang.application.security.JwtAuthFilter;
 import com.project.imdang.domain.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -33,7 +33,7 @@ public class SecurityConfiguration {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/kakao", "/auth/google", "/auth/apple",
+                        .requestMatchers("/auth/kakao", "/auth/google", "/auth/apple", "/members",
                                 "/swagger-resources/**", "/swagger-ui/**","/v3/api-docs/**", "/apartment-complexes").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(new JwtAuthFilter(jwtTokenUtil), UsernamePasswordAuthenticationFilter.class)
