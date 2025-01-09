@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -26,8 +27,8 @@ public class CouponController {
     @Operation(description = "쿠폰 개수(목록) 조회 API")
     @ApiResponse(responseCode = "200", description = "쿠폰 개수 조회 성공",
             content = @Content(schema = @Schema(implementation = ListMemberCouponResponse.class)))
-    @GetMapping("/{memberId}")
-    public ResponseEntity<ListMemberCouponResponse> list(@PathVariable("memberId") UUID memberId) {
+    @GetMapping()
+    public ResponseEntity<ListMemberCouponResponse> list(@AuthenticationPrincipal UUID memberId) {
         ListMemberCouponResponse listMemberCouponResponse = memberCouponApplicationService.listMemberCoupon(memberId);
         return ResponseEntity.ok(listMemberCouponResponse);
     }
@@ -35,7 +36,8 @@ public class CouponController {
     @Operation(description = "쿠폰 발행 API")
     @ApiResponse(responseCode = "200", description = "쿠폰 발행 성공")
     @PostMapping("/issue")
-    public ResponseEntity<Void> issueCoupon(@RequestBody IssueMemberCouponCommand issueMemberCouponCommand) {
+    public ResponseEntity<Void> issueCoupon(@AuthenticationPrincipal UUID memberId, @RequestBody IssueMemberCouponCommand issueMemberCouponCommand) {
+        issueMemberCouponCommand.setMemberId(memberId);
         memberCouponApplicationService.issueMemberCoupon(issueMemberCouponCommand);
         return ResponseEntity.ok().build();
     }
@@ -45,8 +47,8 @@ public class CouponController {
             content = @Content(schema = @Schema(implementation = UseMemberCouponCommandResponse.class))
     )
     @PostMapping("/use")
-    public ResponseEntity<UseMemberCouponCommandResponse> useCoupon(@RequestBody UseMemberCouponCommand useMemberCouponCommand) {
-        UseMemberCouponCommandResponse useMemberCouponCommandResponse = memberCouponApplicationService.useMemberCoupon(useMemberCouponCommand);
+    public ResponseEntity<UseMemberCouponCommandResponse> useCoupon(@AuthenticationPrincipal UUID memberId) {
+        UseMemberCouponCommandResponse useMemberCouponCommandResponse = memberCouponApplicationService.useMemberCoupon(new UseMemberCouponCommand(memberId));
         return ResponseEntity.ok(useMemberCouponCommandResponse);
     }
 

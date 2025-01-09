@@ -1,9 +1,6 @@
 package com.project.imdang.member.service.domain.dto.coupon;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -11,6 +8,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IssueMemberCouponCommand {
+    @Setter
     private UUID memberId;
     private UUID couponId;
 }
