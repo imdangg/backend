@@ -19,14 +19,13 @@ import java.util.UUID;
 public class JoinCommandHandler {
 
     private final MemberDomainService memberDomainService;
-    private final TokenRequestHandler tokenRequestHandler;
     private final MemberRepository memberRepository;
 
     public void join(UUID memberId, JoinCommand joinCommand) {
         // 1. 토큰에서 유저 정보 추출 후 검증
         Member member = checkMember(memberId);
-        // TODO : 2. 닉네임 중복검사
-
+        // 2. 닉네임 중복검사
+        checkNickname(joinCommand.getNickname());
         // 3. 회원가입 (입력 정보 업데이트)
         Member updatedMember = memberDomainService.join(member, joinCommand.getNickname(), joinCommand.getBirthDate(), joinCommand.getGender());
         // 4. 저장
@@ -50,5 +49,13 @@ public class JoinCommandHandler {
         }
         log.info("Member[id : {}] is created.", member.getId().getValue());
         return savedMember;
+    }
+
+    private void checkNickname(String nickName) {
+         if (memberRepository.findByNickname(nickName).isPresent()) {
+             String errorMessage = "Nickname is already used!";
+             log.error(errorMessage);
+             throw new MemberDomainException(errorMessage);
+         }
     }
 }

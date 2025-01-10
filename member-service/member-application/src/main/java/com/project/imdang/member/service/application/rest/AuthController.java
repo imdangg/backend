@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -68,7 +69,7 @@ public class AuthController {
     @Operation(description = "온보딩 API")
     @ApiResponse(responseCode = "200", description = "온보딩이 완료되었습니다.")
     @PutMapping("/join")
-    public ResponseEntity<Void> join(@AuthenticationPrincipal UUID memberId, @RequestBody JoinCommand joinCommand) {
+    public ResponseEntity<Void> join(@AuthenticationPrincipal UUID memberId, @RequestBody @Valid JoinCommand joinCommand) {
         memberApplicationService.join(memberId, joinCommand);
         return ResponseEntity.ok().build();
     }
