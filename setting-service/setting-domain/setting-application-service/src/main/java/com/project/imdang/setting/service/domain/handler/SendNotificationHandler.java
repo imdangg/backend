@@ -59,16 +59,17 @@ public class SendNotificationHandler {
     }
 
     private String getFcmToken(UUID memberId) {
-        String baseUrl = "http://imdang.info/member";
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl)
-                .queryParam("memberId", memberId);
-        String finalUrl = builder.toUriString();
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<?> request = new HttpEntity<>(httpHeaders);
-
-        FcmTokenResponse fcmTokenResponse = restTemplate.exchange(finalUrl, HttpMethod.GET, request, FcmTokenResponse.class).getBody();
-        return fcmTokenResponse.getDeviceToken();
+//        String baseUrl = "http://imdang.info/member";
+//        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl)
+//                .queryParam("memberId", memberId);
+//        String finalUrl = builder.toUriString();
+//
+//        HttpHeaders httpHeaders = new HttpHeaders();
+//        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+//        HttpEntity<?> request = new HttpEntity<>(httpHeaders);
+//
+//        FcmTokenResponse fcmTokenResponse = restTemplate.exchange(finalUrl, HttpMethod.GET, request, FcmTokenResponse.class).getBody();
+//        return fcmTokenResponse.getDeviceToken();
+        return "";
     }
 }
