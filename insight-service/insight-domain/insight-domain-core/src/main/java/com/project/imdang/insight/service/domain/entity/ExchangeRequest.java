@@ -12,7 +12,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.ZonedDateTime;
-import java.util.Objects;
 import java.util.UUID;
 
 @Getter
@@ -59,7 +58,7 @@ public class ExchangeRequest extends AggregateRoot<ExchangeRequestId> {
         this.status = status;
     }
 
-    public void initialize(Snapshot requestedSnapshot, Snapshot requestMemberSnapshot) {
+    public void initialize(Snapshot requestedSnapshot, Snapshot requestMemberSnapshot, MemberCouponId memberCouponId) {
         
         // TODO - validation 체크
 
@@ -68,17 +67,22 @@ public class ExchangeRequest extends AggregateRoot<ExchangeRequestId> {
         ExchangeRequestId id = new ExchangeRequestId(UUID.randomUUID());
         setId(id);
 
+        this.requestedMemberId = requestedSnapshot.getMemberId();
+        this.requestedSnapshotId = requestedSnapshot.getId();
+        this.requestedAt = ZonedDateTime.now();
+
         if (requestMemberSnapshot != null) {
             this.requestMemberId = requestMemberSnapshot.getMemberId();
             this.requestMemberSnapshotId = requestMemberSnapshot.getId();
+
+            this.status = ExchangeRequestStatus.PENDING;
         } else {
-            // TODO : 쿠폰
+            // 쿠폰 사용 요청
+            this.memberCouponId = memberCouponId;
         }
+    }
 
-        this.requestedMemberId = requestedSnapshot.getMemberId();
-        this.requestedSnapshotId = requestedSnapshot.getId();
-
-        this.requestedAt = ZonedDateTime.now();
+    public void completeCheckCoupon() {
         this.status = ExchangeRequestStatus.PENDING;
     }
 
