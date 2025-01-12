@@ -61,7 +61,7 @@ public class InsightController {
     @Operation(description = "아파트 단지별 인사이트 목록 조회 API")
     @ApiResponse(responseCode = "200", description = "아파트 단지별 인사이트 목록이 조회되었습니다.")
     @GetMapping("/by-apartment-complex")
-    public ResponseEntity<Page<InsightResponse>> listByApartmentComplex(@ModelAttribute ListInsightByApartmentComplexQuery listInsightByApartmentComplexQuery) {
+    public ResponseEntity<Page<InsightResponse>> listByApartmentComplex(@ModelAttribute @Valid ListInsightByApartmentComplexQuery listInsightByApartmentComplexQuery) {
         Page<InsightResponse> insightResponses = insightApplicationService.listInsightByApartmentComplex(listInsightByApartmentComplexQuery);
         return ResponseEntity.ok(insightResponses);
     }

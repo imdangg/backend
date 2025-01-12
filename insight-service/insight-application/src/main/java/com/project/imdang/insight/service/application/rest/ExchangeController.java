@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class ExchangeController {
             content = @Content(schema = @Schema(implementation = RequestExchangeInsightResponse.class)))
     @PostMapping("/request")
     public ResponseEntity<RequestExchangeInsightResponse> request(@AuthenticationPrincipal UUID memberId,
-                                                                  @RequestBody RequestExchangeInsightCommand requestExchangeInsightCommand) {
+                                                                  @RequestBody @Valid RequestExchangeInsightCommand requestExchangeInsightCommand) {
 
         requestExchangeInsightCommand.setRequestMemberId(memberId);
         if (requestExchangeInsightCommand.getRequestMemberInsightId() != null) {
@@ -65,7 +66,7 @@ public class ExchangeController {
     @ApiResponse(responseCode = "200", description = "인사이트 교환 수락 성공",
             content = @Content(schema = @Schema(implementation = AcceptExchangeRequestResponse.class)))
     @PostMapping("/accept")
-    public ResponseEntity<AcceptExchangeRequestResponse> accept(@AuthenticationPrincipal UUID memberId, @RequestBody AcceptExchangeRequestCommand acceptExchangeRequestCommand) {
+    public ResponseEntity<AcceptExchangeRequestResponse> accept(@AuthenticationPrincipal UUID memberId, @RequestBody @Valid AcceptExchangeRequestCommand acceptExchangeRequestCommand) {
         acceptExchangeRequestCommand.setRequestedMemberId(memberId);
         AcceptExchangeRequestResponse acceptExchangeRequestResponse = exchangeApplicationService.acceptExchangeRequest(acceptExchangeRequestCommand);
         log.info("ExchangeRequest[id: {}] is accepted.", acceptExchangeRequestCommand.getExchangeRequestId());
@@ -79,7 +80,7 @@ public class ExchangeController {
     @ApiResponse(responseCode = "200", description = "인사이트 교환 거절 성공",
             content = @Content(schema = @Schema(implementation = RejectExchangeRequestResponse.class)))
     @PostMapping("/reject")
-    public ResponseEntity<RejectExchangeRequestResponse> reject(@AuthenticationPrincipal UUID memberId, @RequestBody RejectExchangeRequestCommand rejectExchangeRequestCommand) {
+    public ResponseEntity<RejectExchangeRequestResponse> reject(@AuthenticationPrincipal UUID memberId, @RequestBody @Valid RejectExchangeRequestCommand rejectExchangeRequestCommand) {
         rejectExchangeRequestCommand.setRequestedMemberId(memberId);
         RejectExchangeRequestResponse rejectExchangeRequestResponse = exchangeApplicationService.rejectExchangeRequest(rejectExchangeRequestCommand);
         log.info("ExchangeRequest[id:{}] is rejected.", rejectExchangeRequestCommand.getExchangeRequestId());
