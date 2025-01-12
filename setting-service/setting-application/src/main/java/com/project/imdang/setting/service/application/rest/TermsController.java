@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +44,7 @@ public class TermsController {
     @Operation(description = "약관 동의 API")
     @ApiResponse(responseCode = "200", description = "약관 동의 성공")
     @PostMapping("/agree")
-    public ResponseEntity<Void> agree(@AuthenticationPrincipal UUID memberId, @RequestBody AgreeTermsCommand agreeTermsCommand) {
+    public ResponseEntity<Void> agree(@AuthenticationPrincipal UUID memberId, @RequestBody @Valid AgreeTermsCommand agreeTermsCommand) {
         agreeTermsCommand.setMemberId(memberId);
         termsApplicationService.agreeTerms(agreeTermsCommand);
         return ResponseEntity.ok().build();
