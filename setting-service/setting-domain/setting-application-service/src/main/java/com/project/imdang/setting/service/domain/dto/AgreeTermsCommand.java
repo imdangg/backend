@@ -1,5 +1,7 @@
 package com.project.imdang.setting.service.domain.dto;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +17,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class AgreeTermsCommand {
+    @NotEmpty
     private Set<Long> termsIds;
     @Setter
     private UUID memberId;  // agreedBy
