@@ -9,6 +9,10 @@ import com.project.imdang.insight.service.domain.valueobject.FavorableNews;
 import com.project.imdang.insight.service.domain.valueobject.Infra;
 import com.project.imdang.insight.service.domain.valueobject.VisitMethod;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,25 +35,34 @@ public class CreateInsightCommand {
     @Setter
     private UUID memberId;  // createdBy
     @Schema(description = "인사이트 작성 점수")
+    @NotNull
+    @PositiveOrZero
     private int score;
 
     private Address address;
     @Schema(description = "아파트 단지")
     private ApartmentComplex apartmentComplex;
     @Schema(description = "제목")
+    @NotBlank
+    @Size(min = 1, max = 20)
     private String title;
     @Schema(description = "내용")
     private String contents;
     @Schema(description = "메인 이미지")
     private String mainImage;
     @Schema(description = "요약")
+    @NotBlank
+    @Size(min = 30, max = 200)
     private String summary;
 
     @Schema(description = "다녀온 날짜", example = "2024-12-31")
+    @NotNull
     private ZonedDateTime visitAt;
     @Schema(description = "교통 수단")
+    @NotNull
     private VisitMethod visitMethod;
     @Schema(description = "출입 제한")
+    @NotNull
     private Access access;
 
     // 인프라

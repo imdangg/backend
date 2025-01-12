@@ -1,6 +1,7 @@
 package com.project.imdang.insight.service.domain.dto.exchange.reject;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class RejectExchangeRequestCommand {
     @Schema(description = "교환 요청ID")
+    @NotNull
     private UUID exchangeRequestId;
     @Setter
     @Schema(description = "요청 받은 사용자ID")

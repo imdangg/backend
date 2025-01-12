@@ -1,6 +1,7 @@
 package com.project.imdang.insight.service.domain.valueobject;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,8 +16,10 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Address {
     @Schema(description = "시군구", example = "서울시 서대문구")
+    @NotBlank
     private String siGunGu;
     @Schema(description = "동", example = "임당동")
+    @NotBlank
     private String dong;
 
     @Override

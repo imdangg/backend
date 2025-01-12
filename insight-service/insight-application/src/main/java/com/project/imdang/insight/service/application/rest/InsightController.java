@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -93,7 +94,7 @@ public class InsightController {
     @ApiResponse(responseCode = "200", description = "인사이트가 작성 완료",
             content = @Content(schema = @Schema(implementation = CreateInsightResponse.class)))
     @PostMapping("/create")
-    public ResponseEntity<CreateInsightResponse> createInsight(@AuthenticationPrincipal UUID memberId, @RequestBody CreateInsightCommand createInsightCommand) {
+    public ResponseEntity<CreateInsightResponse> createInsight(@AuthenticationPrincipal UUID memberId, @RequestBody @Valid CreateInsightCommand createInsightCommand) {
         createInsightCommand.setMemberId(memberId);
         CreateInsightResponse createInsightResponse = insightApplicationService.createInsight(createInsightCommand);
         log.info("Insight[id: {}] is created.", createInsightResponse.getInsightId());
@@ -104,7 +105,7 @@ public class InsightController {
     @ApiResponse(responseCode = "200", description = "인사이트가 수정되었습니다.",
             content = @Content(schema = @Schema(implementation = UpdateInsightResponse.class)))
     @PostMapping("/update")
-    public ResponseEntity<UpdateInsightResponse> updateInsight(@AuthenticationPrincipal UUID memberId, @RequestBody UpdateInsightCommand updateInsightCommand) {
+    public ResponseEntity<UpdateInsightResponse> updateInsight(@AuthenticationPrincipal UUID memberId, @RequestBody @Valid UpdateInsightCommand updateInsightCommand) {
         updateInsightCommand.setMemberId(memberId);
         UpdateInsightResponse updateInsightResponse = insightApplicationService.updateInsight(updateInsightCommand);
         log.info("Insight[id: {}] is updated.", updateInsightResponse.getInsightId());
