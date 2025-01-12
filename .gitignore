@@ -1,6 +1,6 @@
 *.yml
 *.p8
-
+*.json
 # Compiled class file
 *.class
 

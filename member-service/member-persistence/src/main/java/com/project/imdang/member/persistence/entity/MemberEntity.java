@@ -34,6 +34,7 @@ public class MemberEntity {
     private String nickname;
     private String birthDate;
     private Gender gender;
+    private String deviceToken;
 
     private int insightCount;
     private int exchangeCount;

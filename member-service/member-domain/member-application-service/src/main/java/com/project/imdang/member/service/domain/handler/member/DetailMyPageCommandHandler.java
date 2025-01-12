@@ -1,4 +1,4 @@
-package com.project.imdang.member.service.domain.handler;
+package com.project.imdang.member.service.domain.handler.member;
 
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.member.service.domain.dto.DetailMyPageQuery;
