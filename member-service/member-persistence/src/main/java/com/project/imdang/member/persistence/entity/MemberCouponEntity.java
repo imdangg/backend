@@ -3,6 +3,7 @@ package com.project.imdang.member.persistence.entity;
 
 import com.project.imdang.domain.valueobject.CouponId;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -33,8 +34,10 @@ public class MemberCouponEntity{
     //private ZonedDateTime expiredAt;
 
     private String remark;  // reason
+    @NotNull
     private ZonedDateTime createdAt;
 
+    @NotNull
     private Boolean used;
     private ZonedDateTime usedAt;
 
