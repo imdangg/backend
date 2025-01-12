@@ -16,11 +16,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JoinCommand {
-    @NotBlank(message = "닉네임을 입력해주세요.")
+    @NotBlank
     private String nickname;
-    @NotBlank(message = "생년월일을 입력해주세요.")
-    @Pattern(regexp = "^[0-9.]+$", message = "잘못된 형식입니다.")
+    @NotBlank
+    @Pattern(regexp = "^[0-9.]+$")
     private String birthDate;
-    @NotNull(message = "성별을 입력해주세요.")
+    @NotNull
     private Gender gender;
 }

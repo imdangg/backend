@@ -59,6 +59,6 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorDTO handleException(MethodArgumentNotValidException methodArgumentNotValidException) {
         log.error(methodArgumentNotValidException.getMessage(), methodArgumentNotValidException);
-        return ErrorDTO.of(HttpStatus.BAD_REQUEST, methodArgumentNotValidException.getMessage());
+        return ErrorDTO.of(HttpStatus.BAD_REQUEST, "Please input " + methodArgumentNotValidException.getParameter().getParameterName());
     }
 }

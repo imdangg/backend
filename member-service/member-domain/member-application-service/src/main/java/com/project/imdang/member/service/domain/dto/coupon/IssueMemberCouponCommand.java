@@ -12,6 +12,6 @@ import java.util.UUID;
 public class IssueMemberCouponCommand {
     @Setter
     private UUID memberId;
-    @NotNull(message = "쿠폰ID를 입력해주세요")
+    @NotNull
     private UUID couponId;
 }
