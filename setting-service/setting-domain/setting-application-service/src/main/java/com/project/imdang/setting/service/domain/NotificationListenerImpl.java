@@ -23,7 +23,7 @@ public class NotificationListenerImpl implements NotificationListener {
     public void notificationEvent(NotificationCreatedEvent notificationCreatedEvent) {
         // notification 요청 생성
         Notification notification = notificationCreatedEvent.getNotification();
-        NotificationRequest notificationRequest = new NotificationRequest(notification.getReceiverId(), notification.getCategory(), notification.getCategory().getTitle(), notification.getCategory().getContent(), notification.getCreatedAt());
+        NotificationRequest notificationRequest = new NotificationRequest(notification.getReceiverId().getValue(), notification.getCategory(), notification.getCategory().getTitle(), notification.getCategory().getContent(), notification.getCreatedAt());
         // 알림 전송
         notificationApplicationService.sendNotification(notificationRequest);
     }

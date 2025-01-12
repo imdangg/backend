@@ -8,12 +8,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class NotificationRequest {
-    private MemberId memberId;
+    private UUID memberId;
     private NotificationCategory category;
     private String title;
     private String body;

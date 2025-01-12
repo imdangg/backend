@@ -28,7 +28,7 @@ public class MemberController {
     @Operation(description = "마이페이지 API")
     @ApiResponse(responseCode = "200", description = "마이페이지 조회 성공",
         content = @Content(schema = @Schema(implementation = DetailMyPageResponse.class)))
-    @GetMapping("/my-page")
+    @GetMapping("/detail")
     public ResponseEntity<DetailMyPageResponse> detail(@AuthenticationPrincipal UUID memberId) {
         DetailMyPageQuery detailMyPageQuery = new DetailMyPageQuery(memberId);
         DetailMyPageResponse detailMyPageResponse = memberApplicationService.detailMyPage(detailMyPageQuery);

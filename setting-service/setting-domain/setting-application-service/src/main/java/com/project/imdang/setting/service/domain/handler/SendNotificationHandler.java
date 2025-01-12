@@ -45,7 +45,7 @@ public class SendNotificationHandler {
         //TODO - CHECK :  APNs Configuration
 
         Message message = Message.builder()
-                .setToken(getFcmToken(notificationRequest.getMemberId().getValue()))
+                .setToken(getFcmToken(notificationRequest.getMemberId()))
                 .setNotification(notification)
                 .setAndroidConfig(androidConfig)
                 .build();
