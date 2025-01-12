@@ -74,7 +74,7 @@ public class AcceptExchangeCommandHandler {
 
     private ExchangeRequest checkExchangeRequest(ExchangeRequestId exchangeRequestId) {
         return exchangeRequestRepository.findById(exchangeRequestId)
-                .orElseThrow(ExchangeRequestNotFoundException::new);
+                .orElseThrow(() -> new ExchangeRequestNotFoundException(exchangeRequestId));
     }
 
     private ExchangeRequest save(ExchangeRequest exchangeRequest) {

@@ -1,5 +1,6 @@
 package com.project.imdang.insight.service.domain;
 
+import com.project.imdang.domain.valueobject.MemberCouponId;
 import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
 import com.project.imdang.insight.service.domain.entity.Snapshot;
 import com.project.imdang.insight.service.domain.event.ExchangeRequestAcceptedEvent;
@@ -14,8 +15,22 @@ public class ExchangeDomainServiceImpl implements ExchangeDomainService {
 
     @Override
     public ExchangeRequestCreatedEvent requestExchange(ExchangeRequest exchangeRequest, Snapshot requestedSnapshot, Snapshot requestMemberSnapshot) {
-        exchangeRequest.initialize(requestedSnapshot, requestMemberSnapshot);
+        exchangeRequest.initialize(requestedSnapshot, requestMemberSnapshot, null);
         log.info("ExchangeRequest[id: {}] is initialized.", exchangeRequest.getId().getValue());
+        return new ExchangeRequestCreatedEvent(exchangeRequest, ZonedDateTime.now());
+    }
+
+    @Override
+    public ExchangeRequest requestExchangeWithCoupon(ExchangeRequest exchangeRequest, Snapshot requestedSnapshot, MemberCouponId memberCouponId) {
+        exchangeRequest.initialize(requestedSnapshot, null, memberCouponId);
+        log.info("ExchangeRequest[id: {}] is initialized.", exchangeRequest.getId().getValue());
+        return exchangeRequest;
+    }
+
+    @Override
+    public ExchangeRequestCreatedEvent completeCheckCoupon(ExchangeRequest exchangeRequest) {
+        exchangeRequest.completeCheckCoupon();
+        log.info("Coupon of ExchangeRequest[id: {}] is checked.", exchangeRequest.getId().getValue());
         return new ExchangeRequestCreatedEvent(exchangeRequest, ZonedDateTime.now());
     }
 

@@ -5,7 +5,7 @@ import com.project.imdang.domain.valueobject.MemberId;
 public class MemberNotFoundException extends MemberDomainException {
 
     public MemberNotFoundException(MemberId memberId) {
-        this(String.format("Could not find member[id: %s]", memberId.getValue()));
+        this(String.format("Could not find member[id: %s]!", memberId.getValue()));
     }
 
     private MemberNotFoundException(String message) {

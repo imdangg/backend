@@ -15,8 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
-
 @Slf4j
 @RequiredArgsConstructor
 @Component
@@ -30,7 +28,7 @@ public class RejectExchangeCommandHandler {
 
     @Transactional
     public RejectExchangeRequestResponse rejectExchangeRequest(RejectExchangeRequestCommand rejectExchangeRequestCommand) {
-        UUID exchangeRequestId = rejectExchangeRequestCommand.getExchangeRequestId();
+        ExchangeRequestId exchangeRequestId = new ExchangeRequestId(rejectExchangeRequestCommand.getExchangeRequestId());
         ExchangeRequest exchangeRequest = checkExchangeRequest(exchangeRequestId);
         // check
         if (!exchangeRequest.getRequestedMemberId().getValue().equals(rejectExchangeRequestCommand.getRequestedMemberId())) {
@@ -44,9 +42,9 @@ public class RejectExchangeCommandHandler {
         return exchangeRequestDataMapper.exchangeRequestToRejectExchangeRequestResponse(saved);
     }
 
-    private ExchangeRequest checkExchangeRequest(UUID exchangeRequestId) {
-        return exchangeRequestRepository.findById(new ExchangeRequestId(exchangeRequestId))
-                .orElseThrow(ExchangeRequestNotFoundException::new);
+    private ExchangeRequest checkExchangeRequest(ExchangeRequestId exchangeRequestId) {
+        return exchangeRequestRepository.findById(exchangeRequestId)
+                .orElseThrow(() -> new ExchangeRequestNotFoundException(exchangeRequestId));
     }
 
     private ExchangeRequest save(ExchangeRequest exchangeRequest) {
