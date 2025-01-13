@@ -5,8 +5,6 @@ import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginCommand;
 
 import java.util.UUID;
 
-import java.util.UUID;
-
 public interface MemberApplicationService {
     LoginResponse login(OAuthLoginCommand loginCommand);
 
@@ -14,5 +12,5 @@ public interface MemberApplicationService {
 
     void join(UUID memberId, JoinCommand joinCommand);
 
-    DetailMemberResponse detailMember(UUID memberId);
+    MemberInfoResponse detailMember(UUID memberId);
 }

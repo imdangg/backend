@@ -1,6 +1,6 @@
 package com.project.imdang.member.service.application.rest;
 
-import com.project.imdang.member.service.domain.dto.DetailMemberResponse;
+import com.project.imdang.member.service.domain.dto.MemberInfoResponse;
 import com.project.imdang.member.service.domain.dto.DetailMyPageQuery;
 import com.project.imdang.member.service.domain.dto.DetailMyPageResponse;
 import com.project.imdang.member.service.domain.ports.input.service.MemberApplicationService;
@@ -38,9 +38,9 @@ public class MemberController {
 
     //TODO - CHECK : 전체 회원 정보 가져오기 or 필요한 정보만 가져오기
     @GetMapping
-    public ResponseEntity<DetailMemberResponse> info(@RequestParam UUID memberId) {
-        DetailMemberResponse detailMemberResponse = memberApplicationService.detailMember(memberId);
+    public ResponseEntity<MemberInfoResponse> info(@RequestParam UUID memberId) {
+        MemberInfoResponse memberInfoResponse = memberApplicationService.detailMember(memberId);
         log.info("Member[id :{}] is retrived", memberId);
-        return ResponseEntity.ok(detailMemberResponse);
+        return ResponseEntity.ok(memberInfoResponse);
     }
 }
