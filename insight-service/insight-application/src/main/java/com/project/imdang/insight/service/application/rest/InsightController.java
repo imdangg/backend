@@ -32,7 +32,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -93,8 +95,11 @@ public class InsightController {
     @ApiResponse(responseCode = "200", description = "인사이트가 작성 완료",
             content = @Content(schema = @Schema(implementation = CreateInsightResponse.class)))
     @PostMapping("/create")
-    public ResponseEntity<CreateInsightResponse> createInsight(@AuthenticationPrincipal UUID memberId, @RequestBody CreateInsightCommand createInsightCommand) {
+    public ResponseEntity<CreateInsightResponse> createInsight(@AuthenticationPrincipal UUID memberId,
+                                                               @RequestPart("createInsightCommand") CreateInsightCommand createInsightCommand,
+                                                               @RequestPart("mainImage") MultipartFile mainImage) {
         createInsightCommand.setMemberId(memberId);
+        createInsightCommand.setMainImage(mainImage);
         CreateInsightResponse createInsightResponse = insightApplicationService.createInsight(createInsightCommand);
         log.info("Insight[id: {}] is created.", createInsightResponse.getInsightId());
         return ResponseEntity.ok(createInsightResponse);
@@ -104,8 +109,11 @@ public class InsightController {
     @ApiResponse(responseCode = "200", description = "인사이트가 수정되었습니다.",
             content = @Content(schema = @Schema(implementation = UpdateInsightResponse.class)))
     @PostMapping("/update")
-    public ResponseEntity<UpdateInsightResponse> updateInsight(@AuthenticationPrincipal UUID memberId, @RequestBody UpdateInsightCommand updateInsightCommand) {
+    public ResponseEntity<UpdateInsightResponse> updateInsight(@AuthenticationPrincipal UUID memberId,
+                                                               @RequestPart("updateInsightCommand") UpdateInsightCommand updateInsightCommand,
+                                                               @RequestPart("mainImage") MultipartFile mainImage) {
         updateInsightCommand.setMemberId(memberId);
+        updateInsightCommand.setMainImage(mainImage);
         UpdateInsightResponse updateInsightResponse = insightApplicationService.updateInsight(updateInsightCommand);
         log.info("Insight[id: {}] is updated.", updateInsightResponse.getInsightId());
         return ResponseEntity.ok(updateInsightResponse);

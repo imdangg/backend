@@ -86,12 +86,6 @@ public class InsightApplicationServiceImpl implements InsightApplicationService 
     public DetailInsightResponse detailInsight(DetailInsightQuery detailInsightQuery) {
         return detailInsightCommandHandler.detailInsight(detailInsightQuery);
     }
-/*
-    @Override
-    public ValidateAndEvaluateInsightResponse validateAndEvaluateInsight(ValidateAndEvaluateInsightCommand validateAndEvaluateInsightCommand) {
-        // TODO : 캐싱
-        return validateAndEvaluateInsightCommandHandler.validateAndEvaluateInsight(validateAndEvaluateInsightCommand);
-    }*/
 
     @Override
     public CreateInsightResponse createInsight(CreateInsightCommand createInsightCommand) {

@@ -1,10 +1,10 @@
 package com.project.imdang.insight.service.domain.handler.insight;
 
+import com.project.imdang.domain.utils.PagingUtils;
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightByApartmentComplexQuery;
 import com.project.imdang.insight.service.domain.mapper.InsightDataMapper;
 import com.project.imdang.insight.service.domain.ports.output.repository.InsightRepository;
-import com.project.imdang.domain.utils.PagingUtils;
 import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

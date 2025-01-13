@@ -18,7 +18,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
 
 @Slf4j
@@ -39,21 +42,26 @@ public class UpdateInsightCommandHandler {
         // validation check
         MemberId updatedBy = new MemberId(updateInsightCommand.getMemberId());
         Insight insight = checkInsight(insightId);
+
+        // TODO : 이미지 처리
+        String mainImage = uploadImage(updateInsightCommand.getMainImage());
         InsightUpdatedEvent insightUpdatedEvent = insightDomainService.updateInsight(
                 insight,
                 updatedBy,
-                updateInsightCommand.getScore(),
+                mainImage,
                 updateInsightCommand.getTitle(),
-                updateInsightCommand.getContents(),
-                updateInsightCommand.getMainImage(),
-                updateInsightCommand.getSummary(),
+                updateInsightCommand.getAddress(),
+                updateInsightCommand.getApartmentComplex(),
                 updateInsightCommand.getVisitAt(),
-                updateInsightCommand.getVisitMethod(),
+                updateInsightCommand.getVisitTimes(),
+                updateInsightCommand.getVisitMethods(),
                 updateInsightCommand.getAccess(),
+                updateInsightCommand.getSummary(),
                 updateInsightCommand.getInfra(),
                 updateInsightCommand.getComplexEnvironment(),
                 updateInsightCommand.getComplexFacility(),
-                updateInsightCommand.getFavorableNews());
+                updateInsightCommand.getFavorableNews(),
+                updateInsightCommand.getScore());
         Insight updated = insightUpdatedEvent.getInsight();
         log.info("Insight[id: {}] is updated.", updated.getId().getValue());
         saveInsight(updated);
@@ -73,6 +81,24 @@ public class UpdateInsightCommandHandler {
             throw new InsightNotFoundException(insightId);
         }
         return insightResult.get();
+    }
+
+    private String uploadImage(MultipartFile image) {
+
+        String filename = image.getOriginalFilename();
+        if (image.isEmpty()) {
+            // TODO : 예외 처리
+            throw new RuntimeException();
+        }
+
+        String filePath = "uploads/" + filename;
+        try {
+            image.transferTo(new File(filePath));
+        } catch (IOException e) {
+            // TODO : 예외 처리
+            throw new RuntimeException(e);
+        }
+        return filename;
     }
 
     private Insight saveInsight(Insight insight) {

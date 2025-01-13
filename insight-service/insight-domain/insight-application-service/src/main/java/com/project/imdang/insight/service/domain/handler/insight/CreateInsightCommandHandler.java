@@ -18,6 +18,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -35,7 +39,11 @@ public class CreateInsightCommandHandler {
     public CreateInsightResponse createInsight(CreateInsightCommand createInsightCommand) {
         Insight insight = insightDataMapper.createInsightCommandToInsight(createInsightCommand);
         // TODO - CHECK : event
-        Insight created = insightDomainService.createInsight(insight);
+
+        // TODO : 이미지 처리
+        String mainImage = uploadImage(createInsightCommand.getMainImage());
+        Insight created = insightDomainService.createInsight(insight, mainImage);
+        
         Insight saved = saveInsight(created);
         log.info("Insight[id: {}] is created.", saved.getId().getValue());
 
@@ -54,6 +62,24 @@ public class CreateInsightCommandHandler {
         saveMemberSnapshot(memberSnapshot);
 
         return insightDataMapper.insightToCreateInsightResponse(insight);
+    }
+
+    private String uploadImage(MultipartFile image) {
+
+        String filename = image.getOriginalFilename();
+        if (image.isEmpty()) {
+            // TODO : 예외 처리
+            throw new RuntimeException();
+        }
+
+        String filePath = "uploads/" + filename;
+        try {
+            image.transferTo(new File(filePath));
+        } catch (IOException e) {
+            // TODO : 예외 처리
+            throw new RuntimeException(e);
+        }
+        return filename;
     }
 
     private Insight saveInsight(Insight insight) {

@@ -8,13 +8,16 @@ import com.project.imdang.insight.service.domain.valueobject.ComplexFacility;
 import com.project.imdang.insight.service.domain.valueobject.FavorableNews;
 import com.project.imdang.insight.service.domain.valueobject.Infra;
 import com.project.imdang.insight.service.domain.valueobject.VisitMethod;
+import com.project.imdang.insight.service.domain.valueobject.VisitTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Builder
@@ -28,17 +31,17 @@ public class DetailInsightResponse {
     private UUID insightId;
     private Long snapshotId;
 
+    private String mainImage;
+    private String title;
+
     private Address address;
     private ApartmentComplex apartmentComplex;
 
-    private String title;
-    private String contents;
-    private String mainImage;
-    private String summary;
-
-    private ZonedDateTime visitAt;
-    private VisitMethod visitMethod;
+    private LocalDate visitAt;
+    private Set<VisitTime> visitTimes;
+    private Set<VisitMethod> visitMethods;
     private Access access;
+    private String summary;
 
     private Infra infra;
     private ComplexEnvironment complexEnvironment;
@@ -56,11 +59,11 @@ public class DetailInsightResponse {
         return DetailInsightResponse.builder()
                 .insightId(insightId)
                 .snapshotId(snapshotId)
-                .recommendedCount(recommendedCount)
+                .mainImage(mainImage)
+                .title(title)
                 .address(address)
                 .apartmentComplex(apartmentComplex)
-                .title(title)
-                .mainImage(mainImage)
+                .recommendedCount(recommendedCount)
                 .memberId(memberId)
 //                .member(member)
                 .createdAt(createdAt)
