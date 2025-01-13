@@ -8,10 +8,13 @@ import com.project.imdang.insight.service.domain.valueobject.ComplexFacility;
 import com.project.imdang.insight.service.domain.valueobject.FavorableNews;
 import com.project.imdang.insight.service.domain.valueobject.Infra;
 import com.project.imdang.insight.service.domain.valueobject.VisitMethod;
+import com.project.imdang.insight.service.domain.valueobject.VisitTime;
 import com.project.imdang.insight.service.persistence.insight.converter.ComplexEnvironmentConverter;
 import com.project.imdang.insight.service.persistence.insight.converter.ComplexFacilityConverter;
 import com.project.imdang.insight.service.persistence.insight.converter.FavorableNewsConverter;
 import com.project.imdang.insight.service.persistence.insight.converter.InfraConverter;
+import com.project.imdang.insight.service.persistence.insight.converter.VisitMethodSetConverter;
+import com.project.imdang.insight.service.persistence.insight.converter.VisitTimeSetConverter;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
@@ -33,7 +36,8 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
 @Builder
@@ -56,28 +60,36 @@ public class SnapshotEntity {
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID memberId;
 
+    private String mainImage;
+    private String title;
+
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "siDo", column = @Column(name = "address_si_do")),
+            @AttributeOverride(name = "siGunGu", column = @Column(name = "address_si_gun_gu")),
+            @AttributeOverride(name = "eupMyeonDong", column = @Column(name = "address_eup_myeon_dong")),
+            @AttributeOverride(name = "roadName", column = @Column(name = "address_road_name")),
+            @AttributeOverride(name = "buildingNumber", column = @Column(name = "address_building_number")),
+            @AttributeOverride(name = "detail", column = @Column(name = "address_detail")),
+    })
     private Address address;
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "key", column = @Column(name = "complex_key")),
             @AttributeOverride(name = "name", column = @Column(name = "complex_name")),
     })
     private ApartmentComplex apartmentComplex;
 
-    private String title;
-    private String contents;
+    private LocalDate visitAt;
 
-    private String mainImage;
-    private String summary;
-
-    private ZonedDateTime visitAt;
-
-    @Enumerated(EnumType.STRING)
-    private VisitMethod visitMethod;
+    @Convert(converter = VisitTimeSetConverter.class)
+    private Set<VisitTime> visitTimes;
+    @Convert(converter = VisitMethodSetConverter.class)
+    private Set<VisitMethod> visitMethods;
     @Enumerated(EnumType.STRING)
     private Access access;
+
+    private String summary;
 
     // TODO - CHECK : 한번에 Convert?
     @Convert(converter = InfraConverter.class)

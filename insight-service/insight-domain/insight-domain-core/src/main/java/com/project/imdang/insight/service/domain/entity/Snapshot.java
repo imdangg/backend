@@ -13,51 +13,69 @@ import com.project.imdang.insight.service.domain.valueobject.FavorableNews;
 import com.project.imdang.insight.service.domain.valueobject.Infra;
 import com.project.imdang.insight.service.domain.valueobject.SnapshotId;
 import com.project.imdang.insight.service.domain.valueobject.VisitMethod;
+import com.project.imdang.insight.service.domain.valueobject.VisitTime;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
+import java.util.Set;
 
 @Getter
 public class Snapshot extends BaseEntity<SnapshotId> {
 
     private final InsightId insightId;
     private final MemberId memberId;  // createdBy
+    private final String mainImage;
+    private final String title;
 
     private final Address address;
-    private final ApartmentComplex apartmentComplex;
+    private ApartmentComplex apartmentComplex;
 
-    private final String title;
-    private final String contents;
-    private final String mainImage;
-    private final String summary;
+    private LocalDate visitAt;
+    private Set<VisitTime> visitTimes;
+    private Set<VisitMethod> visitMethods;
+    private Access access;
 
-    private final ZonedDateTime visitAt;
-    private final VisitMethod visitMethod;
-    private final Access access;
+    private String summary;
+
     // 인프라
-    private final Infra infra;
+    private Infra infra;
     // 단지 환경
-    private final ComplexEnvironment complexEnvironment;
+    private ComplexEnvironment complexEnvironment;
     // 단지 시설
-    private final ComplexFacility complexFacility;
+    private ComplexFacility complexFacility;
     // (예정된) 호재
-    private final FavorableNews favorableNews;
+    private FavorableNews favorableNews;
 
     @Builder
-    public Snapshot(SnapshotId id, InsightId insightId, MemberId memberId, Address address, ApartmentComplex apartmentComplex, String title, String contents, String mainImage, String summary, ZonedDateTime visitAt, VisitMethod visitMethod, Access access, Infra infra, ComplexEnvironment complexEnvironment, ComplexFacility complexFacility, FavorableNews favorableNews) {
+    public Snapshot(SnapshotId id,
+                    InsightId insightId,
+                    MemberId memberId,
+                    String mainImage,
+                    String title,
+                    Address address,
+                    ApartmentComplex apartmentComplex,
+                    LocalDate visitAt,
+                    Set<VisitTime> visitTimes,
+                    Set<VisitMethod> visitMethods,
+                    Access access,
+                    String summary,
+                    Infra infra,
+                    ComplexEnvironment complexEnvironment,
+                    ComplexFacility complexFacility,
+                    FavorableNews favorableNews) {
         setId(id);
         this.insightId = insightId;
         this.memberId = memberId;
+        this.mainImage = mainImage;
+        this.title = title;
         this.address = address;
         this.apartmentComplex = apartmentComplex;
-        this.title = title;
-        this.contents = contents;
-        this.mainImage = mainImage;
-        this.summary = summary;
         this.visitAt = visitAt;
-        this.visitMethod = visitMethod;
+        this.visitTimes = visitTimes;
+        this.visitMethods = visitMethods;
         this.access = access;
+        this.summary = summary;
         this.infra = infra;
         this.complexEnvironment = complexEnvironment;
         this.complexFacility = complexFacility;
@@ -67,15 +85,15 @@ public class Snapshot extends BaseEntity<SnapshotId> {
     private Snapshot(Insight insight) {
         this.insightId = insight.getId();
         this.memberId = insight.getMemberId();
+        this.mainImage = insight.getMainImage();
+        this.title = insight.getTitle();
         this.address = insight.getAddress();
         this.apartmentComplex = insight.getApartmentComplex();
-        this.title = insight.getTitle();
-        this.contents = insight.getContents();
-        this.mainImage = insight.getMainImage();
-        this.summary = insight.getSummary();
         this.visitAt = insight.getVisitAt();
-        this.visitMethod = insight.getVisitMethod();
+        this.visitTimes = insight.getVisitTimes();
+        this.visitMethods = insight.getVisitMethods();
         this.access = insight.getAccess();
+        this.summary = insight.getSummary();
         this.infra = insight.getInfra();
         this.complexEnvironment = insight.getComplexEnvironment();
         this.complexFacility = insight.getComplexFacility();

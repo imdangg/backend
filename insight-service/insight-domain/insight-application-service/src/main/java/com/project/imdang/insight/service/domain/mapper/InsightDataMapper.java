@@ -6,8 +6,6 @@ import com.project.imdang.insight.service.domain.dto.insight.create.CreateInsigh
 import com.project.imdang.insight.service.domain.dto.insight.create.CreateInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.delete.DeleteInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.detail.DetailInsightResponse;
-import com.project.imdang.insight.service.domain.dto.insight.evaluate.ValidateAndEvaluateInsightCommand;
-import com.project.imdang.insight.service.domain.dto.insight.evaluate.ValidateAndEvaluateInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.recommend.RecommendInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.update.UpdateInsightResponse;
@@ -31,20 +29,19 @@ public class InsightDataMapper {
     public Insight createInsightCommandToInsight(CreateInsightCommand createInsightCommand) {
         return Insight.builder()
                 .memberId(new MemberId(createInsightCommand.getMemberId()))
-                .score(createInsightCommand.getScore())
+                .title(createInsightCommand.getTitle())
                 .address(createInsightCommand.getAddress())
                 .apartmentComplex(createInsightCommand.getApartmentComplex())
-                .title(createInsightCommand.getTitle())
-                .contents(createInsightCommand.getContents())
-                .mainImage(createInsightCommand.getMainImage())
-                .summary(createInsightCommand.getSummary())
                 .visitAt(createInsightCommand.getVisitAt())
-                .visitMethod(createInsightCommand.getVisitMethod())
+                .visitTimes(createInsightCommand.getVisitTimes())
+                .visitMethods(createInsightCommand.getVisitMethods())
                 .access(createInsightCommand.getAccess())
+                .summary(createInsightCommand.getSummary())
                 .infra(createInsightCommand.getInfra())
                 .complexEnvironment(createInsightCommand.getComplexEnvironment())
                 .complexFacility(createInsightCommand.getComplexFacility())
                 .favorableNews(createInsightCommand.getFavorableNews())
+                .score(createInsightCommand.getScore())
                 .build();
     }
 
@@ -78,44 +75,19 @@ public class InsightDataMapper {
                 .build();
     }
 
-    public Insight validateAndEvaluateInsightCommandToInsight(ValidateAndEvaluateInsightCommand validateAndEvaluateInsightCommand) {
-        return Insight.builder()
-                .address(validateAndEvaluateInsightCommand.getAddress())
-                .apartmentComplex(validateAndEvaluateInsightCommand.getApartmentComplex())
-                .title(validateAndEvaluateInsightCommand.getTitle())
-                .contents(validateAndEvaluateInsightCommand.getContents())
-                .mainImage(validateAndEvaluateInsightCommand.getMainImage())
-                .summary(validateAndEvaluateInsightCommand.getSummary())
-                .visitAt(validateAndEvaluateInsightCommand.getVisitAt())
-                .visitMethod(validateAndEvaluateInsightCommand.getVisitMethod())
-                .access(validateAndEvaluateInsightCommand.getAccess())
-                .infra(validateAndEvaluateInsightCommand.getInfra())
-                .complexEnvironment(validateAndEvaluateInsightCommand.getComplexEnvironment())
-                .complexFacility(validateAndEvaluateInsightCommand.getComplexFacility())
-                .favorableNews(validateAndEvaluateInsightCommand.getFavorableNews())
-                .build();
-    }
-
-    public ValidateAndEvaluateInsightResponse insightToValidateAndEvaluateInsightCommand(Insight insight) {
-        return ValidateAndEvaluateInsightResponse.builder()
-                .insightId(insight.getId().getValue())
-                .score(insight.getScore())
-                .build();
-    }
-
     public DetailInsightResponse insightToDetailInsightResponse(Insight insight) {
         return DetailInsightResponse.builder()
                 .memberId(insight.getMemberId().getValue())
                 .insightId(insight.getId().getValue())
+                .mainImage(insight.getMainImage())
+                .title(insight.getTitle())
                 .address(insight.getAddress())
                 .apartmentComplex(insight.getApartmentComplex())
-                .title(insight.getTitle())
-                .contents(insight.getContents())
-                .mainImage(insight.getMainImage())
-                .summary(insight.getSummary())
                 .visitAt(insight.getVisitAt())
-                .visitMethod(insight.getVisitMethod())
+                .visitTimes(insight.getVisitTimes())
+                .visitMethods(insight.getVisitMethods())
                 .access(insight.getAccess())
+                .summary(insight.getSummary())
                 .infra(insight.getInfra())
                 .complexEnvironment(insight.getComplexEnvironment())
                 .complexFacility(insight.getComplexFacility())

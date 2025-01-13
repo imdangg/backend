@@ -16,6 +16,8 @@ public class ExchangeRequestCreatedRequestMessageListenerImpl implements Exchang
     // TODO - vs TransactionalEventListener
     @EventListener
     public void handle(ExchangeRequestCreatedRequestMessage exchangeRequestCreatedRequestMessage) {
+
+        // update
         MemberCouponPendingUpdatedResponseMessage memberCouponPendingUpdatedResponseMessage = new MemberCouponPendingUpdatedResponseMessage(
                 true,
                 exchangeRequestCreatedRequestMessage.getExchangeRequestId());

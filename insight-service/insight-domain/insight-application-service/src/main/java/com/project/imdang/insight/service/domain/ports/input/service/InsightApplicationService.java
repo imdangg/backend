@@ -32,8 +32,6 @@ public interface InsightApplicationService {
     List<ApartmentComplex> listMyApartmentComplex(UUID memberId);
 
     DetailInsightResponse detailInsight(DetailInsightQuery detailInsightQuery);
-
-//    ValidateAndEvaluateInsightResponse validateAndEvaluateInsight(ValidateAndEvaluateInsightCommand validateAndEvaluateInsightCommand);
     // = uploadInsight
     CreateInsightResponse createInsight(CreateInsightCommand createInsightCommand);
     UpdateInsightResponse updateInsight(UpdateInsightCommand updateInsightCommand);

@@ -6,8 +6,6 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.UUID;
-
 public final class InsightSpecification {
 
     public static Specification<InsightEntity> equalsMemberId(String memberId) {
@@ -28,21 +26,21 @@ public final class InsightSpecification {
         };
     }
 
-    public static Specification<InsightEntity> equalsDong(String dong) {
+    public static Specification<InsightEntity> equalsEupMyeonDong(String eupMyeonDong) {
         return (Root<InsightEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {
-            if (dong == null || dong.isEmpty()) {
+            if (eupMyeonDong == null || eupMyeonDong.isEmpty()) {
                 return criteriaBuilder.conjunction();
             }
-            return criteriaBuilder.equal(root.get("address").get("dong"), dong);
+            return criteriaBuilder.equal(root.get("address").get("eupMyeonDong"), eupMyeonDong);
         };
     }
 
-    public static Specification<InsightEntity> equalsApartmentComplex(String apartComplexName) {
+    public static Specification<InsightEntity> equalsApartmentComplexName(String apartComplexName) {
         return (Root<InsightEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {
             if (apartComplexName == null || apartComplexName.isEmpty()) {
                 return criteriaBuilder.conjunction();
             }
-            return criteriaBuilder.equal(root.get("apartmentComplex").get("name"), apartComplexName);
+            return criteriaBuilder.equal(root.get("apartComplexName"), apartComplexName);
         };
     }
 }

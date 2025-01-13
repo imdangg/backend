@@ -38,7 +38,7 @@ public class ExchangeRequestMemberCouponSaga implements SagaStep<MemberCouponPen
 
         ExchangeRequestCreatedEvent exchangeRequestCreatedEvent = exchangeDomainService.completeCheckCoupon(exchangeRequest);
         save(exchangeRequestCreatedEvent.getExchangeRequest());
-        eventPublisher.publish(exchangeRequestCreatedEvent);
+//        eventPublisher.publish(exchangeRequestCreatedEvent);
         return exchangeRequestCreatedEvent;
     }
 
