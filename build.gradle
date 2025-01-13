@@ -91,6 +91,7 @@ project(':common:common-application') {
         implementation project(':common:common-domain:common-application-service')
 
         implementation 'org.springframework.boot:spring-boot-starter-security'
+        implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.3'
         testImplementation 'org.springframework.security:spring-security-test'
     }
 }
@@ -103,6 +104,7 @@ project(':common:common-domain:common-application-service') {
         implementation 'org.bouncycastle:bcpkix-jdk18on:1.72'
 
         implementation 'org.springframework.data:spring-data-commons'
+        implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.3'
     }
 }
 
@@ -138,6 +140,7 @@ project(':insight-service:insight-domain:insight-application-service') {
         implementation 'org.springframework.boot:spring-boot-starter-validation'
         implementation 'org.springframework.data:spring-data-commons'
         implementation 'org.springframework:spring-tx'
+        implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.3'
     }
 }
 
@@ -269,6 +272,7 @@ project(':setting-service:setting-domain:setting-application-service') {
         implementation 'org.springframework:spring-aspects'
 
         implementation 'com.google.firebase:firebase-admin:9.2.0'
+        implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.3'
     }
 }
 
