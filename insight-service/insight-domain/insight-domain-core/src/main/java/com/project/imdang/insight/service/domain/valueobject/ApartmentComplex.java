@@ -15,21 +15,22 @@ import java.util.Objects;
 public class ApartmentComplex {
 
     private String name;
-    private String key;
+//    private String key;
 
     // TODO - CHECK
 //    private Address address;
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ApartmentComplex that = (ApartmentComplex) o;
-        return Objects.equals(name, that.name) && Objects.equals(key, that.key);
+        return Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, key);
+        return Objects.hash(name);
     }
 }

@@ -18,4 +18,5 @@ public class JoinCommand {
     private String birthDate;
     @Schema(description = "성별 (MALE, FEMALE 중 하나)")
     private Gender gender;
+    private String deviceToken;
 }

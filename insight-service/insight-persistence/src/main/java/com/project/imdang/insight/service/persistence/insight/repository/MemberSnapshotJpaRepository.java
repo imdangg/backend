@@ -21,21 +21,21 @@ public interface MemberSnapshotJpaRepository extends JpaRepository<MemberSnapsho
 
     // TODO - embedded query
     @Query(value = "select ms.* from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id " +
-            "where ms.member_id = :memberId and s.complex_key = :apartmentComplexKey \n-- #pageRequest\n",
+            "where ms.member_id = :memberId and s.complex_name = :apartmentComplexName \n-- #pageRequest\n",
             countQuery = "select count(*) from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id " +
-                    "where ms.member_id = :memberId and s.complex_key = :apartmentComplexKey",
+                    "where ms.member_id = :memberId and s.complex_name = :apartmentComplexName",
             nativeQuery = true)
-    Page<MemberSnapshotEntity> findAllByMemberIdAndApartmentComplex(UUID memberId, String apartmentComplexKey, PageRequest pageRequest);
+    Page<MemberSnapshotEntity> findAllByMemberIdAndApartmentComplexName(UUID memberId, String apartmentComplexName, PageRequest pageRequest);
 
     @Query(value = "select ms from MemberSnapshotEntity ms inner join SnapshotEntity s on ms.snapshotId = s.id where ms.memberId = :memberId and s.memberId = :snapshotMemberId")
     Page<MemberSnapshotEntity> findAllByMemberIdAndSnapshotMemberId(UUID memberId, UUID snapshotMemberId, PageRequest pageRequest);
 
     @Query(value = "select ms.* from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id " +
-            "where ms.member_id = :memberId and s.complex_key = :apartmentComplexKey and s.member_id = :snapshotMemberId \n-- #pageRequest\n",
+            "where ms.member_id = :memberId and s.complex_name = :apartmentComplexName and s.member_id = :snapshotMemberId \n-- #pageRequest\n",
             countQuery = "select count(*) from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id " +
-                    "where ms.member_id = :memberId and s.complex_key = :apartmentComplexKey and s.member_id = :snapshotMemberId",
+                    "where ms.member_id = :memberId and s.complex_name = :apartmentComplexName and s.member_id = :snapshotMemberId",
             nativeQuery = true)
-    Page<MemberSnapshotEntity> findAllByMemberIdAndApartmentComplexAndSnapshotMemberId(UUID memberId, String apartmentComplexKey, UUID snapshotMemberId, PageRequest pageRequest);
+    Page<MemberSnapshotEntity> findAllByMemberIdAndApartmentComplexNameAndSnapshotMemberId(UUID memberId, String apartmentComplexName, UUID snapshotMemberId, PageRequest pageRequest);
 
     // TODO - paging
     @Query(value = "select distinct s.apartmentComplex from MemberSnapshotEntity ms inner join SnapshotEntity s on ms.snapshotId = s.id where ms.memberId = :memberId")

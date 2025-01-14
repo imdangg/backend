@@ -9,15 +9,20 @@ import com.project.imdang.insight.service.domain.event.InsightDeletedEvent;
 import com.project.imdang.insight.service.domain.event.InsightUpdatedEvent;
 import com.project.imdang.insight.service.domain.exception.InsightDomainException;
 import com.project.imdang.insight.service.domain.valueobject.Access;
+import com.project.imdang.insight.service.domain.valueobject.Address;
+import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
 import com.project.imdang.insight.service.domain.valueobject.ComplexEnvironment;
 import com.project.imdang.insight.service.domain.valueobject.ComplexFacility;
 import com.project.imdang.insight.service.domain.valueobject.FavorableNews;
 import com.project.imdang.insight.service.domain.valueobject.Infra;
 import com.project.imdang.insight.service.domain.valueobject.VisitMethod;
+import com.project.imdang.insight.service.domain.valueobject.VisitTime;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Set;
 
 @Slf4j
 public class InsightDomainServiceImpl implements InsightDomainService {
@@ -31,18 +36,32 @@ public class InsightDomainServiceImpl implements InsightDomainService {
     }*/
 
     @Override
-    public Insight createInsight(Insight insight) {
-        insight.initialize();
+    public Insight createInsight(Insight insight, String mainImage) {
+        insight.initialize(mainImage);
         log.info("Insight[id: {}] is created.", insight.getId().getValue());
         return insight;
     }
 
     @Override
-    public InsightUpdatedEvent updateInsight(Insight insight, MemberId memberId, int score,
-                                             String title, String contents, String mainImage, String summary,
-                                             ZonedDateTime visitAt, VisitMethod visitMethod, Access access,
-                                             Infra infra, ComplexEnvironment complexEnvironment, ComplexFacility complexFacility, FavorableNews favorableNews) {
-        insight.update(memberId, score, title, contents, mainImage, summary, visitAt, visitMethod, access, infra, complexEnvironment, complexFacility, favorableNews);
+    public InsightUpdatedEvent updateInsight(Insight insight,
+                                             MemberId memberId,
+                                             String mainImage,
+                                             String title,
+                                             Address address,
+                                             ApartmentComplex apartmentComplex,
+                                             LocalDate visitAt,
+                                             Set<VisitTime> visitTimes,
+                                             Set<VisitMethod> visitMethods,
+                                             Access access,
+                                             String summary,
+                                             Infra infra,
+                                             ComplexEnvironment complexEnvironment,
+                                             ComplexFacility complexFacility,
+                                             FavorableNews favorableNews,
+                                             int score) {
+        insight.update(memberId, mainImage, title, address, apartmentComplex,
+                visitAt, visitTimes, visitMethods, access, summary,
+                infra, complexEnvironment, complexFacility, favorableNews, score);
         log.info("Insight[id: {}] is updated.", insight.getId().getValue());
         return new InsightUpdatedEvent(insight, ZonedDateTime.now(ZoneId.of("UTC")));
     }

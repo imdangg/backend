@@ -13,10 +13,13 @@ import com.project.imdang.insight.service.domain.valueobject.ComplexFacility;
 import com.project.imdang.insight.service.domain.valueobject.FavorableNews;
 import com.project.imdang.insight.service.domain.valueobject.Infra;
 import com.project.imdang.insight.service.domain.valueobject.VisitMethod;
+import com.project.imdang.insight.service.domain.valueobject.VisitTime;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -24,17 +27,19 @@ public class Insight extends AggregateRoot<InsightId> {
 
     private final MemberId memberId;  // createdBy
 
-    private final Address address;
-    private final ApartmentComplex apartmentComplex;
-
-    private String title;
-    private String contents;
     private String mainImage;
+    private String title;
+
+    private Address address;
+    private ApartmentComplex apartmentComplex;
+
+    private LocalDate visitAt;
+    private Set<VisitTime> visitTimes;
+    private Set<VisitMethod> visitMethods;
+    private Access access;
+
     private String summary;
 
-    private ZonedDateTime visitAt;
-    private VisitMethod visitMethod;
-    private Access access;
     // 인프라
     private Infra infra;
     // 단지 환경
@@ -57,18 +62,37 @@ public class Insight extends AggregateRoot<InsightId> {
     // TODO - CHECK : updatedAt;
 
     @Builder
-    public Insight(InsightId id, MemberId memberId, Address address, ApartmentComplex apartmentComplex, String title, String contents, String mainImage, String summary, ZonedDateTime visitAt, VisitMethod visitMethod, Access access, Infra infra, ComplexEnvironment complexEnvironment, ComplexFacility complexFacility, FavorableNews favorableNews, int recommendedCount, int accusedCount, int viewCount, int score, ZonedDateTime createdAt) {
+    public Insight(InsightId id,
+                   MemberId memberId,
+                   String mainImage,
+                   String title,
+                   Address address,
+                   ApartmentComplex apartmentComplex,
+                   LocalDate visitAt,
+                   Set<VisitTime> visitTimes,
+                   Set<VisitMethod> visitMethods,
+                   Access access,
+                   String summary,
+                   Infra infra,
+                   ComplexEnvironment complexEnvironment,
+                   ComplexFacility complexFacility,
+                   FavorableNews favorableNews,
+                   int recommendedCount,
+                   int accusedCount,
+                   int viewCount,
+                   int score,
+                   ZonedDateTime createdAt) {
         setId(id);
         this.memberId = memberId;
+        this.mainImage = mainImage;
+        this.title = title;
         this.address = address;
         this.apartmentComplex = apartmentComplex;
-        this.title = title;
-        this.contents = contents;
-        this.mainImage = mainImage;
-        this.summary = summary;
         this.visitAt = visitAt;
-        this.visitMethod = visitMethod;
+        this.visitTimes = visitTimes;
+        this.visitMethods = visitMethods;
         this.access = access;
+        this.summary = summary;
         this.infra = infra;
         this.complexEnvironment = complexEnvironment;
         this.complexFacility = complexFacility;
@@ -80,15 +104,14 @@ public class Insight extends AggregateRoot<InsightId> {
         this.createdAt = createdAt;
     }
 
-//    public void validateAndEvaluate() { }
-
     public Snapshot capture() {
         return Snapshot.createNewSnapshot(this);
     }
 
-    public void initialize() {
+    public void initialize(String mainImage) {
         InsightId insightId = new InsightId(UUID.randomUUID());
         setId(insightId);
+        this.mainImage = mainImage;
 //        this.isDeleted = Boolean.FALSE;
         this.recommendedCount = 0;
         this.accusedCount = 0;
@@ -96,11 +119,21 @@ public class Insight extends AggregateRoot<InsightId> {
         this.createdAt = ZonedDateTime.now();
     }
 
-    public Insight update(MemberId updatedBy, int score,
-//                          Address address, ApartmentComplex apartmentComplex,
-                          String title, String contents, String mainImage, String summary,
-                          ZonedDateTime visitAt, VisitMethod visitMethod, Access access,
-                          Infra infra, ComplexEnvironment complexEnvironment, ComplexFacility complexFacility, FavorableNews favorableNews) {
+    public Insight update(MemberId updatedBy,
+                          String mainImage,
+                          String title,
+                          Address address,
+                          ApartmentComplex apartmentComplex,
+                          LocalDate visitAt,
+                          Set<VisitTime> visitTimes,
+                          Set<VisitMethod> visitMethods,
+                          Access access,
+                          String summary,
+                          Infra infra,
+                          ComplexEnvironment complexEnvironment,
+                          ComplexFacility complexFacility,
+                          FavorableNews favorableNews,
+                          int score) {
         // 교환 완료 시점의 인사이트 내용 유지
         // 교환 후 해당 인사이트가 수정되어도 수정사항 반영 X
         // insight가 수정되면 snapshot 생성 및 저장
@@ -109,18 +142,20 @@ public class Insight extends AggregateRoot<InsightId> {
             throw new InsightDomainException("Author does not match!");
         }
 
-        this.score = score;
-        this.title = title;
-        this.contents = contents;
         this.mainImage = mainImage;
-        this.summary = summary;
+        this.title = title;
+        this.address = address;
+        this.apartmentComplex = apartmentComplex;
         this.visitAt = visitAt;
-        this.visitMethod = visitMethod;
+        this.visitTimes = visitTimes;
+        this.visitMethods = visitMethods;
         this.access = access;
+        this.summary = summary;
         this.infra = infra;
         this.complexEnvironment = complexEnvironment;
         this.complexFacility = complexFacility;
         this.favorableNews = favorableNews;
+        this.score = score;
         return this;
     }
 /*

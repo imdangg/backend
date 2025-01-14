@@ -15,6 +15,7 @@ public class Member extends AggregateRoot<MemberId> {
     private String nickname;
     private String birthDate;
     private Gender gender;
+    private String deviceToken;
 
     private String oAuthId;
     private OAuthType oAuthType;
@@ -32,11 +33,12 @@ public class Member extends AggregateRoot<MemberId> {
     }
 
     @Builder
-    public Member(MemberId id, String nickname, String birthDate, Gender gender, String oAuthId, OAuthType oAuthType, int exchangeCount,int insightCount, int rejectedCount) {
+    public Member(MemberId id, String nickname, String birthDate, Gender gender, String deviceToken, String oAuthId, OAuthType oAuthType, int exchangeCount,int insightCount, int rejectedCount) {
         setId(id);
         this.nickname = nickname;
         this.birthDate = birthDate;
         this.gender = gender;
+        this.deviceToken = deviceToken;
         this.oAuthId = oAuthId;
         this.oAuthType = oAuthType;
         this.exchangeCount = exchangeCount;
@@ -44,9 +46,10 @@ public class Member extends AggregateRoot<MemberId> {
         this.rejectedCount = rejectedCount;
     }
 
-    public void join(String nickname, String birthDate, Gender gender) {
+    public void join(String nickname, String birthDate, Gender gender, String deviceToken) {
         this.nickname = nickname;
         this.birthDate = birthDate;
         this.gender = gender;
+        this.deviceToken = deviceToken;
     }
 }

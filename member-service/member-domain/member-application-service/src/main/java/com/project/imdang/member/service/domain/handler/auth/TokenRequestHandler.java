@@ -1,4 +1,4 @@
-package com.project.imdang.member.service.domain.handler;
+package com.project.imdang.member.service.domain.handler.auth;
 
 import com.project.imdang.domain.jwt.JwtTokenProvider;
 import com.project.imdang.member.service.domain.dto.TokenResponse;

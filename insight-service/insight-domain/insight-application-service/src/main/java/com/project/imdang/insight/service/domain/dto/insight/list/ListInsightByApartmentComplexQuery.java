@@ -14,6 +14,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ListInsightByApartmentComplexQuery extends PagingQuery {
 
-    // TODO - apartmentComplexKey로 변경
     private String apartmentComplexName;
 }

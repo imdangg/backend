@@ -16,7 +16,6 @@ public class ListMyInsightQuery {
         // extends PagingQuery {
 //    @Setter
     private UUID memberId;
-    private String apartmentComplexKey;
     private String apartmentComplexName;
 
     private Boolean onlyMine;

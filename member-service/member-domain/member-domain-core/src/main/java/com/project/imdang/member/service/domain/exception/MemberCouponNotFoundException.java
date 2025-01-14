@@ -5,7 +5,7 @@ import com.project.imdang.domain.valueobject.MemberCouponId;
 public class MemberCouponNotFoundException extends MemberCouponDomainException {
 
     public MemberCouponNotFoundException(MemberCouponId memberCouponId) {
-        this(String.format("Could not find memberCoupon[id: %s]", memberCouponId.getValue()));
+        this(String.format("Could not find memberCoupon[id: %s]!", memberCouponId.getValue()));
     }
 
     private MemberCouponNotFoundException(String message) {

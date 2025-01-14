@@ -41,10 +41,10 @@ public class ListMyInsightCommandHandler {
 
         // TODO - CHECK : EntityGraph
         Page<MemberSnapshot> paged = null;
-        if (listMyInsightQuery.getApartmentComplexKey() != null) {
+        if (listMyInsightQuery.getApartmentComplexName() != null) {
             // 단지별 보기
             ApartmentComplex apartmentComplex
-                    = new ApartmentComplex(listMyInsightQuery.getApartmentComplexName(), listMyInsightQuery.getApartmentComplexKey());
+                    = new ApartmentComplex(listMyInsightQuery.getApartmentComplexName());
 
             if (Boolean.TRUE.equals(onlyMine)) {
                 paged = memberSnapshotRepository.findAllByMemberIdAndApartmentComplexAndSnapshotMemberId(memberId, apartmentComplex, memberId, pageRequest);
