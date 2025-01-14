@@ -20,8 +20,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 @Slf4j
@@ -85,19 +87,32 @@ public class UpdateInsightCommandHandler {
 
     private String uploadImage(MultipartFile image) {
 
-        String filename = image.getOriginalFilename();
         if (image.isEmpty()) {
             // TODO : 예외 처리
-            throw new RuntimeException();
+            throw new IllegalArgumentException("File is empty!");
         }
 
-        String filePath = "uploads/" + filename;
+        String filename = image.getOriginalFilename();
+//        String extension = filename.substring(filename.lastIndexOf("."));
+//        String newFileName = UUID.randomUUID().toString() + extension;
+
         try {
-            image.transferTo(new File(filePath));
+
+            String uploadDir = "/uploads";
+            // 업로드 디렉토리 확인 및 생성
+            Path uploadPath = Paths.get(uploadDir);
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            Path filePath = uploadPath.resolve(filename);
+            image.transferTo(filePath.toFile());
+
         } catch (IOException e) {
             // TODO : 예외 처리
             throw new RuntimeException(e);
         }
+
         return filename;
     }
 
