@@ -50,8 +50,8 @@ public class CreateInsightCommand {
     @NotBlank
     @Size(min = 1, max = 20)
     private String title;
-    @Schema(description = "내용")
-    private String contents;
+    @Schema(description = "주소")
+    @NotBlank
     private Address address;
     @Schema(description = "아파트 단지")
     private ApartmentComplex apartmentComplex;
