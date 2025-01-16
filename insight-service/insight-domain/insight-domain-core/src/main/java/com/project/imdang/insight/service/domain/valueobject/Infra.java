@@ -1,5 +1,7 @@
 package com.project.imdang.insight.service.domain.valueobject;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,19 +17,34 @@ import java.util.Set;
 public class Infra {
 
     // 교통
+    @Schema(description = "교통")
+    @NotNull
     private Set<Transportation> transportations;
     // 학군
+    @Schema(description = "학군")
+    @NotNull
     private Set<SchoolDistrict> schoolDistricts;
     // 생활 편의시설
+    @Schema(description = "생활 편의 시설")
+    @NotNull
     private Set<Amenity> amenities;
     // 문화 및 여가시설(단지 외부)
+    @Schema(description = "문화 및 여가 시설")
+    @NotNull
     private Set<Facility> facilities;
     // 주변 환경
+    @Schema(description = "주변 환경")
+    @NotNull
     private Set<Surroundings> surroundings;
     // 랜드마크
+    @Schema(description = "랜드 마크")
+    @NotNull
     private Set<Landmark> landmarks;
     // 기피시설
+    @Schema(description = "기피 시설")
+    @NotNull
     private Set<UnpleasantFacility> unpleasantFacilities;
+    @Schema(description = "인프라 총평")
     private String text;
 
     public enum Transportation {

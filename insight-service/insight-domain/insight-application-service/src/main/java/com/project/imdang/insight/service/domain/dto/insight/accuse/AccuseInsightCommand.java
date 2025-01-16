@@ -22,7 +22,6 @@ public class AccuseInsightCommand {
     private UUID insightId;
 
     @Setter
-    @NotNull
     @Schema(description = "신고한 사용자ID")
     private UUID accuseMemberId;    // accusedBy : 신고한 memberId
 }

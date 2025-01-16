@@ -9,4 +9,5 @@ import java.util.UUID;
 
 public interface MemberJpaRepository extends JpaRepository<MemberEntity, UUID> {
     Optional<MemberEntity> findByAuthIdAndAuthType(String authId, OAuthType authType);
+    Optional<MemberEntity> findByNickname(String nickname);
 }

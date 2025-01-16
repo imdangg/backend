@@ -3,6 +3,7 @@ package com.project.imdang.member.persistence.entity;
 import com.project.imdang.member.service.domain.valueobject.Gender;
 import com.project.imdang.member.service.domain.valueobject.OAuthType;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,7 +27,7 @@ public class MemberEntity {
     @Column(columnDefinition = "CHAR(36)")
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID id;
-
+    @NotNull
     private String authId;
     @Enumerated(EnumType.STRING)
     private OAuthType authType;

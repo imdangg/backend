@@ -2,6 +2,9 @@ package com.project.imdang.member.service.domain.dto;
 
 import com.project.imdang.member.service.domain.valueobject.Gender;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,10 +16,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JoinCommand {
-    //TODO : 정책
+    @NotBlank
     private String nickname;
+    @NotBlank
+    @Pattern(regexp = "^[0-9.]+$")
     private String birthDate;
-    @Schema(description = "성별 (MALE, FEMALE 중 하나)")
+    @NotNull
     private Gender gender;
     private String deviceToken;
 }

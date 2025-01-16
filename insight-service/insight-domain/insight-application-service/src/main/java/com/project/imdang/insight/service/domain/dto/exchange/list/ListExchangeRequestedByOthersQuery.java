@@ -2,6 +2,7 @@ package com.project.imdang.insight.service.domain.dto.exchange.list;
 
 import com.project.imdang.insight.service.domain.valueobject.ExchangeRequestStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +24,7 @@ public class ListExchangeRequestedByOthersQuery {
     private UUID requestedMemberId;
     // 대기, 거절, 완료
     @Schema(description = "요청 상태")
+    @NotNull
     private ExchangeRequestStatus exchangeRequestStatus;
 
     private Integer pageNumber = 0;

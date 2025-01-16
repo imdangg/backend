@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +37,7 @@ public class CouponController {
     @Operation(description = "쿠폰 발행 API")
     @ApiResponse(responseCode = "200", description = "쿠폰 발행 성공")
     @PostMapping("/issue")
-    public ResponseEntity<Void> issueCoupon(@AuthenticationPrincipal UUID memberId, @RequestBody IssueMemberCouponCommand issueMemberCouponCommand) {
+    public ResponseEntity<Void> issueCoupon(@AuthenticationPrincipal UUID memberId, @RequestBody @Valid IssueMemberCouponCommand issueMemberCouponCommand) {
         issueMemberCouponCommand.setMemberId(memberId);
         memberCouponApplicationService.issueMemberCoupon(issueMemberCouponCommand);
         return ResponseEntity.ok().build();

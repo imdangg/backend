@@ -1,5 +1,6 @@
 package com.project.imdang.insight.service.domain.valueobject;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Opinion<T> {
+    @NotNull
     private T choice;
     private String text;
 

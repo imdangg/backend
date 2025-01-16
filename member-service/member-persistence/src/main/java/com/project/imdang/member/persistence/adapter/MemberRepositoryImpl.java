@@ -35,6 +35,12 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
+    public Optional<Member> findByNickname(String nickname) {
+        Optional<MemberEntity> memberEntity = memberJpaRepository.findByNickname(nickname);
+        return memberEntity.map(memberPersistenceMapper::memberEntityToMember);
+    }
+
+    @Override
     @Transactional
     public Member save(Member member) {
         MemberEntity memberEntity = memberPersistenceMapper.memberToMemberEntity(member);

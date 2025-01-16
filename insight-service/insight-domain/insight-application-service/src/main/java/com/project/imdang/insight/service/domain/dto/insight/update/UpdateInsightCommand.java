@@ -9,6 +9,12 @@ import com.project.imdang.insight.service.domain.valueobject.FavorableNews;
 import com.project.imdang.insight.service.domain.valueobject.Infra;
 import com.project.imdang.insight.service.domain.valueobject.VisitMethod;
 import com.project.imdang.insight.service.domain.valueobject.VisitTime;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,27 +33,45 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UpdateInsightCommand {
     // TODO - 수정 가능한 항목
+    @NotNull
     private UUID insightId;
     // TODO - validation
     @Setter
     private UUID memberId;
-    private int score;
-    @Setter
-    private MultipartFile mainImage;
-
-    private String title;
 
     private Address address;
     private ApartmentComplex apartmentComplex;
 
-    // TODO - ZoneId 필요
-//    private ZonedDateTime visitAt;
-    private LocalDate visitAt;
-    private Set<VisitTime> visitTimes;
-    private Set<VisitMethod> visitMethods;
-    private Access access;
-
+    @Schema(description = "인사이트 작성 점수")
+    @NotNull
+    @PositiveOrZero
+    private int score;
+    @Schema(description = "제목")
+    @NotBlank
+    @Size(min = 1, max = 20)
+    private String title;
+    @Schema(description = "메인 이미지")
+    @Setter
+    private MultipartFile mainImage;
+    @Schema(description = "요약")
+    @NotBlank
+    @Size(min = 30, max = 200)
     private String summary;
+
+    // TODO - ZoneId 필요
+    // private ZonedDateTime visitAt;
+    @Schema(description = "방문 날짜", example = "2024-12-31")
+    @NotNull
+    private LocalDate visitAt;
+    @Schema(description = "방문 시간")
+    @NotNull
+    private Set<VisitTime> visitTimes;
+    @Schema(description = "교통 수단")
+    @NotNull
+    private Set<VisitMethod> visitMethods;
+    @Schema(description = "출입 제한")
+    @NotNull
+    private Access access;
 
     // 인프라
     private Infra infra;

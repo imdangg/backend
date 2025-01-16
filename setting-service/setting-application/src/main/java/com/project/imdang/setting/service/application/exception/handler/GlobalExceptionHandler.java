@@ -1,4 +1,4 @@
-package com.project.imdang.member.service.application.exception.handler;
+package com.project.imdang.setting.service.application.exception.handler;
 
 import com.project.imdang.application.handler.ErrorDTO;
 import jakarta.validation.ConstraintViolation;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @ControllerAdvice
-@Component("MemberGlobalExceptionHandler")
+@Component("SettingGlobalExceptionHandler")
 public class GlobalExceptionHandler {
 
     @ResponseBody
