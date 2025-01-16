@@ -2,7 +2,7 @@
 
 BUILD_JAR=$(ls /home/ubuntu/app/imdang-container/build/libs/imdang-container-0.0.1-SNAPSHOT.jar)
 JAR_NAME=$(basename $BUILD_JAR)
-echo ">>> build 파일명: $JAR_NAME" >> /home/ubuntu/deploy.log
+echo ">>> build 파일명: $JAR_NAME" > /home/ubuntu/deploy.log
 
 echo ">>> build 파일 복사" >> /home/ubuntu/deploy.log
 DEPLOY_PATH=/home/ubuntu/app/
