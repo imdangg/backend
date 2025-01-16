@@ -3,7 +3,7 @@ package com.project.imdang.setting.service.domain.handler;
 import com.google.firebase.messaging.*;
 import com.project.imdang.setting.service.domain.dto.NotificationRequest;
 import com.project.imdang.setting.service.domain.exception.NotificationDomainException;
-import com.project.imdang.setting.service.domain.feign.SettingFeignClient;
+import com.project.imdang.setting.service.domain.feign.MemberFeignClient;
 import com.project.imdang.setting.service.domain.feign.MemberInfoResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import java.util.UUID;
 public class SendNotificationHandler {
 
     private final FirebaseMessaging firebaseMessaging;
-    private final SettingFeignClient settingFeignClient;
+    private final MemberFeignClient memberFeignClient;
 
     @Retryable(retryFor = FirebaseMessagingException.class, maxAttempts = 3, backoff = @Backoff(delay = 1000))
     public void send(NotificationRequest notificationRequest) {
@@ -54,7 +54,7 @@ public class SendNotificationHandler {
     }
 
     private String getFcmToken(UUID memberId) {
-        MemberInfoResponse memberInfoResponse = settingFeignClient.getMemberInfo(memberId);
+        MemberInfoResponse memberInfoResponse = memberFeignClient.getMemberInfo(memberId);
         return memberInfoResponse.getDeviceToken();
     }
 }

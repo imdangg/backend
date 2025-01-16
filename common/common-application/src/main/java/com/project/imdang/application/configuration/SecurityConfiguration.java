@@ -29,7 +29,7 @@ import java.util.function.Supplier;
 public class SecurityConfiguration {
 
     @Value("${security.allowed-ip}")
-    private String ALLOWED_IP_ADDRESS_6;
+    private String allowedIp;
     private final JwtTokenProvider jwtTokenUtil;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
@@ -56,6 +56,6 @@ public class SecurityConfiguration {
 
     private AuthorizationDecision hasIpAddress(Supplier<Authentication> authentication, RequestAuthorizationContext object) {
         log.info("Local Request[IP : {}] is requested", object.getRequest().getRemoteAddr());
-        return new AuthorizationDecision(ALLOWED_IP_ADDRESS_6.matches(object.getRequest().getRemoteAddr()));
+        return new AuthorizationDecision(allowedIp.matches(object.getRequest().getRemoteAddr()));
     }
 }
