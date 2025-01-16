@@ -75,7 +75,7 @@ public class InsightController {
     @ApiResponse(responseCode = "200", description = "인사이트가 조회 되었습니다.", content = @Content(schema = @Schema(implementation = DeleteInsightResponse.class)))
     @GetMapping("/detail")
     public ResponseEntity<DetailInsightResponse> detail(@AuthenticationPrincipal UUID memberId,
-            @RequestParam(name = "insightId") UUID insightId) {
+                                                        @RequestParam(name = "insightId") UUID insightId) {
         DetailInsightQuery detailInsightQuery = new DetailInsightQuery(insightId, memberId);
         DetailInsightResponse detailInsightResponse = insightApplicationService.detailInsight(detailInsightQuery);
         log.info("Returning detail of insight[id: {}].", detailInsightResponse.getInsightId());
@@ -85,11 +85,11 @@ public class InsightController {
     // 프론트에서 작업
     /*
      * @Operation(description = "인사이트 평가 API")
-     * 
+     *
      * @ApiResponse(responseCode = "200", description = "인사이트 평가가 완료되었습니다.",
      * content = @Content(schema = @Schema(implementation =
      * ValidateAndEvaluateInsightResponse.class)))
-     * 
+     *
      * @PostMapping("/validate")
      * public ResponseEntity<ValidateAndEvaluateInsightResponse>
      * validateAndEvaluateInsight(@RequestBody ValidateAndEvaluateInsightCommand
@@ -112,7 +112,7 @@ public class InsightController {
                                                                @RequestPart("createInsightCommand") @Valid CreateInsightCommand createInsightCommand,
                                                                @RequestPart("mainImage") MultipartFile mainImage) {
         createInsightCommand.setMemberId(memberId);
-       
+
 
         CreateInsightResponse createInsightResponse = insightApplicationService.createInsight(createInsightCommand);
         log.info("Insight[id: {}] is created.", createInsightResponse.getInsightId());
@@ -133,7 +133,7 @@ public class InsightController {
         return ResponseEntity.ok(updateInsightResponse);
     }
 
-    
+
     @Operation(description = "인사이트 삭제 API")
     @ApiResponse(responseCode = "200", description = "인사이트가 삭제되었습니다.",
             content = @Content(schema = @Schema(implementation = DeleteInsightResponse.class)))
@@ -143,10 +143,11 @@ public class InsightController {
         DeleteInsightResponse deleteInsightResponse = insightApplicationService.deleteInsight(deleteInsightCommand);
         log.info("Insight[id: {}] is deleted.", deleteInsightResponse.getInsightId());
         return ResponseEntity.ok(deleteInsightResponse);
-    } 
+    }
+
     @Operation(description = "인사이트 추천 API")
     @ApiResponse(responseCode = "200", description = "인사이트가 추천되었습니다.",
-            
+
             content = @Content(schema = @Schema(implementation = RecommendInsightResponse.class)))
     @PostMapping("/recommend")
     public ResponseEntity<RecommendInsightResponse> recommendInsight(@AuthenticationPrincipal UUID memberId, @RequestBody RecommendInsightCommand recommendInsightCommand) {
@@ -154,18 +155,20 @@ public class InsightController {
         RecommendInsightResponse recommendInsightResponse = insightApplicationService.recommendInsight(recommendInsightCommand);
         log.info("Insight[id: {}] is recommended.", recommendInsightResponse.getInsightId());
         return ResponseEntity.ok(recommendInsightResponse);
-    } 
+    }
+
     @Operation(description = "인사이트 신고 API")
     @ApiResponse(responseCode = "200", description = "인사이트가 신고되었습니다.",
-            
+
             content = @Content(schema = @Schema(implementation = AccuseInsightResponse.class)))
     @PostMapping("/accuse")
-                
+
     public ResponseEntity<AccuseInsightResponse> accuseInsight(@AuthenticationPrincipal UUID memberId, @RequestBody AccuseInsightCommand accuseInsightCommand) {
         accuseInsightCommand.setAccuseMemberId(memberId);
         AccuseInsightResponse accuseInsightResponse = insightApplicationService.accuseInsight(accuseInsightCommand);
         log.info("Insight[id: {}] is accused.", accuseInsightResponse.getInsightId());
         return ResponseEntity.ok(accuseInsightResponse);
-    } 
+    }
+}
 
             
