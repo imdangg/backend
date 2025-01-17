@@ -112,8 +112,7 @@ public class InsightController {
                                                                @RequestPart("createInsightCommand") @Valid CreateInsightCommand createInsightCommand,
                                                                @RequestPart("mainImage") MultipartFile mainImage) {
         createInsightCommand.setMemberId(memberId);
-
-
+        createInsightCommand.setMainImage(mainImage);
         CreateInsightResponse createInsightResponse = insightApplicationService.createInsight(createInsightCommand);
         log.info("Insight[id: {}] is created.", createInsightResponse.getInsightId());
         return ResponseEntity.ok(createInsightResponse);
