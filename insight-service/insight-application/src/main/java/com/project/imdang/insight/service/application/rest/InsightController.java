@@ -82,28 +82,6 @@ public class InsightController {
         return ResponseEntity.ok(detailInsightResponse);
     }
 
-    // 프론트에서 작업
-    /*
-     * @Operation(description = "인사이트 평가 API")
-     *
-     * @ApiResponse(responseCode = "200", description = "인사이트 평가가 완료되었습니다.",
-     * content = @Content(schema = @Schema(implementation =
-     * ValidateAndEvaluateInsightResponse.class)))
-     *
-     * @PostMapping("/validate")
-     * public ResponseEntity<ValidateAndEvaluateInsightResponse>
-     * validateAndEvaluateInsight(@RequestBody ValidateAndEvaluateInsightCommand
-     * validateAndEvaluateInsightCommand) {
-     * ValidateAndEvaluateInsightResponse validateAndEvaluateInsightResponse =
-     * insightApplicationService.validateAndEvaluateInsight(
-     * validateAndEvaluateInsightCommand);
-     * log.info("Insight[id: {}] is validated and evaluated with score {}.",
-     * validateAndEvaluateInsightResponse.getInsightId(),
-     * validateAndEvaluateInsightResponse.getScore());
-     * return ResponseEntity.ok(validateAndEvaluateInsightResponse);
-     * }
-     */
-
     @Operation(description = "인사이트 작성 API")
     @ApiResponse(responseCode = "200", description = "인사이트가 작성 완료",
             content = @Content(schema = @Schema(implementation = CreateInsightResponse.class)))
@@ -146,7 +124,6 @@ public class InsightController {
 
     @Operation(description = "인사이트 추천 API")
     @ApiResponse(responseCode = "200", description = "인사이트가 추천되었습니다.",
-
             content = @Content(schema = @Schema(implementation = RecommendInsightResponse.class)))
     @PostMapping("/recommend")
     public ResponseEntity<RecommendInsightResponse> recommendInsight(@AuthenticationPrincipal UUID memberId, @RequestBody RecommendInsightCommand recommendInsightCommand) {
@@ -158,7 +135,6 @@ public class InsightController {
 
     @Operation(description = "인사이트 신고 API")
     @ApiResponse(responseCode = "200", description = "인사이트가 신고되었습니다.",
-
             content = @Content(schema = @Schema(implementation = AccuseInsightResponse.class)))
     @PostMapping("/accuse")
 
