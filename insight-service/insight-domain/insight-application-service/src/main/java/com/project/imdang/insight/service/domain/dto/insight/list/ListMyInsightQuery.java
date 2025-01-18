@@ -1,5 +1,6 @@
 package com.project.imdang.insight.service.domain.dto.insight.list;
 
+import com.project.imdang.insight.service.domain.valueobject.Address;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +17,7 @@ public class ListMyInsightQuery {
         // extends PagingQuery {
 //    @Setter
     private UUID memberId;
+    private Address address;
     private String apartmentComplexName;
 
     private Boolean onlyMine;

@@ -29,8 +29,6 @@ public class ListMyInsightCommandHandler {
     private final SnapshotRepository snapshotRepository;
     private final SnapshotDataMapper snapshotDataMapper;
 
-    // 내 인사이트 + 교환한 인사이트
-    // + 단지별 보기
     @Transactional(readOnly = true)
     public Page<InsightResponse> listMyInsight(ListMyInsightQuery listMyInsightQuery) {
 
@@ -54,9 +52,9 @@ public class ListMyInsightCommandHandler {
         } else {
 
             if (Boolean.TRUE.equals(onlyMine)) {
-                paged = memberSnapshotRepository.findAllByMemberIdAndSnapshotMemberId(memberId, memberId, pageRequest);
+                paged = memberSnapshotRepository.findAllByMemberIdAndAddressAndSnapshotMemberId(memberId, listMyInsightQuery.getAddress(), memberId, pageRequest);
             } else {
-                paged = memberSnapshotRepository.findAllByMemberId(memberId, pageRequest);
+                paged = memberSnapshotRepository.findAllByMemberIdAndAddress(memberId, listMyInsightQuery.getAddress(), pageRequest);
             }
         }
 

@@ -1,7 +1,9 @@
 package com.project.imdang.insight.service.domain.handler.insight;
 
 import com.project.imdang.domain.valueobject.MemberId;
+import com.project.imdang.insight.service.domain.dto.insight.list.MyInsightResponse;
 import com.project.imdang.insight.service.domain.ports.output.repository.MemberSnapshotRepository;
+import com.project.imdang.insight.service.domain.valueobject.Address;
 import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,14 +16,18 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class ListMyApartmentComplexCommandHandler {
+public class CountMyInsightByAddressCommandHandler {
 
     private final MemberSnapshotRepository memberSnapshotRepository;
 
-    // 보관중인 인사이트 단지 목록
     @Transactional(readOnly = true)
-    public List<ApartmentComplex> listMyApartmentComplex(UUID _memberId) {
+    public MyInsightResponse countMyInsightByAddress(UUID _memberId, Address address) {
         MemberId memberId = new MemberId(_memberId);
-        return memberSnapshotRepository.findAllDistinctApartmentComplexByMemberId(memberId);
+        List<ApartmentComplex> apartmentComplexes = memberSnapshotRepository.findAllDistinctApartmentComplexByMemberIdAndAddress(memberId, address);
+        int insightCount = memberSnapshotRepository.countAllByMemberIdAndAddress(memberId, address);
+        return MyInsightResponse.builder()
+                .apartmentComplexes(apartmentComplexes)
+                .insightCount(insightCount)
+                .build();
     }
 }

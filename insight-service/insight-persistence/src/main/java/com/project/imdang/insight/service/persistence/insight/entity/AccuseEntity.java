@@ -36,6 +36,10 @@ public class AccuseEntity {
 
     @Column(columnDefinition = "CHAR(36)")
     @JdbcTypeCode(SqlTypes.CHAR)
+    private UUID accusedInsightId;
+
+    @Column(columnDefinition = "CHAR(36)")
+    @JdbcTypeCode(SqlTypes.CHAR)
     private UUID accusedMemberId;
     private ZonedDateTime createdAt;
 }

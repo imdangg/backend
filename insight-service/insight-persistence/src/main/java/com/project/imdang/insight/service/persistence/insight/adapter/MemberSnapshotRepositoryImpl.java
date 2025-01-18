@@ -4,6 +4,7 @@ import com.project.imdang.domain.valueobject.InsightId;
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.entity.MemberSnapshot;
 import com.project.imdang.insight.service.domain.ports.output.repository.MemberSnapshotRepository;
+import com.project.imdang.insight.service.domain.valueobject.Address;
 import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
 import com.project.imdang.insight.service.domain.valueobject.SnapshotId;
 import com.project.imdang.insight.service.persistence.insight.entity.MemberSnapshotEntity;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
@@ -24,32 +26,41 @@ public class MemberSnapshotRepositoryImpl implements MemberSnapshotRepository {
     private final MemberSnapshotPersistenceMapper memberSnapshotPersistenceMapper;
 
     @Override
-    public Page<MemberSnapshot> findAllByMemberId(MemberId memberId, PageRequest pageRequest) {
-        return memberSnapshotJpaRepository.findAllByMemberId(memberId.getValue(), pageRequest)
+    public Page<MemberSnapshot> findAllByMemberIdAndAddress(MemberId memberId, Address address, PageRequest pageRequest) {
+        return memberSnapshotJpaRepository.findAllByMemberIdAndAddress(
+                memberId.getValue().toString(), address.getSiDo(), address.getSiGunGu(), address.getEupMyeonDong(), address.getRoadName(), address.getBuildingNumber(), address.getDetail(), pageRequest)
                 .map(memberSnapshotPersistenceMapper::memberSnapshotEntityToMemberSnapshot);
     }
 
     @Override
     public Page<MemberSnapshot> findAllByMemberIdAndApartmentComplex(MemberId memberId, ApartmentComplex apartmentComplex, PageRequest pageRequest) {
-        return memberSnapshotJpaRepository.findAllByMemberIdAndApartmentComplexName(memberId.getValue(), apartmentComplex.getName(), pageRequest)
+        return memberSnapshotJpaRepository.findAllByMemberIdAndApartmentComplexName(memberId.getValue().toString(), apartmentComplex.getName(), pageRequest)
                 .map(memberSnapshotPersistenceMapper::memberSnapshotEntityToMemberSnapshot);
     }
 
     @Override
-    public Page<MemberSnapshot> findAllByMemberIdAndSnapshotMemberId(MemberId memberId, MemberId snapshotMemberId, PageRequest pageRequest) {
-        return memberSnapshotJpaRepository.findAllByMemberIdAndSnapshotMemberId(memberId.getValue(), snapshotMemberId.getValue(), pageRequest)
+    public Page<MemberSnapshot> findAllByMemberIdAndAddressAndSnapshotMemberId(MemberId memberId, Address address, MemberId snapshotMemberId, PageRequest pageRequest) {
+        return memberSnapshotJpaRepository.findAllByMemberIdAndAddressAndSnapshotMemberId(
+                memberId.getValue().toString(), address.getSiDo(), address.getSiGunGu(), address.getEupMyeonDong(), address.getRoadName(), address.getBuildingNumber(), address.getDetail(), snapshotMemberId.getValue(), pageRequest)
                 .map(memberSnapshotPersistenceMapper::memberSnapshotEntityToMemberSnapshot);
     }
 
     @Override
     public Page<MemberSnapshot> findAllByMemberIdAndApartmentComplexAndSnapshotMemberId(MemberId memberId, ApartmentComplex apartmentComplex, MemberId snapshotMemberId, PageRequest pageRequest) {
-        return memberSnapshotJpaRepository.findAllByMemberIdAndApartmentComplexNameAndSnapshotMemberId(memberId.getValue(), apartmentComplex.getName(), snapshotMemberId.getValue(), pageRequest)
+        return memberSnapshotJpaRepository.findAllByMemberIdAndApartmentComplexNameAndSnapshotMemberId(memberId.getValue().toString(), apartmentComplex.getName(), snapshotMemberId.getValue(), pageRequest)
                 .map(memberSnapshotPersistenceMapper::memberSnapshotEntityToMemberSnapshot);
     }
 
     @Override
-    public List<ApartmentComplex> findAllDistinctApartmentComplexByMemberId(MemberId memberId) {
-        return memberSnapshotJpaRepository.findAllDistinctApartmentComplexByMemberId(memberId.getValue());
+    public List<ApartmentComplex> findAllDistinctApartmentComplexByMemberIdAndAddress(MemberId memberId, Address address) {
+        return memberSnapshotJpaRepository.findAllDistinctApartmentComplexByMemberIdAndAddress(memberId.getValue().toString(), address.getSiDo(), address.getSiGunGu(), address.getEupMyeonDong(), address.getRoadName(), address.getBuildingNumber(), address.getDetail()).stream()
+                .map(ApartmentComplex::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public int countAllByMemberIdAndAddress(MemberId memberId, Address address) {
+        return memberSnapshotJpaRepository.countAllByMemberIdAndAddress(memberId.getValue().toString(), address.getSiDo(), address.getSiGunGu(), address.getEupMyeonDong(), address.getRoadName(), address.getBuildingNumber(), address.getDetail());
     }
 
     @Override

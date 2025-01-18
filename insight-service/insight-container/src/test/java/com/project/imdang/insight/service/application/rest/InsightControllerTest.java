@@ -91,7 +91,7 @@ class InsightControllerTest {
 
     @Test
     void detail() throws Exception {
-        String insightId = "111512ab-a7b6-43f9-bd61-16ee2cded7d9";
+        String insightId = "f509ce55-a67a-4c97-8846-0dee0c754c38";
         mockMvc.perform(get("/insights/detail")
                         .header("Authorization", "Bearer " + requestMemberToken)
                         .param("insightId", insightId)
@@ -114,7 +114,6 @@ class InsightControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.multipart("/insights/create")
                         .file(mainImage)
                         .file(new MockMultipartFile("createInsightCommand", "", "application/json", valueAsString.getBytes(StandardCharsets.UTF_8)))
-//                        .param("createInsightCommand", objectMapper.writeValueAsString(createInsightCommand))
                         .header("Authorization", "Bearer " + requestMemberToken))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.insightId", notNullValue()));

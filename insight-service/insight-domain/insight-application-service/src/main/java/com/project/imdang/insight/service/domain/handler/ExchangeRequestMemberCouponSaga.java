@@ -3,7 +3,6 @@ package com.project.imdang.insight.service.domain.handler;
 import com.project.imdang.domain.event.EmptyEvent;
 import com.project.imdang.domain.message.MemberCouponPendingUpdatedResponseMessage;
 import com.project.imdang.domain.valueobject.ExchangeRequestId;
-import com.project.imdang.event.EventPublisher;
 import com.project.imdang.insight.service.domain.ExchangeDomainService;
 import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
 import com.project.imdang.insight.service.domain.event.ExchangeRequestCreatedEvent;
@@ -25,7 +24,7 @@ public class ExchangeRequestMemberCouponSaga implements SagaStep<MemberCouponPen
     private final ExchangeDomainService exchangeDomainService;
     private final ExchangeRequestRepository exchangeRequestRepository;
 
-    private final EventPublisher eventPublisher;
+//    private final EventPublisher eventPublisher;
 
     // memberCoupon "PENDING" 처리 완료
     @Override

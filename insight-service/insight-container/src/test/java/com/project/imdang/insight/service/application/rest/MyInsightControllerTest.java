@@ -49,6 +49,19 @@ public class MyInsightControllerTest {
     }
 
     @Test
+    void countByAddress() throws Exception {
+        mockMvc.perform(get("/my-insights/by-address")
+                        .header("Authorization", "Bearer " + requestMemberToken)
+                        .param("siDo", "서울시")
+                        .param("siGunGu", "강남구")
+                        .param("eupMyeonDong", "신논현동")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+    }
+
+    @Test
     void list() throws Exception {
         mockMvc.perform(get("/my-insights")
                         .header("Authorization", "Bearer " + requestMemberToken)
@@ -56,16 +69,6 @@ public class MyInsightControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
 //                .andExpect(jsonPath("$.content.length()").value(1))
-                .andDo(print())
-                .andReturn();
-    }
-
-    @Test
-    void listMyApartmentComplex() throws Exception {
-        mockMvc.perform(get("/my-insights/apartment-complexes")
-                        .header("Authorization", "Bearer " + requestMemberToken)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
                 .andDo(print())
                 .andReturn();
     }

@@ -7,12 +7,9 @@ import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExcha
 import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
 import com.project.imdang.insight.service.domain.entity.MemberSnapshot;
 import com.project.imdang.insight.service.domain.event.ExchangeRequestAcceptedEvent;
-import com.project.imdang.insight.service.domain.exception.ExchangeDomainException;
-import com.project.imdang.insight.service.domain.exception.ExchangeRequestNotFoundException;
-import com.project.imdang.insight.service.domain.exception.InsightDomainException;
+import com.project.imdang.insight.service.domain.handler.ExchangeRequestHelper;
+import com.project.imdang.insight.service.domain.handler.MemberSnapshotHelper;
 import com.project.imdang.insight.service.domain.mapper.ExchangeRequestDataMapper;
-import com.project.imdang.insight.service.domain.ports.output.repository.ExchangeRequestRepository;
-import com.project.imdang.insight.service.domain.ports.output.repository.MemberSnapshotRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -24,15 +21,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class AcceptExchangeCommandHandler {
 
     private final ExchangeDomainService exchangeDomainService;
-    private final ExchangeRequestRepository exchangeRequestRepository;
-    private final MemberSnapshotRepository memberSnapshotRepository;
+    private final ExchangeRequestHelper exchangeRequestHelper;
     private final ExchangeRequestDataMapper exchangeRequestDataMapper;
 
+    private final MemberSnapshotHelper memberSnapshotHelper;
 
     @Transactional
     public AcceptExchangeRequestResponse acceptExchangeRequest(AcceptExchangeRequestCommand acceptExchangeRequestCommand) {
         ExchangeRequestId exchangeRequestId = new ExchangeRequestId(acceptExchangeRequestCommand.getExchangeRequestId());
-        ExchangeRequest exchangeRequest = checkExchangeRequest(exchangeRequestId);
+        ExchangeRequest exchangeRequest = exchangeRequestHelper.get(exchangeRequestId);
 
         // check
         if (!exchangeRequest.getRequestedMemberId().getValue().equals(acceptExchangeRequestCommand.getRequestedMemberId())) {
@@ -40,7 +37,7 @@ public class AcceptExchangeCommandHandler {
         }
         ExchangeRequestAcceptedEvent exchangeRequestAcceptedEvent = exchangeDomainService.acceptExchangeRequest(exchangeRequest);
         log.info("ExchangeRequest[id: {}] is accepted.", exchangeRequest.getId().getValue());
-        ExchangeRequest saved = save(exchangeRequest);
+        ExchangeRequest saved = exchangeRequestHelper.save(exchangeRequest);
 
         // memberSnapshot에 insert
         MemberSnapshot requestMemberSnapshot = MemberSnapshot.builder()
@@ -50,7 +47,7 @@ public class AcceptExchangeCommandHandler {
                 // TODO - CHECK
                 .createdAt(exchangeRequestAcceptedEvent.getCreatedAt())
                 .build();
-        saveMemberSnapshot(requestMemberSnapshot);
+        memberSnapshotHelper.save(requestMemberSnapshot);
 
         if (exchangeRequest.getMemberCouponId() != null) {
             // TODO : 쿠폰 사용 처리
@@ -63,38 +60,12 @@ public class AcceptExchangeCommandHandler {
                     // TODO - CHECK
                     .createdAt(exchangeRequestAcceptedEvent.getCreatedAt())
                     .build();
-            saveMemberSnapshot(requestedMemberSnapshot);
+            memberSnapshotHelper.save(requestedMemberSnapshot);
         }
 
         // TODO : publish
 
 
         return exchangeRequestDataMapper.exchangeRequestToAcceptExchangeRequestResponse(saved);
-    }
-
-    private ExchangeRequest checkExchangeRequest(ExchangeRequestId exchangeRequestId) {
-        return exchangeRequestRepository.findById(exchangeRequestId)
-                .orElseThrow(() -> new ExchangeRequestNotFoundException(exchangeRequestId));
-    }
-
-    private ExchangeRequest save(ExchangeRequest exchangeRequest) {
-        ExchangeRequest savedExchangeRequest = exchangeRequestRepository.save(exchangeRequest);
-        if(savedExchangeRequest == null) {
-            String errorMessage = "Could not save ExchangeRequest!";
-            log.error(errorMessage);
-            throw new ExchangeDomainException(errorMessage);
-        }
-        log.info("ExchangeRequest[id: {}] is saved.", savedExchangeRequest.getId().getValue());
-        return savedExchangeRequest;
-    }
-
-    private void saveMemberSnapshot(MemberSnapshot memberSnapshot) {
-        MemberSnapshot saved = memberSnapshotRepository.save(memberSnapshot);
-        if (saved == null) {
-            String errorMessage = "Could not save memberSnapshot!";
-            log.error(errorMessage);
-            throw new InsightDomainException(errorMessage);
-        }
-        log.info("memberSnapshot[id: {}] is saved.", saved.getId().getValue());
     }
 }
