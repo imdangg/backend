@@ -61,7 +61,6 @@ public class RequestExchangeCommandHandler {
                 .orElseThrow(() -> new SnapshotNotFoundException(requestedInsightId));
 
         ExchangeRequest saved;
-        // TODO - Helper
         if (requestExchangeInsightCommand.getRequestMemberInsightId() != null) {
 
             InsightId requestMemberInsightId = new InsightId(requestExchangeInsightCommand.getRequestMemberInsightId());

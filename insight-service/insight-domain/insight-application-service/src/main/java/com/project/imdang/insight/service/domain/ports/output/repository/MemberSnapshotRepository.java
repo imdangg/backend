@@ -1,6 +1,7 @@
 package com.project.imdang.insight.service.domain.ports.output.repository;
 
 import com.project.imdang.domain.valueobject.InsightId;
+import com.project.imdang.domain.valueobject.MemberCouponId;
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.entity.MemberSnapshot;
 import com.project.imdang.insight.service.domain.valueobject.Address;
@@ -18,6 +19,8 @@ public interface MemberSnapshotRepository {
     Page<MemberSnapshot> findAllByMemberIdAndApartmentComplex(MemberId memberId, ApartmentComplex apartmentComplex, PageRequest pageRequest);
     Page<MemberSnapshot> findAllByMemberIdAndAddressAndSnapshotMemberId(MemberId memberId, Address address, MemberId snapshotMemberId, PageRequest pageRequest);
     Page<MemberSnapshot> findAllByMemberIdAndApartmentComplexAndSnapshotMemberId(MemberId memberId, ApartmentComplex apartmentComplex, MemberId createdBy, PageRequest pageRequest);
+
+    List<Address> findAllDistinctAddressByMemberId(MemberId memberId);
     List<ApartmentComplex> findAllDistinctApartmentComplexByMemberIdAndAddress(MemberId memberId, Address address);
     int countAllByMemberIdAndAddress(MemberId memberId, Address address);
 

@@ -49,6 +49,16 @@ public class MyInsightControllerTest {
     }
 
     @Test
+    void listAddress() throws Exception {
+        mockMvc.perform(get("/my-insights/addresses")
+                        .header("Authorization", "Bearer " + requestMemberToken)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+    }
+
+    @Test
     void countByAddress() throws Exception {
         mockMvc.perform(get("/my-insights/by-address")
                         .header("Authorization", "Bearer " + requestMemberToken)

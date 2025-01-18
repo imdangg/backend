@@ -52,6 +52,23 @@ public class MemberSnapshotRepositoryImpl implements MemberSnapshotRepository {
     }
 
     @Override
+    public List<Address> findAllDistinctAddressByMemberId(MemberId memberId) {
+        List<Object[]> results = memberSnapshotJpaRepository.findAllDistinctAddressByMemberId(memberId.getValue().toString());
+        return results.stream()
+                .map(result -> new Address(
+                        (String) result[0],
+                        (String) result[1],
+                        (String) result[2],
+                        null, null, null
+//                        (String) result[3],
+//                        (String) result[4],
+//                        (String) result[5]
+                        )
+                )
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<ApartmentComplex> findAllDistinctApartmentComplexByMemberIdAndAddress(MemberId memberId, Address address) {
         return memberSnapshotJpaRepository.findAllDistinctApartmentComplexByMemberIdAndAddress(memberId.getValue().toString(), address.getSiDo(), address.getSiGunGu(), address.getEupMyeonDong(), address.getRoadName(), address.getBuildingNumber(), address.getDetail()).stream()
                 .map(ApartmentComplex::new)

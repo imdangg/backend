@@ -24,6 +24,7 @@ import com.project.imdang.insight.service.domain.handler.insight.DeleteInsightCo
 import com.project.imdang.insight.service.domain.handler.insight.DetailInsightCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.ListInsightByApartmentComplexCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.ListInsightCommandHandler;
+import com.project.imdang.insight.service.domain.handler.insight.ListMyInsightAddressCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.ListMyInsightCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.ListMyVisitedApartmentComplexCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.RecommendInsightCommandHandler;
@@ -48,6 +49,8 @@ public class InsightApplicationServiceImpl implements InsightApplicationService 
     private final ListInsightByApartmentComplexCommandHandler listInsightByApartmentComplexCommandHandler;
     private final ListMyVisitedApartmentComplexCommandHandler listMyVisitedApartmentComplexCommandHandler;
 
+
+    private final ListMyInsightAddressCommandHandler listMyInsightAddressCommandHandler;
     private final CountMyInsightByAddressCommandHandler countMyInsightByAddressCommandHandler;
     private final ListMyInsightCommandHandler listMyInsightCommandHandler;
 
@@ -72,6 +75,11 @@ public class InsightApplicationServiceImpl implements InsightApplicationService 
     @Override
     public List<ApartmentComplex> listMyVisitedApartmentComplex(UUID memberId) {
         return listMyVisitedApartmentComplexCommandHandler.listMyVisitedApartmentComplex(memberId);
+    }
+
+    @Override
+    public List<Address> listMyInsightAddress(UUID memberId) {
+        return listMyInsightAddressCommandHandler.listMyInsightAddress(memberId);
     }
 
     @Override

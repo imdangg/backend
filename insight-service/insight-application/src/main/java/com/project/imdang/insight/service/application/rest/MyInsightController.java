@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -25,6 +26,12 @@ import java.util.UUID;
 public class MyInsightController {
 // 보관함
     private final InsightApplicationService insightApplicationService;
+
+    @GetMapping("/addresses")
+    public ResponseEntity<List<Address>> listAddress(@AuthenticationPrincipal UUID memberId) {
+        List<Address> addresses = insightApplicationService.listMyInsightAddress(memberId);
+        return ResponseEntity.ok(addresses);
+    }
 
     @GetMapping("/by-address")
     public ResponseEntity<MyInsightResponse> countByAddress(@AuthenticationPrincipal UUID memberId,
