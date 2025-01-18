@@ -35,12 +35,12 @@ public final class InsightSpecification {
         };
     }
 
-    public static Specification<InsightEntity> equalsApartmentComplexName(String apartComplexName) {
+    public static Specification<InsightEntity> equalsApartmentComplexName(String apartmentComplexName) {
         return (Root<InsightEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {
-            if (apartComplexName == null || apartComplexName.isEmpty()) {
+            if (apartmentComplexName == null || apartmentComplexName.isEmpty()) {
                 return criteriaBuilder.conjunction();
             }
-            return criteriaBuilder.equal(root.get("apartComplexName"), apartComplexName);
+            return criteriaBuilder.equal(root.get("apartmentComplex").get("name"), apartmentComplexName);
         };
     }
 }
