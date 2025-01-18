@@ -29,6 +29,7 @@ public interface InsightApplicationService {
     Page<InsightResponse> listInsightByApartmentComplex(ListInsightByApartmentComplexQuery listInsightByApartmentComplexQuery);
     List<ApartmentComplex> listMyVisitedApartmentComplex(UUID memberId);
 
+    List<Address> listMyInsightAddress(UUID memberId);
     MyInsightResponse countMyInsightByAddress(UUID memberId, Address address);
     Page<InsightResponse> listMyInsight(ListMyInsightQuery listMyInsightQuery);
 

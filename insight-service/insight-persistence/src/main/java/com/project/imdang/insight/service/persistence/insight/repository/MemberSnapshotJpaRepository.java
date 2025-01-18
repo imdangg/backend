@@ -1,5 +1,6 @@
 package com.project.imdang.insight.service.persistence.insight.repository;
 
+import com.project.imdang.insight.service.domain.valueobject.Address;
 import com.project.imdang.insight.service.persistence.insight.entity.MemberSnapshotEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -59,6 +60,12 @@ public interface MemberSnapshotJpaRepository extends JpaRepository<MemberSnapsho
                     "where ms.member_id = :memberId and s.complex_name = :apartmentComplexName and s.member_id = :snapshotMemberId",
             nativeQuery = true)
     Page<MemberSnapshotEntity> findAllByMemberIdAndApartmentComplexNameAndSnapshotMemberId(String memberId, String apartmentComplexName, UUID snapshotMemberId, PageRequest pageRequest);
+
+    @Query(value = "select distinct s.address_si_do, s.address_si_gun_gu, s.address_eup_myeon_dong " +
+//            ", s.address_road_name, s.address_building_number, s.address_detail " +
+            "from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id where ms.member_id = :memberId",
+            nativeQuery = true)
+    List<Object[]> findAllDistinctAddressByMemberId(String memberId);
 
     @Query(value = "select distinct s.complex_name from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id " +
             "where ms.member_id = :memberId and s.address_si_do = :siDo and s.address_si_gun_gu = :siGunGu and s.address_eup_myeon_dong = :eupMyeonDong " +
