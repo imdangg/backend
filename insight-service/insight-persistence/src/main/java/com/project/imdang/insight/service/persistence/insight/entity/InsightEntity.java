@@ -68,6 +68,8 @@ public class InsightEntity {
             @AttributeOverride(name = "roadName", column = @Column(name = "address_road_name")),
             @AttributeOverride(name = "buildingNumber", column = @Column(name = "address_building_number")),
             @AttributeOverride(name = "detail", column = @Column(name = "address_detail")),
+            @AttributeOverride(name = "latitude", column = @Column(name = "address_latitude")),
+            @AttributeOverride(name = "longitude", column = @Column(name = "address_longitude"))
     })
     private Address address;
 

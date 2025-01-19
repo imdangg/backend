@@ -43,6 +43,8 @@ public interface InsightDomainService {
     InsightAccusedEvent accuseInsight(Insight insight, MemberId accusedBy);
 //    InsightRequestedEvent requestInsight(Insight insight);
 
+    void viewInsight(Insight insight);
+
     // TODO - CHECK
     Snapshot captureInsight(Insight insight);
 }

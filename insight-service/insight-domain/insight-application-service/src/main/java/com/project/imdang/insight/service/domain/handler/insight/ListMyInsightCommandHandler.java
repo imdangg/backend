@@ -52,9 +52,9 @@ public class ListMyInsightCommandHandler {
         } else {
 
             if (Boolean.TRUE.equals(onlyMine)) {
-                paged = memberSnapshotRepository.findAllByMemberIdAndAddressAndSnapshotMemberId(memberId, listMyInsightQuery.getAddress(), memberId, pageRequest);
+                paged = memberSnapshotRepository.findAllByMemberIdAndDistrictAndSnapshotMemberId(memberId, listMyInsightQuery.getDistrict(), memberId, pageRequest);
             } else {
-                paged = memberSnapshotRepository.findAllByMemberIdAndAddress(memberId, listMyInsightQuery.getAddress(), pageRequest);
+                paged = memberSnapshotRepository.findAllByMemberIdAndDistrict(memberId, listMyInsightQuery.getDistrict(), pageRequest);
             }
         }
 

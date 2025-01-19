@@ -8,6 +8,7 @@ import com.project.imdang.insight.service.domain.dto.insight.delete.DeleteInsigh
 import com.project.imdang.insight.service.domain.dto.insight.delete.DeleteInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.detail.DetailInsightQuery;
 import com.project.imdang.insight.service.domain.dto.insight.detail.DetailInsightResponse;
+import com.project.imdang.insight.service.domain.dto.insight.list.DistrictResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightByApartmentComplexQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightQuery;
@@ -18,20 +19,20 @@ import com.project.imdang.insight.service.domain.dto.insight.recommend.Recommend
 import com.project.imdang.insight.service.domain.dto.insight.update.UpdateInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.update.UpdateInsightResponse;
 import com.project.imdang.insight.service.domain.handler.insight.AccuseInsightCommandHandler;
-import com.project.imdang.insight.service.domain.handler.insight.CountMyInsightByAddressCommandHandler;
+import com.project.imdang.insight.service.domain.handler.insight.CountMyInsightByDistrictCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.CreateInsightCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.DeleteInsightCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.DetailInsightCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.ListInsightByApartmentComplexCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.ListInsightCommandHandler;
-import com.project.imdang.insight.service.domain.handler.insight.ListMyInsightAddressCommandHandler;
+import com.project.imdang.insight.service.domain.handler.insight.ListMyInsightDistrictCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.ListMyInsightCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.ListMyVisitedApartmentComplexCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.RecommendInsightCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.UpdateInsightCommandHandler;
 import com.project.imdang.insight.service.domain.ports.input.service.InsightApplicationService;
-import com.project.imdang.insight.service.domain.valueobject.Address;
 import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
+import com.project.imdang.insight.service.domain.valueobject.District;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -50,8 +51,8 @@ public class InsightApplicationServiceImpl implements InsightApplicationService 
     private final ListMyVisitedApartmentComplexCommandHandler listMyVisitedApartmentComplexCommandHandler;
 
 
-    private final ListMyInsightAddressCommandHandler listMyInsightAddressCommandHandler;
-    private final CountMyInsightByAddressCommandHandler countMyInsightByAddressCommandHandler;
+    private final ListMyInsightDistrictCommandHandler listMyInsightDistrictCommandHandler;
+    private final CountMyInsightByDistrictCommandHandler countMyInsightByDistrictCommandHandler;
     private final ListMyInsightCommandHandler listMyInsightCommandHandler;
 
     private final DetailInsightCommandHandler detailInsightCommandHandler;
@@ -78,13 +79,13 @@ public class InsightApplicationServiceImpl implements InsightApplicationService 
     }
 
     @Override
-    public List<Address> listMyInsightAddress(UUID memberId) {
-        return listMyInsightAddressCommandHandler.listMyInsightAddress(memberId);
+    public List<DistrictResponse> listMyInsightDistrict(UUID memberId) {
+        return listMyInsightDistrictCommandHandler.listMyInsightDistrict(memberId);
     }
 
     @Override
-    public MyInsightResponse countMyInsightByAddress(UUID memberId, Address address) {
-        return countMyInsightByAddressCommandHandler.countMyInsightByAddress(memberId, address);
+    public MyInsightResponse countMyInsightByDistrict(UUID memberId, District district) {
+        return countMyInsightByDistrictCommandHandler.countMyInsightByDistrict(memberId, district);
     }
 
     @Override

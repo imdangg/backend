@@ -4,12 +4,13 @@ import com.project.imdang.domain.valueobject.InsightId;
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.entity.MemberSnapshot;
 import com.project.imdang.insight.service.domain.ports.output.repository.MemberSnapshotRepository;
-import com.project.imdang.insight.service.domain.valueobject.Address;
 import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
+import com.project.imdang.insight.service.domain.valueobject.District;
 import com.project.imdang.insight.service.domain.valueobject.SnapshotId;
 import com.project.imdang.insight.service.persistence.insight.entity.MemberSnapshotEntity;
 import com.project.imdang.insight.service.persistence.insight.mapper.MemberSnapshotPersistenceMapper;
 import com.project.imdang.insight.service.persistence.insight.repository.MemberSnapshotJpaRepository;
+import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,9 +34,9 @@ public class MemberSnapshotRepositoryImpl implements MemberSnapshotRepository {
     }
 
     @Override
-    public Page<MemberSnapshot> findAllByMemberIdAndAddress(MemberId memberId, Address address, PageRequest pageRequest) {
-        return memberSnapshotJpaRepository.findAllByMemberIdAndAddress(
-                memberId.getValue().toString(), address.getSiDo(), address.getSiGunGu(), address.getEupMyeonDong(), address.getRoadName(), address.getBuildingNumber(), address.getDetail(), pageRequest)
+    public Page<MemberSnapshot> findAllByMemberIdAndDistrict(MemberId memberId, District district, PageRequest pageRequest) {
+        return memberSnapshotJpaRepository.findAllByMemberIdAndDistrict(
+                memberId.getValue().toString(), district.getSiDo(), district.getSiGunGu(), district.getEupMyeonDong(), pageRequest)
                 .map(memberSnapshotPersistenceMapper::memberSnapshotEntityToMemberSnapshot);
     }
 
@@ -46,9 +47,9 @@ public class MemberSnapshotRepositoryImpl implements MemberSnapshotRepository {
     }
 
     @Override
-    public Page<MemberSnapshot> findAllByMemberIdAndAddressAndSnapshotMemberId(MemberId memberId, Address address, MemberId snapshotMemberId, PageRequest pageRequest) {
-        return memberSnapshotJpaRepository.findAllByMemberIdAndAddressAndSnapshotMemberId(
-                memberId.getValue().toString(), address.getSiDo(), address.getSiGunGu(), address.getEupMyeonDong(), address.getRoadName(), address.getBuildingNumber(), address.getDetail(), snapshotMemberId.getValue(), pageRequest)
+    public Page<MemberSnapshot> findAllByMemberIdAndDistrictAndSnapshotMemberId(MemberId memberId, District district, MemberId snapshotMemberId, PageRequest pageRequest) {
+        return memberSnapshotJpaRepository.findAllByMemberIdAndDistrictAndSnapshotMemberId(
+                memberId.getValue().toString(), district.getSiDo(), district.getSiGunGu(), district.getEupMyeonDong(), snapshotMemberId.getValue(), pageRequest)
                 .map(memberSnapshotPersistenceMapper::memberSnapshotEntityToMemberSnapshot);
     }
 
@@ -59,32 +60,23 @@ public class MemberSnapshotRepositoryImpl implements MemberSnapshotRepository {
     }
 
     @Override
-    public List<Address> findAllDistinctAddressByMemberId(MemberId memberId) {
-        List<Object[]> results = memberSnapshotJpaRepository.findAllDistinctAddressByMemberId(memberId.getValue().toString());
-        return results.stream()
-                .map(result -> new Address(
-                        (String) result[0],
-                        (String) result[1],
-                        (String) result[2],
-                        null, null, null
-//                        (String) result[3],
-//                        (String) result[4],
-//                        (String) result[5]
-                        )
-                )
-                .collect(Collectors.toList());
+    public List<Object[]> findAllDistinctDistrictByMemberId(MemberId memberId) {
+        return memberSnapshotJpaRepository.findAllDistinctDistrictByMemberId(memberId.getValue().toString());
     }
 
     @Override
-    public List<ApartmentComplex> findAllDistinctApartmentComplexByMemberIdAndAddress(MemberId memberId, Address address) {
-        return memberSnapshotJpaRepository.findAllDistinctApartmentComplexByMemberIdAndAddress(memberId.getValue().toString(), address.getSiDo(), address.getSiGunGu(), address.getEupMyeonDong(), address.getRoadName(), address.getBuildingNumber(), address.getDetail()).stream()
+    public List<ApartmentComplex> findAllDistinctApartmentComplexByMemberIdAndDistrict(MemberId memberId, District district) {
+        return memberSnapshotJpaRepository.findAllDistinctApartmentComplexByMemberIdAndDistrict(memberId.getValue().toString(), district.getSiDo(), district.getSiGunGu(), district.getEupMyeonDong()).stream()
                 .map(ApartmentComplex::new)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public int countAllByMemberIdAndAddress(MemberId memberId, Address address) {
-        return memberSnapshotJpaRepository.countAllByMemberIdAndAddress(memberId.getValue().toString(), address.getSiDo(), address.getSiGunGu(), address.getEupMyeonDong(), address.getRoadName(), address.getBuildingNumber(), address.getDetail());
+    public Long[] countAllByMemberIdAndDistrict(MemberId memberId, District district) {
+        Tuple tuple = memberSnapshotJpaRepository.countAllByMemberIdAndDistrict(memberId.getValue().toString(), district.getSiDo(), district.getSiGunGu(), district.getEupMyeonDong());
+        Long apartmentComplexCount = tuple.get("apartment_complex_count", Long.class);
+        Long insightCount = tuple.get("insight_count", Long.class);
+        return new Long[]{apartmentComplexCount, insightCount};
     }
 
     @Override

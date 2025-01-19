@@ -1,7 +1,7 @@
 package com.project.imdang.insight.service.persistence.insight.repository;
 
-import com.project.imdang.insight.service.domain.valueobject.Address;
 import com.project.imdang.insight.service.persistence.insight.entity.MemberSnapshotEntity;
+import jakarta.persistence.Tuple;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,18 +19,11 @@ public interface MemberSnapshotJpaRepository extends JpaRepository<MemberSnapsho
     Optional<MemberSnapshotEntity> findByMemberIdAndInsightId(UUID memberId, UUID insightId);
 
     @Query(value = "select ms.* from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id " +
-            "where ms.member_id = :memberId and s.address_si_do = :siDo and s.address_si_gun_gu = :siGunGu and s.address_eup_myeon_dong = :eupMyeonDong " +
-            "and (:roadName IS NULL OR s.address_road_name = :roadName) " +
-            "and (:buildingNumber IS NULL OR s.address_building_number = :buildingNumber) " +
-            "and (:detail IS NULL OR s.address_detail = :detail) " +
-            "\n-- #pageRequest\n",
+            "where ms.member_id = :memberId and s.address_si_do = :siDo and s.address_si_gun_gu = :siGunGu and s.address_eup_myeon_dong = :eupMyeonDong \n-- #pageRequest\n",
             countQuery = "select count(*) from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id " +
-                    "where ms.member_id = :memberId and s.address_si_do = :siDo and s.address_si_gun_gu = :siGunGu and s.address_eup_myeon_dong = :eupMyeonDong " +
-                    "and (:roadName IS NULL OR s.address_road_name = :roadName) " +
-                    "and (:buildingNumber IS NULL OR s.address_building_number = :buildingNumber) " +
-                    "and (:detail IS NULL OR s.address_detail = :detail)",
+                    "where ms.member_id = :memberId and s.address_si_do = :siDo and s.address_si_gun_gu = :siGunGu and s.address_eup_myeon_dong = :eupMyeonDong",
             nativeQuery = true)
-    Page<MemberSnapshotEntity> findAllByMemberIdAndAddress(String memberId, String siDo, String siGunGu, String eupMyeonDong, String roadName, String buildingNumber, String detail, Pageable pageable);
+    Page<MemberSnapshotEntity> findAllByMemberIdAndDistrict(String memberId, String siDo, String siGunGu, String eupMyeonDong, Pageable pageable);
 
     @Query(value = "select ms.* from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id " +
             "where ms.member_id = :memberId and s.complex_name = :apartmentComplexName \n-- #pageRequest\n",
@@ -41,18 +34,12 @@ public interface MemberSnapshotJpaRepository extends JpaRepository<MemberSnapsho
 
     @Query(value = "select ms.* from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id " +
             "where ms.member_id = :memberId and s.address_si_do = :siDo and s.address_si_gun_gu = :siGunGu and s.address_eup_myeon_dong = :eupMyeonDong " +
-            "and (:roadName IS NULL OR s.address_road_name = :roadName) " +
-            "and (:buildingNumber IS NULL OR s.address_building_number = :buildingNumber) " +
-            "and (:detail IS NULL OR s.address_detail = :detail) " +
             "and s.member_id = :snapshotMemberId \n-- #pageRequest\n",
             countQuery = "select count(*) from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id " +
                     "where ms.member_id = :memberId and s.address_si_do = :siDo and s.address_si_gun_gu = :siGunGu and s.address_eup_myeon_dong = :eupMyeonDong " +
-                    "and (:roadName IS NULL OR s.address_road_name = :roadName) " +
-                    "and (:buildingNumber IS NULL OR s.address_building_number = :buildingNumber) " +
-                    "and (:detail IS NULL OR s.address_detail = :detail) " +
                     "and s.member_id = :snapshotMemberId ",
             nativeQuery = true)
-    Page<MemberSnapshotEntity> findAllByMemberIdAndAddressAndSnapshotMemberId(String memberId, String siDo, String siGunGu, String eupMyeonDong, String roadName, String buildingNumber, String detail, UUID snapshotMemberId, Pageable pageable);
+    Page<MemberSnapshotEntity> findAllByMemberIdAndDistrictAndSnapshotMemberId(String memberId, String siDo, String siGunGu, String eupMyeonDong, UUID snapshotMemberId, Pageable pageable);
 
     @Query(value = "select ms.* from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id " +
             "where ms.member_id = :memberId and s.complex_name = :apartmentComplexName and s.member_id = :snapshotMemberId \n-- #pageRequest\n",
@@ -62,26 +49,24 @@ public interface MemberSnapshotJpaRepository extends JpaRepository<MemberSnapsho
     Page<MemberSnapshotEntity> findAllByMemberIdAndApartmentComplexNameAndSnapshotMemberId(String memberId, String apartmentComplexName, UUID snapshotMemberId, PageRequest pageRequest);
 
     @Query(value = "select distinct s.address_si_do, s.address_si_gun_gu, s.address_eup_myeon_dong " +
-//            ", s.address_road_name, s.address_building_number, s.address_detail " +
             "from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id where ms.member_id = :memberId",
             nativeQuery = true)
-    List<Object[]> findAllDistinctAddressByMemberId(String memberId);
+    List<Object[]> findAllDistinctDistrictByMemberId(String memberId);
 
     @Query(value = "select distinct s.complex_name from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id " +
-            "where ms.member_id = :memberId and s.address_si_do = :siDo and s.address_si_gun_gu = :siGunGu and s.address_eup_myeon_dong = :eupMyeonDong " +
-            "and (:roadName IS NULL OR s.address_road_name = :roadName) " +
-            "and (:buildingNumber IS NULL OR s.address_building_number = :buildingNumber) " +
-            "and (:detail IS NULL OR s.address_detail = :detail)",
+            "where ms.member_id = :memberId and s.address_si_do = :siDo and s.address_si_gun_gu = :siGunGu and s.address_eup_myeon_dong = :eupMyeonDong",
             nativeQuery = true)
-    List<String> findAllDistinctApartmentComplexByMemberIdAndAddress(String memberId, String siDo, String siGunGu, String eupMyeonDong, String roadName, String buildingNumber, String detail);
+    List<String> findAllDistinctApartmentComplexByMemberIdAndDistrict(String memberId, String siDo, String siGunGu, String eupMyeonDong);
 
-    @Query(value = "select count(*) from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id " +
-            "where ms.member_id = :memberId and s.address_si_do = :siDo and s.address_si_gun_gu = :siGunGu and s.address_eup_myeon_dong = :eupMyeonDong " +
-            "and (:roadName IS NULL OR s.address_road_name = :roadName) " +
-            "and (:buildingNumber IS NULL OR s.address_building_number = :buildingNumber) " +
-            "and (:detail IS NULL OR s.address_detail = :detail) ",
+//    @Query(value = "select count(distinct s.complex_name) from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id " +
+//            "where ms.member_id = :memberId and s.address_si_do = :siDo and s.address_si_gun_gu = :siGunGu and s.address_eup_myeon_dong = :eupMyeonDong ",
+//            nativeQuery = true)
+//    int countAllDistinctApartmentComplexByMemberIdAndDistinct(String memberId, String siDo, String siGunGu, String eupMyeonDong);
+    @Query(value = "select count(distinct s.complex_name) as apartment_complex_count, count(*) as insight_count from member_snapshot ms " +
+            "inner join snapshot s on ms.snapshot_id = s.id " +
+            "where ms.member_id = :memberId and s.address_si_do = :siDo and s.address_si_gun_gu = :siGunGu and s.address_eup_myeon_dong = :eupMyeonDong ",
             nativeQuery = true)
-    int countAllByMemberIdAndAddress(String memberId, String siDo, String siGunGu, String eupMyeonDong, String roadName, String buildingNumber, String detail);
+    Tuple countAllByMemberIdAndDistrict(String memberId, String siDo, String siGunGu, String eupMyeonDong);
 
     void deleteByMemberIdAndInsightId(UUID memberId, UUID insightId);
 }
