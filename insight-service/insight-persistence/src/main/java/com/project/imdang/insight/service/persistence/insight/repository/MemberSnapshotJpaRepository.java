@@ -39,14 +39,14 @@ public interface MemberSnapshotJpaRepository extends JpaRepository<MemberSnapsho
                     "where ms.member_id = :memberId and s.address_si_do = :siDo and s.address_si_gun_gu = :siGunGu and s.address_eup_myeon_dong = :eupMyeonDong " +
                     "and s.member_id = :snapshotMemberId ",
             nativeQuery = true)
-    Page<MemberSnapshotEntity> findAllByMemberIdAndDistrictAndSnapshotMemberId(String memberId, String siDo, String siGunGu, String eupMyeonDong, UUID snapshotMemberId, Pageable pageable);
+    Page<MemberSnapshotEntity> findAllByMemberIdAndDistrictAndSnapshotMemberId(String memberId, String siDo, String siGunGu, String eupMyeonDong, String snapshotMemberId, Pageable pageable);
 
     @Query(value = "select ms.* from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id " +
             "where ms.member_id = :memberId and s.complex_name = :apartmentComplexName and s.member_id = :snapshotMemberId \n-- #pageRequest\n",
             countQuery = "select count(*) from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id " +
                     "where ms.member_id = :memberId and s.complex_name = :apartmentComplexName and s.member_id = :snapshotMemberId",
             nativeQuery = true)
-    Page<MemberSnapshotEntity> findAllByMemberIdAndApartmentComplexNameAndSnapshotMemberId(String memberId, String apartmentComplexName, UUID snapshotMemberId, PageRequest pageRequest);
+    Page<MemberSnapshotEntity> findAllByMemberIdAndApartmentComplexNameAndSnapshotMemberId(String memberId, String apartmentComplexName, String snapshotMemberId, PageRequest pageRequest);
 
     @Query(value = "select distinct s.address_si_do, s.address_si_gun_gu, s.address_eup_myeon_dong " +
             "from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id where ms.member_id = :memberId",
