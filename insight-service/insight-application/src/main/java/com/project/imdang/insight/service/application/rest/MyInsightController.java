@@ -1,10 +1,11 @@
 package com.project.imdang.insight.service.application.rest;
 
+import com.project.imdang.insight.service.domain.dto.insight.list.DistrictResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListMyInsightQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.MyInsightResponse;
 import com.project.imdang.insight.service.domain.ports.input.service.InsightApplicationService;
-import com.project.imdang.insight.service.domain.valueobject.Address;
+import com.project.imdang.insight.service.domain.valueobject.District;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,16 +28,17 @@ public class MyInsightController {
 // 보관함
     private final InsightApplicationService insightApplicationService;
 
-    @GetMapping("/addresses")
-    public ResponseEntity<List<Address>> listAddress(@AuthenticationPrincipal UUID memberId) {
-        List<Address> addresses = insightApplicationService.listMyInsightAddress(memberId);
-        return ResponseEntity.ok(addresses);
+    // 보관중인 인사이트 자치구 목록 API
+    @GetMapping("/districts")
+    public ResponseEntity<List<DistrictResponse>> listDistrict(@AuthenticationPrincipal UUID memberId) {
+        List<DistrictResponse> districtResponses = insightApplicationService.listMyInsightDistrict(memberId);
+        return ResponseEntity.ok(districtResponses);
     }
 
-    @GetMapping("/by-address")
-    public ResponseEntity<MyInsightResponse> countByAddress(@AuthenticationPrincipal UUID memberId,
-                                                            @ModelAttribute Address address) {
-        MyInsightResponse myInsightResponse = insightApplicationService.countMyInsightByAddress(memberId, address);
+    @GetMapping("/by-district")
+    public ResponseEntity<MyInsightResponse> countByDistrict(@AuthenticationPrincipal UUID memberId,
+                                                             @ModelAttribute District district) {
+        MyInsightResponse myInsightResponse = insightApplicationService.countMyInsightByDistrict(memberId, district);
         return ResponseEntity.ok(myInsightResponse);
     }
 
@@ -45,18 +47,18 @@ public class MyInsightController {
     // + 단지별 보기
     @GetMapping
     public ResponseEntity<Page<InsightResponse>> list(@AuthenticationPrincipal UUID memberId,
-                                                      @RequestParam(name = "address") Address address,
+                                                      @ModelAttribute District district,
                                                       @RequestParam(name = "apartmentComplexName", required = false) String apartmentComplexName,
                                                       @RequestParam(name = "onlyMine", defaultValue = "FALSE") Boolean onlyMine,
                                                       // TODO - PagingQuery
                                                       @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
                                                       @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                                       @RequestParam(name = "direction", defaultValue = "DESC") String direction,
-                                                      @RequestParam(name = "properties", defaultValue = "createdAt") String[] properties) {
+                                                      @RequestParam(name = "properties", defaultValue = "created_at") String[] properties) {
 
         ListMyInsightQuery listMyInsightQuery = ListMyInsightQuery.builder()
                 .memberId(memberId)
-                .address(address)
+                .district(district)
                 .apartmentComplexName(apartmentComplexName)
                 .onlyMine(onlyMine)
                 .pageNumber(pageNumber)

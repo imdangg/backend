@@ -49,8 +49,8 @@ public class MyInsightControllerTest {
     }
 
     @Test
-    void listAddress() throws Exception {
-        mockMvc.perform(get("/my-insights/addresses")
+    void listDistrict() throws Exception {
+        mockMvc.perform(get("/my-insights/districts")
                         .header("Authorization", "Bearer " + requestMemberToken)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -59,8 +59,8 @@ public class MyInsightControllerTest {
     }
 
     @Test
-    void countByAddress() throws Exception {
-        mockMvc.perform(get("/my-insights/by-address")
+    void countByDistrict() throws Exception {
+        mockMvc.perform(get("/my-insights/by-district")
                         .header("Authorization", "Bearer " + requestMemberToken)
                         .param("siDo", "서울시")
                         .param("siGunGu", "강남구")
@@ -75,7 +75,10 @@ public class MyInsightControllerTest {
     void list() throws Exception {
         mockMvc.perform(get("/my-insights")
                         .header("Authorization", "Bearer " + requestMemberToken)
-                        .param("onlyMine", "TRUE")
+//                        .param("onlyMine", "TRUE")
+                        .param("siDo", "서울시")
+                        .param("siGunGu", "강남구")
+                        .param("eupMyeonDong", "신논현동")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
 //                .andExpect(jsonPath("$.content.length()").value(1))

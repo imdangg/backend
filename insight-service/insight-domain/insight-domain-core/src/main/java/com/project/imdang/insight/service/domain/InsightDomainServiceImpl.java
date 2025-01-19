@@ -87,6 +87,12 @@ public class InsightDomainServiceImpl implements InsightDomainService {
     }
 
     @Override
+    public void viewInsight(Insight insight) {
+        insight.view();
+        log.info("Insight[id: {}] is viewed.", insight.getId().getValue());
+    }
+
+    @Override
     public Snapshot captureInsight(Insight insight) {
         Snapshot snapshot = insight.capture();
         log.info("Insight[id: {}] is captured.", insight.getId().getValue());

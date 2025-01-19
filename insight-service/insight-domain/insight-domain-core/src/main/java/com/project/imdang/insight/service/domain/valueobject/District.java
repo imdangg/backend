@@ -14,7 +14,8 @@ import java.util.Objects;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class Address {
+public class District {
+
     @Schema(description = "시/도", example = "서울특별시")
     @NotBlank
     private String siDo; // 시/도 (예: 서울특별시)
@@ -24,27 +25,17 @@ public class Address {
     @Schema(description = "읍/면/동", example = "효제동")
     @NotBlank
     private String eupMyeonDong; // 읍/면/동 (예: 효제동)
-    @Schema(description = "도로명")
-//    @NotBlank
-    private String roadName; // 도로명
-    @Schema(description = "번지", example = "191")
-//    @NotBlank
-    private String buildingNumber; // 번지 (예: 191)
-    private String detail;
-
-    private Double latitude;
-    private Double longitude;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Address address = (Address) o;
-        return Objects.equals(siDo, address.siDo) && Objects.equals(siGunGu, address.siGunGu) && Objects.equals(eupMyeonDong, address.eupMyeonDong) && Objects.equals(roadName, address.roadName) && Objects.equals(buildingNumber, address.buildingNumber) && Objects.equals(detail, address.detail) && Objects.equals(latitude, address.latitude) && Objects.equals(longitude, address.longitude);
+        District district = (District) o;
+        return Objects.equals(siDo, district.siDo) && Objects.equals(siGunGu, district.siGunGu) && Objects.equals(eupMyeonDong, district.eupMyeonDong);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(siDo, siGunGu, eupMyeonDong, roadName, buildingNumber, detail, latitude, longitude);
+        return Objects.hash(siDo, siGunGu, eupMyeonDong);
     }
 }

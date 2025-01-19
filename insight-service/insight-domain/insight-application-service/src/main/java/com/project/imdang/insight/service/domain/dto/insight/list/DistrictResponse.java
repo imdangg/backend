@@ -1,20 +1,20 @@
 package com.project.imdang.insight.service.domain.dto.insight.list;
 
-import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Builder
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MyInsightResponse {
-//    private int apartmentComplexCount;
-    private List<ApartmentComplex> apartmentComplexes;
+public class DistrictResponse {
+    private String siDo; // 시/도 (예: 서울특별시)
+    private String siGunGu; // 시/군/구 (예: 종로구)
+    private String eupMyeonDong; // 읍/면/동 (예: 효제동)
+
+    private Long apartmentComplexCount;
     private Long insightCount;
 }

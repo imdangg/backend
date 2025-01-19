@@ -144,7 +144,7 @@ class InsightControllerTest {
 
     @Test
     void recommendInsight() throws Exception {
-        UUID insightId = UUID.fromString("b434b945-5e39-4439-b0eb-ff953b777118");
+        UUID insightId = UUID.fromString("f509ce55-a67a-4c97-8846-0dee0c754c38");
         RecommendInsightCommand recommendInsightCommand = new TestData(insightId).recommendInsightCommand();
         mockMvc.perform(post("/insights/recommend")
                         .header("Authorization", "Bearer " + requestMemberToken)

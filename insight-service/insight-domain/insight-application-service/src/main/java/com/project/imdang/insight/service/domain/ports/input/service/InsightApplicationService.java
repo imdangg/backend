@@ -8,6 +8,7 @@ import com.project.imdang.insight.service.domain.dto.insight.delete.DeleteInsigh
 import com.project.imdang.insight.service.domain.dto.insight.delete.DeleteInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.detail.DetailInsightQuery;
 import com.project.imdang.insight.service.domain.dto.insight.detail.DetailInsightResponse;
+import com.project.imdang.insight.service.domain.dto.insight.list.DistrictResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightByApartmentComplexQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightQuery;
@@ -17,8 +18,8 @@ import com.project.imdang.insight.service.domain.dto.insight.recommend.Recommend
 import com.project.imdang.insight.service.domain.dto.insight.recommend.RecommendInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.update.UpdateInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.update.UpdateInsightResponse;
-import com.project.imdang.insight.service.domain.valueobject.Address;
 import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
+import com.project.imdang.insight.service.domain.valueobject.District;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -29,8 +30,8 @@ public interface InsightApplicationService {
     Page<InsightResponse> listInsightByApartmentComplex(ListInsightByApartmentComplexQuery listInsightByApartmentComplexQuery);
     List<ApartmentComplex> listMyVisitedApartmentComplex(UUID memberId);
 
-    List<Address> listMyInsightAddress(UUID memberId);
-    MyInsightResponse countMyInsightByAddress(UUID memberId, Address address);
+    List<DistrictResponse> listMyInsightDistrict(UUID memberId);
+    MyInsightResponse countMyInsightByDistrict(UUID memberId, District district);
     Page<InsightResponse> listMyInsight(ListMyInsightQuery listMyInsightQuery);
 
     DetailInsightResponse detailInsight(DetailInsightQuery detailInsightQuery);
