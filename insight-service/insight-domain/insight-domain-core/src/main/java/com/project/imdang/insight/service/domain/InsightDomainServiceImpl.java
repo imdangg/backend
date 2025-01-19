@@ -3,9 +3,11 @@ package com.project.imdang.insight.service.domain;
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.entity.Accuse;
 import com.project.imdang.insight.service.domain.entity.Insight;
+import com.project.imdang.insight.service.domain.entity.Recommend;
 import com.project.imdang.insight.service.domain.entity.Snapshot;
 import com.project.imdang.insight.service.domain.event.InsightAccusedEvent;
 import com.project.imdang.insight.service.domain.event.InsightDeletedEvent;
+import com.project.imdang.insight.service.domain.event.InsightRecommendedEvent;
 import com.project.imdang.insight.service.domain.event.InsightUpdatedEvent;
 import com.project.imdang.insight.service.domain.exception.InsightDomainException;
 import com.project.imdang.insight.service.domain.valueobject.Access;
@@ -27,13 +29,6 @@ import java.util.Set;
 @Slf4j
 public class InsightDomainServiceImpl implements InsightDomainService {
 // TODO - CHECK : 왜 DomainServiceImpl을 bean으로 등록하는가?
-/*
-    @Override
-    public Insight validateAndEvaluateInsight(Insight insight) {
-        insight.validateAndEvaluate();
-        log.info("Insight[id: {}] is validated.", insight.getId().getValue());
-        return insight;
-    }*/
 
     @Override
     public Insight createInsight(Insight insight, String mainImage) {
@@ -78,18 +73,17 @@ public class InsightDomainServiceImpl implements InsightDomainService {
     }
 
     @Override
-    public Insight recommendInsight(Insight insight) {
-        insight.recommend();
+    public InsightRecommendedEvent recommendInsight(Insight insight, MemberId recommendedBy) {
+        Recommend recommend = insight.recommend(recommendedBy);
         log.info("Insight[id: {}] is recommended.", insight.getId().getValue());
-        return insight;
+        return new InsightRecommendedEvent(insight, recommend, recommend.getCreatedAt());
     }
 
     @Override
     public InsightAccusedEvent accuseInsight(Insight insight, MemberId accusedBy) {
         Accuse accuse = insight.accuse(accusedBy);
         log.info("Insight[id: {}] is accused.", insight.getId().getValue());
-        // TODO - CHECK : accuse.getCreatedAt()
-        return new InsightAccusedEvent(insight, accuse, ZonedDateTime.now(ZoneId.of("UTC")));
+        return new InsightAccusedEvent(insight, accuse, accuse.getCreatedAt());
     }
 
     @Override

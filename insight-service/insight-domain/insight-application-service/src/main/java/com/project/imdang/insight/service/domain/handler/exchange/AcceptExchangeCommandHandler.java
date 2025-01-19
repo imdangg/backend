@@ -31,8 +31,9 @@ public class AcceptExchangeCommandHandler {
         ExchangeRequestId exchangeRequestId = new ExchangeRequestId(acceptExchangeRequestCommand.getExchangeRequestId());
         ExchangeRequest exchangeRequest = exchangeRequestHelper.get(exchangeRequestId);
 
-        // check
-        if (!exchangeRequest.getRequestedMemberId().getValue().equals(acceptExchangeRequestCommand.getRequestedMemberId())) {
+        // validation check
+        if (!exchangeRequest.getRequestedMemberId().getValue()
+                .equals(acceptExchangeRequestCommand.getRequestedMemberId())) {
             throw new RuntimeException();
         }
         ExchangeRequestAcceptedEvent exchangeRequestAcceptedEvent = exchangeDomainService.acceptExchangeRequest(exchangeRequest);

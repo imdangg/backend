@@ -18,7 +18,7 @@ public class AccuseHelper {
 
     private final AccuseRepository accuseRepository;
 
-    public void save(Accuse accuse) {
+    public Accuse save(Accuse accuse) {
         Accuse saved = accuseRepository.save(accuse);
         if (saved == null) {
             String errorMessage = "Could not save accuse!";
@@ -27,6 +27,7 @@ public class AccuseHelper {
             throw new InsightDomainException(errorMessage);
         }
         log.info("Accuse[id: {}] is saved.", saved.getId().getValue());
+        return saved;
     }
 
     public Optional<Accuse> getByAccuseMemberIdAndAccusedInsightId(MemberId accuseMemberId, InsightId accusedInsightId) {

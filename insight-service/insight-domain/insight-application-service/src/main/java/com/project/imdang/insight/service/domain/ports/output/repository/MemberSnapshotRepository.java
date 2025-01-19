@@ -11,10 +11,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MemberSnapshotRepository {
 
-//    Optional<MemberSnapshot> findByMemberIdAndInsightId(MemberId memberId, InsightId insightId);
+    Optional<MemberSnapshot> findByMemberIdAndInsightId(MemberId memberId, InsightId insightId);
     Page<MemberSnapshot> findAllByMemberIdAndAddress(MemberId memberId, Address address, PageRequest pageRequest);
     Page<MemberSnapshot> findAllByMemberIdAndApartmentComplex(MemberId memberId, ApartmentComplex apartmentComplex, PageRequest pageRequest);
     Page<MemberSnapshot> findAllByMemberIdAndAddressAndSnapshotMemberId(MemberId memberId, Address address, MemberId snapshotMemberId, PageRequest pageRequest);

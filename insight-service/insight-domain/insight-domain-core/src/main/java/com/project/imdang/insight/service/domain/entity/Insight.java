@@ -166,8 +166,9 @@ public class Insight extends AggregateRoot<InsightId> {
     }*/
 
     // TODO - 동시성 체크
-    public void recommend() {
+    public Recommend recommend(MemberId recommendedBy) {
         this.recommendedCount++;
+        return Recommend.createNewRecommend(recommendedBy, getId(), this.memberId);
     }
 
     // TODO - 동시성 체크
