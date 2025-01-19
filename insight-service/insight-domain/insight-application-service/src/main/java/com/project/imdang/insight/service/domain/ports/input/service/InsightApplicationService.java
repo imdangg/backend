@@ -13,7 +13,7 @@ import com.project.imdang.insight.service.domain.dto.insight.list.InsightRespons
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightByApartmentComplexQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListMyInsightQuery;
-import com.project.imdang.insight.service.domain.dto.insight.list.MyInsightResponse;
+import com.project.imdang.insight.service.domain.dto.insight.list.ApartmentComplexResponse;
 import com.project.imdang.insight.service.domain.dto.insight.recommend.RecommendInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.recommend.RecommendInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.update.UpdateInsightCommand;
@@ -31,7 +31,7 @@ public interface InsightApplicationService {
     List<ApartmentComplex> listMyVisitedApartmentComplex(UUID memberId);
 
     List<DistrictResponse> listMyInsightDistrict(UUID memberId);
-    MyInsightResponse countMyInsightByDistrict(UUID memberId, District district);
+    List<ApartmentComplexResponse> listApartmentComplexByDistrict(UUID memberId, District district);
     Page<InsightResponse> listMyInsight(ListMyInsightQuery listMyInsightQuery);
 
     DetailInsightResponse detailInsight(DetailInsightQuery detailInsightQuery);

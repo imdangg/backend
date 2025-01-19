@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
@@ -65,10 +64,8 @@ public class MemberSnapshotRepositoryImpl implements MemberSnapshotRepository {
     }
 
     @Override
-    public List<ApartmentComplex> findAllDistinctApartmentComplexByMemberIdAndDistrict(MemberId memberId, District district) {
-        return memberSnapshotJpaRepository.findAllDistinctApartmentComplexByMemberIdAndDistrict(memberId.getValue().toString(), district.getSiDo(), district.getSiGunGu(), district.getEupMyeonDong()).stream()
-                .map(ApartmentComplex::new)
-                .collect(Collectors.toList());
+    public List<Object[]> findAllDistinctApartmentComplexAndInsightCountByMemberIdAndDistrict(MemberId memberId, District district) {
+        return memberSnapshotJpaRepository.findAllDistinctApartmentComplexAndInsightCountByMemberIdAndDistrict(memberId.getValue().toString(), district.getSiDo(), district.getSiGunGu(), district.getEupMyeonDong());
     }
 
     @Override

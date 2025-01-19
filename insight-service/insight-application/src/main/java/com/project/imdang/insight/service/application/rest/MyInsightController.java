@@ -1,9 +1,9 @@
 package com.project.imdang.insight.service.application.rest;
 
+import com.project.imdang.insight.service.domain.dto.insight.list.ApartmentComplexResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.DistrictResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListMyInsightQuery;
-import com.project.imdang.insight.service.domain.dto.insight.list.MyInsightResponse;
 import com.project.imdang.insight.service.domain.ports.input.service.InsightApplicationService;
 import com.project.imdang.insight.service.domain.valueobject.District;
 import lombok.RequiredArgsConstructor;
@@ -35,11 +35,18 @@ public class MyInsightController {
         return ResponseEntity.ok(districtResponses);
     }
 
-    @GetMapping("/by-district")
-    public ResponseEntity<MyInsightResponse> countByDistrict(@AuthenticationPrincipal UUID memberId,
-                                                             @ModelAttribute District district) {
-        MyInsightResponse myInsightResponse = insightApplicationService.countMyInsightByDistrict(memberId, district);
-        return ResponseEntity.ok(myInsightResponse);
+    // '단지별 보기' 클릭 시, 자치구별 단지-인사이트 개수 목록 API
+    /*
+    {
+        "apartmentComplexName": "신뇬현 더 센트럴 푸르지오",
+        "insightCount": 12
+    }
+     */
+    @GetMapping("/by-district/apartment-complexes")
+    public ResponseEntity<List<ApartmentComplexResponse>> listApartmentComplexByDistrict(@AuthenticationPrincipal UUID memberId,
+                                                                                         @ModelAttribute District district) {
+        List<ApartmentComplexResponse> apartmentComplexResponses = insightApplicationService.listApartmentComplexByDistrict(memberId, district);
+        return ResponseEntity.ok(apartmentComplexResponses);
     }
 
     // 전체 (내 인사이트 + 교환한 인사이트)

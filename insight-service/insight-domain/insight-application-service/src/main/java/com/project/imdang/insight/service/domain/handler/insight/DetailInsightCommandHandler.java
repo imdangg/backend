@@ -59,24 +59,35 @@ public class DetailInsightCommandHandler {
 
                 // 1. 본인의 인사이트
                 if (insight.getMemberId().equals(requestedBy)) {
+                    // 교환 신청 여부 확인
+                    Optional<ExchangeRequest> optional =
+                            exchangeRequestRepository.findByRequestMemberIdAndRequestedInsightId(requestedBy, insightId);
+                    ExchangeRequestStatus exchangeRequestStatus = optional.map(ExchangeRequest::getStatus).orElse(null);
                     // TODO - CHECK : OR snapshotRepository
-                    return insightDataMapper.insightToDetailInsightResponse(insight);
+                    return insightDataMapper.insightToDetailInsightResponse(insight, exchangeRequestStatus);
                 } else {
 
-                    // 2. 교환 여부 확인
+                    // 2. 교환 신청 여부 확인
                     Optional<ExchangeRequest> optional =
-                            exchangeRequestRepository.findByRequestMemberIdAndRequestedInsightIdAndExchangeRequestStatus(requestedBy, insightId, ExchangeRequestStatus.ACCEPTED);
+                            exchangeRequestRepository.findByRequestMemberIdAndRequestedInsightId(requestedBy, insightId);
                     if (optional.isPresent()) {
-                        // 2-1. 교환 O
+                        // 2-1. 교환 신청 O
                         ExchangeRequest exchangeRequest = optional.get();
-                        SnapshotId snapshotId = exchangeRequest.getRequestedSnapshotId();
-                        Snapshot snapshot = snapshotRepository.findById(snapshotId)
-                                .orElseThrow(() -> new SnapshotNotFoundException(snapshotId));
-                        return snapshotDataMapper.snapshotToDetailInsightResponse(snapshot);
+
+                        if (ExchangeRequestStatus.ACCEPTED.equals(exchangeRequest.getStatus())) {
+                            SnapshotId snapshotId = exchangeRequest.getRequestedSnapshotId();
+                            Snapshot snapshot = snapshotRepository.findById(snapshotId)
+                                    .orElseThrow(() -> new SnapshotNotFoundException(snapshotId));
+                            return snapshotDataMapper.snapshotToDetailInsightResponse(snapshot, exchangeRequest.getStatus());
+                        } else {
+                            // PENDING, REJECTED
+                            return insightDataMapper.insightToDetailInsightResponse(insight, exchangeRequest.getStatus())
+                                    .toPreviewInsightResponse();
+                        }
 
                     } else {
-                        // 2-2. 교환 X
-                        return insightDataMapper.insightToDetailInsightResponse(insight)
+                        // 2-2. 교환 신청 X
+                        return insightDataMapper.insightToDetailInsightResponse(insight, null)
                                 .toPreviewInsightResponse();
                     }
                 }
