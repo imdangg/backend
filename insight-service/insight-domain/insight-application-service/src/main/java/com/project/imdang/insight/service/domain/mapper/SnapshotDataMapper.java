@@ -3,6 +3,7 @@ package com.project.imdang.insight.service.domain.mapper;
 import com.project.imdang.insight.service.domain.dto.insight.detail.DetailInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
 import com.project.imdang.insight.service.domain.entity.Snapshot;
+import com.project.imdang.insight.service.domain.valueobject.ExchangeRequestStatus;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,7 +19,7 @@ public class SnapshotDataMapper {
                 .build();
     }
 
-    public DetailInsightResponse snapshotToDetailInsightResponse(Snapshot snapshot) {
+    public DetailInsightResponse snapshotToDetailInsightResponse(Snapshot snapshot, ExchangeRequestStatus exchangeRequestStatus) {
         return DetailInsightResponse.builder()
                 .snapshotId(snapshot.getId().getValue())
                 .memberId(snapshot.getMemberId().getValue())
@@ -36,6 +37,8 @@ public class SnapshotDataMapper {
                 .complexEnvironment(snapshot.getComplexEnvironment())
                 .complexFacility(snapshot.getComplexFacility())
                 .favorableNews(snapshot.getFavorableNews())
+                // TODO - CHECK
+                .exchangeRequestStatus(exchangeRequestStatus)
                 .build();
     }
 }

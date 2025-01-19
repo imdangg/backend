@@ -10,6 +10,7 @@ import com.project.imdang.insight.service.domain.dto.insight.list.InsightRespons
 import com.project.imdang.insight.service.domain.dto.insight.recommend.RecommendInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.update.UpdateInsightResponse;
 import com.project.imdang.insight.service.domain.entity.Insight;
+import com.project.imdang.insight.service.domain.valueobject.ExchangeRequestStatus;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -75,7 +76,7 @@ public class InsightDataMapper {
                 .build();
     }
 
-    public DetailInsightResponse insightToDetailInsightResponse(Insight insight) {
+    public DetailInsightResponse insightToDetailInsightResponse(Insight insight, ExchangeRequestStatus exchangeRequestStatus) {
         return DetailInsightResponse.builder()
                 .memberId(insight.getMemberId().getValue())
                 .insightId(insight.getId().getValue())
@@ -97,6 +98,8 @@ public class InsightDataMapper {
                 .viewCount(insight.getViewCount())
                 .score(insight.getScore())
                 .createdAt(insight.getCreatedAt())
+                // TODO - CHECK
+                .exchangeRequestStatus(exchangeRequestStatus)
                 .build();
     }
 }

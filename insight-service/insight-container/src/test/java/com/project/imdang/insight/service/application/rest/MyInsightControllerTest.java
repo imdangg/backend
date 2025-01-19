@@ -59,8 +59,8 @@ public class MyInsightControllerTest {
     }
 
     @Test
-    void countByDistrict() throws Exception {
-        mockMvc.perform(get("/my-insights/by-district")
+    void listApartmentComplexByDistrict() throws Exception {
+        mockMvc.perform(get("/my-insights/by-district/apartment-complexes")
                         .header("Authorization", "Bearer " + requestMemberToken)
                         .param("siDo", "서울시")
                         .param("siGunGu", "강남구")

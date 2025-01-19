@@ -5,6 +5,7 @@ import com.project.imdang.insight.service.domain.valueobject.Address;
 import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
 import com.project.imdang.insight.service.domain.valueobject.ComplexEnvironment;
 import com.project.imdang.insight.service.domain.valueobject.ComplexFacility;
+import com.project.imdang.insight.service.domain.valueobject.ExchangeRequestStatus;
 import com.project.imdang.insight.service.domain.valueobject.FavorableNews;
 import com.project.imdang.insight.service.domain.valueobject.Infra;
 import com.project.imdang.insight.service.domain.valueobject.VisitMethod;
@@ -54,6 +55,7 @@ public class DetailInsightResponse {
 
     private Integer score;
     private ZonedDateTime createdAt;
+    private ExchangeRequestStatus exchangeRequestStatus;
 
     public DetailInsightResponse toPreviewInsightResponse() {
         return DetailInsightResponse.builder()
@@ -68,6 +70,8 @@ public class DetailInsightResponse {
 //                .member(member)
                 .createdAt(createdAt)
                 .score(score)
+                // TODO - CHECK
+                .exchangeRequestStatus(exchangeRequestStatus)
                 .build();
     }
 }

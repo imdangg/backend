@@ -21,8 +21,7 @@ public interface MemberSnapshotRepository {
     Page<MemberSnapshot> findAllByMemberIdAndApartmentComplexAndSnapshotMemberId(MemberId memberId, ApartmentComplex apartmentComplex, MemberId createdBy, PageRequest pageRequest);
 
     List<Object[]> findAllDistinctDistrictByMemberId(MemberId memberId);
-    List<ApartmentComplex> findAllDistinctApartmentComplexByMemberIdAndDistrict(MemberId memberId, District district);
-//    int countAllByMemberIdAndAddress(MemberId memberId, Address address);
+    List<Object[]> findAllDistinctApartmentComplexAndInsightCountByMemberIdAndDistrict(MemberId memberId, District district);
     Long[] countAllByMemberIdAndDistrict(MemberId memberId, District district);
 
     MemberSnapshot save(MemberSnapshot memberSnapshot);

@@ -53,15 +53,12 @@ public interface MemberSnapshotJpaRepository extends JpaRepository<MemberSnapsho
             nativeQuery = true)
     List<Object[]> findAllDistinctDistrictByMemberId(String memberId);
 
-    @Query(value = "select distinct s.complex_name from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id " +
-            "where ms.member_id = :memberId and s.address_si_do = :siDo and s.address_si_gun_gu = :siGunGu and s.address_eup_myeon_dong = :eupMyeonDong",
+    @Query(value = "select s.complex_name, count(*) from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id " +
+            "where ms.member_id = :memberId and s.address_si_do = :siDo and s.address_si_gun_gu = :siGunGu and s.address_eup_myeon_dong = :eupMyeonDong " +
+            "group by s.complex_name",
             nativeQuery = true)
-    List<String> findAllDistinctApartmentComplexByMemberIdAndDistrict(String memberId, String siDo, String siGunGu, String eupMyeonDong);
+    List<Object[]> findAllDistinctApartmentComplexAndInsightCountByMemberIdAndDistrict(String memberId, String siDo, String siGunGu, String eupMyeonDong);
 
-//    @Query(value = "select count(distinct s.complex_name) from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id " +
-//            "where ms.member_id = :memberId and s.address_si_do = :siDo and s.address_si_gun_gu = :siGunGu and s.address_eup_myeon_dong = :eupMyeonDong ",
-//            nativeQuery = true)
-//    int countAllDistinctApartmentComplexByMemberIdAndDistinct(String memberId, String siDo, String siGunGu, String eupMyeonDong);
     @Query(value = "select count(distinct s.complex_name) as apartment_complex_count, count(*) as insight_count from member_snapshot ms " +
             "inner join snapshot s on ms.snapshot_id = s.id " +
             "where ms.member_id = :memberId and s.address_si_do = :siDo and s.address_si_gun_gu = :siGunGu and s.address_eup_myeon_dong = :eupMyeonDong ",
