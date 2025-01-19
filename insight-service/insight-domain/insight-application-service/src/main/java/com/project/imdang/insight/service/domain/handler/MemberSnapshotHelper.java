@@ -9,12 +9,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Slf4j
 @RequiredArgsConstructor
 @Component
 public class MemberSnapshotHelper {
 
     private final MemberSnapshotRepository memberSnapshotRepository;
+
+    public Optional<MemberSnapshot> getByMemberIdAndInsightId(MemberId memberId, InsightId insightId) {
+        return memberSnapshotRepository.findByMemberIdAndInsightId(memberId, insightId);
+    }
 
     public void save(MemberSnapshot memberSnapshot) {
         MemberSnapshot saved = memberSnapshotRepository.save(memberSnapshot);

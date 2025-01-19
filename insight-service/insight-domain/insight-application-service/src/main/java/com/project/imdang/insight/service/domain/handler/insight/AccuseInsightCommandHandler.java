@@ -19,7 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static com.project.imdang.domain.exception.ErrorCode.MEMBER_ALREADY_ACCUSED;
+import static com.project.imdang.domain.exception.ErrorCode.ALREADY_ACCUSED;
+
 
 @Slf4j
 @RequiredArgsConstructor
@@ -36,23 +37,26 @@ public class AccuseInsightCommandHandler {
     @Transactional
     public AccuseInsightResponse accuseInsight(AccuseInsightCommand accuseInsightCommand) {
 
-        InsightId accusedInsightId = new InsightId(accuseInsightCommand.getInsightId());
-        Insight insight = insightHelper.get(accusedInsightId);
         MemberId accusedBy = new MemberId(accuseInsightCommand.getAccuseMemberId());
+        InsightId accusedInsightId = new InsightId(accuseInsightCommand.getInsightId());
 
-        // insightId - memberId(accusedBy)로 중복 신고 여부 체크
+        // accusedInsightId - memberId(accusedBy)로 중복 신고 여부 체크
+        checkAlreadyAccused(accusedBy, accusedInsightId);
+
+        Insight accusedInsight = insightHelper.get(accusedInsightId);
+        InsightAccusedEvent insightAccusedEvent = insightDomainService.accuseInsight(accusedInsight, accusedBy);
+        Insight savedInsight = insightHelper.save(insightAccusedEvent.getInsight());
+        // TODO - publish event
+        Accuse savedAccuse = accuseHelper.save(insightAccusedEvent.getAccuse());
+
+        log.info("Insight[id: {}] is accused by Member[id: {}].", savedInsight.getId().getValue(), savedAccuse.getAccuseMemberId().getValue());
+        return insightDataMapper.insightToAccuseInsightResponse(savedInsight);
+    }
+
+    private void checkAlreadyAccused(MemberId accusedBy, InsightId accusedInsightId) {
         Optional<Accuse> optional = accuseHelper.getByAccuseMemberIdAndAccusedInsightId(accusedBy, accusedInsightId);
         if (optional.isPresent()) {
-            throw new InsightApplicationServiceException(MEMBER_ALREADY_ACCUSED);
+            throw new InsightApplicationServiceException(ALREADY_ACCUSED);
         }
-
-        InsightAccusedEvent insightAccusedEvent = insightDomainService.accuseInsight(insight, accusedBy);
-        insightHelper.save(insightAccusedEvent.getInsight());
-        // TODO - 신고 횟수에 따른 이벤트 발생 (+ 어디서 accuse를 저장할까?)
-        // TODO - publish event
-        accuseHelper.save(insightAccusedEvent.getAccuse());
-
-        log.info("Insight[id: {}] is accused by Member[id: {}].", insightAccusedEvent.getInsight().getId().getValue(), insightAccusedEvent.getAccuse().getAccuseMemberId().getValue());
-        return insightDataMapper.insightToAccuseInsightResponse(insightAccusedEvent.getInsight());
     }
 }

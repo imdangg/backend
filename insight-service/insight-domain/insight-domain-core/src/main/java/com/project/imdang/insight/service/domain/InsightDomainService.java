@@ -5,6 +5,7 @@ import com.project.imdang.insight.service.domain.entity.Insight;
 import com.project.imdang.insight.service.domain.entity.Snapshot;
 import com.project.imdang.insight.service.domain.event.InsightAccusedEvent;
 import com.project.imdang.insight.service.domain.event.InsightDeletedEvent;
+import com.project.imdang.insight.service.domain.event.InsightRecommendedEvent;
 import com.project.imdang.insight.service.domain.event.InsightUpdatedEvent;
 import com.project.imdang.insight.service.domain.valueobject.Access;
 import com.project.imdang.insight.service.domain.valueobject.Address;
@@ -38,7 +39,7 @@ public interface InsightDomainService {
                                       FavorableNews favorableNews,
                                       int score);
     InsightDeletedEvent deleteInsight(Insight insight, MemberId deletedBy);
-    Insight recommendInsight(Insight insight);
+    InsightRecommendedEvent recommendInsight(Insight insight, MemberId recommendedBy);
     InsightAccusedEvent accuseInsight(Insight insight, MemberId accusedBy);
 //    InsightRequestedEvent requestInsight(Insight insight);
 

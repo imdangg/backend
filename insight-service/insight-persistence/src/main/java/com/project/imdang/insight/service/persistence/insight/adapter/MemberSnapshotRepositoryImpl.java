@@ -16,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -24,6 +25,12 @@ public class MemberSnapshotRepositoryImpl implements MemberSnapshotRepository {
 
     private final MemberSnapshotJpaRepository memberSnapshotJpaRepository;
     private final MemberSnapshotPersistenceMapper memberSnapshotPersistenceMapper;
+
+    @Override
+    public Optional<MemberSnapshot> findByMemberIdAndInsightId(MemberId memberId, InsightId insightId) {
+        return memberSnapshotJpaRepository.findByMemberIdAndInsightId(memberId.getValue(), memberId.getValue())
+                .map(memberSnapshotPersistenceMapper::memberSnapshotEntityToMemberSnapshot);
+    }
 
     @Override
     public Page<MemberSnapshot> findAllByMemberIdAndAddress(MemberId memberId, Address address, PageRequest pageRequest) {

@@ -90,11 +90,11 @@ public class RequestExchangeCommandHandler {
     private void checkMember(MemberId requestMemberId) {
         FetchMemberResponse requestMember = null;
 //                memberFetcher.fetchByMemberId(requestMemberId);
-        if (requestMember.getAccusedCount() == 5) {
-            throw new InsightApplicationServiceException(MEMBER_5ACCUSED);
-        } else if (requestMember.getAccusedCount() == 15) {
-            throw new InsightApplicationServiceException(MEMBER_15ACCUSED);
-        }
+//        if (requestMember.getAccusedCount() == 5) {
+//            throw new InsightApplicationServiceException(MEMBER_5ACCUSED);
+//        } else if (requestMember.getAccusedCount() == 15) {
+//            throw new InsightApplicationServiceException(MEMBER_15ACCUSED);
+//        }
     }
 
     private void checkIsAlreadyExistedExchangeRequest(ExchangeRequest exchangeRequest) {
