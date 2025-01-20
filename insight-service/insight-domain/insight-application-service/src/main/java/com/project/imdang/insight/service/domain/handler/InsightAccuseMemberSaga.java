@@ -12,20 +12,21 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class InsightAccuseMemberSaga implements SagaStep<MemberAccusedResponseMessage, EmptyEvent, EmptyEvent> {
+public class InsightAccuseMemberSaga implements SagaStep<MemberAccusedResponseMessage, EmptyEvent> {
     // insight accuse
-    // insight accuse → check accusedMember accusedCount & update status
+    // insight accuse → increase accusedMember accusedCount (& update status)
 
     private final InsightDomainService insightDomainService;
 
+    // accusedMember increase accusedCount 처리 완료
     @Override
     public EmptyEvent process(MemberAccusedResponseMessage response) {
         InsightId accusedInsightId = new InsightId(response.getAccusedInsightId());
         return null;
     }
 
+    // accusedMember increase accusedCount 처리 실패
     @Override
-    public EmptyEvent rollback(MemberAccusedResponseMessage response) {
-        return null;
+    public void rollback(MemberAccusedResponseMessage response) {
     }
 }

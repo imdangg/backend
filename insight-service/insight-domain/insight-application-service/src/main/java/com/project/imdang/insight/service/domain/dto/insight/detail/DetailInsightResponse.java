@@ -56,6 +56,7 @@ public class DetailInsightResponse {
     private Integer score;
     private ZonedDateTime createdAt;
     private ExchangeRequestStatus exchangeRequestStatus;
+    private UUID exchangeRequestId;
 
     public DetailInsightResponse toPreviewInsightResponse() {
         return DetailInsightResponse.builder()
@@ -65,6 +66,11 @@ public class DetailInsightResponse {
                 .title(title)
                 .address(address)
                 .apartmentComplex(apartmentComplex)
+                .visitAt(visitAt)
+                .visitTimes(visitTimes)
+                .visitMethods(visitMethods)
+                .access(access)
+                .summary(summary)
                 .recommendedCount(recommendedCount)
                 .memberId(memberId)
 //                .member(member)

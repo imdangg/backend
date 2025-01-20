@@ -31,4 +31,8 @@ public class ExchangeRequestHelper {
         log.info("ExchangeRequest[id: {}] is saved.", savedExchangeRequest.getId().getValue());
         return savedExchangeRequest;
     }
+
+    public void delete(ExchangeRequestId exchangeRequestId) {
+        exchangeRequestRepository.deleteById(exchangeRequestId);
+    }
 }

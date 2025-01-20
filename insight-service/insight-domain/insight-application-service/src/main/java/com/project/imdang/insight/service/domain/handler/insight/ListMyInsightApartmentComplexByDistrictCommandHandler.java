@@ -16,12 +16,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class ListApartmentComplexByDistrictCommandHandler {
+public class ListMyInsightApartmentComplexByDistrictCommandHandler {
 
     private final MemberSnapshotRepository memberSnapshotRepository;
 
     @Transactional(readOnly = true)
-    public List<ApartmentComplexResponse> listApartmentComplexByDistrict(UUID _memberId, District district) {
+    public List<ApartmentComplexResponse> listMyInsightApartmentComplexByDistrict(UUID _memberId, District district) {
         MemberId memberId = new MemberId(_memberId);
         List<Object[]> results = memberSnapshotRepository.findAllDistinctApartmentComplexAndInsightCountByMemberIdAndDistrict(memberId, district);
         return results.stream()

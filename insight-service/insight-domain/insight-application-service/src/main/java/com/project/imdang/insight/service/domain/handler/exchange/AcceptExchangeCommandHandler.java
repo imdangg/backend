@@ -1,6 +1,7 @@
 package com.project.imdang.insight.service.domain.handler.exchange;
 
 import com.project.imdang.domain.valueobject.ExchangeRequestId;
+import com.project.imdang.domain.valueobject.MemberCouponId;
 import com.project.imdang.insight.service.domain.ExchangeDomainService;
 import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExchangeRequestCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExchangeRequestResponse;
@@ -36,24 +37,31 @@ public class AcceptExchangeCommandHandler {
                 .equals(acceptExchangeRequestCommand.getRequestedMemberId())) {
             throw new RuntimeException();
         }
-        ExchangeRequestAcceptedEvent exchangeRequestAcceptedEvent = exchangeDomainService.acceptExchangeRequest(exchangeRequest);
-        log.info("ExchangeRequest[id: {}] is accepted.", exchangeRequest.getId().getValue());
-        ExchangeRequest saved = exchangeRequestHelper.save(exchangeRequest);
-
-        // memberSnapshot에 insert
-        MemberSnapshot requestMemberSnapshot = MemberSnapshot.builder()
-                .memberId(exchangeRequest.getRequestMemberId())
-                .snapshotId(exchangeRequest.getRequestedSnapshotId())
-                .insightId(exchangeRequest.getRequestedInsightId())
-                // TODO - CHECK
-                .createdAt(exchangeRequestAcceptedEvent.getCreatedAt())
-                .build();
-        memberSnapshotHelper.save(requestMemberSnapshot);
 
         if (exchangeRequest.getMemberCouponId() != null) {
-            // TODO : 쿠폰 사용 처리
+            // 쿠폰 사용 처리 : 쿠폰 사용한 ExchangeRequest 수락 시, MemberCoupon 상태 'USED' 처리
+            // 'USED' 처리 완료 - process
+            // 'USED' 처리 실패 - rollback
+            MemberCouponId memberCouponId = exchangeRequest.getMemberCouponId();
+//            exchangeRequestAcceptedRequestMessagePublisher.publish(
+//                    new ExchangeRequestAcceptedRequestMessage(exchangeRequest.getId().getValue()));
 
         } else {
+
+            ExchangeRequestAcceptedEvent exchangeRequestAcceptedEvent = exchangeDomainService.acceptExchangeRequest(exchangeRequest);
+            log.info("ExchangeRequest[id: {}] is accepted.", exchangeRequest.getId().getValue());
+            ExchangeRequest saved = exchangeRequestHelper.save(exchangeRequest);
+
+            // memberSnapshot에 insert
+            MemberSnapshot requestMemberSnapshot = MemberSnapshot.builder()
+                    .memberId(exchangeRequest.getRequestMemberId())
+                    .snapshotId(exchangeRequest.getRequestedSnapshotId())
+                    .insightId(exchangeRequest.getRequestedInsightId())
+                    // TODO - CHECK
+                    .createdAt(exchangeRequestAcceptedEvent.getCreatedAt())
+                    .build();
+            memberSnapshotHelper.save(requestMemberSnapshot);
+
             MemberSnapshot requestedMemberSnapshot = MemberSnapshot.builder()
                     .memberId(exchangeRequest.getRequestedMemberId())
                     .snapshotId(exchangeRequest.getRequestMemberSnapshotId())
@@ -63,10 +71,7 @@ public class AcceptExchangeCommandHandler {
                     .build();
             memberSnapshotHelper.save(requestedMemberSnapshot);
         }
-
-        // TODO : publish
-
-
-        return exchangeRequestDataMapper.exchangeRequestToAcceptExchangeRequestResponse(saved);
+        return null;
+//        return exchangeRequestDataMapper.exchangeRequestToAcceptExchangeRequestResponse(saved);
     }
 }

@@ -17,6 +17,8 @@ public interface MemberSnapshotRepository {
     Optional<MemberSnapshot> findByMemberIdAndInsightId(MemberId memberId, InsightId insightId);
     Page<MemberSnapshot> findAllByMemberIdAndDistrict(MemberId memberId, District district, PageRequest pageRequest);
     Page<MemberSnapshot> findAllByMemberIdAndApartmentComplex(MemberId memberId, ApartmentComplex apartmentComplex, PageRequest pageRequest);
+
+    Page<MemberSnapshot> findAllByMemberIdAndSnapshotMemberId(MemberId memberId, MemberId snapshotMemberId, PageRequest pageRequest);
     Page<MemberSnapshot> findAllByMemberIdAndDistrictAndSnapshotMemberId(MemberId memberId, District district, MemberId snapshotMemberId, PageRequest pageRequest);
     Page<MemberSnapshot> findAllByMemberIdAndApartmentComplexAndSnapshotMemberId(MemberId memberId, ApartmentComplex apartmentComplex, MemberId createdBy, PageRequest pageRequest);
 

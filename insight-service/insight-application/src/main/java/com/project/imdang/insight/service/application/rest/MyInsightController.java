@@ -3,6 +3,8 @@ package com.project.imdang.insight.service.application.rest;
 import com.project.imdang.insight.service.domain.dto.insight.list.ApartmentComplexResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.DistrictResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
+import com.project.imdang.insight.service.domain.dto.insight.list.InsightSimpleResponse;
+import com.project.imdang.insight.service.domain.dto.insight.list.ListMyInsightCreatedByMeQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListMyInsightQuery;
 import com.project.imdang.insight.service.domain.ports.input.service.InsightApplicationService;
 import com.project.imdang.insight.service.domain.valueobject.District;
@@ -45,7 +47,7 @@ public class MyInsightController {
     @GetMapping("/by-district/apartment-complexes")
     public ResponseEntity<List<ApartmentComplexResponse>> listApartmentComplexByDistrict(@AuthenticationPrincipal UUID memberId,
                                                                                          @ModelAttribute District district) {
-        List<ApartmentComplexResponse> apartmentComplexResponses = insightApplicationService.listApartmentComplexByDistrict(memberId, district);
+        List<ApartmentComplexResponse> apartmentComplexResponses = insightApplicationService.listMyInsightApartmentComplexByDistrict(memberId, district);
         return ResponseEntity.ok(apartmentComplexResponses);
     }
 
@@ -74,6 +76,25 @@ public class MyInsightController {
                 .properties(properties)
                 .build();
         Page<InsightResponse> insights = insightApplicationService.listMyInsight(listMyInsightQuery);
+        return ResponseEntity.ok(insights);
+    }
+
+    @GetMapping("/created-by-me")
+    public ResponseEntity<Page<InsightSimpleResponse>> listCreatedByMe(@AuthenticationPrincipal UUID memberId,
+                                                                 // TODO - PagingQuery
+                                                                 @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
+                                                                 @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                                                                 @RequestParam(name = "direction", defaultValue = "DESC") String direction,
+                                                                 @RequestParam(name = "properties", defaultValue = "created_at") String[] properties) {
+
+        ListMyInsightCreatedByMeQuery listMyInsightCreatedByMeQuery = ListMyInsightCreatedByMeQuery.builder()
+                .memberId(memberId)
+                .pageNumber(pageNumber)
+                .pageSize(pageSize)
+                .direction(direction)
+                .properties(properties)
+                .build();
+        Page<InsightSimpleResponse> insights = insightApplicationService.listMyInsightCreatedByMe(listMyInsightCreatedByMeQuery);
         return ResponseEntity.ok(insights);
     }
 }

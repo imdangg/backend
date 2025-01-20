@@ -85,4 +85,16 @@ public class MyInsightControllerTest {
                 .andDo(print())
                 .andReturn();
     }
+
+    @Test
+    void listCreatedByMe() throws Exception {
+        mockMvc.perform(get("/my-insights/created-by-me")
+                        .header("Authorization", "Bearer " + requestMemberToken)
+                        .param("pageNumber", "1")
+                        .param("pageSize", "5")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+    }
 }
