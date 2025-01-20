@@ -33,6 +33,13 @@ public interface MemberSnapshotJpaRepository extends JpaRepository<MemberSnapsho
     Page<MemberSnapshotEntity> findAllByMemberIdAndApartmentComplexName(String memberId, String apartmentComplexName, PageRequest pageRequest);
 
     @Query(value = "select ms.* from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id " +
+            "where ms.member_id = :memberId and s.member_id = :snapshotMemberId \n-- #pageRequest\n",
+            countQuery = "select count(*) from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id " +
+                    "where ms.member_id = :memberId and s.member_id = :snapshotMemberId",
+            nativeQuery = true)
+    Page<MemberSnapshotEntity> findAllByMemberIdAndSnapshotMemberId(String memberId, String snapshotMemberId, Pageable pageable);
+
+    @Query(value = "select ms.* from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id " +
             "where ms.member_id = :memberId and s.address_si_do = :siDo and s.address_si_gun_gu = :siGunGu and s.address_eup_myeon_dong = :eupMyeonDong " +
             "and s.member_id = :snapshotMemberId \n-- #pageRequest\n",
             countQuery = "select count(*) from member_snapshot ms inner join snapshot s on ms.snapshot_id = s.id " +

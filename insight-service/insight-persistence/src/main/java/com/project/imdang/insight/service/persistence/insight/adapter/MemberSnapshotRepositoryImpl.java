@@ -46,6 +46,12 @@ public class MemberSnapshotRepositoryImpl implements MemberSnapshotRepository {
     }
 
     @Override
+    public Page<MemberSnapshot> findAllByMemberIdAndSnapshotMemberId(MemberId memberId, MemberId snapshotMemberId, PageRequest pageRequest) {
+        return memberSnapshotJpaRepository.findAllByMemberIdAndSnapshotMemberId(memberId.getValue().toString(), snapshotMemberId.getValue().toString(), pageRequest)
+                .map(memberSnapshotPersistenceMapper::memberSnapshotEntityToMemberSnapshot);
+    }
+
+    @Override
     public Page<MemberSnapshot> findAllByMemberIdAndDistrictAndSnapshotMemberId(MemberId memberId, District district, MemberId snapshotMemberId, PageRequest pageRequest) {
         return memberSnapshotJpaRepository.findAllByMemberIdAndDistrictAndSnapshotMemberId(
                 memberId.getValue().toString(), district.getSiDo(), district.getSiGunGu(), district.getEupMyeonDong(), snapshotMemberId.getValue().toString(), pageRequest)

@@ -12,7 +12,6 @@ import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExc
 import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
 import com.project.imdang.insight.service.domain.entity.Snapshot;
 import com.project.imdang.insight.service.domain.event.ExchangeRequestCreatedEvent;
-import com.project.imdang.insight.service.domain.exception.InsightApplicationServiceException;
 import com.project.imdang.insight.service.domain.exception.SnapshotNotFoundException;
 import com.project.imdang.insight.service.domain.handler.ExchangeRequestCreatedRequestMessagePublisher;
 import com.project.imdang.insight.service.domain.handler.ExchangeRequestHelper;
@@ -24,9 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-
-import static com.project.imdang.domain.exception.ErrorCode.MEMBER_15ACCUSED;
-import static com.project.imdang.domain.exception.ErrorCode.MEMBER_5ACCUSED;
 
 
 @Slf4j
@@ -76,6 +72,7 @@ public class RequestExchangeCommandHandler {
             // TODO - 쿠폰 확인
             Assert.notNull(requestExchangeInsightCommand.getMemberCouponId(), "MemberCouponId must not be null!");
             MemberCouponId memberCouponId = new MemberCouponId(requestExchangeInsightCommand.getMemberCouponId());
+
             ExchangeRequest requestExchangeWithCoupon = exchangeDomainService.requestExchangeWithCoupon(exchangeRequest, requestedSnapshot, memberCouponId);
             saved = exchangeRequestHelper.save(requestExchangeWithCoupon);
             // TODO - CHECK : publish 위치
@@ -83,7 +80,6 @@ public class RequestExchangeCommandHandler {
                     new ExchangeRequestCreatedRequestMessage(saved.getId().getValue()));
         }
 
-        // TODO - CHECK : 쿠폰 업데이트 실패 시, rollback 메소드에서 데이터 삭제하면?
         return exchangeRequestDataMapper.exchangeRequestToRequestExchangeInsightResponse(saved);
     }
 

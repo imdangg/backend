@@ -62,9 +62,9 @@ public class DetailInsightCommandHandler {
                     // 교환 신청 여부 확인
                     Optional<ExchangeRequest> optional =
                             exchangeRequestRepository.findByRequestMemberIdAndRequestedInsightId(requestedBy, insightId);
-                    ExchangeRequestStatus exchangeRequestStatus = optional.map(ExchangeRequest::getStatus).orElse(null);
+                    ExchangeRequest exchangeRequest = optional.orElse(null);
                     // TODO - CHECK : OR snapshotRepository
-                    return insightDataMapper.insightToDetailInsightResponse(insight, exchangeRequestStatus);
+                    return insightDataMapper.insightToDetailInsightResponse(insight, exchangeRequest);
                 } else {
 
                     // 2. 교환 신청 여부 확인
@@ -78,10 +78,10 @@ public class DetailInsightCommandHandler {
                             SnapshotId snapshotId = exchangeRequest.getRequestedSnapshotId();
                             Snapshot snapshot = snapshotRepository.findById(snapshotId)
                                     .orElseThrow(() -> new SnapshotNotFoundException(snapshotId));
-                            return snapshotDataMapper.snapshotToDetailInsightResponse(snapshot, exchangeRequest.getStatus());
+                            return snapshotDataMapper.snapshotToDetailInsightResponse(snapshot, exchangeRequest);
                         } else {
                             // PENDING, REJECTED
-                            return insightDataMapper.insightToDetailInsightResponse(insight, exchangeRequest.getStatus())
+                            return insightDataMapper.insightToDetailInsightResponse(insight, exchangeRequest)
                                     .toPreviewInsightResponse();
                         }
 

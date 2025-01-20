@@ -2,8 +2,9 @@ package com.project.imdang.insight.service.domain.mapper;
 
 import com.project.imdang.insight.service.domain.dto.insight.detail.DetailInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
+import com.project.imdang.insight.service.domain.dto.insight.list.InsightSimpleResponse;
+import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
 import com.project.imdang.insight.service.domain.entity.Snapshot;
-import com.project.imdang.insight.service.domain.valueobject.ExchangeRequestStatus;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,6 +13,7 @@ public class SnapshotDataMapper {
     public InsightResponse snapshotToInsightResponse(Snapshot snapshot) {
         return InsightResponse.builder()
                 .insightId(snapshot.getInsightId().getValue())
+                .recommendedCount(null)
                 .address(snapshot.getAddress())
                 .title(snapshot.getTitle())
                 .mainImage(snapshot.getMainImage())
@@ -19,11 +21,20 @@ public class SnapshotDataMapper {
                 .build();
     }
 
-    public DetailInsightResponse snapshotToDetailInsightResponse(Snapshot snapshot, ExchangeRequestStatus exchangeRequestStatus) {
+    public InsightSimpleResponse snapshotToInsightSimpleResponse(Snapshot snapshot) {
+        return InsightSimpleResponse.builder()
+                .insightId(snapshot.getInsightId().getValue())
+                .recommendedCount(null)
+                .address(snapshot.getAddress())
+                .title(snapshot.getTitle())
+                .build();
+    }
+
+    public DetailInsightResponse snapshotToDetailInsightResponse(Snapshot snapshot, ExchangeRequest exchangeRequest) {
         return DetailInsightResponse.builder()
-                .snapshotId(snapshot.getId().getValue())
                 .memberId(snapshot.getMemberId().getValue())
                 .insightId(snapshot.getInsightId().getValue())
+                .snapshotId(snapshot.getId().getValue())
                 .mainImage(snapshot.getMainImage())
                 .title(snapshot.getTitle())
                 .address(snapshot.getAddress())
@@ -37,8 +48,12 @@ public class SnapshotDataMapper {
                 .complexEnvironment(snapshot.getComplexEnvironment())
                 .complexFacility(snapshot.getComplexFacility())
                 .favorableNews(snapshot.getFavorableNews())
+                .recommendedCount(null)
+                .accusedCount(null)
+                .viewCount(null)
                 // TODO - CHECK
-                .exchangeRequestStatus(exchangeRequestStatus)
+                .exchangeRequestStatus(exchangeRequest != null ? exchangeRequest.getStatus() : null)
+                .exchangeRequestId(exchangeRequest != null ? exchangeRequest.getId().getValue() : null)
                 .build();
     }
 }
