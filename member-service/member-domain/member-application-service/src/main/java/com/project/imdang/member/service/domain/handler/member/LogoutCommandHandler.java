@@ -3,6 +3,7 @@ package com.project.imdang.member.service.domain.handler.member;
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.member.service.domain.MemberDomainService;
 import com.project.imdang.member.service.domain.entity.Member;
+import com.project.imdang.member.service.domain.exception.MemberDomainException;
 import com.project.imdang.member.service.domain.exception.MemberNotFoundException;
 import com.project.imdang.member.service.domain.ports.output.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ public class LogoutCommandHandler {
 
     public void logout(UUID memberId) {
         Member member = check(memberId);
-        memberDomainService.logout(member);
+        saveMember(memberDomainService.logout(member));
         log.info("Member[id:{}] is logout", member.getId().getValue());
     }
 
@@ -28,5 +29,16 @@ public class LogoutCommandHandler {
         MemberId memberId = new MemberId(_memberId);
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
+    }
+
+    private Member saveMember(Member member) {
+        Member savedMember =  memberRepository.save(member);
+        if (savedMember == null) {
+            String errorMessage = "Could not save Member!";
+            log.error("Could not save Member!");
+            throw new MemberDomainException(errorMessage);
+        }
+        log.info("Member[id : {}] is saved.", member.getId().getValue());
+        return savedMember;
     }
 }

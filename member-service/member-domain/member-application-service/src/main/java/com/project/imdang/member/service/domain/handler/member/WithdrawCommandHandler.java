@@ -4,6 +4,7 @@ import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.member.service.domain.MemberDomainService;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthWithdrawCommand;
 import com.project.imdang.member.service.domain.entity.Member;
+import com.project.imdang.member.service.domain.exception.MemberDomainException;
 import com.project.imdang.member.service.domain.exception.MemberNotFoundException;
 import com.project.imdang.member.service.domain.handler.auth.OAuthApiClientHandler;
 import com.project.imdang.member.service.domain.ports.output.MemberRepository;
@@ -38,7 +39,7 @@ public class WithdrawCommandHandler {
         OAuthApiClientHandler withdrawHandler = apiClients.get(oAuthWithdrawCommand.oAuthType());
         withdrawHandler.withdraw(oAuthWithdrawCommand);
         // 3. 사용자 삭제 및 토큰 만료
-        memberDomainService.withdraw(member);
+        saveMember(memberDomainService.withdraw(member));
         log.info("Member[id:{}] is withdrew", member.getId().getValue());
     }
 
@@ -47,5 +48,16 @@ public class WithdrawCommandHandler {
         Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
         return findMember;
+    }
+
+    private Member saveMember(Member member) {
+        Member savedMember =  memberRepository.save(member);
+        if (savedMember == null) {
+            String errorMessage = "Could not save Member!";
+            log.error("Could not save Member!");
+            throw new MemberDomainException(errorMessage);
+        }
+        log.info("Member[id : {}] is saved.", member.getId().getValue());
+        return savedMember;
     }
 }

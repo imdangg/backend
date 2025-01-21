@@ -33,13 +33,10 @@ public class KaKaoApiClientHandler implements OAuthApiClientHandler{
     }
 
     @Override
-    public String getAccessToken(OAuthLoginCommand loginCommand) {
-        MultiValueMap<String, String> body = loginCommand.makeBody();
-        return body.getFirst("code");
-    }
+    public OAuthLoginResponse getOAuthInfo(OAuthLoginCommand loginCommand) {
+        MultiValueMap<String, String> commandBody = loginCommand.makeBody();
+        String accessToken = commandBody.getFirst("code");
 
-    @Override
-    public OAuthLoginResponse getOAuthInfo(String accessToken) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         httpHeaders.set("Authorization", "Bearer " + accessToken);

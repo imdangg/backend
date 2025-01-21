@@ -35,13 +35,10 @@ public class GoogleApiClientHandler implements OAuthApiClientHandler {
     }
 
     @Override
-    public String getAccessToken(OAuthLoginCommand loginCommand) {
+    public OAuthLoginResponse getOAuthInfo(OAuthLoginCommand loginCommand) {
         MultiValueMap<String, String> body = loginCommand.makeBody();
-        return body.getFirst("code");
-    }
+        String accessToken = body.getFirst("code");
 
-    @Override
-    public OAuthLoginResponse getOAuthInfo(String accessToken) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);

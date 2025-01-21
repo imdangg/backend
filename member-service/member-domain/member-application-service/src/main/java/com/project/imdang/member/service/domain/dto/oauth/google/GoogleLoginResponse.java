@@ -46,4 +46,8 @@ public class GoogleLoginResponse implements OAuthLoginResponse {
     public OAuthType getOAuthType() {
         return OAuthType.GOOGLE;
     }
+    @Override
+    public String getRefreshToken() {
+        return null;
+    }
 }

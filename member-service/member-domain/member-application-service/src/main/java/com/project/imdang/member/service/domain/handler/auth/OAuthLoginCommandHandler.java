@@ -36,8 +36,7 @@ public class OAuthLoginCommandHandler {
 
     public LoginResponse login(OAuthLoginCommand loginCommand) {
         OAuthApiClientHandler client = apiClients.get(loginCommand.oAuthType());
-        String accessToken = client.getAccessToken(loginCommand);
-        OAuthLoginResponse oAuthInfo = client.getOAuthInfo(accessToken);
+        OAuthLoginResponse oAuthInfo = client.getOAuthInfo(loginCommand);
 
         // 1. 로그인
         // TODO - REVIEW
@@ -56,7 +55,7 @@ public class OAuthLoginCommandHandler {
         TokenResponse tokenResponse = tokenRequestHandler.generate(member);
         // 3. RefreshToken 저장
         memberDomainService.storeRefreshToken(member, tokenResponse.getRefreshToken());
-        return LoginResponse.from(tokenResponse, isJoined, member.getId().getValue());
+        return LoginResponse.from(tokenResponse, isJoined, member.getId().getValue(), oAuthInfo.getRefreshToken());
     }
 
     private Member saveMember(Member member) {

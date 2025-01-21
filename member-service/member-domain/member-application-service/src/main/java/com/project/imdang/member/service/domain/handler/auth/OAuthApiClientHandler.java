@@ -7,7 +7,6 @@ import com.project.imdang.member.service.domain.valueobject.OAuthType;
 
 public interface OAuthApiClientHandler {
     OAuthType oAuthType();
-    String getAccessToken(OAuthLoginCommand loginCommand);
-    OAuthLoginResponse getOAuthInfo(String accessToken);
+    OAuthLoginResponse getOAuthInfo(OAuthLoginCommand loginCommand);
     void withdraw(OAuthWithdrawCommand withdrawCommand);
 }

@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 public class AppleLoginResponse implements OAuthLoginResponse {
     private String id;
     private String email;
+    private String refreshToken;
 
     @Override
     public String getNickname() {
@@ -36,4 +37,5 @@ public class AppleLoginResponse implements OAuthLoginResponse {
     public OAuthType getOAuthType() {
         return OAuthType.APPLE;
     }
+
 }

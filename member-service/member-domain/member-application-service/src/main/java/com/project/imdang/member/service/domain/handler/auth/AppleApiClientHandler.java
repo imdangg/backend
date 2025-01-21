@@ -28,6 +28,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.security.PrivateKey;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Component
@@ -55,12 +57,11 @@ public class AppleApiClientHandler implements OAuthApiClientHandler {
         return OAuthType.APPLE;
     }
 
-
     /**
      * 엑세스 토큰과 리프레쉬토큰 얻어오기
      */
     @Override
-    public String getAccessToken(OAuthLoginCommand loginCommand) {
+    public OAuthLoginResponse getOAuthInfo(OAuthLoginCommand loginCommand) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -71,16 +72,13 @@ public class AppleApiClientHandler implements OAuthApiClientHandler {
 
         HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
         AppleTokenResponse response = restTemplate.postForObject(authUrl, request, AppleTokenResponse.class);
-        //TODO null 체크
-        return response.getIdToken();
-    }
 
-    @Override
-    public OAuthLoginResponse getOAuthInfo(String idToken) {
-        DecodedJWT decodedJWT = JWT.decode(idToken);
+        DecodedJWT decodedJWT = JWT.decode(response.getIdToken());
         return AppleLoginResponse.builder()
                 .id(String.valueOf(decodedJWT.getClaim("sub")))
-                .email(String.valueOf(decodedJWT.getClaim("email"))).build();
+                .email(String.valueOf(decodedJWT.getClaim("email")))
+                .refreshToken(response.getRefreshToken()).build();
+
     }
 
     @Override
@@ -98,11 +96,14 @@ public class AppleApiClientHandler implements OAuthApiClientHandler {
     }
 
     private String generateClientSecret() {
+        Map<String, Object> jwtHeader = new HashMap<>();
+        jwtHeader.put("kid", keyId);
+        jwtHeader.put("alg", "ES256");
+
         return Jwts.builder()
-                .header().keyId(keyId)
-                .and()
+                .setHeaderParams(jwtHeader)
                 .issuer(teamId)
-                .audience().add(authUrl).and()
+                .audience().add("https://appleid.apple.com").and()
                 .subject(clientId)
                 .issuedAt(new Date())
                 .expiration(new Date(1000*60))
