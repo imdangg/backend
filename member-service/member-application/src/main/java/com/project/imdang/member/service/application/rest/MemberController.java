@@ -43,4 +43,15 @@ public class MemberController {
         log.info("Member[id :{}] is retrived", memberId);
         return ResponseEntity.ok(detailMemberResponse);
     }
+
+    /**
+     * 로그아웃
+     */
+    @Operation(description = "로그아웃 API")
+    @ApiResponse(responseCode = "200", description = "로그아웃 완료")
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@AuthenticationPrincipal UUID memberId) {
+        memberApplicationService.logout(memberId);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -16,4 +16,10 @@ public class MemberDomainServiceImpl implements MemberDomainService {
     public Member createMember(String oAuthId, OAuthType oAuthType) {
         return Member.createNewMember(oAuthId, oAuthType);
     }
+
+    @Override
+    public Member logout(Member member) {
+        member.logout();
+        return member;
+    }
 }

@@ -10,4 +10,6 @@ public interface MemberDomainService {
     Member join(Member member, String nickname, String birthDate, Gender gender, String deviceToken);
 
     Member createMember(String id, OAuthType oAuthType);
+
+    Member logout(Member member);
 }

@@ -39,4 +39,8 @@ public class MemberEntity {
 
     private int insightCount;
     private int exchangeCount;
+
+    private String refreshToken;
+    private Boolean isLogin;
+    private Boolean isDeleted;
 }

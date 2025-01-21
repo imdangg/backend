@@ -19,6 +19,8 @@ public class MemberPersistenceMapper {
                 .authType(member.getOAuthType())
                 .insightCount(member.getInsightCount())
                 .exchangeCount(member.getExchangeCount())
+                .refreshToken(member.getRefreshToken())
+                .isLogin(member.getIsLogin())
                 .build();
     }
 
@@ -33,6 +35,8 @@ public class MemberPersistenceMapper {
                 .oAuthType(memberEntity.getAuthType())
                 .exchangeCount(memberEntity.getExchangeCount())
                 .insightCount(memberEntity.getInsightCount())
+                .refreshToken(memberEntity.getRefreshToken())
+                .isLogin(memberEntity.getIsLogin())
                 .build();
     }
 }

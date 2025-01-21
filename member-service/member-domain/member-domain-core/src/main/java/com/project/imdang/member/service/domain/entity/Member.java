@@ -24,6 +24,8 @@ public class Member extends AggregateRoot<MemberId> {
     // TODO - CHECK : 데이터를 쌓아서 GROUP BY로?
     private int rejectedCount;
 
+    private String refreshToken;
+    private Boolean isLogin;
     public static Member createNewMember(String oAuthId, OAuthType oAuthType) {
         return Member.builder()
                 .id(new MemberId(UUID.randomUUID()))
@@ -44,6 +46,8 @@ public class Member extends AggregateRoot<MemberId> {
         this.exchangeCount = exchangeCount;
         this.insightCount = insightCount;
         this.rejectedCount = rejectedCount;
+        this.refreshToken = refreshToken;
+        this.isLogin = isLogin;
     }
 
     public void join(String nickname, String birthDate, Gender gender, String deviceToken) {
@@ -51,5 +55,10 @@ public class Member extends AggregateRoot<MemberId> {
         this.birthDate = birthDate;
         this.gender = gender;
         this.deviceToken = deviceToken;
+    }
+
+    public void logout() {
+        this.isLogin = Boolean.FALSE;
+        this.refreshToken = null;
     }
 }
