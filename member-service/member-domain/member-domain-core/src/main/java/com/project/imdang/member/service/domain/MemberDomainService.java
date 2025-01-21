@@ -12,4 +12,6 @@ public interface MemberDomainService {
     Member createMember(String id, OAuthType oAuthType);
 
     Member logout(Member member);
+
+    Member withdraw(Member member);
 }

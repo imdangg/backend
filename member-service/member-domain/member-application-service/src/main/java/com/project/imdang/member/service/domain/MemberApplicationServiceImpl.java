@@ -2,11 +2,13 @@ package com.project.imdang.member.service.domain;
 
 import com.project.imdang.member.service.domain.dto.*;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginCommand;
+import com.project.imdang.member.service.domain.dto.oauth.OAuthWithdrawCommand;
 import com.project.imdang.member.service.domain.handler.auth.JoinCommandHandler;
 import com.project.imdang.member.service.domain.handler.auth.OAuthLoginCommandHandler;
 import com.project.imdang.member.service.domain.handler.member.DetailMemberCommandHandler;
 import com.project.imdang.member.service.domain.handler.member.DetailMyPageCommandHandler;
 import com.project.imdang.member.service.domain.handler.member.LogoutCommandHandler;
+import com.project.imdang.member.service.domain.handler.member.WithdrawCommandHandler;
 import com.project.imdang.member.service.domain.ports.input.service.MemberApplicationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,5 +51,10 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
     @Override
     public void logout(UUID memberId) {
         logoutCommandHandler.logout(memberId);
+    }
+
+    @Override
+    public void withdraw(UUID memberId, OAuthWithdrawCommand withdrawCommand) {
+        withdrawCommandHandler.withdraw(memberId, withdrawCommand);
     }
 }

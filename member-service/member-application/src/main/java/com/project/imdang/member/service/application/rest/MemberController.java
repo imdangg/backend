@@ -3,12 +3,16 @@ package com.project.imdang.member.service.application.rest;
 import com.project.imdang.member.service.domain.dto.DetailMemberResponse;
 import com.project.imdang.member.service.domain.dto.DetailMyPageQuery;
 import com.project.imdang.member.service.domain.dto.DetailMyPageResponse;
+import com.project.imdang.member.service.domain.dto.oauth.apple.AppleWithdrawCommand;
+import com.project.imdang.member.service.domain.dto.oauth.google.GoogleWithdrawCommand;
+import com.project.imdang.member.service.domain.dto.oauth.kakao.KakaoWithdrawCommand;
 import com.project.imdang.member.service.domain.ports.input.service.MemberApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -52,6 +56,33 @@ public class MemberController {
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@AuthenticationPrincipal UUID memberId) {
         memberApplicationService.logout(memberId);
+        return ResponseEntity.ok().build();
+    }
+
+    //회원 탈퇴
+    @Operation(description = "카카오 회원 탈퇴 API")
+    @ApiResponse(responseCode = "200", description = "탈퇴 완료")
+    @PostMapping("/withdrawal/kakao")
+    public ResponseEntity<Void> withdraw(@AuthenticationPrincipal UUID memberId, @RequestBody @Valid KakaoWithdrawCommand kakaoWithdrawCommand) {
+        memberApplicationService.withdraw(memberId, kakaoWithdrawCommand);
+        return ResponseEntity.ok().build();
+    }
+
+    //회원 탈퇴
+    @Operation(description = "구글 회원 탈퇴 API")
+    @ApiResponse(responseCode = "200", description = "탈퇴 완료")
+    @PostMapping("/withdrawal/google")
+    public ResponseEntity<Void> withdraw(@AuthenticationPrincipal UUID memberId,@RequestBody @Valid GoogleWithdrawCommand googleWithdrawCommand) {
+        memberApplicationService.withdraw(memberId, googleWithdrawCommand);
+        return ResponseEntity.ok().build();
+    }
+
+    //회원 탈퇴
+    @Operation(description = "애플 회원 탈퇴 API")
+    @ApiResponse(responseCode = "200", description = "탈퇴 완료")
+    @PostMapping("/withdrawal/apple")
+    public ResponseEntity<Void> withdraw(@AuthenticationPrincipal UUID memberId, @RequestBody @Valid AppleWithdrawCommand appleWithdrawCommand) {
+        memberApplicationService.withdraw(memberId, appleWithdrawCommand);
         return ResponseEntity.ok().build();
     }
 }

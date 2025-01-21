@@ -26,16 +26,19 @@ public class Member extends AggregateRoot<MemberId> {
 
     private String refreshToken;
     private Boolean isLogin;
+    private Boolean isDeleted;
+
     public static Member createNewMember(String oAuthId, OAuthType oAuthType) {
         return Member.builder()
                 .id(new MemberId(UUID.randomUUID()))
                 .oAuthId(oAuthId)
                 .oAuthType(oAuthType)
+                .isDeleted(Boolean.FALSE)
                 .build();
     }
 
     @Builder
-    public Member(MemberId id, String nickname, String birthDate, Gender gender, String deviceToken, String oAuthId, OAuthType oAuthType, int exchangeCount,int insightCount, int rejectedCount) {
+    public Member(MemberId id, String nickname, String birthDate, Gender gender, String deviceToken, String oAuthId, OAuthType oAuthType, int exchangeCount,int insightCount, int rejectedCount, String refreshToken, Boolean isLogin, Boolean isDeleted) {
         setId(id);
         this.nickname = nickname;
         this.birthDate = birthDate;
@@ -48,6 +51,7 @@ public class Member extends AggregateRoot<MemberId> {
         this.rejectedCount = rejectedCount;
         this.refreshToken = refreshToken;
         this.isLogin = isLogin;
+        this.isDeleted = isDeleted;
     }
 
     public void join(String nickname, String birthDate, Gender gender, String deviceToken) {
@@ -60,5 +64,11 @@ public class Member extends AggregateRoot<MemberId> {
     public void logout() {
         this.isLogin = Boolean.FALSE;
         this.refreshToken = null;
+    }
+
+    public void withdraw() {
+        this.isDeleted = Boolean.TRUE;
+        this.refreshToken = null;
+        this.deviceToken = null;
     }
 }

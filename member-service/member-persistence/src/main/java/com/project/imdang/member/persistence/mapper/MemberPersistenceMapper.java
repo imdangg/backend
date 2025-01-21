@@ -21,6 +21,7 @@ public class MemberPersistenceMapper {
                 .exchangeCount(member.getExchangeCount())
                 .refreshToken(member.getRefreshToken())
                 .isLogin(member.getIsLogin())
+                .isDeleted(member.getIsDeleted())
                 .build();
     }
 
@@ -37,6 +38,7 @@ public class MemberPersistenceMapper {
                 .insightCount(memberEntity.getInsightCount())
                 .refreshToken(memberEntity.getRefreshToken())
                 .isLogin(memberEntity.getIsLogin())
+                .isDeleted(memberEntity.getIsDeleted())
                 .build();
     }
 }

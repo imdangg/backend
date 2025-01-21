@@ -2,6 +2,7 @@ package com.project.imdang.member.service.domain.ports.input.service;
 
 import com.project.imdang.member.service.domain.dto.*;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginCommand;
+import com.project.imdang.member.service.domain.dto.oauth.OAuthWithdrawCommand;
 
 import java.util.UUID;
 
@@ -17,4 +18,6 @@ public interface MemberApplicationService {
     DetailMemberResponse detailMember(UUID memberId);
 
     void logout(UUID memberId);
+
+    void withdraw(UUID memberId, OAuthWithdrawCommand withdrawCommand);
 }

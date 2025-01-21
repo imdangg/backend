@@ -22,4 +22,10 @@ public class MemberDomainServiceImpl implements MemberDomainService {
         member.logout();
         return member;
     }
+
+    @Override
+    public Member withdraw(Member member) {
+        member.withdraw();
+        return member;
+    }
 }

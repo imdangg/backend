@@ -5,6 +5,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginCommand;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginResponse;
+import com.project.imdang.member.service.domain.dto.oauth.OAuthWithdrawCommand;
 import com.project.imdang.member.service.domain.dto.oauth.apple.AppleLoginResponse;
 import com.project.imdang.member.service.domain.dto.oauth.apple.AppleTokenResponse;
 import com.project.imdang.member.service.domain.valueobject.OAuthType;
@@ -80,6 +81,20 @@ public class AppleApiClientHandler implements OAuthApiClientHandler {
         return AppleLoginResponse.builder()
                 .id(String.valueOf(decodedJWT.getClaim("sub")))
                 .email(String.valueOf(decodedJWT.getClaim("email"))).build();
+    }
+
+    @Override
+    public void withdraw(OAuthWithdrawCommand withdrawCommand) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> body = withdrawCommand.makeBody();
+        body.add("client_id", clientId);
+        body.add("client_secret", generateClientSecret());
+        body.add("token_type_hint", "refresh_token");
+
+        HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
+        restTemplate.postForObject(authUrl, request, Void.class);
     }
 
     private String generateClientSecret() {
