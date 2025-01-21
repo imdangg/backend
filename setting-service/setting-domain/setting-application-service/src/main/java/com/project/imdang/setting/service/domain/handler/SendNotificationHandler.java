@@ -1,20 +1,15 @@
 package com.project.imdang.setting.service.domain.handler;
 
 import com.google.firebase.messaging.*;
-import com.project.imdang.setting.service.domain.dto.FcmTokenResponse;
 import com.project.imdang.setting.service.domain.dto.NotificationRequest;
 import com.project.imdang.setting.service.domain.exception.NotificationDomainException;
+import com.project.imdang.setting.service.domain.feign.MemberFeignClient;
+import com.project.imdang.setting.service.domain.feign.MemberInfoResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.UUID;
 
@@ -24,7 +19,7 @@ import java.util.UUID;
 public class SendNotificationHandler {
 
     private final FirebaseMessaging firebaseMessaging;
-    private final RestTemplate restTemplate;
+    private final MemberFeignClient memberFeignClient;
 
     @Retryable(retryFor = FirebaseMessagingException.class, maxAttempts = 3, backoff = @Backoff(delay = 1000))
     public void send(NotificationRequest notificationRequest) {
@@ -59,17 +54,7 @@ public class SendNotificationHandler {
     }
 
     private String getFcmToken(UUID memberId) {
-//        String baseUrl = "http://imdang.info/member";
-//        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl)
-//                .queryParam("memberId", memberId);
-//        String finalUrl = builder.toUriString();
-//
-//        HttpHeaders httpHeaders = new HttpHeaders();
-//        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-//        HttpEntity<?> request = new HttpEntity<>(httpHeaders);
-//
-//        FcmTokenResponse fcmTokenResponse = restTemplate.exchange(finalUrl, HttpMethod.GET, request, FcmTokenResponse.class).getBody();
-//        return fcmTokenResponse.getDeviceToken();
-        return "";
+        MemberInfoResponse memberInfoResponse = memberFeignClient.getMemberInfo(memberId);
+        return memberInfoResponse.getDeviceToken();
     }
 }
