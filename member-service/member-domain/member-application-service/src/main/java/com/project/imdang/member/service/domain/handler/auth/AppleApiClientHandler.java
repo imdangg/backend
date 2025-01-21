@@ -83,11 +83,14 @@ public class AppleApiClientHandler implements OAuthApiClientHandler {
     }
 
     private String generateClientSecret() {
+        Map<String, Object> jwtHeader = new HashMap<>();
+        jwtHeader.put("kid", keyId);
+        jwtHeader.put("alg", "ES256");
+
         return Jwts.builder()
-                .header().keyId(keyId)
-                .and()
+                .setHeaderParams(jwtHeader)
                 .issuer(teamId)
-                .audience().add(authUrl).and()
+                .audience().add("https://appleid.apple.com").and()
                 .subject(clientId)
                 .issuedAt(new Date())
                 .expiration(new Date(1000*60))
