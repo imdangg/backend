@@ -5,6 +5,7 @@ import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginCommand;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthWithdrawCommand;
 import com.project.imdang.member.service.domain.handler.auth.JoinCommandHandler;
 import com.project.imdang.member.service.domain.handler.auth.OAuthLoginCommandHandler;
+import com.project.imdang.member.service.domain.handler.auth.ReissueCommandHandler;
 import com.project.imdang.member.service.domain.handler.member.DetailMemberCommandHandler;
 import com.project.imdang.member.service.domain.handler.member.DetailMyPageCommandHandler;
 import com.project.imdang.member.service.domain.handler.member.LogoutCommandHandler;
@@ -27,6 +28,7 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
     private final DetailMemberCommandHandler detailMemberCommandHandler;
     private final LogoutCommandHandler logoutCommandHandler;
     private final WithdrawCommandHandler withdrawCommandHandler;
+    private final ReissueCommandHandler reissueCommandHandler;
 
     @Override
     public LoginResponse login(OAuthLoginCommand loginCommand) {
@@ -56,5 +58,10 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
     @Override
     public void withdraw(UUID memberId, OAuthWithdrawCommand withdrawCommand) {
         withdrawCommandHandler.withdraw(memberId, withdrawCommand);
+    }
+
+    @Override
+    public TokenResponse reissue(UUID memberId) {
+        return reissueCommandHandler.reissue(memberId);
     }
 }

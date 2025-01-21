@@ -54,8 +54,8 @@ public class OAuthLoginCommandHandler {
 
         // 2. 토큰 생성
         TokenResponse tokenResponse = tokenRequestHandler.generate(member);
-        // TODO: 3. RefreshToken 저장
-        tokenRequestHandler.storeRefreshToken(member.getOAuthId(), tokenResponse.getRefreshToken());
+        // 3. RefreshToken 저장
+        memberDomainService.storeRefreshToken(member, tokenResponse.getRefreshToken());
         return LoginResponse.from(tokenResponse, isJoined, member.getId().getValue());
     }
 

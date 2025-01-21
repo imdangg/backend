@@ -28,4 +28,10 @@ public class MemberDomainServiceImpl implements MemberDomainService {
         member.withdraw();
         return member;
     }
+
+    @Override
+    public Member storeRefreshToken(Member member, String refreshToken) {
+        member.storeRefeashToken(refreshToken);
+        return member;
+    }
 }

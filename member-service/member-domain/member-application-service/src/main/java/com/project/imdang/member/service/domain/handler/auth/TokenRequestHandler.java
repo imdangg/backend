@@ -34,8 +34,4 @@ public class TokenRequestHandler {
 
         return new TokenResponse(accessToken, refreshToken,ACCESS_TOKEN_EXPIRE_TIME / 1000L);
     }
-
-    public void storeRefreshToken(String oAuthId, String refreshToken) {
-
-    }
 }

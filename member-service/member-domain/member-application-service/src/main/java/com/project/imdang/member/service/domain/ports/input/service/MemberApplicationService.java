@@ -20,4 +20,6 @@ public interface MemberApplicationService {
     void logout(UUID memberId);
 
     void withdraw(UUID memberId, OAuthWithdrawCommand withdrawCommand);
+
+    TokenResponse reissue(UUID memberId);
 }

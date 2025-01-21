@@ -14,4 +14,6 @@ public interface MemberDomainService {
     Member logout(Member member);
 
     Member withdraw(Member member);
+
+    Member storeRefreshToken(Member member, String refreshToken);
 }

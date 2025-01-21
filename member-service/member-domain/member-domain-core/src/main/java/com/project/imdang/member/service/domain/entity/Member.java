@@ -71,4 +71,8 @@ public class Member extends AggregateRoot<MemberId> {
         this.refreshToken = null;
         this.deviceToken = null;
     }
+
+    public void storeRefeashToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 }
