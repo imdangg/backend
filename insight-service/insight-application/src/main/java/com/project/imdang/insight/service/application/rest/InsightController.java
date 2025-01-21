@@ -85,11 +85,11 @@ public class InsightController {
     // 프론트에서 작업
     /*
      * @Operation(description = "인사이트 평가 API")
-     * 
+     *
      * @ApiResponse(responseCode = "200", description = "인사이트 평가가 완료되었습니다.",
      * content = @Content(schema = @Schema(implementation =
      * ValidateAndEvaluateInsightResponse.class)))
-     * 
+     *
      * @PostMapping("/validate")
      * public ResponseEntity<ValidateAndEvaluateInsightResponse>
      * validateAndEvaluateInsight(@RequestBody ValidateAndEvaluateInsightCommand
@@ -112,7 +112,7 @@ public class InsightController {
                                                                @RequestPart("createInsightCommand") @Valid CreateInsightCommand createInsightCommand,
                                                                @RequestPart("mainImage") MultipartFile mainImage) {
         createInsightCommand.setMemberId(memberId);
-       
+        createInsightCommand.setMainImage(mainImage);
 
         CreateInsightResponse createInsightResponse = insightApplicationService.createInsight(createInsightCommand);
         log.info("Insight[id: {}] is created.", createInsightResponse.getInsightId());
@@ -133,7 +133,7 @@ public class InsightController {
         return ResponseEntity.ok(updateInsightResponse);
     }
 
-    
+
     @Operation(description = "인사이트 삭제 API")
     @ApiResponse(responseCode = "200", description = "인사이트가 삭제되었습니다.",
             content = @Content(schema = @Schema(implementation = DeleteInsightResponse.class)))
@@ -166,6 +166,6 @@ public class InsightController {
         AccuseInsightResponse accuseInsightResponse = insightApplicationService.accuseInsight(accuseInsightCommand);
         log.info("Insight[id: {}] is accused.", accuseInsightResponse.getInsightId());
         return ResponseEntity.ok(accuseInsightResponse);
-    } 
-
+    }
+}
             
