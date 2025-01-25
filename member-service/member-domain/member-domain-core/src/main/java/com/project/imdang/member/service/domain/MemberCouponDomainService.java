@@ -7,5 +7,5 @@ import java.util.List;
 public interface MemberCouponDomainService {
     void issue(MemberCoupon memberCoupon);
     void use(MemberCoupon memberCoupon);
-    void cancle(MemberCoupon memberCoupon);
+    void cancel(MemberCoupon memberCoupon);
 }

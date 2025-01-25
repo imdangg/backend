@@ -1,7 +1,7 @@
 package com.project.imdang.member.service.domain.entity;
 
 
-import com.project.imdang.domain.entity.BaseEntity;
+import com.project.imdang.domain.entity.AggregateRoot;
 import com.project.imdang.domain.valueobject.CouponId;
 import com.project.imdang.domain.valueobject.MemberCouponId;
 import com.project.imdang.domain.valueobject.MemberId;
@@ -12,26 +12,24 @@ import lombok.Getter;
 import java.time.ZonedDateTime;
 
 @Getter
-public class MemberCoupon extends BaseEntity<MemberCouponId> {
+public class MemberCoupon extends AggregateRoot<MemberCouponId> {
 
     private final CouponId couponId;
     private final MemberId memberId;
-
-    // TODO - CHECK : only 사용/미사용 + 사용 취소
-    //private ZonedDateTime expiredAt;
+    private ZonedDateTime expiredAt;
 
     private String remark;  // reason
     private ZonedDateTime createdAt;
 
-    private Boolean used;
+    private boolean used;
     private ZonedDateTime usedAt;
 
     @Builder
-    public MemberCoupon(MemberCouponId id, CouponId couponId, MemberId memberId, String remark, ZonedDateTime createdAt, Boolean used, ZonedDateTime usedAt) {
+    public MemberCoupon(MemberCouponId id, CouponId couponId, MemberId memberId, ZonedDateTime expiredAt, String remark, ZonedDateTime createdAt, boolean used, ZonedDateTime usedAt) {
         setId(id);
         this.couponId = couponId;
         this.memberId = memberId;
-//        this.expiredAt = expiredAt;
+        this.expiredAt = expiredAt;
         this.remark = remark;
         this.createdAt = createdAt;
         this.used = used;
@@ -43,18 +41,18 @@ public class MemberCoupon extends BaseEntity<MemberCouponId> {
     }
 
     public void use() {
-        if (Boolean.TRUE.equals(used)) {
+        if (used) {
             throw new MemberCouponDomainException("Already used memberCoupon!");
         }
-        this.used = Boolean.TRUE;
+        this.used = true;
         this.usedAt = ZonedDateTime.now();
     }
 
-    public void cancle() {
-        if (Boolean.FALSE.equals(used)) {
+    public void cancel() {
+        if (!used) {
             throw new MemberCouponDomainException("Not used memberCoupon!");
         }
-        this.used = Boolean.FALSE;
+        this.used = false;
         this.usedAt = null;
     }
 }

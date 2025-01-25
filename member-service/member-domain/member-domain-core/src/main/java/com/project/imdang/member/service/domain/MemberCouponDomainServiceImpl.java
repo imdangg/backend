@@ -14,7 +14,7 @@ public class MemberCouponDomainServiceImpl implements MemberCouponDomainService{
     }
 
     @Override
-    public void cancle(MemberCoupon memberCoupon) {
-        memberCoupon.cancle();
+    public void cancel(MemberCoupon memberCoupon) {
+        memberCoupon.cancel();
     }
 }

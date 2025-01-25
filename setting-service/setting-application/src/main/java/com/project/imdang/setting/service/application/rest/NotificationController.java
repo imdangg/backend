@@ -39,7 +39,7 @@ public class NotificationController {
                                                                     @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
                                                                     @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                                                     @RequestParam(name = "direction", defaultValue = "DESC") String direction,
-                                                                    @RequestParam(name = "properties", defaultValue = "createdAt") String[] properties) {
+                                                                    @RequestParam(name = "properties", defaultValue = "created_at") String[] properties) {
 
         ListNotificationQuery listNotificationQuery = ListNotificationQuery.builder()
                 .receiverId(memberId)

@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class ExchangeRequestCreatedRequestMessage {
+public class ExchangeRequestRejectedRequestMessage {
     private Long memberCouponId;
 }

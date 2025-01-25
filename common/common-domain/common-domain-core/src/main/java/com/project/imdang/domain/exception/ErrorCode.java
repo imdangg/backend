@@ -1,6 +1,8 @@
 package com.project.imdang.domain.exception;
 
 public enum ErrorCode {
+
+    MEMBER_NOT_EXIST,
     MEMBER_5ACCUSED,
     MEMBER_15ACCUSED,
     ALREADY_ACCUSED,

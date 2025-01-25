@@ -1,6 +1,8 @@
 package com.project.imdang.insight.service.domain.handler.exchange;
 
+import com.project.imdang.domain.message.ExchangeRequestRejectedRequestMessage;
 import com.project.imdang.domain.valueobject.ExchangeRequestId;
+import com.project.imdang.domain.valueobject.MemberCouponId;
 import com.project.imdang.insight.service.domain.ExchangeDomainService;
 import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestResponse;
@@ -8,6 +10,7 @@ import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
 import com.project.imdang.insight.service.domain.event.ExchangeRequestRejectedEvent;
 import com.project.imdang.insight.service.domain.handler.ExchangeRequestHelper;
 import com.project.imdang.insight.service.domain.mapper.ExchangeRequestDataMapper;
+import com.project.imdang.insight.service.domain.ports.output.publisher.ExchangeRequestRejectedRequestMessagePublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -24,19 +27,29 @@ public class RejectExchangeCommandHandler {
     private final ExchangeRequestHelper exchangeRequestHelper;
     private final ExchangeRequestDataMapper exchangeRequestDataMapper;
 
+    private final ExchangeRequestRejectedRequestMessagePublisher exchangeRequestRejectedRequestMessagePublisher;
+
     @Transactional
     public RejectExchangeRequestResponse rejectExchangeRequest(RejectExchangeRequestCommand rejectExchangeRequestCommand) {
         ExchangeRequestId exchangeRequestId = new ExchangeRequestId(rejectExchangeRequestCommand.getExchangeRequestId());
         ExchangeRequest exchangeRequest = exchangeRequestHelper.get(exchangeRequestId);
-        // check
-        if (!exchangeRequest.getRequestedMemberId().getValue().equals(rejectExchangeRequestCommand.getRequestedMemberId())) {
-            throw new RuntimeException();
+
+        // validation check
+        if (!exchangeRequest.getRequestedMemberId().getValue()
+                .equals(rejectExchangeRequestCommand.getRequestedMemberId())) {
+            throw new IllegalArgumentException();
+        }
+
+        if (exchangeRequest.getMemberCouponId() != null) {
+            MemberCouponId memberCouponId = exchangeRequest.getMemberCouponId();
+            exchangeRequestRejectedRequestMessagePublisher.publish(
+                    new ExchangeRequestRejectedRequestMessage(memberCouponId.getValue()));
         }
 
         ExchangeRequestRejectedEvent exchangeRequestRejectedEvent = exchangeDomainService.rejectExchangeRequest(exchangeRequest);
         log.info("ExchangeRequest[id: {}] is rejected.", exchangeRequest.getId().getValue());
-        ExchangeRequest saved = exchangeRequestHelper.save(exchangeRequest);
-        // TODO : publish
+        ExchangeRequest saved = exchangeRequestHelper.save(exchangeRequestRejectedEvent.getExchangeRequest());
+
         return exchangeRequestDataMapper.exchangeRequestToRejectExchangeRequestResponse(saved);
     }
 }

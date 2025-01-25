@@ -74,15 +74,11 @@ public class ExchangeRequest extends AggregateRoot<ExchangeRequestId> {
         if (requestMemberSnapshot != null) {
             this.requestMemberId = requestMemberSnapshot.getMemberId();
             this.requestMemberSnapshotId = requestMemberSnapshot.getId();
-
-            this.status = ExchangeRequestStatus.PENDING;
         } else {
             // 쿠폰 사용 요청
             this.memberCouponId = memberCouponId;
         }
-    }
 
-    public void completeCheckCoupon() {
         this.status = ExchangeRequestStatus.PENDING;
     }
 
