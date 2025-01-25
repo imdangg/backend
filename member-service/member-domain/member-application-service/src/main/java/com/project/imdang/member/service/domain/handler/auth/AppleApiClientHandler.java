@@ -27,6 +27,8 @@ import org.springframework.web.client.RestTemplate;
 import java.io.Reader;
 import java.io.StringReader;
 import java.security.PrivateKey;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -105,8 +107,8 @@ public class AppleApiClientHandler implements OAuthApiClientHandler {
                 .issuer(teamId)
                 .audience().add("https://appleid.apple.com").and()
                 .subject(clientId)
-                .issuedAt(new Date())
-                .expiration(new Date(1000*60))
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(Date.from(LocalDateTime.now().plusDays(30).atZone(ZoneId.systemDefault()).toInstant()))
                 .signWith(getPrivateKey(), SignatureAlgorithm.ES256)
                 .compact();
     }

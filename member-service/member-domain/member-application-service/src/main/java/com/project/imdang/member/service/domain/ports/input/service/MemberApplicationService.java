@@ -6,8 +6,6 @@ import com.project.imdang.member.service.domain.dto.oauth.OAuthWithdrawCommand;
 
 import java.util.UUID;
 
-import java.util.UUID;
-
 public interface MemberApplicationService {
     LoginResponse login(OAuthLoginCommand loginCommand);
 

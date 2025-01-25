@@ -8,9 +8,13 @@ import com.project.imdang.insight.service.domain.dto.insight.delete.DeleteInsigh
 import com.project.imdang.insight.service.domain.dto.insight.delete.DeleteInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.detail.DetailInsightQuery;
 import com.project.imdang.insight.service.domain.dto.insight.detail.DetailInsightResponse;
+import com.project.imdang.insight.service.domain.dto.insight.list.ApartmentComplexResponse;
+import com.project.imdang.insight.service.domain.dto.insight.list.DistrictResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
+import com.project.imdang.insight.service.domain.dto.insight.list.InsightSimpleResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightByApartmentComplexQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightQuery;
+import com.project.imdang.insight.service.domain.dto.insight.list.ListMyInsightCreatedByMeQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListMyInsightQuery;
 import com.project.imdang.insight.service.domain.dto.insight.recommend.RecommendInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.recommend.RecommendInsightResponse;
@@ -22,13 +26,16 @@ import com.project.imdang.insight.service.domain.handler.insight.DeleteInsightCo
 import com.project.imdang.insight.service.domain.handler.insight.DetailInsightCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.ListInsightByApartmentComplexCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.ListInsightCommandHandler;
-import com.project.imdang.insight.service.domain.handler.insight.ListMyApartmentComplexCommandHandler;
+import com.project.imdang.insight.service.domain.handler.insight.ListMyInsightApartmentComplexByDistrictCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.ListMyInsightCommandHandler;
+import com.project.imdang.insight.service.domain.handler.insight.ListMyInsightCreatedByMeCommandHandler;
+import com.project.imdang.insight.service.domain.handler.insight.ListMyInsightDistrictCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.ListMyVisitedApartmentComplexCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.RecommendInsightCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.UpdateInsightCommandHandler;
 import com.project.imdang.insight.service.domain.ports.input.service.InsightApplicationService;
 import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
+import com.project.imdang.insight.service.domain.valueobject.District;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -46,8 +53,11 @@ public class InsightApplicationServiceImpl implements InsightApplicationService 
     private final ListInsightByApartmentComplexCommandHandler listInsightByApartmentComplexCommandHandler;
     private final ListMyVisitedApartmentComplexCommandHandler listMyVisitedApartmentComplexCommandHandler;
 
+
+    private final ListMyInsightDistrictCommandHandler listMyInsightDistrictCommandHandler;
+    private final ListMyInsightApartmentComplexByDistrictCommandHandler listMyInsightApartmentComplexByDistrictCommandHandler;
     private final ListMyInsightCommandHandler listMyInsightCommandHandler;
-    private final ListMyApartmentComplexCommandHandler listMyApartmentComplexCommandHandler;
+    private final ListMyInsightCreatedByMeCommandHandler listMyInsightCreatedByMeCommandHandler;
 
     private final DetailInsightCommandHandler detailInsightCommandHandler;
     private final CreateInsightCommandHandler createInsightCommandHandler;
@@ -73,13 +83,23 @@ public class InsightApplicationServiceImpl implements InsightApplicationService 
     }
 
     @Override
+    public List<DistrictResponse> listMyInsightDistrict(UUID memberId) {
+        return listMyInsightDistrictCommandHandler.listMyInsightDistrict(memberId);
+    }
+
+    @Override
+    public List<ApartmentComplexResponse> listMyInsightApartmentComplexByDistrict(UUID memberId, District district) {
+        return listMyInsightApartmentComplexByDistrictCommandHandler.listMyInsightApartmentComplexByDistrict(memberId, district);
+    }
+
+    @Override
     public Page<InsightResponse> listMyInsight(ListMyInsightQuery listMyInsightQuery) {
         return listMyInsightCommandHandler.listMyInsight(listMyInsightQuery);
     }
 
     @Override
-    public List<ApartmentComplex> listMyApartmentComplex(UUID memberId) {
-        return listMyApartmentComplexCommandHandler.listMyApartmentComplex(memberId);
+    public Page<InsightSimpleResponse> listMyInsightCreatedByMe(ListMyInsightCreatedByMeQuery listMyInsightCreatedByMeQuery) {
+        return listMyInsightCreatedByMeCommandHandler.listMyInsightCreatedByMe(listMyInsightCreatedByMeQuery);
     }
 
     @Override

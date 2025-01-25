@@ -18,12 +18,12 @@ public class CancelMemberCouponCommandHandler {
     private final MemberCouponRepository memberCouponRepository;
     private final MemberCouponDomainService memberCouponDomainService;
 
-    public void cancle(CancelMemberCouponCommand cancelMemberCouponCommand) {
+    public void cancel(CancelMemberCouponCommand cancelMemberCouponCommand) {
         // 1. 쿠폰 조회
         MemberCoupon memberCoupon = checkMemberCoupon(cancelMemberCouponCommand.getMemberCouponId());
         // 2. 쿠폰 취소
-        memberCouponDomainService.cancle(memberCoupon);
-        log.info("MemberCoupon[id:{}] is cancled", memberCoupon.getId().getValue());
+        memberCouponDomainService.cancel(memberCoupon);
+        log.info("MemberCoupon[id:{}] is cancelled", memberCoupon.getId().getValue());
     }
 
     private MemberCoupon checkMemberCoupon(Long _memberCouponId) {

@@ -48,7 +48,7 @@ public class MemberControllerTest {
                         .thenReturn(Optional.ofNullable(member));
         //then
         mockMvc.perform(get("/members")
-                        .header("Authorization", "Bearer " + accessToken)
+//                        .header("Authorization", "Bearer " + accessToken)
                         .param("memberId", String.valueOf(memberId))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

@@ -41,7 +41,7 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
     }
 
     @Override
-    public DetailMemberResponse detailMember(UUID memberId) {
+    public MemberInfoResponse detailMember(UUID memberId) {
         return detailMemberCommandHandler.detailMember(memberId);
     }
 

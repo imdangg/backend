@@ -57,7 +57,7 @@ public class CouponController {
     @ApiResponse(responseCode = "200", description = "쿠폰 사용 취소 성공")
     @PostMapping("/cancel")
     public ResponseEntity<Void> cancelCoupon(@RequestBody CancelMemberCouponCommand cancelMemberCouponCommand) {
-        memberCouponApplicationService.cancleMemberCoupon(cancelMemberCouponCommand);
+        memberCouponApplicationService.cancelMemberCoupon(cancelMemberCouponCommand);
         return ResponseEntity.ok().build();
     }
 }

@@ -25,7 +25,6 @@ public enum ErrorCode {
                 return errorCode;
             }
         }
-        // TODO - 예외 처리
-        throw new RuntimeException();
+        throw new IllegalArgumentException("Unsupported code : " + code);
     }
 }

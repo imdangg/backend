@@ -51,7 +51,7 @@ public class FavorableNews {
     }
 
     public enum Development {
-        잘_모르겠어요, 재개발, 재건축, 리모델링, 인근_신도시_개발, 복합단지_개발, 대형_쇼핑몰, 백화점, 대형_오피스_단지
+        잘_모르겠어요, 재개발, 재건축, 리모델링, 인근_신도시_개발, 복합_단지_개발, 대형_쇼핑몰, 백화점, 대형_오피스_단지
     }
 
     public enum Education {
@@ -59,15 +59,15 @@ public class FavorableNews {
     }
 
     public enum Environment {
-        잘_모르겠어요, 대형공원, 하천_복원, 호수_복원
+        잘_모르겠어요, 대형_공원, 하천_복원, 호수_복원
     }
 
     public enum Culture {
-        잘_모르겠어요, 대형병원, 문화센터, 도서관, 공연장, 체육관
+        잘_모르겠어요, 대형_병원, 문화센터, 도서관, 공연장, 체육관
     }
 
     public enum Industry {
-        잘_모르겠어요, 산업단지, 기업_이전, 스타트업_단지
+        잘_모르겠어요, 산업_단지, 기업_이전, 스타트업_단지
     }
 
     public enum Policy {

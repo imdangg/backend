@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorDTO handleException(Exception exception) {
         log.error(exception.getMessage(), exception);
-        return ErrorDTO.of(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected Error!");
+        return ErrorDTO.of(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
     }
 
     @ResponseBody

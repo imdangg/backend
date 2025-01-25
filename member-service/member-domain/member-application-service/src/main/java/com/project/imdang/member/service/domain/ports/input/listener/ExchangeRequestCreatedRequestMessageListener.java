@@ -1,4 +1,4 @@
-package com.project.imdang.insight.service.domain.handler;
+package com.project.imdang.member.service.domain.ports.input.listener;
 
 import com.project.imdang.domain.message.ExchangeRequestCreatedRequestMessage;
 

@@ -21,16 +21,9 @@ public class ExchangeDomainServiceImpl implements ExchangeDomainService {
     }
 
     @Override
-    public ExchangeRequest requestExchangeWithCoupon(ExchangeRequest exchangeRequest, Snapshot requestedSnapshot, MemberCouponId memberCouponId) {
+    public ExchangeRequestCreatedEvent requestExchangeWithCoupon(ExchangeRequest exchangeRequest, Snapshot requestedSnapshot, MemberCouponId memberCouponId) {
         exchangeRequest.initialize(requestedSnapshot, null, memberCouponId);
         log.info("ExchangeRequest[id: {}] is initialized.", exchangeRequest.getId().getValue());
-        return exchangeRequest;
-    }
-
-    @Override
-    public ExchangeRequestCreatedEvent completeCheckCoupon(ExchangeRequest exchangeRequest) {
-        exchangeRequest.completeCheckCoupon();
-        log.info("Coupon of ExchangeRequest[id: {}] is checked.", exchangeRequest.getId().getValue());
         return new ExchangeRequestCreatedEvent(exchangeRequest, ZonedDateTime.now());
     }
 

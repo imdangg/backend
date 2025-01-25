@@ -49,10 +49,38 @@ public class MyInsightControllerTest {
     }
 
     @Test
+    void listDistrict() throws Exception {
+        mockMvc.perform(get("/my-insights/districts")
+                        .header("Authorization", "Bearer " + requestMemberToken)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+    }
+
+    @Test
+    void listApartmentComplexByDistrict() throws Exception {
+        mockMvc.perform(get("/my-insights/by-district/apartment-complexes")
+                        .header("Authorization", "Bearer " + requestMemberToken)
+                        .param("siDo", "서울시")
+                        .param("siGunGu", "강남구")
+                        .param("eupMyeonDong", "신논현동")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+    }
+
+    @Test
     void list() throws Exception {
         mockMvc.perform(get("/my-insights")
                         .header("Authorization", "Bearer " + requestMemberToken)
-                        .param("onlyMine", "TRUE")
+//                        .param("onlyMine", "TRUE")
+                        .param("siDo", "서울시")
+                        .param("siGunGu", "강남구")
+                        .param("eupMyeonDong", "신논현동")
+                        .param("pageNumber", "1")
+                        .param("pageSize", "5")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
 //                .andExpect(jsonPath("$.content.length()").value(1))
@@ -61,9 +89,11 @@ public class MyInsightControllerTest {
     }
 
     @Test
-    void listMyApartmentComplex() throws Exception {
-        mockMvc.perform(get("/my-insights/apartment-complexes")
+    void listCreatedByMe() throws Exception {
+        mockMvc.perform(get("/my-insights/created-by-me")
                         .header("Authorization", "Bearer " + requestMemberToken)
+                        .param("pageNumber", "1")
+                        .param("pageSize", "5")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())

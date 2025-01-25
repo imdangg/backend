@@ -6,6 +6,7 @@ import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExcha
 import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightCommand;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -68,9 +69,9 @@ public class ExchangeControllerTest {
                 .andExpect(jsonPath("$.exchangeRequestId", notNullValue()));
     }
 
-//    @Test
+    @Test
     public void request_with_coupon() throws Exception {
-        UUID insightId = UUID.fromString("111512ab-a7b6-43f9-bd61-16ee2cded7d9");
+        UUID insightId = UUID.fromString("f509ce55-a67a-4c97-8846-0dee0c754c38");
         RequestExchangeInsightCommand requestExchangeInsightCommand
                 = new TestData(insightId).requestExchangeInsightCommand(null, 1L) ;
 
@@ -82,10 +83,10 @@ public class ExchangeControllerTest {
                 .andExpect(jsonPath("$.exchangeRequestId", notNullValue()));
     }
 
-//    @Test
+    @Test
     public void accept() throws Exception {
         AcceptExchangeRequestCommand acceptExchangeRequestCommand = AcceptExchangeRequestCommand.builder()
-                .exchangeRequestId(UUID.fromString("a4c9a9e8-2577-4a4d-9bf1-3f76687336dd"))
+                .exchangeRequestId(UUID.fromString("61ec70ab-2baf-47b1-80a6-c5d551bfccc9"))
                 .requestedMemberId(requestedMemberId)
                 .build();
         mockMvc.perform(post("/exchanges/accept")

@@ -25,27 +25,26 @@ public class Address {
     @NotBlank
     private String eupMyeonDong; // 읍/면/동 (예: 효제동)
     @Schema(description = "도로명")
-    @NotBlank
+//    @NotBlank
     private String roadName; // 도로명
     @Schema(description = "번지", example = "191")
-    @NotBlank
+//    @NotBlank
     private String buildingNumber; // 번지 (예: 191)
     private String detail;
 
+    private Double latitude;
+    private Double longitude;
+
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         Address address = (Address) o;
-        return Objects.equals(siDo, address.siDo) && Objects.equals(siGunGu, address.siGunGu)
-                && Objects.equals(eupMyeonDong, address.eupMyeonDong) && Objects.equals(roadName, address.roadName)
-                && Objects.equals(buildingNumber, address.buildingNumber) && Objects.equals(detail, address.detail);
+        return Objects.equals(siDo, address.siDo) && Objects.equals(siGunGu, address.siGunGu) && Objects.equals(eupMyeonDong, address.eupMyeonDong) && Objects.equals(roadName, address.roadName) && Objects.equals(buildingNumber, address.buildingNumber) && Objects.equals(detail, address.detail) && Objects.equals(latitude, address.latitude) && Objects.equals(longitude, address.longitude);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(siDo, siGunGu, eupMyeonDong, roadName, buildingNumber, detail);
+        return Objects.hash(siDo, siGunGu, eupMyeonDong, roadName, buildingNumber, detail, latitude, longitude);
     }
 }

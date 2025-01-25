@@ -5,12 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class MemberCouponPendingUpdatedResponseMessage {
+public class MemberCouponCancelledResponseMessage {
     private boolean isCompleted;
-    private UUID exchangeRequestId;
+    private Long memberCouponId;
 }

@@ -28,7 +28,7 @@ public class RequestExchangeInsightCommand {
     /////////////////////////////////////////////////
     // 내가 작성한 인사이트
     @Schema(description = "교환 요청한 사용자의 인사이트ID")
-    @NotNull
+//    @NotNull
     private UUID requestMemberInsightId;
     // OR
     @Schema(description = "쿠폰ID")

@@ -8,34 +8,29 @@ import com.project.imdang.insight.service.domain.dto.insight.update.UpdateInsigh
 import com.project.imdang.insight.service.domain.entity.Insight;
 import com.project.imdang.insight.service.domain.entity.Snapshot;
 import com.project.imdang.insight.service.domain.event.InsightUpdatedEvent;
-import com.project.imdang.insight.service.domain.exception.InsightDomainException;
-import com.project.imdang.insight.service.domain.exception.InsightNotFoundException;
+import com.project.imdang.insight.service.domain.handler.InsightHelper;
+import com.project.imdang.insight.service.domain.handler.SnapshotHelper;
+import com.project.imdang.insight.service.domain.handler.UploadMultipartFileHelper;
 import com.project.imdang.insight.service.domain.mapper.InsightDataMapper;
-import com.project.imdang.insight.service.domain.ports.output.repository.InsightRepository;
 import com.project.imdang.insight.service.domain.ports.output.repository.MemberSnapshotRepository;
-import com.project.imdang.insight.service.domain.ports.output.repository.SnapshotRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
 @Component
 public class UpdateInsightCommandHandler {
     private final InsightDomainService insightDomainService;
-    private final InsightRepository insightRepository;
-    private final SnapshotRepository snapshotRepository;
+    private final InsightHelper insightHelper;
+    private final InsightDataMapper insightDataMapper;
+
+    private final SnapshotHelper snapshotHelper;
     private final MemberSnapshotRepository memberSnapshotRepository;
 
-    private final InsightDataMapper insightDataMapper;
+    private final UploadMultipartFileHelper uploadMultipartFileHelper;
+
 
     @Transactional
     public UpdateInsightResponse updateInsight(UpdateInsightCommand updateInsightCommand) {
@@ -43,10 +38,10 @@ public class UpdateInsightCommandHandler {
 
         // validation check
         MemberId updatedBy = new MemberId(updateInsightCommand.getMemberId());
-        Insight insight = checkInsight(insightId);
+        Insight insight = insightHelper.get(insightId);
 
         // TODO : 이미지 처리
-        String mainImage = uploadImage(updateInsightCommand.getMainImage());
+        String mainImage = uploadMultipartFileHelper.uploadFile(updateInsightCommand.getMainImage());
         InsightUpdatedEvent insightUpdatedEvent = insightDomainService.updateInsight(
                 insight,
                 updatedBy,
@@ -66,75 +61,14 @@ public class UpdateInsightCommandHandler {
                 updateInsightCommand.getScore());
         Insight updated = insightUpdatedEvent.getInsight();
         log.info("Insight[id: {}] is updated.", updated.getId().getValue());
-        saveInsight(updated);
+        insightHelper.save(updated);
 
         Snapshot snapshot = insightDomainService.captureInsight(insightUpdatedEvent.getInsight());
-        Snapshot saved = saveSnapshot(snapshot);
+        Snapshot saved = snapshotHelper.save(snapshot);
 
         // memberSnapshot에 update
         memberSnapshotRepository.updateSnapshotIdByMemberIdAndInsightId(saved.getId(), updatedBy, insightId);
 
         return insightDataMapper.insightToUpdateInsightResponse(insightUpdatedEvent.getInsight());
-    }
-
-    private Insight checkInsight(InsightId insightId) {
-        Optional<Insight> insightResult = insightRepository.findById(insightId);
-        if (insightResult.isEmpty()) {
-            throw new InsightNotFoundException(insightId);
-        }
-        return insightResult.get();
-    }
-
-    private String uploadImage(MultipartFile image) {
-
-        if (image.isEmpty()) {
-            // TODO : 예외 처리
-            throw new IllegalArgumentException("File is empty!");
-        }
-
-        String filename = image.getOriginalFilename();
-//        String extension = filename.substring(filename.lastIndexOf("."));
-//        String newFileName = UUID.randomUUID().toString() + extension;
-
-        try {
-
-            String uploadDir = "/uploads";
-            // 업로드 디렉토리 확인 및 생성
-            Path uploadPath = Paths.get(uploadDir);
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-
-            Path filePath = uploadPath.resolve(filename);
-            image.transferTo(filePath.toFile());
-
-        } catch (IOException e) {
-            // TODO : 예외 처리
-            throw new RuntimeException(e);
-        }
-
-        return filename;
-    }
-
-    private Insight saveInsight(Insight insight) {
-        Insight saved = insightRepository.save(insight);
-        if (saved == null) {
-            String errorMessage = "Could not save insight!";
-            log.error(errorMessage);
-            throw new InsightDomainException(errorMessage);
-        }
-        log.info("Insight[id: {}] is saved.", saved.getId().getValue());
-        return saved;
-    }
-
-    private Snapshot saveSnapshot(Snapshot snapshot) {
-        Snapshot saved = snapshotRepository.save(snapshot);
-        if (saved == null) {
-            String errorMessage = "Could not save snapshot!";
-            log.error(errorMessage);
-            throw new InsightDomainException(errorMessage);
-        }
-        log.info("Snapshot[id: {}] is saved.", saved.getId().getValue());
-        return saved;
     }
 }
