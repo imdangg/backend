@@ -21,8 +21,9 @@ public class LoginResponse {
     @Schema(description = "온보딩 여부")
     private boolean isJoined;
     private UUID memberId;
+    private String appleRefreshToken;
 
-    public static LoginResponse from(TokenResponse response, boolean isJoined, UUID memberId) {
-        return new LoginResponse(response.getAccessToken(), response.getRefreshToken(), response.getExpiresIn(), isJoined, memberId);
+    public static LoginResponse from(TokenResponse response, boolean isJoined, UUID memberId, String refreshToken) {
+        return new LoginResponse(response.getAccessToken(), response.getRefreshToken(), response.getExpiresIn(), isJoined, memberId, refreshToken);
     }
 }

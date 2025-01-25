@@ -29,7 +29,7 @@ public class ListMemberCouponHandler {
         Member member = checkMember(memberId);
         // MemberCoupon 조회
         List<MemberCoupon> memberCoupons = memberCouponRepository.findAllByMemberIdAndUsed(member.getId(), Boolean.FALSE);
-        log.info("");
+        log.info("Member[id:{}] have {} Coupons", member.getId().getValue(), memberCoupons.size());
         return memberCouponDataMapper.memberCouponsToListMemberCouponResponse(memberCoupons);
     }
     private Member checkMember(UUID _memberId) {

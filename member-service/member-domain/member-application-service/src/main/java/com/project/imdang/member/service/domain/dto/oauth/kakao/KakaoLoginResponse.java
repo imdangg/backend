@@ -53,4 +53,8 @@ public class KakaoLoginResponse implements OAuthLoginResponse {
     public OAuthType getOAuthType() {
         return OAuthType.KAKAO;
     }
+    @Override
+    public String getRefreshToken() {
+        return null;
+    }
 }

@@ -17,7 +17,10 @@ import java.util.stream.IntStream;
 public class MemberCouponDataMapper {
 
     public ListMemberCouponResponse memberCouponsToListMemberCouponResponse(List<MemberCoupon> memberCoupons) {
-        return new ListMemberCouponResponse(memberCoupons.size());
+        if(memberCoupons.isEmpty()){
+            return new ListMemberCouponResponse(0, null);
+        }
+        return new ListMemberCouponResponse(memberCoupons.size(), memberCoupons.get(0).getCouponId().getValue());
     }
 
     public List<MemberCoupon> issueMemberCouponCommandToMemberCoupons(Member member, Coupon coupon, Integer quantity) {

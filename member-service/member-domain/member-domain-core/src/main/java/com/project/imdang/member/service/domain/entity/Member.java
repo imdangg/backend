@@ -28,6 +28,10 @@ public class Member extends AggregateRoot<MemberId> {
     // TODO - CHECK : 데이터를 쌓아서 GROUP BY로?
     private int rejectedCount;
 
+    private String refreshToken;
+    private Boolean isLogin;
+    private Boolean isDeleted;
+  
     private int accusedCount;
     private MemberStatus status;
     private PenaltyPeriod penaltyPeriod;
@@ -37,6 +41,7 @@ public class Member extends AggregateRoot<MemberId> {
                 .id(new MemberId(UUID.randomUUID()))
                 .oAuthId(oAuthId)
                 .oAuthType(oAuthType)
+                .isDeleted(Boolean.FALSE)
                 .status(MemberStatus.ACTIVE)
                 .build();
     }
@@ -52,6 +57,9 @@ public class Member extends AggregateRoot<MemberId> {
                   int exchangeCount,
                   int insightCount,
                   int rejectedCount,
+                  String refreshToken, 
+                  Boolean isLogin, 
+                  Boolean isDeleted,
                   int accusedCount,
                   MemberStatus status,
                   PenaltyPeriod penaltyPeriod) {
@@ -65,6 +73,9 @@ public class Member extends AggregateRoot<MemberId> {
         this.exchangeCount = exchangeCount;
         this.insightCount = insightCount;
         this.rejectedCount = rejectedCount;
+        this.refreshToken = refreshToken;
+        this.isLogin = isLogin;
+        this.isDeleted = isDeleted;
         this.accusedCount = accusedCount;
         this.status = status;
         this.penaltyPeriod = penaltyPeriod;
@@ -75,6 +86,21 @@ public class Member extends AggregateRoot<MemberId> {
         this.birthDate = birthDate;
         this.gender = gender;
         this.deviceToken = deviceToken;
+    }
+
+    public void logout() {
+        this.isLogin = Boolean.FALSE;
+        this.refreshToken = null;
+    }
+
+    public void withdraw() {
+        this.isDeleted = Boolean.TRUE;
+        this.refreshToken = null;
+        this.deviceToken = null;
+    }
+
+    public void storeRefeashToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
     public void increaseAccusedCount(AccusePenaltyPolicy accusePenaltyPolicy) {

@@ -2,7 +2,9 @@ package com.project.imdang.member.service.domain.handler.auth;
 
 import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginCommand;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginResponse;
+import com.project.imdang.member.service.domain.dto.oauth.OAuthWithdrawCommand;
 import com.project.imdang.member.service.domain.dto.oauth.kakao.KakaoLoginResponse;
+import com.project.imdang.member.service.domain.dto.oauth.kakao.KakaoWithdrawResponse;
 import com.project.imdang.member.service.domain.valueobject.OAuthType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,19 +24,19 @@ public class KaKaoApiClientHandler implements OAuthApiClientHandler{
     @Value("${oauth.kakao.url.api}")
     private String apiUrl;
 
+    @Value("${oauth.kakao.url.api}")
+    private String withdrawUrl;
+
     @Override
     public OAuthType oAuthType() {
         return OAuthType.KAKAO;
     }
 
     @Override
-    public String getAccessToken(OAuthLoginCommand loginCommand) {
-        MultiValueMap<String, String> body = loginCommand.makeBody();
-        return body.getFirst("code");
-    }
+    public OAuthLoginResponse getOAuthInfo(OAuthLoginCommand loginCommand) {
+        MultiValueMap<String, String> commandBody = loginCommand.makeBody();
+        String accessToken = commandBody.getFirst("code");
 
-    @Override
-    public OAuthLoginResponse getOAuthInfo(String accessToken) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         httpHeaders.set("Authorization", "Bearer " + accessToken);
@@ -44,5 +46,18 @@ public class KaKaoApiClientHandler implements OAuthApiClientHandler{
 
         HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
         return restTemplate.postForObject(apiUrl, request, KakaoLoginResponse.class);
+    }
+
+    @Override
+    public void withdraw(OAuthWithdrawCommand withdrawCommand) {
+        MultiValueMap<String, String> body = withdrawCommand.makeBody();
+        String accessToken = body.getFirst("token");
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        httpHeaders.set("Authorization", "Bearer " + accessToken);
+
+        HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
+        KakaoWithdrawResponse kakaoWithdrawResponse = restTemplate.postForObject(withdrawUrl, request, KakaoWithdrawResponse.class);
     }
 }

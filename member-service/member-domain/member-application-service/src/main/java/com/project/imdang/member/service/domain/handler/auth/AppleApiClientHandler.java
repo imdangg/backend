@@ -5,6 +5,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginCommand;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginResponse;
+import com.project.imdang.member.service.domain.dto.oauth.OAuthWithdrawCommand;
 import com.project.imdang.member.service.domain.dto.oauth.apple.AppleLoginResponse;
 import com.project.imdang.member.service.domain.dto.oauth.apple.AppleTokenResponse;
 import com.project.imdang.member.service.domain.valueobject.OAuthType;
@@ -58,12 +59,11 @@ public class AppleApiClientHandler implements OAuthApiClientHandler {
         return OAuthType.APPLE;
     }
 
-
     /**
      * 엑세스 토큰과 리프레쉬토큰 얻어오기
      */
     @Override
-    public String getAccessToken(OAuthLoginCommand loginCommand) {
+    public OAuthLoginResponse getOAuthInfo(OAuthLoginCommand loginCommand) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -74,16 +74,27 @@ public class AppleApiClientHandler implements OAuthApiClientHandler {
 
         HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
         AppleTokenResponse response = restTemplate.postForObject(authUrl, request, AppleTokenResponse.class);
-        //TODO null 체크
-        return response.getIdToken();
+
+        DecodedJWT decodedJWT = JWT.decode(response.getIdToken());
+        return AppleLoginResponse.builder()
+                .id(String.valueOf(decodedJWT.getClaim("sub")))
+                .email(String.valueOf(decodedJWT.getClaim("email")))
+                .refreshToken(response.getRefreshToken()).build();
+
     }
 
     @Override
-    public OAuthLoginResponse getOAuthInfo(String idToken) {
-        DecodedJWT decodedJWT = JWT.decode(idToken);
-        return AppleLoginResponse.builder()
-                .id(String.valueOf(decodedJWT.getClaim("sub")))
-                .email(String.valueOf(decodedJWT.getClaim("email"))).build();
+    public void withdraw(OAuthWithdrawCommand withdrawCommand) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> body = withdrawCommand.makeBody();
+        body.add("client_id", clientId);
+        body.add("client_secret", generateClientSecret());
+        body.add("token_type_hint", "refresh_token");
+
+        HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
+        restTemplate.postForObject(authUrl, request, Void.class);
     }
 
     private String generateClientSecret() {

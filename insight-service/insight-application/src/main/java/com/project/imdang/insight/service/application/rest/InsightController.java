@@ -145,5 +145,3 @@ public class InsightController {
         return ResponseEntity.ok(accuseInsightResponse);
     }
 }
-
-            

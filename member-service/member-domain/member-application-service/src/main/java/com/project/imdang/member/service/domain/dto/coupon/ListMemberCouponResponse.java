@@ -7,10 +7,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ListMemberCouponResponse {
     @Schema(description = "보유한 쿠폰 갯수")
     private Integer couponCount;
+    private UUID couponId;
 }
