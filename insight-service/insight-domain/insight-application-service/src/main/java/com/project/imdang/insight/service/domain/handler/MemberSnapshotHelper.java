@@ -22,7 +22,7 @@ public class MemberSnapshotHelper {
         return memberSnapshotRepository.findByMemberIdAndInsightId(memberId, insightId);
     }
 
-    public void save(MemberSnapshot memberSnapshot) {
+    public MemberSnapshot save(MemberSnapshot memberSnapshot) {
         MemberSnapshot saved = memberSnapshotRepository.save(memberSnapshot);
         if (saved == null) {
             String errorMessage = "Could not save memberSnapshot!";
@@ -30,6 +30,7 @@ public class MemberSnapshotHelper {
             throw new InsightDomainException(errorMessage);
         }
         log.info("memberSnapshot[id: {}] is saved.", saved.getId().getValue());
+        return saved;
     }
 
     public void deleteByMemberIdAndInsightId(MemberId memberId, InsightId insightId) {

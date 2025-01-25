@@ -1,6 +1,5 @@
 package com.project.imdang.insight.service.domain.handler;
 
-import com.project.imdang.domain.event.EmptyEvent;
 import com.project.imdang.domain.message.MemberAccusedResponseMessage;
 import com.project.imdang.domain.valueobject.InsightId;
 import com.project.imdang.insight.service.domain.InsightDomainService;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class InsightAccuseMemberSaga implements SagaStep<MemberAccusedResponseMessage, EmptyEvent> {
+public class InsightAccuseMemberSaga implements SagaStep<MemberAccusedResponseMessage> {
     // insight accuse
     // insight accuse → increase accusedMember accusedCount (& update status)
 
@@ -20,9 +19,8 @@ public class InsightAccuseMemberSaga implements SagaStep<MemberAccusedResponseMe
 
     // accusedMember increase accusedCount 처리 완료
     @Override
-    public EmptyEvent process(MemberAccusedResponseMessage response) {
+    public void process(MemberAccusedResponseMessage response) {
         InsightId accusedInsightId = new InsightId(response.getAccusedInsightId());
-        return null;
     }
 
     // accusedMember increase accusedCount 처리 실패

@@ -35,7 +35,7 @@ public class MemberCouponApplicationServiceImpl implements MemberCouponApplicati
     }
 
     @Override
-    public void cancleMemberCoupon(CancelMemberCouponCommand cancelMemberCouponCommand) {
-        cancelMemberCouponCommandHandler.cancle(cancelMemberCouponCommand);
+    public void cancelMemberCoupon(CancelMemberCouponCommand cancelMemberCouponCommand) {
+        cancelMemberCouponCommandHandler.cancel(cancelMemberCouponCommand);
     }
 }

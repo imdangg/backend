@@ -79,6 +79,8 @@ public class MyInsightControllerTest {
                         .param("siDo", "서울시")
                         .param("siGunGu", "강남구")
                         .param("eupMyeonDong", "신논현동")
+                        .param("pageNumber", "1")
+                        .param("pageSize", "5")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
 //                .andExpect(jsonPath("$.content.length()").value(1))

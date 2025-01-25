@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class ExchangeRequestCreatedRequestMessage {
+public class MemberCouponUsedResponseMessage {
+    private boolean isCompleted;
     private Long memberCouponId;
 }

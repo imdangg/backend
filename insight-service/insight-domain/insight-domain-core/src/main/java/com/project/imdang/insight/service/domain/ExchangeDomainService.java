@@ -9,8 +9,7 @@ import com.project.imdang.insight.service.domain.event.ExchangeRequestRejectedEv
 
 public interface ExchangeDomainService {
     ExchangeRequestCreatedEvent requestExchange(ExchangeRequest exchangeRequest, Snapshot requestedSnapshot, Snapshot requestMemberSnapshot);
-    ExchangeRequest requestExchangeWithCoupon(ExchangeRequest exchangeRequest, Snapshot requestedSnapshot, MemberCouponId memberCouponId);
-    ExchangeRequestCreatedEvent completeCheckCoupon(ExchangeRequest exchangeRequest);
+    ExchangeRequestCreatedEvent requestExchangeWithCoupon(ExchangeRequest exchangeRequest, Snapshot requestedSnapshot, MemberCouponId memberCouponId);
     ExchangeRequestAcceptedEvent acceptExchangeRequest(ExchangeRequest exchangeRequest);
     ExchangeRequestRejectedEvent rejectExchangeRequest(ExchangeRequest exchangeRequest);
 }
