@@ -17,7 +17,7 @@ public class MemberCouponPersistenceMapper {
                 .couponId(memberCoupon.getCouponId().getValue())
                 .memberId(memberCoupon.getMemberId().getValue())
                 .createdAt(memberCoupon.getCreatedAt())
-                .used(memberCoupon.getUsed())
+                .used(memberCoupon.isUsed())
                 .remark(memberCoupon.getRemark())
                 .usedAt(memberCoupon.getUsedAt())
                 .build();

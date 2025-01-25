@@ -13,7 +13,7 @@ public interface MemberApplicationService {
 
     void join(UUID memberId, JoinCommand joinCommand);
 
-    DetailMemberResponse detailMember(UUID memberId);
+    MemberInfoResponse detailMember(UUID memberId);
 
     void logout(UUID memberId);
 
