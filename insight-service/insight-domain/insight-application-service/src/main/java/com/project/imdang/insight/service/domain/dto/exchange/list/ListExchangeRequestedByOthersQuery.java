@@ -17,7 +17,6 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ListExchangeRequestedByOthersQuery {
-        // extends PagingQuery {
 
     @Setter
     @Schema(description = "요청 받은 사용자ID")
@@ -27,8 +26,8 @@ public class ListExchangeRequestedByOthersQuery {
     @NotNull
     private ExchangeRequestStatus exchangeRequestStatus;
 
-    private Integer pageNumber = 0;
-    private Integer pageSize = 10;
+    private Integer pageNumber;
+    private Integer pageSize;
     private String direction;
     private String[] properties;
 }

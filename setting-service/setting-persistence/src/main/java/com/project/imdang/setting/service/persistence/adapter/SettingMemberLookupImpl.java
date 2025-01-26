@@ -27,7 +27,7 @@ public class SettingMemberLookupImpl implements SettingMemberLookup {
             return Optional.ofNullable(responseEntity)
                     .map(HttpEntity::getBody)
                     .map(memberInfoResponse -> MemberInfo.builder()
-                            .memberId(memberInfoResponse.getMemberId())
+                            .memberId(new MemberId(memberInfoResponse.getMemberId()))
                             .deviceToken(memberInfoResponse.getDeviceToken())
                             .build());
         } catch (Exception e) {

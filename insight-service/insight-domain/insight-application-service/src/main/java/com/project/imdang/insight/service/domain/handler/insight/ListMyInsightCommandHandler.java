@@ -1,13 +1,16 @@
 package com.project.imdang.insight.service.domain.handler.insight;
 
 import com.project.imdang.domain.utils.PagingUtils;
+import com.project.imdang.domain.valueobject.InsightId;
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListMyInsightQuery;
+import com.project.imdang.insight.service.domain.entity.Insight;
 import com.project.imdang.insight.service.domain.entity.MemberSnapshot;
 import com.project.imdang.insight.service.domain.entity.Snapshot;
 import com.project.imdang.insight.service.domain.mapper.SnapshotDataMapper;
 import com.project.imdang.insight.service.domain.ports.output.lookup.InsightMemberLookup;
+import com.project.imdang.insight.service.domain.ports.output.repository.InsightRepository;
 import com.project.imdang.insight.service.domain.ports.output.repository.MemberSnapshotRepository;
 import com.project.imdang.insight.service.domain.ports.output.repository.SnapshotRepository;
 import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
@@ -23,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -35,6 +37,7 @@ public class ListMyInsightCommandHandler {
     private final SnapshotRepository snapshotRepository;
     private final SnapshotDataMapper snapshotDataMapper;
 
+    private final InsightRepository insightRepository;
     private final InsightMemberLookup insightMemberLookup;
 
     @Transactional(readOnly = true)
@@ -75,14 +78,24 @@ public class ListMyInsightCommandHandler {
     }
 
     private List<InsightResponse> getInsightResponses(List<Snapshot> snapshots) {
-        Map<UUID, String> memberNicknameMap = getMemberNicknameMap(snapshots);
+        Map<MemberId, String> memberNicknameMap = getMemberNicknameMap(snapshots);
+        Map<InsightId, Integer> recommendedCountMap = getRecommendedCountMap(snapshots);
         return snapshots.stream().map(snapshot -> {
-            String memberNickname = memberNicknameMap.get(snapshot.getMemberId().getValue());
-            return snapshotDataMapper.snapshotToInsightResponse(snapshot, memberNickname);
+            String memberNickname = memberNicknameMap.get(snapshot.getMemberId());
+            Integer recommendedCount = recommendedCountMap.get(snapshot.getInsightId());
+            return snapshotDataMapper.snapshotToInsightResponse(snapshot, memberNickname, recommendedCount);
         }).toList();
     }
 
-    private Map<UUID, String> getMemberNicknameMap(List<Snapshot> snapshots) {
+    private Map<InsightId, Integer> getRecommendedCountMap(List<Snapshot> snapshots) {
+        List<InsightId> insightIds = snapshots.stream()
+                .map(Snapshot::getInsightId)
+                .toList();
+        return insightRepository.findAllByIds(insightIds).stream()
+                .collect(Collectors.toMap(Insight::getId, Insight::getRecommendedCount));
+    }
+
+    private Map<MemberId, String> getMemberNicknameMap(List<Snapshot> snapshots) {
         List<MemberId> memberIds = snapshots.stream()
                 .map(Snapshot::getMemberId)
                 .toList();

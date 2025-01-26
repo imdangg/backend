@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface NotificationApplicationService {
-    Page<NotificationResponse> listUncheckedNotification(ListNotificationQuery listNotificationQuery);
+    Page<NotificationResponse> listNotification(ListNotificationQuery listNotificationQuery);
     void createNotification(CreateNotificationCommand createNotificationCommand);
     void updateNotificationAsChecked(List<Long> notificationIds);
 //    void updateNotificationAsChecked(Long notificationId);

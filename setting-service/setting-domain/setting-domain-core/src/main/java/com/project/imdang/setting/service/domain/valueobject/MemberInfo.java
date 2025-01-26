@@ -1,10 +1,9 @@
 package com.project.imdang.setting.service.domain.valueobject;
 
+import com.project.imdang.domain.valueobject.MemberId;
 import lombok.Builder;
 
-import java.util.UUID;
-
 @Builder
-public record MemberInfo(UUID memberId,
+public record MemberInfo(MemberId memberId,
                          String deviceToken) {
 }

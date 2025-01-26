@@ -19,7 +19,6 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ListExchangeRequestedByMeQuery {
     // TODO - PagingQuery 클래스 이동
-//        extends PagingQuery {
 
     @Setter
     @Schema(description = "요청한 사용자 ID")

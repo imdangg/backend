@@ -28,7 +28,8 @@ import java.util.UUID;
 public class DetailInsightResponse {
 
     private UUID memberId;
-//    private MemberResponse member;
+    private String memberNickname;
+
     private UUID insightId;
     private Long snapshotId;
 
@@ -49,6 +50,8 @@ public class DetailInsightResponse {
     private ComplexFacility complexFacility;
     private FavorableNews favorableNews;
 
+    private Boolean recommended;    // 로그인한 사용자가 추천했는가?
+    private Boolean accused;        // 로그인한 사용자가 신고했는가?
     private Integer recommendedCount;
     private Integer accusedCount;
     private Integer viewCount;
@@ -56,6 +59,7 @@ public class DetailInsightResponse {
     private Integer score;
     private ZonedDateTime createdAt;
     private ExchangeRequestStatus exchangeRequestStatus;
+    private Boolean exchangeRequestCreatedByMe;
     private UUID exchangeRequestId;
 
     public DetailInsightResponse toPreviewInsightResponse() {
@@ -73,11 +77,12 @@ public class DetailInsightResponse {
                 .summary(summary)
                 .recommendedCount(recommendedCount)
                 .memberId(memberId)
-//                .member(member)
+                .memberNickname(memberNickname)
                 .createdAt(createdAt)
                 .score(score)
-                // TODO - CHECK
                 .exchangeRequestStatus(exchangeRequestStatus)
+                .exchangeRequestCreatedByMe(exchangeRequestCreatedByMe)
+                .exchangeRequestId(exchangeRequestId)
                 .build();
     }
 }

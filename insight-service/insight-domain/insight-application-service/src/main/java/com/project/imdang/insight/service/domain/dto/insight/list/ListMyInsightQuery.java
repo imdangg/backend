@@ -14,7 +14,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ListMyInsightQuery {
-        // extends PagingQuery {
+
 //    @Setter
     private UUID memberId;
     private District district;

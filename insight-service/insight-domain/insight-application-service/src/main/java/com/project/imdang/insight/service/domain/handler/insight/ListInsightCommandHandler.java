@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -37,14 +36,14 @@ public class ListInsightCommandHandler {
                 listInsightQuery.getPageNumber(), listInsightQuery.getPageSize(), listInsightQuery.getDirection(), listInsightQuery.getProperties());
 
         Page<Insight> paged = insightRepository.findAll(pageRequest);
-        Map<UUID, String> memberNicknameMap = getMemberNicknameMap(paged.getContent());
+        Map<MemberId, String> memberNicknameMap = getMemberNicknameMap(paged.getContent());
         return paged.map(insight -> {
-                    String memberNickname = memberNicknameMap.get(insight.getMemberId().getValue());
-                    return insightDataMapper.insightToInsightResponse(insight, memberNickname);
-                });
+            String memberNickname = memberNicknameMap.get(insight.getMemberId());
+            return insightDataMapper.insightToInsightResponse(insight, memberNickname);
+        });
     }
 
-    private Map<UUID, String> getMemberNicknameMap(List<Insight> insights) {
+    private Map<MemberId, String> getMemberNicknameMap(List<Insight> insights) {
         List<MemberId> memberIds = insights.stream()
                 .map(Insight::getMemberId)
                 .toList();
