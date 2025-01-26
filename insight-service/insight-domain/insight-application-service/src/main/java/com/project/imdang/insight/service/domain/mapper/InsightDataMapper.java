@@ -16,14 +16,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class InsightDataMapper {
 
-    public InsightResponse insightToInsightResponse(Insight insight) {
+    public InsightResponse insightToInsightResponse(Insight insight, String memberNickname) {
         return InsightResponse.builder()
                 .insightId(insight.getId().getValue())
                 .recommendedCount(insight.getRecommendedCount())
                 .address(insight.getAddress())
                 .title(insight.getTitle())
                 .mainImage(insight.getMainImage())
-                .memberId(insight.getMemberId().getValue())
+                .memberNickname(memberNickname)
                 .build();
     }
 

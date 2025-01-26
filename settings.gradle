@@ -5,6 +5,7 @@ include("imdang-container")
 include("infrastructure")
 include("infrastructure:event")
 include("infrastructure:saga")
+include(':infrastructure:feign')
 
 include("common")
 include("common:common-application")

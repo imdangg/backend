@@ -1,9 +1,15 @@
 package com.project.imdang.member.service.domain.ports.input.service;
 
-import com.project.imdang.member.service.domain.dto.*;
+import com.project.imdang.member.service.domain.dto.DetailMyPageQuery;
+import com.project.imdang.member.service.domain.dto.DetailMyPageResponse;
+import com.project.imdang.member.service.domain.dto.JoinCommand;
+import com.project.imdang.member.service.domain.dto.LoginResponse;
+import com.project.imdang.member.service.domain.dto.MemberResponse;
+import com.project.imdang.member.service.domain.dto.TokenResponse;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginCommand;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthWithdrawCommand;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface MemberApplicationService {
@@ -13,7 +19,8 @@ public interface MemberApplicationService {
 
     void join(UUID memberId, JoinCommand joinCommand);
 
-    DetailMemberResponse detailMember(UUID memberId);
+    MemberResponse detailMember(UUID memberId);
+    List<MemberResponse> listMember(List<UUID> memberIds);
 
     void logout(UUID memberId);
 

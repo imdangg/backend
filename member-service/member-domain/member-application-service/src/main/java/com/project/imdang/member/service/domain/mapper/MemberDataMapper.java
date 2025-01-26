@@ -1,7 +1,7 @@
 package com.project.imdang.member.service.domain.mapper;
 
-import com.project.imdang.member.service.domain.dto.MemberInfoResponse;
 import com.project.imdang.member.service.domain.dto.DetailMyPageResponse;
+import com.project.imdang.member.service.domain.dto.MemberResponse;
 import com.project.imdang.member.service.domain.entity.Member;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +15,9 @@ public class MemberDataMapper {
                 .build();
     }
 
-    public MemberInfoResponse memberToDetailMemberResponse(Member member){
-        return MemberInfoResponse.builder()
+    public MemberResponse memberToDetailMemberResponse(Member member){
+        return MemberResponse.builder()
+                .memberId(member.getId().getValue())
                 .nickname(member.getNickname())
                 .birthDate(member.getBirthDate())
                 .gender(member.getGender().name())

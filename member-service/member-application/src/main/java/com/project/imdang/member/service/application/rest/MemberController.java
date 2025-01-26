@@ -1,8 +1,8 @@
 package com.project.imdang.member.service.application.rest;
 
-import com.project.imdang.member.service.domain.dto.MemberInfoResponse;
 import com.project.imdang.member.service.domain.dto.DetailMyPageQuery;
 import com.project.imdang.member.service.domain.dto.DetailMyPageResponse;
+import com.project.imdang.member.service.domain.dto.MemberResponse;
 import com.project.imdang.member.service.domain.dto.oauth.apple.AppleWithdrawCommand;
 import com.project.imdang.member.service.domain.dto.oauth.google.GoogleWithdrawCommand;
 import com.project.imdang.member.service.domain.dto.oauth.kakao.KakaoWithdrawCommand;
@@ -17,15 +17,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
 @Tag(name = "MemberController", description = "마이페이지 API")
-@RequestMapping("members")
+@RequestMapping("/members")
 public class MemberController {
     private final MemberApplicationService memberApplicationService;
 
@@ -36,16 +42,21 @@ public class MemberController {
     public ResponseEntity<DetailMyPageResponse> detail(@AuthenticationPrincipal UUID memberId) {
         DetailMyPageQuery detailMyPageQuery = new DetailMyPageQuery(memberId);
         DetailMyPageResponse detailMyPageResponse = memberApplicationService.detailMyPage(detailMyPageQuery);
-        log.info("Member[id : {}] mypage is viewed", memberId);
+        log.info("MyPage of Member[id : {}] is viewed", memberId);
         return ResponseEntity.ok(detailMyPageResponse);
     }
 
-    //TODO - CHECK : 전체 회원 정보 가져오기 or 필요한 정보만 가져오기
+    @GetMapping("/info")
+    public ResponseEntity<MemberResponse> info(@RequestParam UUID memberId) {
+        MemberResponse memberResponse = memberApplicationService.detailMember(memberId);
+        log.info("Member[id :{}] is retrieved", memberId);
+        return ResponseEntity.ok(memberResponse);
+    }
+
     @GetMapping
-    public ResponseEntity<MemberInfoResponse> info(@RequestParam UUID memberId) {
-        MemberInfoResponse memberInfoResponse = memberApplicationService.detailMember(memberId);
-        log.info("Member[id :{}] is retrived", memberId);
-        return ResponseEntity.ok(memberInfoResponse);
+    public ResponseEntity<List<MemberResponse>> list(@RequestParam List<UUID> memberIds) {
+        List<MemberResponse> memberResponses = memberApplicationService.listMember(memberIds);
+        return ResponseEntity.ok(memberResponses);
     }
 
     /**
@@ -58,6 +69,14 @@ public class MemberController {
         memberApplicationService.logout(memberId);
         return ResponseEntity.ok().build();
     }
+/*
+    @Operation(description = "회원 탈퇴 API")
+    @ApiResponse(responseCode = "200", description = "탈퇴 완료")
+    @PostMapping("/withdraw")
+    public ResponseEntity<Void> withdraw(@AuthenticationPrincipal UUID memberId, @RequestBody @Valid OAuthWithdrawCommand_ oAuthWithdrawCommand) {
+        memberApplicationService.withdraw(memberId, oAuthWithdrawCommand);
+        return ResponseEntity.ok().build();
+    }*/
 
     //회원 탈퇴
     @Operation(description = "카카오 회원 탈퇴 API")

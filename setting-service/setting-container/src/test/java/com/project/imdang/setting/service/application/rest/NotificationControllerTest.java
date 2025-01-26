@@ -1,7 +1,7 @@
 package com.project.imdang.setting.service.application.rest;
 
 import com.project.imdang.domain.jwt.JwtTokenProvider;
-import com.project.imdang.setting.service.domain.SettingServiceApplication;
+import com.project.imdang.setting.service.SettingServiceApplication;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

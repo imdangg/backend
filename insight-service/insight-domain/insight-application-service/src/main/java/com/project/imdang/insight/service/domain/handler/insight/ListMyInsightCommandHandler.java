@@ -5,10 +5,13 @@ import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListMyInsightQuery;
 import com.project.imdang.insight.service.domain.entity.MemberSnapshot;
+import com.project.imdang.insight.service.domain.entity.Snapshot;
 import com.project.imdang.insight.service.domain.mapper.SnapshotDataMapper;
+import com.project.imdang.insight.service.domain.ports.output.lookup.InsightMemberLookup;
 import com.project.imdang.insight.service.domain.ports.output.repository.MemberSnapshotRepository;
 import com.project.imdang.insight.service.domain.ports.output.repository.SnapshotRepository;
 import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
+import com.project.imdang.insight.service.domain.valueobject.MemberInfo;
 import com.project.imdang.insight.service.domain.valueobject.SnapshotId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +22,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,6 +34,8 @@ public class ListMyInsightCommandHandler {
     private final MemberSnapshotRepository memberSnapshotRepository;
     private final SnapshotRepository snapshotRepository;
     private final SnapshotDataMapper snapshotDataMapper;
+
+    private final InsightMemberLookup insightMemberLookup;
 
     @Transactional(readOnly = true)
     public Page<InsightResponse> listMyInsight(ListMyInsightQuery listMyInsightQuery) {
@@ -58,16 +66,27 @@ public class ListMyInsightCommandHandler {
             }
         }
 
-        List<InsightResponse> insightResponses = getInsightResponses(paged);
-        return new PageImpl<>(insightResponses, paged.getPageable(), paged.getTotalElements());
-    }
-
-    private List<InsightResponse> getInsightResponses(Page<MemberSnapshot> paged) {
         List<SnapshotId> snapshotIds = paged.getContent().stream()
                 .map(MemberSnapshot::getSnapshotId)
                 .toList();
-        return snapshotRepository.findAllByIds(snapshotIds).stream()
-                .map(snapshotDataMapper::snapshotToInsightResponse)
+        List<Snapshot> snapshots = snapshotRepository.findAllByIds(snapshotIds);
+        List<InsightResponse> insightResponses = getInsightResponses(snapshots);
+        return new PageImpl<>(insightResponses, paged.getPageable(), paged.getTotalElements());
+    }
+
+    private List<InsightResponse> getInsightResponses(List<Snapshot> snapshots) {
+        Map<UUID, String> memberNicknameMap = getMemberNicknameMap(snapshots);
+        return snapshots.stream().map(snapshot -> {
+            String memberNickname = memberNicknameMap.get(snapshot.getMemberId().getValue());
+            return snapshotDataMapper.snapshotToInsightResponse(snapshot, memberNickname);
+        }).toList();
+    }
+
+    private Map<UUID, String> getMemberNicknameMap(List<Snapshot> snapshots) {
+        List<MemberId> memberIds = snapshots.stream()
+                .map(Snapshot::getMemberId)
                 .toList();
+        return insightMemberLookup.lookupByMemberIds(memberIds).stream()
+                .collect(Collectors.toMap(MemberInfo::memberId, MemberInfo::nickname));
     }
 }

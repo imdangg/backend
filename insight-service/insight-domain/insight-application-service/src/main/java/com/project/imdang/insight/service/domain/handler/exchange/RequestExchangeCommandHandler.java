@@ -16,10 +16,10 @@ import com.project.imdang.insight.service.domain.exception.SnapshotNotFoundExcep
 import com.project.imdang.insight.service.domain.handler.ExchangeRequestCreatedRequestMessagePublisherImpl;
 import com.project.imdang.insight.service.domain.handler.ExchangeRequestHelper;
 import com.project.imdang.insight.service.domain.mapper.ExchangeRequestDataMapper;
-import com.project.imdang.insight.service.domain.ports.output.lookup.MemberInfo;
-import com.project.imdang.insight.service.domain.ports.output.lookup.MemberLookup;
+import com.project.imdang.insight.service.domain.ports.output.lookup.InsightMemberLookup;
 import com.project.imdang.insight.service.domain.ports.output.repository.ExchangeRequestRepository;
 import com.project.imdang.insight.service.domain.ports.output.repository.SnapshotRepository;
+import com.project.imdang.insight.service.domain.valueobject.MemberInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -43,7 +43,7 @@ public class RequestExchangeCommandHandler {
 
     private final SnapshotRepository snapshotRepository;
 
-    private final MemberLookup memberLookup;
+    private final InsightMemberLookup insightMemberLookup;
 
     private final ExchangeRequestCreatedRequestMessagePublisherImpl exchangeRequestCreatedRequestMessagePublisher;
     private final EventPublisher eventPublisher;
@@ -89,12 +89,12 @@ public class RequestExchangeCommandHandler {
     }
 
     private void checkMember(MemberId requestMemberId) {
-        MemberInfo memberInfo = memberLookup.lookupByMemberId(requestMemberId.getValue())
+        MemberInfo memberInfo = insightMemberLookup.lookupByMemberId(requestMemberId)
                 .orElseThrow(() -> new InsightApplicationServiceException(MEMBER_NOT_EXIST));
 
-        if (memberInfo.getAccusedCount() == 5) {
+        if (memberInfo.accusedCount() == 5) {
             throw new InsightApplicationServiceException(MEMBER_5ACCUSED);
-        } else if (memberInfo.getAccusedCount() == 15) {
+        } else if (memberInfo.accusedCount() == 15) {
             throw new InsightApplicationServiceException(MEMBER_15ACCUSED);
         }
     }
