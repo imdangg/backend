@@ -1,17 +1,24 @@
 package com.project.imdang.setting.service.domain.handler;
 
-import com.google.firebase.messaging.*;
+import com.google.firebase.messaging.AndroidConfig;
+import com.google.firebase.messaging.AndroidNotification;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.Notification;
+import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.setting.service.domain.dto.NotificationRequest;
 import com.project.imdang.setting.service.domain.exception.NotificationDomainException;
-import com.project.imdang.setting.service.domain.feign.MemberFeignClient;
-import com.project.imdang.setting.service.domain.feign.MemberInfoResponse;
+import com.project.imdang.setting.service.domain.exception.SettingApplicationServiceException;
+import com.project.imdang.setting.service.domain.ports.output.lookup.SettingMemberLookup;
+import com.project.imdang.setting.service.domain.valueobject.MemberInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
+import static com.project.imdang.domain.exception.ErrorCode.MEMBER_NOT_EXIST;
 
 @Component
 @RequiredArgsConstructor
@@ -19,28 +26,22 @@ import java.util.UUID;
 public class SendNotificationHandler {
 
     private final FirebaseMessaging firebaseMessaging;
-    private final MemberFeignClient memberFeignClient;
+    private final SettingMemberLookup settingMemberLookup;
 
     @Retryable(retryFor = FirebaseMessagingException.class, maxAttempts = 3, backoff = @Backoff(delay = 1000))
     public void send(NotificationRequest notificationRequest) {
-        Notification notification = Notification.builder()
-                .setTitle(notificationRequest.getTitle())
-                .setBody(notificationRequest.getBody())
-                .build();
 
+        MemberId memberId = new MemberId(notificationRequest.getMemberId());
+        String title = notificationRequest.getTitle();
+        String body = notificationRequest.getBody();
+
+        String token = getFcmToken(memberId);
+        Notification notification = getNotification(title, body);
         // TODO - CHECK : Android Configuration
-        AndroidConfig androidConfig = AndroidConfig.builder()
-                .setPriority(AndroidConfig.Priority.HIGH)
-                .setNotification(AndroidNotification.builder()
-                        .setTitle(notificationRequest.getTitle())
-                        .setBody(notificationRequest.getBody())
-                        .build())
-                .build();
-
-        //TODO - CHECK :  APNs Configuration
-
+        AndroidConfig androidConfig = getAndroidConfig(title, body);
+        // TODO - CHECK :  APNs Configuration
         Message message = Message.builder()
-                .setToken(getFcmToken(notificationRequest.getMemberId()))
+                .setToken(token)
                 .setNotification(notification)
                 .setAndroidConfig(androidConfig)
                 .build();
@@ -53,8 +54,26 @@ public class SendNotificationHandler {
         }
     }
 
-    private String getFcmToken(UUID memberId) {
-        MemberInfoResponse memberInfoResponse = memberFeignClient.getMemberInfo(memberId);
-        return memberInfoResponse.getDeviceToken();
+    private Notification getNotification(String title, String body) {
+        return Notification.builder()
+                .setTitle(title)
+                .setBody(body)
+                .build();
+    }
+
+    private AndroidConfig getAndroidConfig(String title, String body) {
+        return AndroidConfig.builder()
+                .setPriority(AndroidConfig.Priority.HIGH)
+                .setNotification(AndroidNotification.builder()
+                        .setTitle(title)
+                        .setBody(body)
+                        .build())
+                .build();
+    }
+
+    private String getFcmToken(MemberId memberId) {
+        MemberInfo memberInfo = settingMemberLookup.lookupByMemberId(memberId)
+                .orElseThrow(() -> new SettingApplicationServiceException(MEMBER_NOT_EXIST));
+        return memberInfo.deviceToken();
     }
 }

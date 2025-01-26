@@ -2,7 +2,7 @@ package com.project.imdang.setting.service.application.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.imdang.domain.jwt.JwtTokenProvider;
-import com.project.imdang.setting.service.domain.SettingServiceApplication;
+import com.project.imdang.setting.service.SettingServiceApplication;
 import com.project.imdang.setting.service.domain.dto.AgreeTermsCommand;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

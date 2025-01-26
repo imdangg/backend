@@ -25,7 +25,6 @@ public class InsightResponse {
     private String title;
     @Schema(description = "메인 이미지")
     private String mainImage;
-    @Schema(description = "사용자ID")
-    private UUID memberId;
-//    private MemberResponse member;
+    @Schema(description = "사용자 닉네임")
+    private String memberNickname;
 }

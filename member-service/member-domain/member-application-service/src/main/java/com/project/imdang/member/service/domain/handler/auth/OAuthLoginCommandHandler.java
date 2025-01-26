@@ -41,7 +41,7 @@ public class OAuthLoginCommandHandler {
         // 1. 로그인
         // TODO - REVIEW
         boolean isJoined = false;
-        Optional<Member> optional = memberRepository.findMemberByOAuthIdAndOAuthType(oAuthInfo.getId(), oAuthInfo.getOAuthType());
+        Optional<Member> optional = memberRepository.findByOAuthIdAndOAuthType(oAuthInfo.getId(), oAuthInfo.getOAuthType());
         Member member;
         if (optional.isEmpty()) {
             member = memberDomainService.createMember(oAuthInfo.getId(), oAuthInfo.getOAuthType());
