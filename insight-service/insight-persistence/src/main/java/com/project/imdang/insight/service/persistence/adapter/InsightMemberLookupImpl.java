@@ -51,6 +51,7 @@ public class InsightMemberLookupImpl implements InsightMemberLookup {
         try {
             return memberFeignClient.listMemberInfo(memberIds).getBody().stream()
                     .map(memberInfoResponse -> MemberInfo.builder()
+                            .memberId(new MemberId(memberInfoResponse.getMemberId()))
                             .nickname(memberInfoResponse.getNickname())
                             .birthDate(memberInfoResponse.getBirthDate())
                             .gender(memberInfoResponse.getGender())
