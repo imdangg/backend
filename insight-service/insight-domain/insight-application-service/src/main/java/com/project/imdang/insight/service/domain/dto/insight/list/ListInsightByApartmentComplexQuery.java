@@ -1,7 +1,5 @@
 package com.project.imdang.insight.service.domain.dto.insight.list;
 
-import com.project.imdang.domain.dto.PagingQuery;
-import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -13,7 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ListInsightByApartmentComplexQuery extends PagingQuery {
+public class ListInsightByApartmentComplexQuery {
     @NotBlank
     private String apartmentComplexName;
+
+    private Integer pageNumber;
+    private Integer pageSize;
+    private String direction;
+    private String[] properties;
 }

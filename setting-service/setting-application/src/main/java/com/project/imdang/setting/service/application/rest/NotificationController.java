@@ -4,8 +4,6 @@ import com.project.imdang.setting.service.domain.dto.ListNotificationQuery;
 import com.project.imdang.setting.service.domain.dto.NotificationResponse;
 import com.project.imdang.setting.service.domain.ports.input.service.NotificationApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -43,15 +41,35 @@ public class NotificationController {
 
         ListNotificationQuery listNotificationQuery = ListNotificationQuery.builder()
                 .receiverId(memberId)
+                .isChecked(false)
                 .pageNumber(pageNumber)
                 .pageSize(pageSize)
                 .direction(direction)
                 .properties(properties)
                 .build();
-        Page<NotificationResponse> paged = notificationApplicationService.listUncheckedNotification(listNotificationQuery);
+        Page<NotificationResponse> paged = notificationApplicationService.listNotification(listNotificationQuery);
         List<Long> notificationIds = paged.getContent().stream()
                 .map(NotificationResponse::getNotificationId).toList();
         notificationApplicationService.updateNotificationAsChecked(notificationIds);
+        return ResponseEntity.ok(paged);
+    }
+
+    @GetMapping("/checked")
+    public ResponseEntity<Page<NotificationResponse>> listChecked(@AuthenticationPrincipal UUID memberId,
+                                                                  @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
+                                                                  @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                                                                  @RequestParam(name = "direction", defaultValue = "DESC") String direction,
+                                                                  @RequestParam(name = "properties", defaultValue = "created_at") String[] properties) {
+
+        ListNotificationQuery listNotificationQuery = ListNotificationQuery.builder()
+                .receiverId(memberId)
+                .isChecked(true)
+                .pageNumber(pageNumber)
+                .pageSize(pageSize)
+                .direction(direction)
+                .properties(properties)
+                .build();
+        Page<NotificationResponse> paged = notificationApplicationService.listNotification(listNotificationQuery);
         return ResponseEntity.ok(paged);
     }
 }

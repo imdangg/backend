@@ -41,14 +41,14 @@ public class ListInsightByApartmentComplexCommandHandler {
                 .build();
 
         Page<Insight> paged = insightRepository.findAllByApartmentComplex(apartmentComplex, pageRequest);
-        Map<UUID, String> memberNicknameMap = getMemberNicknameMap(paged.getContent());
+        Map<MemberId, String> memberNicknameMap = getMemberNicknameMap(paged.getContent());
         return paged.map(insight -> {
-                    String memberNickname = memberNicknameMap.get(insight.getMemberId().getValue());
+                    String memberNickname = memberNicknameMap.get(insight.getMemberId());
                     return insightDataMapper.insightToInsightResponse(insight, memberNickname);
                 });
     }
 
-    private Map<UUID, String> getMemberNicknameMap(List<Insight> insights) {
+    private Map<MemberId, String> getMemberNicknameMap(List<Insight> insights) {
         List<MemberId> memberIds = insights.stream()
                 .map(Insight::getMemberId)
                 .toList();

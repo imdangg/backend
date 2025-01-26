@@ -57,14 +57,14 @@ public class ListExchangeRequestedByOthersHandler {
     }
 
     private List<InsightResponse> getInsightResponses(List<Insight> insights) {
-        Map<UUID, String> memberNicknameMap = getMemberNicknameMap(insights);
+        Map<MemberId, String> memberNicknameMap = getMemberNicknameMap(insights);
         return insights.stream().map(insight -> {
-            String memberNickname = memberNicknameMap.get(insight.getMemberId().getValue());
+            String memberNickname = memberNicknameMap.get(insight.getMemberId());
             return insightDataMapper.insightToInsightResponse(insight, memberNickname);
         }).toList();
     }
 
-    private Map<UUID, String> getMemberNicknameMap(List<Insight> insights) {
+    private Map<MemberId, String> getMemberNicknameMap(List<Insight> insights) {
         List<MemberId> memberIds = insights.stream()
                 .map(Insight::getMemberId)
                 .toList();

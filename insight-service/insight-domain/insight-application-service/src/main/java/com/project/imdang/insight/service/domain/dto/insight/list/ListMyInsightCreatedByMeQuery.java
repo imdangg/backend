@@ -13,7 +13,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ListMyInsightCreatedByMeQuery {
-        // extends PagingQuery {
+
 //    @Setter
     private UUID memberId;
 

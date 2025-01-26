@@ -1,19 +1,20 @@
 package com.project.imdang.insight.service.domain.mapper;
 
+import com.project.imdang.domain.valueobject.ExchangeRequestId;
 import com.project.imdang.insight.service.domain.dto.insight.detail.DetailInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightSimpleResponse;
-import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
 import com.project.imdang.insight.service.domain.entity.Snapshot;
+import com.project.imdang.insight.service.domain.valueobject.ExchangeRequestStatus;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SnapshotDataMapper {
 
-    public InsightResponse snapshotToInsightResponse(Snapshot snapshot, String memberNickname) {
+    public InsightResponse snapshotToInsightResponse(Snapshot snapshot, String memberNickname, Integer recommendedCount) {
         return InsightResponse.builder()
                 .insightId(snapshot.getInsightId().getValue())
-                .recommendedCount(null)
+                .recommendedCount(recommendedCount)
                 .address(snapshot.getAddress())
                 .title(snapshot.getTitle())
                 .mainImage(snapshot.getMainImage())
@@ -21,18 +22,28 @@ public class SnapshotDataMapper {
                 .build();
     }
 
-    public InsightSimpleResponse snapshotToInsightSimpleResponse(Snapshot snapshot) {
+    public InsightSimpleResponse snapshotToInsightSimpleResponse(Snapshot snapshot, Integer recommendedCount) {
         return InsightSimpleResponse.builder()
                 .insightId(snapshot.getInsightId().getValue())
-                .recommendedCount(null)
+                .recommendedCount(recommendedCount)
                 .address(snapshot.getAddress())
                 .title(snapshot.getTitle())
                 .build();
     }
 
-    public DetailInsightResponse snapshotToDetailInsightResponse(Snapshot snapshot, ExchangeRequest exchangeRequest) {
+    public DetailInsightResponse snapshotToDetailInsightResponse(Snapshot snapshot,
+                                                                 String memberNickname,
+                                                                 Boolean recommended,
+                                                                 Boolean accused,
+                                                                 Integer recommendedCount,
+                                                                 Integer accusedCount,
+                                                                 Integer viewCount,
+                                                                 ExchangeRequestStatus exchangeRequestStatus,
+                                                                 Boolean exchangeRequestCreatedByMe,
+                                                                 ExchangeRequestId exchangeRequestId) {
         return DetailInsightResponse.builder()
                 .memberId(snapshot.getMemberId().getValue())
+                .memberNickname(memberNickname)
                 .insightId(snapshot.getInsightId().getValue())
                 .snapshotId(snapshot.getId().getValue())
                 .mainImage(snapshot.getMainImage())
@@ -48,12 +59,14 @@ public class SnapshotDataMapper {
                 .complexEnvironment(snapshot.getComplexEnvironment())
                 .complexFacility(snapshot.getComplexFacility())
                 .favorableNews(snapshot.getFavorableNews())
-                .recommendedCount(null)
-                .accusedCount(null)
-                .viewCount(null)
-                // TODO - CHECK
-                .exchangeRequestStatus(exchangeRequest != null ? exchangeRequest.getStatus() : null)
-                .exchangeRequestId(exchangeRequest != null ? exchangeRequest.getId().getValue() : null)
+                .recommended(recommended)
+                .accused(accused)
+                .recommendedCount(recommendedCount)
+                .accusedCount(accusedCount)
+                .viewCount(viewCount)
+                .exchangeRequestStatus(exchangeRequestStatus)
+                .exchangeRequestCreatedByMe(exchangeRequestCreatedByMe)
+                .exchangeRequestId(exchangeRequestId.getValue())
                 .build();
     }
 }

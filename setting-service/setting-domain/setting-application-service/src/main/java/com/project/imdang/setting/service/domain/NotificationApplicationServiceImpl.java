@@ -27,8 +27,8 @@ public class NotificationApplicationServiceImpl implements NotificationApplicati
     private final SendNotificationHandler sendNotificationHandler;
 
     @Override
-    public Page<NotificationResponse> listUncheckedNotification(ListNotificationQuery listNotificationQuery) {
-        return listNotificationCommandHandler.listUncheckedNotification(listNotificationQuery);
+    public Page<NotificationResponse> listNotification(ListNotificationQuery listNotificationQuery) {
+        return listNotificationCommandHandler.listNotification(listNotificationQuery);
     }
 
     @Override

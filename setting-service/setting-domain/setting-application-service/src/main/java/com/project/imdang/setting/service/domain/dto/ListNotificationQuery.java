@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.UUID;
 
 @Builder
@@ -15,6 +14,8 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ListNotificationQuery {
     private UUID receiverId;
+    private boolean isChecked;
+
     private Integer pageNumber;
     private Integer pageSize;
     private String direction;

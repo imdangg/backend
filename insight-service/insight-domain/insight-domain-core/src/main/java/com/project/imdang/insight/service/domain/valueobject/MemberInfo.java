@@ -1,12 +1,11 @@
 package com.project.imdang.insight.service.domain.valueobject;
 
+import com.project.imdang.domain.valueobject.MemberId;
 import lombok.Builder;
-
-import java.util.UUID;
 
 // TODO - CHECK : 위치
 @Builder
-public record MemberInfo(UUID memberId,
+public record MemberInfo(MemberId memberId,
                          String nickname,
                          String birthDate,
                          String gender,

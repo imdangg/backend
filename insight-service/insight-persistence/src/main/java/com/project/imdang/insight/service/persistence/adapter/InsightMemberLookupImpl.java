@@ -27,7 +27,7 @@ public class InsightMemberLookupImpl implements InsightMemberLookup {
             return Optional.ofNullable(memberFeignClient.getMemberInfo(memberId))
                     .map(HttpEntity::getBody)
                     .map(memberInfoResponse -> MemberInfo.builder()
-                            .memberId(memberInfoResponse.getMemberId())
+                            .memberId(new MemberId(memberInfoResponse.getMemberId()))
                             .nickname(memberInfoResponse.getNickname())
                             .birthDate(memberInfoResponse.getBirthDate())
                             .gender(memberInfoResponse.getGender())

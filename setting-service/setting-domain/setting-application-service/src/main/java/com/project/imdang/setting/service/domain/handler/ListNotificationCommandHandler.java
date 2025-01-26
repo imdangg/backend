@@ -21,10 +21,10 @@ public class ListNotificationCommandHandler {
     private final NotificationDataMapper notificationDataMapper;
 
     @Transactional(readOnly = true)
-    public Page<NotificationResponse> listUncheckedNotification(ListNotificationQuery listNotificationQuery) {
+    public Page<NotificationResponse> listNotification(ListNotificationQuery listNotificationQuery) {
         PageRequest pageRequest = PagingUtils.getPageRequest(
                 listNotificationQuery.getPageNumber(), listNotificationQuery.getPageSize(), listNotificationQuery.getDirection(), listNotificationQuery.getProperties());
-        return notificationRepository.findAllByIsChecked(false, pageRequest)
+        return notificationRepository.findAllByIsChecked(listNotificationQuery.isChecked(), pageRequest)
                 .map(notificationDataMapper::notificationToNotificationResponse);
     }
 }

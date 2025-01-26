@@ -1,5 +1,6 @@
 package com.project.imdang.insight.service.domain.mapper;
 
+import com.project.imdang.domain.valueobject.ExchangeRequestId;
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.dto.insight.accuse.AccuseInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.create.CreateInsightCommand;
@@ -9,8 +10,8 @@ import com.project.imdang.insight.service.domain.dto.insight.detail.DetailInsigh
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.recommend.RecommendInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.update.UpdateInsightResponse;
-import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
 import com.project.imdang.insight.service.domain.entity.Insight;
+import com.project.imdang.insight.service.domain.valueobject.ExchangeRequestStatus;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -76,9 +77,16 @@ public class InsightDataMapper {
                 .build();
     }
 
-    public DetailInsightResponse insightToDetailInsightResponse(Insight insight, ExchangeRequest exchangeRequest) {
+    public DetailInsightResponse insightToDetailInsightResponse(Insight insight,
+                                                                String memberNickname,
+                                                                Boolean recommended,
+                                                                Boolean accused,
+                                                                ExchangeRequestStatus exchangeRequestStatus,
+                                                                Boolean exchangeRequestCreatedByMe,
+                                                                ExchangeRequestId exchangeRequestId) {
         return DetailInsightResponse.builder()
                 .memberId(insight.getMemberId().getValue())
+                .memberNickname(memberNickname)
                 .insightId(insight.getId().getValue())
                 .mainImage(insight.getMainImage())
                 .title(insight.getTitle())
@@ -93,14 +101,16 @@ public class InsightDataMapper {
                 .complexEnvironment(insight.getComplexEnvironment())
                 .complexFacility(insight.getComplexFacility())
                 .favorableNews(insight.getFavorableNews())
+                .recommended(recommended)
+                .accused(accused)
                 .recommendedCount(insight.getRecommendedCount())
                 .accusedCount(insight.getAccusedCount())
                 .viewCount(insight.getViewCount())
                 .score(insight.getScore())
                 .createdAt(insight.getCreatedAt())
-                // TODO - CHECK
-                .exchangeRequestStatus(exchangeRequest != null ? exchangeRequest.getStatus() : null)
-                .exchangeRequestId(exchangeRequest != null ? exchangeRequest.getId().getValue() : null)
+                .exchangeRequestStatus(exchangeRequestStatus)
+                .exchangeRequestCreatedByMe(exchangeRequestCreatedByMe)
+                .exchangeRequestId(exchangeRequestId.getValue())
                 .build();
     }
 }
