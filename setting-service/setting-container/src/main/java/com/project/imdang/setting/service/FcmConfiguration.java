@@ -1,4 +1,4 @@
-package com.project.imdang.setting.service.domain;
+package com.project.imdang.setting.service;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
