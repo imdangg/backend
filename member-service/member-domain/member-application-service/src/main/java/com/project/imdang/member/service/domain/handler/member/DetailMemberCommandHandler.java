@@ -1,7 +1,7 @@
 package com.project.imdang.member.service.domain.handler.member;
 
 import com.project.imdang.domain.valueobject.MemberId;
-import com.project.imdang.member.service.domain.dto.MemberInfoResponse;
+import com.project.imdang.member.service.domain.dto.MemberResponse;
 import com.project.imdang.member.service.domain.entity.Member;
 import com.project.imdang.member.service.domain.exception.MemberNotFoundException;
 import com.project.imdang.member.service.domain.mapper.MemberDataMapper;
@@ -20,15 +20,10 @@ public class DetailMemberCommandHandler {
     private final MemberDataMapper memberDataMapper;
     private final MemberRepository memberRepository;
 
-    public MemberInfoResponse detailMember(UUID memberId) {
-        Member member = checkMember(memberId);
-        return memberDataMapper.memberToDetailMemberResponse(member);
-    }
-
-    private Member checkMember(UUID _memberId) {
+    public MemberResponse detailMember(UUID _memberId) {
         MemberId memberId = new MemberId(_memberId);
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberNotFoundException(memberId));
-        return member;
+        return memberDataMapper.memberToDetailMemberResponse(member);
     }
 }

@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class SnapshotDataMapper {
 
-    public InsightResponse snapshotToInsightResponse(Snapshot snapshot) {
+    public InsightResponse snapshotToInsightResponse(Snapshot snapshot, String memberNickname) {
         return InsightResponse.builder()
                 .insightId(snapshot.getInsightId().getValue())
                 .recommendedCount(null)
                 .address(snapshot.getAddress())
                 .title(snapshot.getTitle())
                 .mainImage(snapshot.getMainImage())
-                .memberId(snapshot.getMemberId().getValue())
+                .memberNickname(memberNickname)
                 .build();
     }
 
