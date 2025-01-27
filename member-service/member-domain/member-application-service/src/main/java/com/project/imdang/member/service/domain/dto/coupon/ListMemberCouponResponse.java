@@ -15,5 +15,5 @@ import java.util.UUID;
 public class ListMemberCouponResponse {
     @Schema(description = "보유한 쿠폰 갯수")
     private Integer couponCount;
-    private UUID couponId;
+    private Long memberCouponId;
 }

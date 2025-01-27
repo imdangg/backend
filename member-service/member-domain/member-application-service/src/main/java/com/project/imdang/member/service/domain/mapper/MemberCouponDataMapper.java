@@ -20,7 +20,7 @@ public class MemberCouponDataMapper {
         if(memberCoupons.isEmpty()){
             return new ListMemberCouponResponse(0, null);
         }
-        return new ListMemberCouponResponse(memberCoupons.size(), memberCoupons.get(0).getCouponId().getValue());
+        return new ListMemberCouponResponse(memberCoupons.size(), memberCoupons.get(0).getId().getValue());
     }
 
     public List<MemberCoupon> issueMemberCouponCommandToMemberCoupons(Member member, Coupon coupon, Integer quantity) {
