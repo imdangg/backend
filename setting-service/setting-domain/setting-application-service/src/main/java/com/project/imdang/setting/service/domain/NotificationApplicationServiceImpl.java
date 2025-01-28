@@ -4,10 +4,7 @@ import com.project.imdang.setting.service.domain.dto.CreateNotificationCommand;
 import com.project.imdang.setting.service.domain.dto.ListNotificationQuery;
 import com.project.imdang.setting.service.domain.dto.NotificationRequest;
 import com.project.imdang.setting.service.domain.dto.NotificationResponse;
-import com.project.imdang.setting.service.domain.handler.CreateNotificationCommandHandler;
-import com.project.imdang.setting.service.domain.handler.ListNotificationCommandHandler;
-import com.project.imdang.setting.service.domain.handler.SendNotificationHandler;
-import com.project.imdang.setting.service.domain.handler.UpdateNotificationAsCheckedHandler;
+import com.project.imdang.setting.service.domain.handler.*;
 import com.project.imdang.setting.service.domain.ports.input.service.NotificationApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,16 +12,29 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
+import java.util.UUID;
 
 @Validated
 @RequiredArgsConstructor
 @Service
 public class NotificationApplicationServiceImpl implements NotificationApplicationService {
 
+    private final CheckNewNotificationCommandHandler checkNewNotificationCommandHandler;
+    private final ListUncheckNotificationCommandHandler listUncheckNotificationCommandHandler;
     private final ListNotificationCommandHandler listNotificationCommandHandler;
     private final CreateNotificationCommandHandler createNotificationCommandHandler;
     private final UpdateNotificationAsCheckedHandler updateNotificationAsCheckedHandler;
     private final SendNotificationHandler sendNotificationHandler;
+
+    @Override
+    public Boolean checkNewNotification(UUID memberId) {
+        return checkNewNotificationCommandHandler.checkNewNotification(memberId);
+    }
+
+    @Override
+    public List<NotificationResponse> listUncheckedNotification(UUID receiverId) {
+        return listUncheckNotificationCommandHandler.listUncheckNotification(receiverId);
+    }
 
     @Override
     public Page<NotificationResponse> listNotification(ListNotificationQuery listNotificationQuery) {

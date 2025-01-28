@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.ZonedDateTime;
+
 @Builder
 @AllArgsConstructor
 @Getter
@@ -19,4 +21,6 @@ public class NotificationResponse {
     private NotificationCategory category;
     @Schema(description = "알림 메세지")
     private String message;
+    @Schema(description = "알림 생성 날짜")
+    private ZonedDateTime createdAt;
 }

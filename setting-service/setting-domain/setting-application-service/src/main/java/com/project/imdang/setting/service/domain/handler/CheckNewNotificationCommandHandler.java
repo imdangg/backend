@@ -13,24 +13,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.ZonedDateTime;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class ListNotificationCommandHandler {
+public class CheckNewNotificationCommandHandler {
 
     private final NotificationRepository notificationRepository;
-    private final NotificationDataMapper notificationDataMapper;
 
     @Transactional(readOnly = true)
-    public Page<NotificationResponse> listNotification(ListNotificationQuery listNotificationQuery) {
-        PageRequest pageRequest = PagingUtils.getPageRequest(
-                listNotificationQuery.getPageNumber(), listNotificationQuery.getPageSize(), listNotificationQuery.getDirection(), listNotificationQuery.getProperties());
-        MemberId memberId = new MemberId(listNotificationQuery.getReceiverId());
-        ZonedDateTime minusOneYear = ZonedDateTime.now().minusYears(1);
-
-        return notificationRepository.findAllByReceiverIdAndIsCheckedAndCreatedAt(memberId, listNotificationQuery.isChecked(), minusOneYear, pageRequest)
-                .map(notificationDataMapper::notificationToNotificationResponse);
+    public Boolean checkNewNotification(UUID _receiverId) {
+        MemberId receiverId = new MemberId(_receiverId);
+        return !notificationRepository.findAllByReciverIdAndIsChecked(receiverId, Boolean.FALSE).isEmpty();
     }
 }
