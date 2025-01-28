@@ -22,6 +22,7 @@ public class NotificationDataMapper {
                 .notificationId(notification.getId().getValue())
                 .category(notification.getCategory())
                 .message(notification.getMessage())
+                .createdAt(notification.getCreatedAt())
                 .build();
     }
 }

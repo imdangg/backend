@@ -28,38 +28,28 @@ public class NotificationController {
 
     private final NotificationApplicationService notificationApplicationService;
 
-    // 읽지 않은 알림 리스트 조회 (+ '읽음' 상태로 변경)
-    // notifications/unchecked
-    @Operation(description = "읽지 않은 알림 목록 조회 API")
-    @ApiResponse(responseCode = "200", description = "읽지 않은 알림 목록 조회 성공")
+    @Operation(description = "읽지 않은 알림 유무 조회 API")
+    @ApiResponse(responseCode = "200", description = "읽지 않은 알림 유무 조회 성공")
     @GetMapping("/unchecked")
-    public ResponseEntity<Page<NotificationResponse>> listUnchecked(@AuthenticationPrincipal UUID memberId,
-                                                                    @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
-                                                                    @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-                                                                    @RequestParam(name = "direction", defaultValue = "DESC") String direction,
-                                                                    @RequestParam(name = "properties", defaultValue = "created_at") String[] properties) {
-
-        ListNotificationQuery listNotificationQuery = ListNotificationQuery.builder()
-                .receiverId(memberId)
-                .isChecked(false)
-                .pageNumber(pageNumber)
-                .pageSize(pageSize)
-                .direction(direction)
-                .properties(properties)
-                .build();
-        Page<NotificationResponse> paged = notificationApplicationService.listNotification(listNotificationQuery);
-        List<Long> notificationIds = paged.getContent().stream()
-                .map(NotificationResponse::getNotificationId).toList();
-        notificationApplicationService.updateNotificationAsChecked(notificationIds);
-        return ResponseEntity.ok(paged);
+    public ResponseEntity<Boolean> check(@AuthenticationPrincipal UUID memberId) {
+        Boolean isNew = notificationApplicationService.checkNewNotification(memberId);
+        return ResponseEntity.ok(isNew);
     }
 
+    @Operation(description = "알림 리스트 조회 API")
+    @ApiResponse(responseCode = "200", description = "알림 리스트 조회 성공")
     @GetMapping("/checked")
-    public ResponseEntity<Page<NotificationResponse>> listChecked(@AuthenticationPrincipal UUID memberId,
+    public ResponseEntity<Page<NotificationResponse>> list(@AuthenticationPrincipal UUID memberId,
                                                                   @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
                                                                   @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                                                   @RequestParam(name = "direction", defaultValue = "DESC") String direction,
                                                                   @RequestParam(name = "properties", defaultValue = "created_at") String[] properties) {
+
+        List<NotificationResponse> uncheckedNotification = notificationApplicationService.listUncheckedNotification(memberId);
+        List<Long> notificationIds = uncheckedNotification.stream()
+                .map(NotificationResponse::getNotificationId).toList();
+        notificationApplicationService.updateNotificationAsChecked(notificationIds);
+        log.info("Member[id:{}] new notification is checked", memberId);
 
         ListNotificationQuery listNotificationQuery = ListNotificationQuery.builder()
                 .receiverId(memberId)
@@ -70,6 +60,7 @@ public class NotificationController {
                 .properties(properties)
                 .build();
         Page<NotificationResponse> paged = notificationApplicationService.listNotification(listNotificationQuery);
+        log.info("Member[id:{}] notification list is retrieved", memberId);
         return ResponseEntity.ok(paged);
     }
 }

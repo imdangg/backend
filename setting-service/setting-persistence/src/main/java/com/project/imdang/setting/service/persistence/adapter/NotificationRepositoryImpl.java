@@ -1,5 +1,6 @@
 package com.project.imdang.setting.service.persistence.adapter;
 
+import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.setting.service.domain.entity.Notification;
 import com.project.imdang.setting.service.domain.ports.output.repository.NotificationRepository;
 import com.project.imdang.setting.service.persistence.entity.NotificationEntity;
@@ -10,7 +11,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
+import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -21,6 +25,13 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     private final NotificationPersistenceMapper notificationPersistenceMapper;
 
     @Override
+    public List<Notification> findAllByReciverIdAndIsChecked(MemberId memberId, Boolean isChecked) {
+        return notificationJpaRepository.findAllByReceiverIdAndIsChecked(memberId.getValue(), isChecked).stream()
+                .map(notificationPersistenceMapper::notificationEntityToNotification)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<Notification> findAllByIds(List<Long> notificationIds) {
         return notificationJpaRepository.findAllById(notificationIds).stream()
                 .map(notificationPersistenceMapper::notificationEntityToNotification)
@@ -28,8 +39,8 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     }
 
     @Override
-    public Page<Notification> findAllByIsChecked(Boolean checked, PageRequest pageRequest) {
-        return notificationJpaRepository.findAllByIsChecked(checked, pageRequest)
+    public Page<Notification> findAllByReceiverIdAndIsCheckedAndCreatedAt(MemberId receiverId, Boolean checked, ZonedDateTime time, PageRequest pageRequest) {
+        return notificationJpaRepository.findAllByReceiverIdAndIsCheckedAndCreatedAtAfter(receiverId.getValue(),checked,time,pageRequest)
                 .map(notificationPersistenceMapper::notificationEntityToNotification);
     }
 

@@ -6,7 +6,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 @Repository
 public interface NotificationJpaRepository extends JpaRepository<NotificationEntity, Long> {
-    Page<NotificationEntity> findAllByIsChecked(Boolean checked, PageRequest pageRequest);
+    Page<NotificationEntity> findAllByReceiverIdAndIsCheckedAndCreatedAtAfter(UUID receiverId, Boolean checked, ZonedDateTime time, PageRequest pageRequest);
+    List<NotificationEntity> findAllByReceiverIdAndIsChecked(UUID memberId, Boolean checked);
 }
