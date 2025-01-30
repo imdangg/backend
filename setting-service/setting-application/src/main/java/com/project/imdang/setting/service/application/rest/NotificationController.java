@@ -45,10 +45,7 @@ public class NotificationController {
                                                                   @RequestParam(name = "direction", defaultValue = "DESC") String direction,
                                                                   @RequestParam(name = "properties", defaultValue = "created_at") String[] properties) {
 
-        List<NotificationResponse> uncheckedNotification = notificationApplicationService.listUncheckedNotification(memberId);
-        List<Long> notificationIds = uncheckedNotification.stream()
-                .map(NotificationResponse::getNotificationId).toList();
-        notificationApplicationService.updateNotificationAsChecked(notificationIds);
+        notificationApplicationService.updateNotificationAsChecked(memberId);
         log.info("Member[id:{}] new notification is checked", memberId);
 
         ListNotificationQuery listNotificationQuery = ListNotificationQuery.builder()

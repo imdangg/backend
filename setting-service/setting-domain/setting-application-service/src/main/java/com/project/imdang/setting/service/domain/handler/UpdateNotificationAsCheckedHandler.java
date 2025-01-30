@@ -1,5 +1,6 @@
 package com.project.imdang.setting.service.domain.handler;
 
+import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.setting.service.domain.NotificationDomainService;
 import com.project.imdang.setting.service.domain.entity.Notification;
 import com.project.imdang.setting.service.domain.exception.NotificationDomainException;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -20,12 +22,13 @@ public class UpdateNotificationAsCheckedHandler {
     private final NotificationRepository notificationRepository;
 
     @Transactional
-    public void updateAsChecked(List<Long> notificationIds) {
-        List<Notification> notifications = notificationRepository.findAllByIds(notificationIds);
+    public void updateAsChecked(UUID receiverId) {
+        List<Notification> uncheckedNotification = getUncheckedNotification(receiverId);
+//        List<Notification> notifications = notificationRepository.findAllByIds(notificationIds);
 
         // TODO - CHECK : 일괄 업데이트가 빠를텐데?
 //        notificationRepository.updateIsChecked(notificationIds, Boolean.TRUE);
-        notifications.forEach(notification -> {
+        uncheckedNotification.forEach(notification -> {
             notificationDomainService.updateNotificationAsChecked(notification);
             log.info("Notification[id: {}] is updated as checked.", notification.getId().getValue());
             save(notification);
@@ -41,5 +44,10 @@ public class UpdateNotificationAsCheckedHandler {
             throw new NotificationDomainException(errorMessage);
         }
         log.info("Notification[id: {}] is saved.", saved.getId().getValue());
+    }
+
+    private List<Notification> getUncheckedNotification(UUID _receiverId) {
+        MemberId receiverId = new MemberId(_receiverId);
+       return notificationRepository.findAllByReciverIdAndIsChecked(receiverId, Boolean.FALSE);
     }
 }
