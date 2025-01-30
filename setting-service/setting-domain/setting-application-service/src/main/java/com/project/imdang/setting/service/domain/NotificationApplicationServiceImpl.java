@@ -20,7 +20,6 @@ import java.util.UUID;
 public class NotificationApplicationServiceImpl implements NotificationApplicationService {
 
     private final CheckNewNotificationCommandHandler checkNewNotificationCommandHandler;
-    private final ListUncheckNotificationCommandHandler listUncheckNotificationCommandHandler;
     private final ListNotificationCommandHandler listNotificationCommandHandler;
     private final CreateNotificationCommandHandler createNotificationCommandHandler;
     private final UpdateNotificationAsCheckedHandler updateNotificationAsCheckedHandler;
@@ -29,11 +28,6 @@ public class NotificationApplicationServiceImpl implements NotificationApplicati
     @Override
     public Boolean checkNewNotification(UUID memberId) {
         return checkNewNotificationCommandHandler.checkNewNotification(memberId);
-    }
-
-    @Override
-    public List<NotificationResponse> listUncheckedNotification(UUID receiverId) {
-        return listUncheckNotificationCommandHandler.listUncheckNotification(receiverId);
     }
 
     @Override
@@ -49,8 +43,8 @@ public class NotificationApplicationServiceImpl implements NotificationApplicati
     // 조회 API 실행 시
     // TODO : Async 처리
     @Override
-    public void updateNotificationAsChecked(List<Long> notificationIds) {
-        updateNotificationAsCheckedHandler.updateAsChecked(notificationIds);
+    public void updateNotificationAsChecked(UUID memberId) {
+        updateNotificationAsCheckedHandler.updateAsChecked(memberId);
     }
 
     @Override

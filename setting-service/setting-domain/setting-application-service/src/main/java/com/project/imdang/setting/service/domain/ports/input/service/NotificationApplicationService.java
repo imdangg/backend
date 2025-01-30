@@ -11,10 +11,9 @@ import java.util.UUID;
 
 public interface NotificationApplicationService {
     Boolean checkNewNotification(UUID memberId);
-    List<NotificationResponse> listUncheckedNotification(UUID receiverId);
     Page<NotificationResponse> listNotification(ListNotificationQuery listNotificationQuery);
     void createNotification(CreateNotificationCommand createNotificationCommand);
-    void updateNotificationAsChecked(List<Long> notificationIds);
+    void updateNotificationAsChecked(UUID memberId);
 //    void updateNotificationAsChecked(Long notificationId);
     void sendNotification(NotificationRequest notificationRequest);
 }
