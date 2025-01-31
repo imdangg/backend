@@ -31,9 +31,8 @@ public class SettingMemberLookupImpl implements SettingMemberLookup {
                             .deviceToken(memberInfoResponse.getDeviceToken())
                             .build());
         } catch (Exception e) {
-            // TODO - 로그
-            e.printStackTrace();
+            // TODO - 예외 처리
+            throw new RuntimeException(e.getMessage());
         }
-        return Optional.empty();
     }
 }
