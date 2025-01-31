@@ -66,7 +66,7 @@ public class SnapshotDataMapper {
                 .viewCount(viewCount)
                 .exchangeRequestStatus(exchangeRequestStatus)
                 .exchangeRequestCreatedByMe(exchangeRequestCreatedByMe)
-                .exchangeRequestId(exchangeRequestId.getValue())
+                .exchangeRequestId(exchangeRequestId != null ? exchangeRequestId.getValue() : null)
                 .build();
     }
 }

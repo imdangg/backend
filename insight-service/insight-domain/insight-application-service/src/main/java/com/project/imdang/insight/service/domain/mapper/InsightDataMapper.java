@@ -110,7 +110,7 @@ public class InsightDataMapper {
                 .createdAt(insight.getCreatedAt())
                 .exchangeRequestStatus(exchangeRequestStatus)
                 .exchangeRequestCreatedByMe(exchangeRequestCreatedByMe)
-                .exchangeRequestId(exchangeRequestId.getValue())
+                .exchangeRequestId(exchangeRequestId != null ? exchangeRequestId.getValue() : null)
                 .build();
     }
 }
