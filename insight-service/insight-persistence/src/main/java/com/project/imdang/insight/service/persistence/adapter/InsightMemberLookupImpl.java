@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -38,9 +37,9 @@ public class InsightMemberLookupImpl implements InsightMemberLookup {
                             .rejectedCount(memberInfoResponse.getRejectedCount())
                             .build());
         } catch (Exception e) {
-            e.printStackTrace();
+            // TODO - 예외 처리
+            throw new RuntimeException(e.getMessage());
         }
-        return Optional.empty();
     }
 
     @Override
@@ -63,8 +62,8 @@ public class InsightMemberLookupImpl implements InsightMemberLookup {
                             .build())
                     .toList();
         } catch (Exception e) {
-            e.printStackTrace();
+            // TODO - 예외 처리
+            throw new RuntimeException(e.getMessage());
         }
-        return Collections.emptyList();
     }
 }
