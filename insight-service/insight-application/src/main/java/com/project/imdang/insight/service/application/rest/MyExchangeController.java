@@ -41,7 +41,7 @@ public class MyExchangeController {
         return ResponseEntity.ok(paged);
     }
 
-    // 다른 사람이 요청한 내역 (대기, 거절, 완료)
+    // 요청 받은 내역 (대기, 거절, 완료)
     @Operation(description = "다른 사람이 요청한 인사이트 교환 목록 API")
     @ApiResponse(responseCode = "200", description = "다른 사람이 요청한 인사이트 교환 목록 조회 성공")
     @GetMapping("/requested-by-others")

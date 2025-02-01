@@ -49,10 +49,11 @@ public class ListExchangeRequestedByOthersHandler {
         Page<ExchangeRequest> paged
                 = exchangeRequestRepository.findAllByRequestedMemberIdAndExchangeRequestStatus(new MemberId(requestedMemberId), exchangeRequestStatus, pageRequest);
 
-        List<InsightId> requestedInsightIds = paged.getContent().stream()
-                .map(ExchangeRequest::getRequestedInsightId).collect(Collectors.toList());
-        List<Insight> requestedInsights = insightRepository.findAllByIds(requestedInsightIds);
-        List<InsightResponse> insightResponses = getInsightResponses(requestedInsights);
+        List<InsightId> requestMemberInsightIds = paged.getContent().stream()
+                .map(ExchangeRequest::getRequestMemberInsightId)
+                .toList();
+        List<Insight> requestMemberInsights = insightRepository.findAllByIds(requestMemberInsightIds);
+        List<InsightResponse> insightResponses = getInsightResponses(requestMemberInsights);
         return new PageImpl<>(insightResponses, paged.getPageable(), paged.getTotalElements());
     }
 

@@ -48,12 +48,6 @@ public class ExchangeRequestRepositoryImpl implements ExchangeRequestRepository 
     }
 
     @Override
-    public Optional<ExchangeRequest> findByRequestMemberIdAndRequestedInsightIdAndExchangeRequestStatus(MemberId requestMemberId, InsightId requestedInsightId, ExchangeRequestStatus exchangeRequestStatus) {
-        return exchangeRequestJpaRepository.findByRequestMemberIdAndRequestedInsightIdAndStatus(requestMemberId.getValue(), requestedInsightId.getValue(), exchangeRequestStatus)
-                .map(exchangeRequestPersistenceMapper::exchangeRequestEntityToExchangeRequest);
-    }
-
-    @Override
     public Optional<ExchangeRequest> findByRequestMemberIdAndRequestedInsightId(MemberId requestMemberId, InsightId requestedInsightId) {
         return exchangeRequestJpaRepository.findByRequestMemberIdAndRequestedInsightId(requestMemberId.getValue(), requestedInsightId.getValue())
                 .map(exchangeRequestPersistenceMapper::exchangeRequestEntityToExchangeRequest);
@@ -62,6 +56,12 @@ public class ExchangeRequestRepositoryImpl implements ExchangeRequestRepository 
     @Override
     public Optional<ExchangeRequest> findByRequestedMemberIdAndRequestedInsightId(MemberId requestedMemberId, InsightId requestedInsightId) {
         return exchangeRequestJpaRepository.findByRequestedMemberIdAndRequestedInsightId(requestedMemberId.getValue(), requestedInsightId.getValue())
+                .map(exchangeRequestPersistenceMapper::exchangeRequestEntityToExchangeRequest);
+    }
+
+    @Override
+    public Optional<ExchangeRequest> findByRequestedMemberIdAndRequestMemberInsightId(MemberId requestedMemberId, InsightId requestMemberInsightId) {
+        return exchangeRequestJpaRepository.findByRequestedMemberIdAndRequestMemberInsightId(requestedMemberId.getValue(), requestMemberInsightId.getValue())
                 .map(exchangeRequestPersistenceMapper::exchangeRequestEntityToExchangeRequest);
     }
 
