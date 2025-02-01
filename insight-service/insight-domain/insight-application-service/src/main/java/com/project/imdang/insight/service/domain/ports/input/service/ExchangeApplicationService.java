@@ -17,6 +17,6 @@ public interface ExchangeApplicationService {
     RejectExchangeRequestResponse rejectExchangeRequest(RejectExchangeRequestCommand rejectExchangeRequestCommand);
     // 내가 요청한 내역
     Page<InsightResponse> listExchangeRequestedByMe(ListExchangeRequestedByMeQuery listExchangeRequestedByMeQuery) ;
-    // 다른 사람이 요청한 내역
+    // 요청 받은 내역
     Page<InsightResponse> listExchangeRequestedByOthers(ListExchangeRequestedByOthersQuery listExchangeRequestedByOthersQuery);
 }

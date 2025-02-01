@@ -75,16 +75,19 @@ public class DetailInsightCommandHandler {
                 MemberId requestedBy = new MemberId(memberId);
                 boolean recommended = recommendRepository.findByRecommendMemberIdAndRecommendedInsightId(requestedBy, insightId).isPresent();
                 boolean accused = accuseRepository.findByAccuseMemberIdAndAccusedInsightId(requestedBy, insightId).isPresent();
-                MemberInfo memberInfo = insightMemberLookup.lookupByMemberId(requestedBy)
+                MemberId insightCreatedBy = insight.getMemberId();
+                MemberInfo memberInfo = insightMemberLookup.lookupByMemberId(insightCreatedBy)
                         .orElseThrow(() -> new InsightApplicationServiceException(MEMBER_NOT_EXIST));
                 String memberNickname = memberInfo.nickname();
 
-                // 1. 본인의 인사이트
-                if (insight.getMemberId().equals(requestedBy)) {
+                // 본인의 인사이트
+                if (insightCreatedBy.equals(requestedBy)) {
 
                     // 교환 신청 여부 확인
+                    // 로그인 유저(본인)가 교환 요청을 받았는가?
                     Optional<ExchangeRequest> optional =
                             exchangeRequestRepository.findByRequestedMemberIdAndRequestedInsightId(requestedBy, insightId);
+                    // 교환 요청 받은 사람이 로그인 유저(본인)인 경우
                     if (optional.isPresent()) {
                         ExchangeRequest exchangeRequest = optional.get();
                         ExchangeRequestStatus exchangeRequestStatus = exchangeRequest.getStatus();
@@ -97,16 +100,16 @@ public class DetailInsightCommandHandler {
                     }
 
                 } else {
+                    // 상대방 인사이트
 
-                    // 2. 교환 신청 여부 확인
-                    Optional<ExchangeRequest> optional =
+                    // 교환 신청 여부 확인
+                    // 1) 로그인 유저가 교환 요청을 한 경우
+                    Optional<ExchangeRequest> exchangeRequestCreatedByMeOptional =
                             exchangeRequestRepository.findByRequestMemberIdAndRequestedInsightId(requestedBy, insightId);
-                    if (optional.isPresent()) {
-
-                        // 2-1. 교환 신청 O
-                        ExchangeRequest exchangeRequest = optional.get();
+                    if (exchangeRequestCreatedByMeOptional.isPresent()) {
+                        ExchangeRequest exchangeRequest = exchangeRequestCreatedByMeOptional.get();
                         ExchangeRequestStatus exchangeRequestStatus = exchangeRequest.getStatus();
-                        Boolean exchangeRequestCreatedByMe = exchangeRequest.getRequestMemberId().equals(requestedBy);
+                        Boolean exchangeRequestCreatedByMe = Boolean.TRUE;
                         ExchangeRequestId exchangeRequestId = exchangeRequest.getId();
 
                         if (ExchangeRequestStatus.ACCEPTED.equals(exchangeRequestStatus)) {
@@ -116,17 +119,64 @@ public class DetailInsightCommandHandler {
                             Integer recommendedCount = insight.getRecommendedCount();
                             Integer accusedCount = insight.getAccusedCount();
                             Integer viewCount = insight.getViewCount();
-                            return snapshotDataMapper.snapshotToDetailInsightResponse(snapshot, memberNickname, recommended, accused, recommendedCount, accusedCount, viewCount, exchangeRequestStatus, exchangeRequestCreatedByMe, exchangeRequestId);
+                            return snapshotDataMapper.snapshotToDetailInsightResponse(
+                                    snapshot,
+                                    memberNickname,
+                                    recommended,
+                                    accused,
+                                    recommendedCount,
+                                    accusedCount,
+                                    viewCount,
+                                    exchangeRequestStatus,
+                                    exchangeRequestCreatedByMe,
+                                    exchangeRequestId);
                         } else {
-                            // PENDING, REJECTED - 교환 완료해야 추천 가능
-                            return insightDataMapper.insightToDetailInsightResponse(insight, memberNickname, recommended, accused, exchangeRequestStatus, exchangeRequestCreatedByMe, exchangeRequestId)
+                            // PENDING, REJECTED
+                            return insightDataMapper.insightToDetailInsightResponse(
+                                    insight, memberNickname, recommended, accused, exchangeRequestStatus, exchangeRequestCreatedByMe, exchangeRequestId)
                                     .toPreviewInsightResponse();
                         }
 
                     } else {
-                        // 2-2. 교환 신청 X - 교환 완료해야 추천 가능
-                        return insightDataMapper.insightToDetailInsightResponse(insight, memberNickname, recommended, accused, null, null, null)
-                                .toPreviewInsightResponse();
+                        // 2) 로그인 유저가 교환 요청을 받은 경우
+                        Optional<ExchangeRequest> exchangeRequestCreatedByOtherOptional =
+                                exchangeRequestRepository.findByRequestedMemberIdAndRequestMemberInsightId(requestedBy, insightId);
+                        if (exchangeRequestCreatedByOtherOptional.isPresent()) {
+                            ExchangeRequest exchangeRequest = exchangeRequestCreatedByOtherOptional.get();
+                            ExchangeRequestStatus exchangeRequestStatus = exchangeRequest.getStatus();
+                            Boolean exchangeRequestCreatedByMe = Boolean.FALSE;
+                            ExchangeRequestId exchangeRequestId = exchangeRequest.getId();
+
+                            if (ExchangeRequestStatus.ACCEPTED.equals(exchangeRequestStatus)) {
+                                SnapshotId snapshotId = exchangeRequest.getRequestedSnapshotId();
+                                Snapshot snapshot = snapshotRepository.findById(snapshotId)
+                                        .orElseThrow(() -> new SnapshotNotFoundException(snapshotId));
+                                Integer recommendedCount = insight.getRecommendedCount();
+                                Integer accusedCount = insight.getAccusedCount();
+                                Integer viewCount = insight.getViewCount();
+                                return snapshotDataMapper.snapshotToDetailInsightResponse(
+                                        snapshot,
+                                        memberNickname,
+                                        recommended,
+                                        accused,
+                                        recommendedCount,
+                                        accusedCount,
+                                        viewCount,
+                                        exchangeRequestStatus,
+                                        exchangeRequestCreatedByMe,
+                                        exchangeRequestId);
+                            } else {
+                                // PENDING, REJECTED
+                                return insightDataMapper.insightToDetailInsightResponse(
+                                                insight, memberNickname, recommended, accused, exchangeRequestStatus, exchangeRequestCreatedByMe, exchangeRequestId)
+                                        .toPreviewInsightResponse();
+                            }
+
+                        } else {
+                            // 교환 신청 X - 교환 완료해야 추천 가능
+                            return insightDataMapper.insightToDetailInsightResponse(insight, memberNickname, recommended, accused, null, null, null)
+                                    .toPreviewInsightResponse();
+                        }
                     }
                 }
             }
