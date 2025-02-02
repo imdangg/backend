@@ -181,13 +181,4 @@ public class Insight extends AggregateRoot<InsightId> {
     public void view() {
         this.viewCount++;
     }
-
-    public void exchange(Insight counterpartInsight) {
-        MemberId counterpartMemberId = counterpartInsight.memberId;
-//        this.holderIds.add(counterpartMemberId);
-
-        // TODO - counterpartInsight.exchange();
-        // 교환한 insight의 holderIds에 memberId 추가
-//        counterpartInsight.holderIds.add(memberId);
-    }
 }
