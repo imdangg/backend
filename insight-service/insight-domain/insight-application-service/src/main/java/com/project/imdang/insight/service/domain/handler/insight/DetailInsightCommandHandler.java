@@ -100,10 +100,10 @@ public class DetailInsightCommandHandler {
                     }
 
                 } else {
-                    // 상대방 인사이트
+                    // 타인의 인사이트
 
                     // 교환 신청 여부 확인
-                    // 1) 로그인 유저가 교환 요청을 한 경우
+                    // 1) 로그인 유저(requestedBy)가 교환 요청을 한 경우
                     Optional<ExchangeRequest> exchangeRequestCreatedByMeOptional =
                             exchangeRequestRepository.findByRequestMemberIdAndRequestedInsightId(requestedBy, insightId);
                     if (exchangeRequestCreatedByMeOptional.isPresent()) {
@@ -148,7 +148,7 @@ public class DetailInsightCommandHandler {
                             ExchangeRequestId exchangeRequestId = exchangeRequest.getId();
 
                             if (ExchangeRequestStatus.ACCEPTED.equals(exchangeRequestStatus)) {
-                                SnapshotId snapshotId = exchangeRequest.getRequestedSnapshotId();
+                                SnapshotId snapshotId = exchangeRequest.getRequestMemberSnapshotId();
                                 Snapshot snapshot = snapshotRepository.findById(snapshotId)
                                         .orElseThrow(() -> new SnapshotNotFoundException(snapshotId));
                                 Integer recommendedCount = insight.getRecommendedCount();
