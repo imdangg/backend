@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface MemberCouponRepository {
     List<MemberCoupon> findAllByMemberIdAndUsed(MemberId memberId, Boolean used);
 
+    MemberCoupon save(MemberCoupon memberCoupon);
     List<MemberCoupon> saveAll(List<MemberCoupon> memberCoupons);
 
     Optional<MemberCoupon> findByCouponIdAndMemberId(CouponId couponId, MemberId memberId);

@@ -38,7 +38,7 @@ public class RecommendInsightCommandHandler {
     @Transactional
     public RecommendInsightResponse recommendInsight(RecommendInsightCommand recommendInsightCommand) {
 
-        MemberId recommendedBy = new MemberId(recommendInsightCommand.getMemberId());
+        MemberId recommendedBy = new MemberId(recommendInsightCommand.getRecommendMemberId());
         InsightId recommendedInsightId = new InsightId(recommendInsightCommand.getInsightId());
 
         // 교환 완료해야 상대방 인사이트 추천 가능

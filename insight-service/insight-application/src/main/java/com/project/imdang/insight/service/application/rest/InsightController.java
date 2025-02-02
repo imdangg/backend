@@ -127,7 +127,7 @@ public class InsightController {
             content = @Content(schema = @Schema(implementation = RecommendInsightResponse.class)))
     @PostMapping("/recommend")
     public ResponseEntity<RecommendInsightResponse> recommendInsight(@AuthenticationPrincipal UUID memberId, @RequestBody RecommendInsightCommand recommendInsightCommand) {
-        recommendInsightCommand.setMemberId(memberId);
+        recommendInsightCommand.setRecommendMemberId(memberId);
         RecommendInsightResponse recommendInsightResponse = insightApplicationService.recommendInsight(recommendInsightCommand);
         log.info("Insight[id: {}] is recommended.", recommendInsightResponse.getInsightId());
         return ResponseEntity.ok(recommendInsightResponse);

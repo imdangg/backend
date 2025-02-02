@@ -10,16 +10,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class MemberCouponCancelledResponseMessageListenerImpl implements MemberCouponCancelledResponseMessageListener {
 
-    private final RejectExchangeMemberCouponSaga rejectExchangeMemberCouponSaga;
+    private final RejectExchangeRequestMemberCouponSaga rejectExchangeRequestMemberCouponSaga;
 
     // TODO - vs TransactionalEventListener
     @EventListener
     @Override
     public void updated(MemberCouponCancelledResponseMessage memberCouponCancelledResponseMessage) {
         if (memberCouponCancelledResponseMessage.isCompleted()) {
-            rejectExchangeMemberCouponSaga.process(memberCouponCancelledResponseMessage);
+            rejectExchangeRequestMemberCouponSaga.process(memberCouponCancelledResponseMessage);
         } else {
-            rejectExchangeMemberCouponSaga.rollback(memberCouponCancelledResponseMessage);
+            rejectExchangeRequestMemberCouponSaga.rollback(memberCouponCancelledResponseMessage);
         }
     }
 }

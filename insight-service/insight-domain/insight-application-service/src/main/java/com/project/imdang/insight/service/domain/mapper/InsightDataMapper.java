@@ -25,6 +25,7 @@ public class InsightDataMapper {
                 .title(insight.getTitle())
                 .mainImage(insight.getMainImage())
                 .memberNickname(memberNickname)
+                .createdAt(insight.getCreatedAt())
                 .build();
     }
 

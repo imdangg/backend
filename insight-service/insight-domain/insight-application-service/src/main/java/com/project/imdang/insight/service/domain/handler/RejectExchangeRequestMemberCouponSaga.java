@@ -12,7 +12,7 @@ import static com.project.imdang.domain.exception.ErrorCode.EXCHANGE_REQUEST_REJ
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class RejectExchangeMemberCouponSaga implements SagaStep<MemberCouponCancelledResponseMessage> {
+public class RejectExchangeRequestMemberCouponSaga implements SagaStep<MemberCouponCancelledResponseMessage> {
 
     @Override
     public void process(MemberCouponCancelledResponseMessage response) {
