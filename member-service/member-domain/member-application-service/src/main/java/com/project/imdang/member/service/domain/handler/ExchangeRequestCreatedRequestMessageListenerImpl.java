@@ -30,6 +30,7 @@ public class ExchangeRequestCreatedRequestMessageListenerImpl implements Exchang
         MemberCoupon memberCoupon = memberCouponRepository.findById(memberCouponId)
                 .orElseThrow(() -> new MemberCouponNotFoundException(memberCouponId));
         memberCouponDomainService.use(memberCoupon);
+        memberCouponRepository.save(memberCoupon);
 
         // update
         MemberCouponUsedResponseMessage memberCouponUsedResponseMessage

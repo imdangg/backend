@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class RejectExchangeCommandHandler {
+public class RejectExchangeRequestCommandHandler {
     // TODO - CHECK : 교환 요청/거절/승인 내역을 따로 저장해서 GROUP BY로 COUNT하는 방법
     // TODO - CHECK : 거절 횟수로 쿠폰 발급하는 것은 배치로? 비동기(kafka)? 로직에서 바로 처리
 // 교환 요청한 상대방의 rejectedCount + 1 → 횟수 비교해서 쿠폰 발급

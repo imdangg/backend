@@ -10,7 +10,6 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class MemberAccusedResponseMessage {
-    private boolean isCompleted;
+public class InsightAccusedRequestMessage {
     private UUID accusedMemberId;
 }

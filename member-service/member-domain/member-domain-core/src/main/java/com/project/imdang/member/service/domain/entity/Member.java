@@ -16,15 +16,17 @@ import java.util.UUID;
 @Getter
 public class Member extends AggregateRoot<MemberId> {
 
+    private String oAuthId;
+    private OAuthType oAuthType;
+
     private String nickname;
     private String birthDate;
     private Gender gender;
     private String deviceToken;
 
-    private String oAuthId;
-    private OAuthType oAuthType;
-    private int exchangeCount;
+
     private int insightCount;
+    private int exchangeCount;
     // TODO - CHECK : 데이터를 쌓아서 GROUP BY로?
     private int rejectedCount;
 
@@ -103,7 +105,7 @@ public class Member extends AggregateRoot<MemberId> {
         this.refreshToken = refreshToken;
     }
 
-    public void increaseAccusedCount(AccusePenaltyPolicy accusePenaltyPolicy) {
+    public void increaseAccusedCount() {
         this.accusedCount++;
         // TODO - 배치
 //        accusePenaltyPolicy.apply(this);

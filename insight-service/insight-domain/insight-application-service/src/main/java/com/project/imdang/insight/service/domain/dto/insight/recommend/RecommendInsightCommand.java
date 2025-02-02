@@ -21,5 +21,5 @@ public class RecommendInsightCommand {
     private UUID insightId;
     @Setter
     @Schema(description = "추천한 사용자ID")
-    private UUID memberId;  // recommendedBy
+    private UUID recommendMemberId;  // recommendedBy
 }

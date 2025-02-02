@@ -1,5 +1,6 @@
 package com.project.imdang.insight.service.domain.handler.insight;
 
+import com.project.imdang.domain.message.InsightAccusedRequestMessage;
 import com.project.imdang.domain.valueobject.InsightId;
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.InsightDomainService;
@@ -12,6 +13,7 @@ import com.project.imdang.insight.service.domain.exception.InsightApplicationSer
 import com.project.imdang.insight.service.domain.handler.AccuseHelper;
 import com.project.imdang.insight.service.domain.handler.InsightHelper;
 import com.project.imdang.insight.service.domain.mapper.InsightDataMapper;
+import com.project.imdang.insight.service.domain.ports.output.publisher.InsightAccusedRequestMessagePublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -26,13 +28,13 @@ import static com.project.imdang.domain.exception.ErrorCode.ALREADY_ACCUSED;
 @RequiredArgsConstructor
 @Component
 public class AccuseInsightCommandHandler {
-// TODO - 배치
-// 상대방의 신고 횟수 + 1
+
     private final InsightDomainService insightDomainService;
     private final InsightHelper insightHelper;
     private final InsightDataMapper insightDataMapper;
 
     private final AccuseHelper accuseHelper;
+    private final InsightAccusedRequestMessagePublisher insightAccusedRequestMessagePublisher;
 
     @Transactional
     public AccuseInsightResponse accuseInsight(AccuseInsightCommand accuseInsightCommand) {
@@ -46,8 +48,9 @@ public class AccuseInsightCommandHandler {
         Insight accusedInsight = insightHelper.get(accusedInsightId);
         InsightAccusedEvent insightAccusedEvent = insightDomainService.accuseInsight(accusedInsight, accusedBy);
         Insight savedInsight = insightHelper.save(insightAccusedEvent.getInsight());
-        // TODO - publish event
         Accuse savedAccuse = accuseHelper.save(insightAccusedEvent.getAccuse());
+        // publish
+        insightAccusedRequestMessagePublisher.publish(new InsightAccusedRequestMessage(savedAccuse.getAccusedMemberId().getValue()));
 
         log.info("Insight[id: {}] is accused by Member[id: {}].", savedInsight.getId().getValue(), savedAccuse.getAccuseMemberId().getValue());
         return insightDataMapper.insightToAccuseInsightResponse(savedInsight);

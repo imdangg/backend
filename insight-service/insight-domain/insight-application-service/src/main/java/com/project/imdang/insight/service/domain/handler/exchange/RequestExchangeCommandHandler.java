@@ -13,10 +13,10 @@ import com.project.imdang.insight.service.domain.entity.Snapshot;
 import com.project.imdang.insight.service.domain.event.ExchangeRequestCreatedEvent;
 import com.project.imdang.insight.service.domain.exception.InsightApplicationServiceException;
 import com.project.imdang.insight.service.domain.exception.SnapshotNotFoundException;
-import com.project.imdang.insight.service.domain.handler.ExchangeRequestCreatedRequestMessagePublisherImpl;
 import com.project.imdang.insight.service.domain.handler.ExchangeRequestHelper;
 import com.project.imdang.insight.service.domain.mapper.ExchangeRequestDataMapper;
 import com.project.imdang.insight.service.domain.ports.output.lookup.InsightMemberLookup;
+import com.project.imdang.insight.service.domain.ports.output.publisher.ExchangeRequestCreatedRequestMessagePublisher;
 import com.project.imdang.insight.service.domain.ports.output.repository.ExchangeRequestRepository;
 import com.project.imdang.insight.service.domain.ports.output.repository.SnapshotRepository;
 import com.project.imdang.insight.service.domain.valueobject.MemberInfo;
@@ -45,7 +45,7 @@ public class RequestExchangeCommandHandler {
 
     private final InsightMemberLookup insightMemberLookup;
 
-    private final ExchangeRequestCreatedRequestMessagePublisherImpl exchangeRequestCreatedRequestMessagePublisher;
+    private final ExchangeRequestCreatedRequestMessagePublisher exchangeRequestCreatedRequestMessagePublisher;
     private final EventPublisher eventPublisher;
 
     @Transactional

@@ -1,5 +1,6 @@
 package com.project.imdang.insight.service.persistence.mapper;
 
+import com.project.imdang.domain.valueobject.ExchangeRequestId;
 import com.project.imdang.domain.valueobject.InsightId;
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.entity.MemberSnapshot;
@@ -18,6 +19,8 @@ public class MemberSnapshotPersistenceMapper {
                 .memberId(memberSnapshot.getMemberId().getValue())
                 .snapshotId(memberSnapshot.getSnapshotId().getValue())
                 .insightId(memberSnapshot.getInsightId().getValue())
+                .exchangeRequestId(memberSnapshot.getExchangeRequestId() != null ?
+                        memberSnapshot.getExchangeRequestId().getValue() : null)
                 .createdAt(memberSnapshot.getCreatedAt())
                 .build();
     }
@@ -28,6 +31,8 @@ public class MemberSnapshotPersistenceMapper {
                 .memberId(new MemberId(memberSnapshotEntity.getMemberId()))
                 .snapshotId(new SnapshotId(memberSnapshotEntity.getSnapshotId()))
                 .insightId(new InsightId(memberSnapshotEntity.getInsightId()))
+                .exchangeRequestId(memberSnapshotEntity.getExchangeRequestId() != null ?
+                        new ExchangeRequestId(memberSnapshotEntity.getExchangeRequestId()) : null)
                 .createdAt(memberSnapshotEntity.getCreatedAt())
                 .build();
     }

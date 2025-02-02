@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class AcceptExchangeCommandHandler {
+public class AcceptExchangeRequestCommandHandler {
 
     private final ExchangeDomainService exchangeDomainService;
     private final ExchangeRequestHelper exchangeRequestHelper;
@@ -51,6 +51,7 @@ public class AcceptExchangeCommandHandler {
                 .memberId(exchangeRequest.getRequestMemberId())
                 .snapshotId(exchangeRequest.getRequestedSnapshotId())
                 .insightId(exchangeRequest.getRequestedInsightId())
+                .exchangeRequestId(saved.getId())
                 // TODO - CHECK
                 .createdAt(exchangeRequestAcceptedEvent.getCreatedAt())
                 .build();
@@ -61,6 +62,7 @@ public class AcceptExchangeCommandHandler {
                     .memberId(exchangeRequest.getRequestedMemberId())
                     .snapshotId(exchangeRequest.getRequestMemberSnapshotId())
                     .insightId(exchangeRequest.getRequestMemberInsightId())
+                    .exchangeRequestId(saved.getId())
                     // TODO - CHECK
                     .createdAt(exchangeRequestAcceptedEvent.getCreatedAt())
                     .build();

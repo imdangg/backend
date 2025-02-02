@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Builder
@@ -27,4 +28,5 @@ public class InsightResponse {
     private String mainImage;
     @Schema(description = "사용자 닉네임")
     private String memberNickname;
+    private ZonedDateTime createdAt;
 }

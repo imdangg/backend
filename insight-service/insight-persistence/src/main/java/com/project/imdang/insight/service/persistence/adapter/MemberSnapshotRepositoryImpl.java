@@ -28,7 +28,7 @@ public class MemberSnapshotRepositoryImpl implements MemberSnapshotRepository {
 
     @Override
     public Optional<MemberSnapshot> findByMemberIdAndInsightId(MemberId memberId, InsightId insightId) {
-        return memberSnapshotJpaRepository.findByMemberIdAndInsightId(memberId.getValue(), memberId.getValue())
+        return memberSnapshotJpaRepository.findByMemberIdAndInsightId(memberId.getValue(), insightId.getValue())
                 .map(memberSnapshotPersistenceMapper::memberSnapshotEntityToMemberSnapshot);
     }
 

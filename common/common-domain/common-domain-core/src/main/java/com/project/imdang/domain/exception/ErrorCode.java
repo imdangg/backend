@@ -14,5 +14,7 @@ public enum ErrorCode {
     // 요청 수락 실패
     EXCHANGE_REQUEST_ACCEPT_FAILED,
     // 요청 거절 실패
-    EXCHANGE_REQUEST_REJECT_FAILED
+    EXCHANGE_REQUEST_REJECT_FAILED,
+
+    MEMBER_ACCUSE_FAILED
 }
