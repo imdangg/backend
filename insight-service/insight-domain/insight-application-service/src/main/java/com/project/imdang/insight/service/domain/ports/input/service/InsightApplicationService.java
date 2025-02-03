@@ -13,6 +13,7 @@ import com.project.imdang.insight.service.domain.dto.insight.list.DistrictRespon
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightSimpleResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightByApartmentComplexQuery;
+import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightByDistrictQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListMyInsightCreatedByMeQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListMyInsightQuery;
@@ -29,8 +30,10 @@ import java.util.UUID;
 
 public interface InsightApplicationService {
     Page<InsightResponse> listInsight(ListInsightQuery listInsightQuery);
+    Page<InsightResponse> listInsightByDistrict(ListInsightByDistrictQuery listInsightByDistrictQuery);
     Page<InsightResponse> listInsightByApartmentComplex(ListInsightByApartmentComplexQuery listInsightByApartmentComplexQuery);
     List<ApartmentComplex> listMyVisitedApartmentComplex(UUID memberId);
+    Page<District> listDistrict(String siDo, String siGunGu, Integer pageNumber, Integer pageSize);
 
     List<DistrictResponse> listMyInsightDistrict(UUID memberId);
     List<ApartmentComplexResponse> listMyInsightApartmentComplexByDistrict(UUID memberId, District district);
