@@ -1,11 +1,6 @@
 package com.project.imdang.member.service.domain.ports.input.service;
 
-import com.project.imdang.member.service.domain.dto.DetailMyPageQuery;
-import com.project.imdang.member.service.domain.dto.DetailMyPageResponse;
-import com.project.imdang.member.service.domain.dto.JoinCommand;
-import com.project.imdang.member.service.domain.dto.LoginResponse;
-import com.project.imdang.member.service.domain.dto.MemberResponse;
-import com.project.imdang.member.service.domain.dto.TokenResponse;
+import com.project.imdang.member.service.domain.dto.*;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginCommand;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthWithdrawCommand;
 
@@ -26,5 +21,5 @@ public interface MemberApplicationService {
 
     void withdraw(UUID memberId, OAuthWithdrawCommand withdrawCommand);
 
-    TokenResponse reissue(UUID memberId);
+    TokenResponse reissue(TokenReissueCommand tokenReissueCommand);
 }

@@ -2,6 +2,7 @@ package com.project.imdang.member.service.domain.handler.auth;
 
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.member.service.domain.MemberDomainService;
+import com.project.imdang.member.service.domain.dto.TokenReissueCommand;
 import com.project.imdang.member.service.domain.dto.TokenResponse;
 import com.project.imdang.member.service.domain.entity.Member;
 import com.project.imdang.member.service.domain.exception.MemberDomainException;
@@ -21,12 +22,23 @@ public class ReissueCommandHandler {
     private final MemberDomainService memberDomainService;
     private final TokenRequestHandler tokenRequestHandler;
 
-    public TokenResponse reissue(UUID memberId) {
-        Member member = check(memberId);
+    public TokenResponse reissue(TokenReissueCommand tokenReissueCommand) {
+        Member member = check(tokenReissueCommand.getMemberId());
+        validate(tokenReissueCommand.getRefreshToken(), member);
         TokenResponse tokenResponse = tokenRequestHandler.generate(member);
         log.info("Member[id:{}] token reissued", member.getId().getValue());
         saveMember(memberDomainService.storeRefreshToken(member, tokenResponse.getRefreshToken()));
         return tokenResponse;
+    }
+
+    private void validate(String refreshToken, Member member) {
+        // 1. 유효한 리프레쉬인지
+        tokenRequestHandler.validateRefereshToken(refreshToken);
+        // 2. 일치하는 리프레쉬토큰인지
+        if (!member.getRefreshToken().equals(refreshToken)) {
+            //TODO : 보완
+            throw new MemberDomainException("Invalid Token");
+        }
     }
 
     private Member check(UUID _memberId) {

@@ -2,6 +2,7 @@ package com.project.imdang.member.service.application.rest;
 
 import com.project.imdang.member.service.domain.dto.JoinCommand;
 import com.project.imdang.member.service.domain.dto.LoginResponse;
+import com.project.imdang.member.service.domain.dto.TokenReissueCommand;
 import com.project.imdang.member.service.domain.dto.TokenResponse;
 import com.project.imdang.member.service.domain.dto.oauth.apple.AppleLoginCommand;
 import com.project.imdang.member.service.domain.dto.oauth.google.GoogleLoginCommand;
@@ -81,8 +82,8 @@ public class AuthController {
     @Operation(description = "토큰 재발급 API")
     @ApiResponse(responseCode = "200", description = "토큰 재발급 완료")
     @PostMapping("/reissue")
-    public ResponseEntity<TokenResponse> reissue(@AuthenticationPrincipal UUID memberId) {
-        TokenResponse tokenResponse = memberApplicationService.reissue(memberId);
+    public ResponseEntity<TokenResponse> reissue(@RequestBody @Valid TokenReissueCommand tokenReissueCommand) {
+        TokenResponse tokenResponse = memberApplicationService.reissue(tokenReissueCommand);
         return ResponseEntity.ok(tokenResponse);
     }
 }
