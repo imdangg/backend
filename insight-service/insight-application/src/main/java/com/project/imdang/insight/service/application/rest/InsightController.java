@@ -10,6 +10,7 @@ import com.project.imdang.insight.service.domain.dto.insight.detail.DetailInsigh
 import com.project.imdang.insight.service.domain.dto.insight.detail.DetailInsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightByApartmentComplexQuery;
+import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightByDistrictQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightQuery;
 import com.project.imdang.insight.service.domain.dto.insight.recommend.RecommendInsightCommand;
 import com.project.imdang.insight.service.domain.dto.insight.recommend.RecommendInsightResponse;
@@ -39,6 +40,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
+import static com.project.imdang.insight.service.application.rest.DistrictController.DEFAULT_SI_DO;
+
 @Slf4j
 @RequestMapping("/insights")
 @RequiredArgsConstructor
@@ -57,6 +60,30 @@ public class InsightController {
     @GetMapping
     public ResponseEntity<Page<InsightResponse>> list(@ModelAttribute ListInsightQuery listInsightQuery) {
         Page<InsightResponse> insightResponses = insightApplicationService.listInsight(listInsightQuery);
+        return ResponseEntity.ok(insightResponses);
+    }
+
+    @GetMapping("/by-district")
+    public ResponseEntity<Page<InsightResponse>> listByDistrict(@RequestParam(name = "siGunGu") String siGunGu,
+                                                                @RequestParam(name = "eupMyeonDong") String eupMyeonDong,
+                                                                // TODO - PagingQuery
+                                                                @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
+                                                                @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                                                                @RequestParam(name = "direction", defaultValue = "DESC") String direction,
+                                                                @RequestParam(name = "properties", defaultValue = "createdAt") String[] properties) {
+
+        // TODO - 리팩토링
+        ListInsightByDistrictQuery listInsightByDistrictQuery = ListInsightByDistrictQuery.builder()
+                .siDo("서울")
+//                .siDo(DEFAULT_SI_DO)
+                .siGunGu(siGunGu)
+                .eupMyeonDong(eupMyeonDong)
+                .pageNumber(pageNumber)
+                .pageSize(pageSize)
+                .direction(direction)
+                .properties(properties)
+                .build();
+        Page<InsightResponse> insightResponses = insightApplicationService.listInsightByDistrict(listInsightByDistrictQuery);
         return ResponseEntity.ok(insightResponses);
     }
 

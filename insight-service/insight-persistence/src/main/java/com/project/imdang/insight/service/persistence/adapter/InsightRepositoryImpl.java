@@ -6,6 +6,7 @@ import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.entity.Insight;
 import com.project.imdang.insight.service.domain.ports.output.repository.InsightRepository;
 import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
+import com.project.imdang.insight.service.domain.valueobject.District;
 import com.project.imdang.insight.service.persistence.entity.InsightEntity;
 import com.project.imdang.insight.service.persistence.mapper.InsightPersistenceMapper;
 import com.project.imdang.insight.service.persistence.repository.InsightJpaRepository;
@@ -63,6 +64,16 @@ public class InsightRepositoryImpl implements InsightRepository {
         return insightJpaRepository.findAllByIdIn(_insightIds).stream()
                 .map(insightPersistenceMapper::insightEntityToInsight)
                 .toList();
+    }
+
+    @Override
+    public Page<Insight> findAllByDistrict(District district, PageRequest pageRequest) {
+        Specification<InsightEntity> specification =
+                Specification.where(InsightSpecification.equalsSiDo(district.getSiDo()))
+                        .and(InsightSpecification.equalsSiGunGu(district.getSiGunGu()))
+                        .and(InsightSpecification.equalsEupMyeonDong(district.getEupMyeonDong()));
+        return insightJpaRepository.findAll(specification, pageRequest)
+                .map(insightPersistenceMapper::insightEntityToInsight);
     }
 
     @Override

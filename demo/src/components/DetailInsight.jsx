@@ -4,7 +4,7 @@ import {accuseInsight, fetchInsight, recommendInsight} from "../api-insight.js";
 import {fetchInsightsCreatedByMe} from "../api-my-insight.js";
 import {requestExchange} from "../api-exchange.js";
 
-export default function InsightDetail() {
+export default function DetailInsight() {
     const { id } = useParams();
     const [insight, setInsight] = useState(null);
     const [recommended, setRecommended] = useState(null);
