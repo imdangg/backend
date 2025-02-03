@@ -38,7 +38,7 @@ public class NotificationController {
 
     @Operation(description = "알림 리스트 조회 API")
     @ApiResponse(responseCode = "200", description = "알림 리스트 조회 성공")
-    @GetMapping("/checked")
+    @GetMapping
     public ResponseEntity<Page<NotificationResponse>> list(@AuthenticationPrincipal UUID memberId,
                                                                   @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
                                                                   @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
