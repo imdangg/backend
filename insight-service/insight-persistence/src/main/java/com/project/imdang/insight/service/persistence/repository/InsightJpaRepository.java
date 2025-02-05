@@ -20,6 +20,6 @@ public interface InsightJpaRepository extends JpaRepository<InsightEntity, UUID>
     Page<InsightEntity> findAll(Specification specification, Pageable pageable);
     List<InsightEntity> findAllByIdIn(Set<UUID> ids);
 
-    @Query("select distinct i.apartmentComplex from InsightEntity i")
+    @Query("select distinct i.apartmentComplex from InsightEntity i where i.memberId = :memberId")
     List<ApartmentComplex> findDistinctApartmentComplexByMemberId(UUID memberId);
 }
