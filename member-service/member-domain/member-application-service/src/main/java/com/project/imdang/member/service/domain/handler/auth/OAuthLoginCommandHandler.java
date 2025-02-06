@@ -46,16 +46,15 @@ public class OAuthLoginCommandHandler {
         boolean isJoined = false;
         if (optional.isEmpty()) {
             member = memberDomainService.createMember(oAuthInfo.getId(), oAuthInfo.getOAuthType());
-            saveMember(member);
         } else {
             member = optional.get();
             isJoined = (member.getNickname() != null);
         }
-
         // 2. 토큰 생성
         TokenResponse tokenResponse = tokenRequestHandler.generate(member);
         // 3. RefreshToken 저장
         memberDomainService.storeRefreshToken(member, tokenResponse.getRefreshToken());
+        saveMember(member);
         return LoginResponse.from(tokenResponse, isJoined, member.getId().getValue(), oAuthInfo.getRefreshToken());
     }
 

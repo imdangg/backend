@@ -44,6 +44,7 @@ public class Member extends AggregateRoot<MemberId> {
                 .oAuthId(oAuthId)
                 .oAuthType(oAuthType)
                 .isDeleted(Boolean.FALSE)
+                .isLogin(Boolean.TRUE)
                 .status(MemberStatus.ACTIVE)
                 .build();
     }
