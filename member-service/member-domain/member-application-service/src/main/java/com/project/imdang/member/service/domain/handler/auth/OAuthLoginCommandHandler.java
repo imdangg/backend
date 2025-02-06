@@ -40,7 +40,7 @@ public class OAuthLoginCommandHandler {
 
         // 1. 로그인
         // TODO - REVIEW
-        Optional<Member> optional = memberRepository.findByOAuthIdAndOAuthType(oAuthInfo.getId(), oAuthInfo.getOAuthType());
+        Optional<Member> optional = memberRepository.findByOAuthIdAndOAuthTypeAndIsDeleted(oAuthInfo.getId(), oAuthInfo.getOAuthType());
         // 지워지지 않은 사용자라면 가져오고, 아니라면 새로 생성
         Member member = optional.filter(m -> m.getIsDeleted().equals(Boolean.FALSE))
                 .orElseGet(() -> {
