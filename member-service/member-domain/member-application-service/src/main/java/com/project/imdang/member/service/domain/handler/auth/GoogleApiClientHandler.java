@@ -26,7 +26,7 @@ public class GoogleApiClientHandler implements OAuthApiClientHandler {
     @Value("${oauth.google.url.api}")
     private String apiUrl;
 
-    @Value("${oauth.google.url.api}")
+    @Value("${oauth.google.url.withdraw-api}")
     private String withdrawUrl;
 
     @Override
