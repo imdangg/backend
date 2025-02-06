@@ -43,6 +43,9 @@ public class AppleApiClientHandler implements OAuthApiClientHandler {
     @Value("${oauth.apple.url.auth}")
     private String authUrl;
 
+    @Value("${oauth.apple.url.withdraw-api}")
+    private String revokeUrl;
+
     @Value("${oauth.apple.client-id}")
     private String clientId;
 
@@ -94,7 +97,7 @@ public class AppleApiClientHandler implements OAuthApiClientHandler {
         body.add("token_type_hint", "refresh_token");
 
         HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
-        restTemplate.postForObject(authUrl, request, Void.class);
+        restTemplate.postForObject(revokeUrl, request, Void.class);
     }
 
     private String generateClientSecret() {

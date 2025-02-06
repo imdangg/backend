@@ -31,7 +31,11 @@ public class ListMyInsightDistrictCommandHandler {
                     String siDo = (String) _district[0];
                     String siGunGu = (String) _district[1];
                     String eupMyeonDong = (String) _district[2];
-                    District district = new District(siDo, siGunGu, eupMyeonDong);
+                    District district = District.builder()
+                            .siDo(siDo)
+                            .siGunGu(siGunGu)
+                            .eupMyeonDong(eupMyeonDong)
+                            .build();
                     Long[] result = memberSnapshotRepository.countAllByMemberIdAndDistrict(memberId, district);
 
                     Long apartmentComplexCount = result[0];
