@@ -8,6 +8,13 @@ repositories {
     mavenCentral()
 }
 
+bootJar {
+    enabled = false
+}
+jar {
+    enabled = true
+}
+
 subprojects {
     group = 'com.project.imdang'
     version = '0.0.1-SNAPSHOT'
@@ -44,13 +51,6 @@ subprojects {
 
     tasks.named('test') {
         useJUnitPlatform()
-    }
-
-    bootJar {
-        enabled = false
-    }
-    jar {
-        enabled = true
     }
 }
 
