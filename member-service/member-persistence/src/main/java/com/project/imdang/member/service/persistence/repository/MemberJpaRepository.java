@@ -8,6 +8,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface MemberJpaRepository extends JpaRepository<MemberEntity, UUID> {
-    Optional<MemberEntity> findByAuthIdAndAuthType(String authId, OAuthType authType);
+    Optional<MemberEntity> findByAuthIdAndAuthTypeAndIsDeleted(String authId, OAuthType authType, Boolean isDeleted);
     Optional<MemberEntity> findByNickname(String nickname);
 }
