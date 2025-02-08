@@ -16,9 +16,10 @@ public class EventForwarder {
 
     private final EventManager eventManager;
     private final OffsetManager offsetManager;
+    private final EventListener eventListener;
 
 
-    @Scheduled(initialDelay = 1000L, fixedDelay = 1000L)
+    @Scheduled(initialDelay = 7000L, fixedDelay = 7000L)
     public void getAndSend() {
         long nextOffset = getNextOffset();
         List<EventEntry> eventEntries = eventManager.get(nextOffset, DEFAULT_LIMIT_SIZE);
@@ -39,7 +40,7 @@ public class EventForwarder {
 
         try {
             for (EventEntry eventEntry : eventEntries) {
-//                eventListener.process(eventEntry);
+                eventListener.process(eventEntry);
                 processedCount++;
             }
         } catch (Exception e) {

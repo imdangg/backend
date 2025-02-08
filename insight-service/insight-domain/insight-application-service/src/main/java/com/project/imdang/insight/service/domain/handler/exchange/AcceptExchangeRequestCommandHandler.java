@@ -2,6 +2,7 @@ package com.project.imdang.insight.service.domain.handler.exchange;
 
 import com.project.imdang.domain.message.ExchangeRequestAcceptedCountRequestMessage;
 import com.project.imdang.domain.valueobject.ExchangeRequestId;
+import com.project.imdang.event.EventPublisher;
 import com.project.imdang.insight.service.domain.ExchangeDomainService;
 import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExchangeRequestCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExchangeRequestResponse;
@@ -28,10 +29,13 @@ public class AcceptExchangeRequestCommandHandler {
 
     private final MemberSnapshotHelper memberSnapshotHelper;
     private final ExchangeRequestAcceptedCountMessagePublisher exchangeRequestAcceptedCountMessagePublisher;
+    private final EventPublisher eventPublisher;
 
     @Transactional
-    public AcceptExchangeRequestResponse acceptExchangeRequest(AcceptExchangeRequestCommand acceptExchangeRequestCommand) {
-        ExchangeRequestId exchangeRequestId = new ExchangeRequestId(acceptExchangeRequestCommand.getExchangeRequestId());
+    public AcceptExchangeRequestResponse acceptExchangeRequest(
+            AcceptExchangeRequestCommand acceptExchangeRequestCommand) {
+        ExchangeRequestId exchangeRequestId = new ExchangeRequestId(
+                acceptExchangeRequestCommand.getExchangeRequestId());
         ExchangeRequest exchangeRequest = exchangeRequestHelper.get(exchangeRequestId);
 
         // validation check
@@ -39,17 +43,21 @@ public class AcceptExchangeRequestCommandHandler {
                 .equals(acceptExchangeRequestCommand.getRequestedMemberId())) {
             throw new IllegalArgumentException();
         }
-/*
-        if (exchangeRequest.getMemberCouponId() != null) {
-            MemberCouponId memberCouponId = exchangeRequest.getMemberCouponId();
-            exchangeRequestAcceptedRequestMessagePublisher.publish(
-                    new ExchangeRequestAcceptedRequestMessage(memberCouponId.getValue()));
-        }*/
+        /*
+         * if (exchangeRequest.getMemberCouponId() != null) {
+         * MemberCouponId memberCouponId = exchangeRequest.getMemberCouponId();
+         * exchangeRequestAcceptedRequestMessagePublisher.publish(
+         * new ExchangeRequestAcceptedRequestMessage(memberCouponId.getValue()));
+         * }
+         */
 
-        ExchangeRequestAcceptedEvent exchangeRequestAcceptedEvent = exchangeDomainService.acceptExchangeRequest(exchangeRequest);
-        //publish event
-        ExchangeRequestAcceptedCountRequestMessage event = new ExchangeRequestAcceptedCountRequestMessage(exchangeRequest.getRequestMemberId().getValue());
+        ExchangeRequestAcceptedEvent exchangeRequestAcceptedEvent = exchangeDomainService
+                .acceptExchangeRequest(exchangeRequest);
+        // publish event
+        ExchangeRequestAcceptedCountRequestMessage event = new ExchangeRequestAcceptedCountRequestMessage(
+                exchangeRequest.getRequestMemberId().getValue());
         exchangeRequestAcceptedCountMessagePublisher.publish(event);
+        eventPublisher.publish(exchangeRequestAcceptedEvent);
 
         log.info("ExchangeRequest[id: {}] is accepted.", exchangeRequest.getId().getValue());
         ExchangeRequest saved = exchangeRequestHelper.save(exchangeRequestAcceptedEvent.getExchangeRequest());

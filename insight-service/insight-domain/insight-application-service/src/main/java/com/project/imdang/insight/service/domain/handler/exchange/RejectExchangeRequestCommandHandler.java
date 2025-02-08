@@ -4,6 +4,7 @@ import com.project.imdang.domain.message.ExchangeRequestRejectedCountRequestMess
 import com.project.imdang.domain.message.ExchangeRequestRejectedRequestMessage;
 import com.project.imdang.domain.valueobject.ExchangeRequestId;
 import com.project.imdang.domain.valueobject.MemberCouponId;
+import com.project.imdang.event.EventPublisher;
 import com.project.imdang.insight.service.domain.ExchangeDomainService;
 import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestResponse;
@@ -26,18 +27,20 @@ import java.util.UUID;
 public class RejectExchangeRequestCommandHandler {
     // TODO - CHECK : 교환 요청/거절/승인 내역을 따로 저장해서 GROUP BY로 COUNT하는 방법
     // TODO - CHECK : 거절 횟수로 쿠폰 발급하는 것은 배치로? 비동기(kafka)? 로직에서 바로 처리
-// 교환 요청한 상대방의 rejectedCount + 1 → 횟수 비교해서 쿠폰 발급
+    // 교환 요청한 상대방의 rejectedCount + 1 → 횟수 비교해서 쿠폰 발급
     private final ExchangeDomainService exchangeDomainService;
     private final ExchangeRequestHelper exchangeRequestHelper;
     private final ExchangeRequestDataMapper exchangeRequestDataMapper;
 
-
     private final ExchangeRequestRejectedRequestMessagePublisher exchangeRequestRejectedRequestMessagePublisher;
     private final ExchangeRequestRejectedCountMessagePublisher exchangeRequestRejectedCountMessagePublisher;
+    private final EventPublisher eventPublisher;
 
     @Transactional
-    public RejectExchangeRequestResponse rejectExchangeRequest(RejectExchangeRequestCommand rejectExchangeRequestCommand) {
-        ExchangeRequestId exchangeRequestId = new ExchangeRequestId(rejectExchangeRequestCommand.getExchangeRequestId());
+    public RejectExchangeRequestResponse rejectExchangeRequest(
+            RejectExchangeRequestCommand rejectExchangeRequestCommand) {
+        ExchangeRequestId exchangeRequestId = new ExchangeRequestId(
+                rejectExchangeRequestCommand.getExchangeRequestId());
         ExchangeRequest exchangeRequest = exchangeRequestHelper.get(exchangeRequestId);
 
         // validation check
@@ -53,11 +56,14 @@ public class RejectExchangeRequestCommandHandler {
         }
 
         // 거절 이벤트 횟수 카운트 발생
-        ExchangeRequestRejectedEvent exchangeRequestRejectedEvent = exchangeDomainService.rejectExchangeRequest(exchangeRequest);
+        ExchangeRequestRejectedEvent exchangeRequestRejectedEvent = exchangeDomainService
+                .rejectExchangeRequest(exchangeRequest);
+
         // 이벤트 publish (-> 비동기)
-        ExchangeRequestRejectedCountRequestMessage exchangeRequestRejectedCountRequestMessage =
-                new ExchangeRequestRejectedCountRequestMessage(exchangeRequestRejectedEvent.getExchangeRequest().getRequestMemberId().getValue());
+        ExchangeRequestRejectedCountRequestMessage exchangeRequestRejectedCountRequestMessage = new ExchangeRequestRejectedCountRequestMessage(
+                exchangeRequestRejectedEvent.getExchangeRequest().getRequestMemberId().getValue());
         exchangeRequestRejectedCountMessagePublisher.publish(exchangeRequestRejectedCountRequestMessage);
+        eventPublisher.publish(exchangeRequestRejectedEvent);
 
         log.info("ExchangeRequest[id: {}] is rejected.", exchangeRequest.getId().getValue());
         ExchangeRequest saved = exchangeRequestHelper.save(exchangeRequestRejectedEvent.getExchangeRequest());

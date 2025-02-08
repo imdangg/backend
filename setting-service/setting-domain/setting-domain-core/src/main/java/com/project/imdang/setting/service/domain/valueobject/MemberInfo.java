@@ -5,5 +5,6 @@ import lombok.Builder;
 
 @Builder
 public record MemberInfo(MemberId memberId,
-                         String deviceToken) {
+                         String deviceToken,
+                         String nickname) {
 }
