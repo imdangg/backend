@@ -1,5 +1,6 @@
 package com.project.imdang.insight.service.domain.handler.insight;
 
+import com.project.imdang.domain.message.InsightCreatedCountRequestMessage;
 import com.project.imdang.domain.valueobject.InsightId;
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.InsightDomainService;
@@ -8,11 +9,10 @@ import com.project.imdang.insight.service.domain.dto.insight.create.CreateInsigh
 import com.project.imdang.insight.service.domain.entity.Insight;
 import com.project.imdang.insight.service.domain.entity.MemberSnapshot;
 import com.project.imdang.insight.service.domain.entity.Snapshot;
-import com.project.imdang.insight.service.domain.handler.InsightHelper;
-import com.project.imdang.insight.service.domain.handler.MemberSnapshotHelper;
-import com.project.imdang.insight.service.domain.handler.SnapshotHelper;
-import com.project.imdang.insight.service.domain.handler.UploadImageHelper;
+import com.project.imdang.insight.service.domain.handler.*;
 import com.project.imdang.insight.service.domain.mapper.InsightDataMapper;
+import com.project.imdang.insight.service.domain.ports.output.publisher.InsightAccusedRequestMessagePublisher;
+import com.project.imdang.insight.service.domain.ports.output.publisher.InsightCreatedCountMessagePublisher;
 import com.project.imdang.insight.service.domain.valueobject.SnapshotId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +31,8 @@ public class CreateInsightCommandHandler {
     private final SnapshotHelper snapshotHelper;
     private final MemberSnapshotHelper memberSnapshotHelper;
 
+
+    private final InsightCreatedCountMessagePublisher insightCreatedCountMessagePublisher;
     private final UploadImageHelper uploadImageHelper;
 
     @Transactional
@@ -42,6 +44,8 @@ public class CreateInsightCommandHandler {
         Insight created = insightDomainService.createInsight(insight, mainImage);
         
         Insight saved = insightHelper.save(created);
+        InsightCreatedCountRequestMessage event = new InsightCreatedCountRequestMessage(saved.getMemberId().getValue());
+        insightCreatedCountMessagePublisher.publish(event);
         log.info("Insight[id: {}] is created.", saved.getId().getValue());
 
         // TODO : event

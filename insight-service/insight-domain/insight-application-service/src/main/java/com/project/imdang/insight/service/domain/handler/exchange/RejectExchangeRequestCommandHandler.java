@@ -1,5 +1,6 @@
 package com.project.imdang.insight.service.domain.handler.exchange;
 
+import com.project.imdang.domain.message.ExchangeRequestRejectedCountRequestMessage;
 import com.project.imdang.domain.message.ExchangeRequestRejectedRequestMessage;
 import com.project.imdang.domain.valueobject.ExchangeRequestId;
 import com.project.imdang.domain.valueobject.MemberCouponId;
@@ -10,11 +11,14 @@ import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
 import com.project.imdang.insight.service.domain.event.ExchangeRequestRejectedEvent;
 import com.project.imdang.insight.service.domain.handler.ExchangeRequestHelper;
 import com.project.imdang.insight.service.domain.mapper.ExchangeRequestDataMapper;
+import com.project.imdang.insight.service.domain.ports.output.publisher.ExchangeRequestRejectedCountMessagePublisher;
 import com.project.imdang.insight.service.domain.ports.output.publisher.ExchangeRequestRejectedRequestMessagePublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,7 +31,9 @@ public class RejectExchangeRequestCommandHandler {
     private final ExchangeRequestHelper exchangeRequestHelper;
     private final ExchangeRequestDataMapper exchangeRequestDataMapper;
 
+
     private final ExchangeRequestRejectedRequestMessagePublisher exchangeRequestRejectedRequestMessagePublisher;
+    private final ExchangeRequestRejectedCountMessagePublisher exchangeRequestRejectedCountMessagePublisher;
 
     @Transactional
     public RejectExchangeRequestResponse rejectExchangeRequest(RejectExchangeRequestCommand rejectExchangeRequestCommand) {
@@ -46,7 +52,13 @@ public class RejectExchangeRequestCommandHandler {
                     new ExchangeRequestRejectedRequestMessage(memberCouponId.getValue()));
         }
 
+        // 거절 이벤트 횟수 카운트 발생
         ExchangeRequestRejectedEvent exchangeRequestRejectedEvent = exchangeDomainService.rejectExchangeRequest(exchangeRequest);
+        // 이벤트 publish (-> 비동기)
+        ExchangeRequestRejectedCountRequestMessage exchangeRequestRejectedCountRequestMessage =
+                new ExchangeRequestRejectedCountRequestMessage(exchangeRequestRejectedEvent.getExchangeRequest().getRequestMemberId().getValue());
+        exchangeRequestRejectedCountMessagePublisher.publish(exchangeRequestRejectedCountRequestMessage);
+
         log.info("ExchangeRequest[id: {}] is rejected.", exchangeRequest.getId().getValue());
         ExchangeRequest saved = exchangeRequestHelper.save(exchangeRequestRejectedEvent.getExchangeRequest());
 

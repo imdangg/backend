@@ -43,21 +43,21 @@ public class CouponController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(description = "쿠폰 사용 API")
-    @ApiResponse(responseCode = "200", description = "쿠폰 사용 성공",
-            content = @Content(schema = @Schema(implementation = UseMemberCouponCommandResponse.class))
-    )
-    @PostMapping("/use")
-    public ResponseEntity<UseMemberCouponCommandResponse> useCoupon(@AuthenticationPrincipal UUID memberId) {
-        UseMemberCouponCommandResponse useMemberCouponCommandResponse = memberCouponApplicationService.useMemberCoupon(new UseMemberCouponCommand(memberId));
-        return ResponseEntity.ok(useMemberCouponCommandResponse);
-    }
-
-    @Operation(description = "쿠폰 사용 취소 API")
-    @ApiResponse(responseCode = "200", description = "쿠폰 사용 취소 성공")
-    @PostMapping("/cancel")
-    public ResponseEntity<Void> cancelCoupon(@RequestBody CancelMemberCouponCommand cancelMemberCouponCommand) {
-        memberCouponApplicationService.cancelMemberCoupon(cancelMemberCouponCommand);
-        return ResponseEntity.ok().build();
-    }
+//    @Operation(description = "쿠폰 사용 API")
+//    @ApiResponse(responseCode = "200", description = "쿠폰 사용 성공",
+//            content = @Content(schema = @Schema(implementation = UseMemberCouponCommandResponse.class))
+//    )
+//    @PostMapping("/use")
+//    public ResponseEntity<UseMemberCouponCommandResponse> useCoupon(@AuthenticationPrincipal UUID memberId) {
+//        UseMemberCouponCommandResponse useMemberCouponCommandResponse = memberCouponApplicationService.useMemberCoupon(new UseMemberCouponCommand(memberId));
+//        return ResponseEntity.ok(useMemberCouponCommandResponse);
+//    }
+//
+//    @Operation(description = "쿠폰 사용 취소 API")
+//    @ApiResponse(responseCode = "200", description = "쿠폰 사용 취소 성공")
+//    @PostMapping("/cancel")
+//    public ResponseEntity<Void> cancelCoupon(@RequestBody CancelMemberCouponCommand cancelMemberCouponCommand) {
+//        memberCouponApplicationService.cancelMemberCoupon(cancelMemberCouponCommand);
+//        return ResponseEntity.ok().build();
+//    }
 }
