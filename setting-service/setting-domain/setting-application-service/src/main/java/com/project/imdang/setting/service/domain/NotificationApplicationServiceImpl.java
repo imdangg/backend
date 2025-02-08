@@ -2,7 +2,7 @@ package com.project.imdang.setting.service.domain;
 
 import com.project.imdang.setting.service.domain.dto.CreateNotificationCommand;
 import com.project.imdang.setting.service.domain.dto.ListNotificationQuery;
-import com.project.imdang.setting.service.domain.dto.NotificationRequest;
+import com.project.imdang.setting.service.domain.dto.PushNotificationRequest;
 import com.project.imdang.setting.service.domain.dto.NotificationResponse;
 import com.project.imdang.setting.service.domain.handler.*;
 import com.project.imdang.setting.service.domain.ports.input.service.NotificationApplicationService;
@@ -11,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.List;
 import java.util.UUID;
 
 @Validated
@@ -48,7 +47,7 @@ public class NotificationApplicationServiceImpl implements NotificationApplicati
     }
 
     @Override
-    public void sendNotification(NotificationRequest notificationRequest) {
+    public void sendNotification(PushNotificationRequest notificationRequest) {
         sendNotificationHandler.send(notificationRequest);
     }
 

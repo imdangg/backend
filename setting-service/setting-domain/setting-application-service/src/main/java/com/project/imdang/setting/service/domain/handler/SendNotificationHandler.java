@@ -7,7 +7,7 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import com.project.imdang.domain.valueobject.MemberId;
-import com.project.imdang.setting.service.domain.dto.NotificationRequest;
+import com.project.imdang.setting.service.domain.dto.PushNotificationRequest;
 import com.project.imdang.setting.service.domain.exception.NotificationDomainException;
 import com.project.imdang.setting.service.domain.exception.SettingApplicationServiceException;
 import com.project.imdang.setting.service.domain.ports.output.lookup.SettingMemberLookup;
@@ -29,11 +29,11 @@ public class SendNotificationHandler {
     private final SettingMemberLookup settingMemberLookup;
 
     @Retryable(retryFor = FirebaseMessagingException.class, maxAttempts = 3, backoff = @Backoff(delay = 1000))
-    public void send(NotificationRequest notificationRequest) {
+    public void send(PushNotificationRequest pushNotificationRequest) {
 
-        MemberId memberId = new MemberId(notificationRequest.getMemberId());
-        String title = notificationRequest.getTitle();
-        String body = notificationRequest.getBody();
+        MemberId memberId = new MemberId(pushNotificationRequest.getMemberId());
+        String title = pushNotificationRequest.getTitle();
+        String body = pushNotificationRequest.getBody();
 
         String token = getFcmToken(memberId);
         Notification notification = getNotification(title, body);

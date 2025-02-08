@@ -1,6 +1,7 @@
 package com.project.imdang.insight.service.domain.handler.exchange;
 
 import com.project.imdang.domain.valueobject.ExchangeRequestId;
+import com.project.imdang.event.EventPublisher;
 import com.project.imdang.insight.service.domain.ExchangeDomainService;
 import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExchangeRequestCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExchangeRequestResponse;
@@ -25,6 +26,7 @@ public class AcceptExchangeCommandHandler {
     private final ExchangeRequestDataMapper exchangeRequestDataMapper;
 
     private final MemberSnapshotHelper memberSnapshotHelper;
+    private final EventPublisher eventPublisher;
 
     @Transactional
     public AcceptExchangeRequestResponse acceptExchangeRequest(AcceptExchangeRequestCommand acceptExchangeRequestCommand) {
@@ -44,6 +46,8 @@ public class AcceptExchangeCommandHandler {
         }*/
 
         ExchangeRequestAcceptedEvent exchangeRequestAcceptedEvent = exchangeDomainService.acceptExchangeRequest(exchangeRequest);
+        eventPublisher.publish(exchangeRequestAcceptedEvent);
+
         log.info("ExchangeRequest[id: {}] is accepted.", exchangeRequest.getId().getValue());
         ExchangeRequest saved = exchangeRequestHelper.save(exchangeRequestAcceptedEvent.getExchangeRequest());
 

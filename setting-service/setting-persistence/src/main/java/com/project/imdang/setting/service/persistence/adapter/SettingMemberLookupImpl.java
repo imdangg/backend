@@ -29,6 +29,7 @@ public class SettingMemberLookupImpl implements SettingMemberLookup {
                     .map(memberInfoResponse -> MemberInfo.builder()
                             .memberId(new MemberId(memberInfoResponse.getMemberId()))
                             .deviceToken(memberInfoResponse.getDeviceToken())
+                            .nickname(memberInfoResponse.getNickname())
                             .build());
         } catch (Exception e) {
             // TODO - 로그

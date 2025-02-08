@@ -3,6 +3,7 @@ package com.project.imdang.insight.service.domain.handler.exchange;
 import com.project.imdang.domain.message.ExchangeRequestRejectedRequestMessage;
 import com.project.imdang.domain.valueobject.ExchangeRequestId;
 import com.project.imdang.domain.valueobject.MemberCouponId;
+import com.project.imdang.event.EventPublisher;
 import com.project.imdang.insight.service.domain.ExchangeDomainService;
 import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestResponse;
@@ -28,6 +29,7 @@ public class RejectExchangeCommandHandler {
     private final ExchangeRequestDataMapper exchangeRequestDataMapper;
 
     private final ExchangeRequestRejectedRequestMessagePublisher exchangeRequestRejectedRequestMessagePublisher;
+    private final EventPublisher eventPublisher;
 
     @Transactional
     public RejectExchangeRequestResponse rejectExchangeRequest(RejectExchangeRequestCommand rejectExchangeRequestCommand) {
@@ -47,6 +49,7 @@ public class RejectExchangeCommandHandler {
         }
 
         ExchangeRequestRejectedEvent exchangeRequestRejectedEvent = exchangeDomainService.rejectExchangeRequest(exchangeRequest);
+        eventPublisher.publish(exchangeRequestRejectedEvent);
         log.info("ExchangeRequest[id: {}] is rejected.", exchangeRequest.getId().getValue());
         ExchangeRequest saved = exchangeRequestHelper.save(exchangeRequestRejectedEvent.getExchangeRequest());
 
