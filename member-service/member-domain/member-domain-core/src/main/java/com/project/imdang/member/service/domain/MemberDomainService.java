@@ -16,4 +16,6 @@ public interface MemberDomainService {
     Member withdraw(Member member);
 
     Member storeRefreshToken(Member member, String refreshToken);
+
+    Member updateRejectedCount(Member member);
 }

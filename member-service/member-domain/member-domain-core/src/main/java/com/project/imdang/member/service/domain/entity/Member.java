@@ -122,4 +122,8 @@ public class Member extends AggregateRoot<MemberId> {
         this.status = MemberStatus.ACTIVE;
         this.penaltyPeriod = null;
     }
+
+    public void plusRejectedCount() {
+        this.rejectedCount++;
+    }
 }

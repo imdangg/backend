@@ -48,11 +48,12 @@ public class IssueMemberCouponCommandHandler {
 
     public void issue(IssueMemberCouponCommand issueMemberCouponCommand) {
         // 1. 쿠폰 종류 확인
-        Coupon coupon = checkCoupon(issueMemberCouponCommand.getCouponId());
+        Coupon coupon = checkCoupon(issueMemberCouponCommand.getName());
         // 2. 사용자 확인
         Member member = checkMember(issueMemberCouponCommand.getMemberId());
         // 3. 쿠폰 정책 적용
-        Integer couponQuantity = couponPolicies.get(coupon.getName()).apply(coupon, member);
+        CouponPolicy couponPolicy = couponPolicies.get(issueMemberCouponCommand.getName());
+        Integer couponQuantity = couponPolicy.apply(coupon, member);
         // 4. 쿠폰 발급
         List<MemberCoupon> memberCoupons = memberCouponDataMapper.issueMemberCouponCommandToMemberCoupons(member, coupon, couponQuantity);
         memberCoupons.forEach(memberCouponDomainService::issue);
@@ -72,10 +73,9 @@ public class IssueMemberCouponCommandHandler {
         return saved;
     }
 
-    private Coupon checkCoupon(UUID _couponId) {
-        CouponId couponId = new CouponId(_couponId);
-        return couponRepository.findById(couponId)
-                .orElseThrow(() -> new CouponNotFoundException(couponId));
+    private Coupon checkCoupon(String couponName) {
+        return couponRepository.findByName(couponName)
+                .orElseThrow(() -> new CouponNotFoundException(String.format("Could not find Coupon [name : %s]", couponName)));
     }
 
     private Member checkMember(UUID _memberId) {

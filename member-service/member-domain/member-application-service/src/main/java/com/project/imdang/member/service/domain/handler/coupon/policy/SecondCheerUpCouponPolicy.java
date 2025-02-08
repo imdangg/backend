@@ -19,6 +19,7 @@ public class SecondCheerUpCouponPolicy implements CouponPolicy{
 
     @Override
     public Integer apply(Coupon coupon, Member member) {
+        validate(coupon, member);
         return ISSUE_QUANTITY;
     }
 

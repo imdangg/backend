@@ -34,4 +34,10 @@ public class MemberDomainServiceImpl implements MemberDomainService {
         member.storeRefeashToken(refreshToken);
         return member;
     }
+
+    @Override
+    public Member updateRejectedCount(Member member) {
+        member.plusRejectedCount();
+        return member;
+    }
 }
