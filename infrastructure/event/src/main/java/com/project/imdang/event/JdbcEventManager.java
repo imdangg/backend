@@ -30,7 +30,7 @@ public class JdbcEventManager implements EventManager {
     @Override
     public <T extends DomainEvent> void save(T event) {
         EventEntry eventEntry = EventEntry.builder()
-                .type(event.getClass().getName())
+                .type(event.getClass().getSimpleName())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .payload(toJson(event))
                 .build();
