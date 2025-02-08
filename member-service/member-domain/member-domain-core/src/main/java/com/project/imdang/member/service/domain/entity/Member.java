@@ -126,4 +126,8 @@ public class Member extends AggregateRoot<MemberId> {
     public void plusRejectedCount() {
         this.rejectedCount++;
     }
+
+    public void plusInsightCount() {
+        this.insightCount++;
+    }
 }

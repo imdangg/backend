@@ -40,4 +40,10 @@ public class MemberDomainServiceImpl implements MemberDomainService {
         member.plusRejectedCount();
         return member;
     }
+
+    @Override
+    public Member updateInsightCreatedCount(Member member) {
+        member.plusInsightCount();
+        return member;
+    }
 }
