@@ -10,7 +10,7 @@ import com.project.imdang.insight.service.domain.entity.Snapshot;
 import com.project.imdang.insight.service.domain.event.InsightUpdatedEvent;
 import com.project.imdang.insight.service.domain.handler.InsightHelper;
 import com.project.imdang.insight.service.domain.handler.SnapshotHelper;
-import com.project.imdang.insight.service.domain.handler.UploadMultipartFileHelper;
+import com.project.imdang.insight.service.domain.handler.UploadImageHelper;
 import com.project.imdang.insight.service.domain.mapper.InsightDataMapper;
 import com.project.imdang.insight.service.domain.ports.output.repository.MemberSnapshotRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class UpdateInsightCommandHandler {
     private final SnapshotHelper snapshotHelper;
     private final MemberSnapshotRepository memberSnapshotRepository;
 
-    private final UploadMultipartFileHelper uploadMultipartFileHelper;
+    private final UploadImageHelper uploadImageHelper;
 
 
     @Transactional
@@ -40,8 +40,7 @@ public class UpdateInsightCommandHandler {
         MemberId updatedBy = new MemberId(updateInsightCommand.getMemberId());
         Insight insight = insightHelper.get(insightId);
 
-        // TODO : 이미지 처리
-        String mainImage = uploadMultipartFileHelper.uploadFile(updateInsightCommand.getMainImage());
+        String mainImage = uploadImageHelper.uploadImage(updateInsightCommand.getMainImage());
         InsightUpdatedEvent insightUpdatedEvent = insightDomainService.updateInsight(
                 insight,
                 updatedBy,

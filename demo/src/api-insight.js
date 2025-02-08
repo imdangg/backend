@@ -111,3 +111,18 @@ export async function accuseInsight(insightId) {
     }
     return response.json();
 }
+
+export async function createInsight(payload) {
+    const response = await fetch(`${API_URL}/insights/create`, {
+        method: 'POST',
+        headers: {
+            ...getAuthHeaders()
+        },
+        body: payload,
+    });
+
+    if (!response.ok) {
+        throw new Error('생성 요청에 실패했습니다.');
+    }
+    return response.json();
+}

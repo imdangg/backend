@@ -106,6 +106,12 @@ project(':common:common-domain:common-application-service') {
     }
 }
 
+project(':infrastructure:aws:s3') {
+    dependencies {
+        implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    }
+}
+
 project(':infrastructure:event') {
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
@@ -171,6 +177,7 @@ project(':insight-service:insight-persistence') {
 //        implementation project(':common:common-application')
         implementation project(':common:common-domain:common-domain-core')
 
+        implementation project(':infrastructure:aws:s3')
         implementation project(':infrastructure:feign')
 
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

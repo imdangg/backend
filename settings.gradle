@@ -3,6 +3,8 @@ rootProject.name = 'imdang'
 include("imdang-container")
 
 include("infrastructure")
+include("infrastructure:aws")
+include("infrastructure:aws:s3")
 include("infrastructure:event")
 include("infrastructure:saga")
 include(':infrastructure:feign')

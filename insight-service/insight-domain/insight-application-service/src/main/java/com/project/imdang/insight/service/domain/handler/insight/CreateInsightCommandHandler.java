@@ -31,15 +31,16 @@ public class CreateInsightCommandHandler {
     private final SnapshotHelper snapshotHelper;
     private final MemberSnapshotHelper memberSnapshotHelper;
 
-    private final UploadMultipartFileHelper uploadMultipartFileHelper;
+
     private final InsightCreatedCountMessagePublisher insightCreatedCountMessagePublisher;
+    private final UploadImageHelper uploadImageHelper;
 
     @Transactional
     public CreateInsightResponse createInsight(CreateInsightCommand createInsightCommand) {
         Insight insight = insightDataMapper.createInsightCommandToInsight(createInsightCommand);
         // TODO - CHECK : event
 
-        String mainImage = uploadMultipartFileHelper.uploadFile(createInsightCommand.getMainImage());
+        String mainImage = uploadImageHelper.uploadImage(createInsightCommand.getMainImage());
         Insight created = insightDomainService.createInsight(insight, mainImage);
         
         Insight saved = insightHelper.save(created);
