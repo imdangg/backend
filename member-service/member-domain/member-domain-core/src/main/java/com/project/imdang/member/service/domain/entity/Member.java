@@ -130,4 +130,8 @@ public class Member extends AggregateRoot<MemberId> {
     public void plusInsightCount() {
         this.insightCount++;
     }
+
+    public void plusExchangeRequestCount() {
+        this.exchangeCount++;
+    }
 }

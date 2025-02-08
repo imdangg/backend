@@ -46,4 +46,10 @@ public class MemberDomainServiceImpl implements MemberDomainService {
         member.plusInsightCount();
         return member;
     }
+
+    @Override
+    public Member updateExchangeRequestAcceptedCount(Member member) {
+        member.plusExchangeRequestCount();
+        return member;
+    }
 }

@@ -1,5 +1,6 @@
 package com.project.imdang.insight.service.domain.handler.exchange;
 
+import com.project.imdang.domain.message.ExchangeRequestAcceptedCountRequestMessage;
 import com.project.imdang.domain.valueobject.ExchangeRequestId;
 import com.project.imdang.insight.service.domain.ExchangeDomainService;
 import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExchangeRequestCommand;
@@ -10,6 +11,7 @@ import com.project.imdang.insight.service.domain.event.ExchangeRequestAcceptedEv
 import com.project.imdang.insight.service.domain.handler.ExchangeRequestHelper;
 import com.project.imdang.insight.service.domain.handler.MemberSnapshotHelper;
 import com.project.imdang.insight.service.domain.mapper.ExchangeRequestDataMapper;
+import com.project.imdang.insight.service.domain.ports.output.publisher.ExchangeRequestAcceptedCountMessagePublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -25,6 +27,7 @@ public class AcceptExchangeRequestCommandHandler {
     private final ExchangeRequestDataMapper exchangeRequestDataMapper;
 
     private final MemberSnapshotHelper memberSnapshotHelper;
+    private final ExchangeRequestAcceptedCountMessagePublisher exchangeRequestAcceptedCountMessagePublisher;
 
     @Transactional
     public AcceptExchangeRequestResponse acceptExchangeRequest(AcceptExchangeRequestCommand acceptExchangeRequestCommand) {
@@ -44,6 +47,10 @@ public class AcceptExchangeRequestCommandHandler {
         }*/
 
         ExchangeRequestAcceptedEvent exchangeRequestAcceptedEvent = exchangeDomainService.acceptExchangeRequest(exchangeRequest);
+        //publish event
+        ExchangeRequestAcceptedCountRequestMessage event = new ExchangeRequestAcceptedCountRequestMessage(exchangeRequest.getRequestMemberId().getValue());
+        exchangeRequestAcceptedCountMessagePublisher.publish(event);
+
         log.info("ExchangeRequest[id: {}] is accepted.", exchangeRequest.getId().getValue());
         ExchangeRequest saved = exchangeRequestHelper.save(exchangeRequestAcceptedEvent.getExchangeRequest());
 

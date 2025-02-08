@@ -20,4 +20,6 @@ public interface MemberDomainService {
     Member updateRejectedCount(Member member);
 
     Member updateInsightCreatedCount(Member member);
+
+    Member updateExchangeRequestAcceptedCount(Member member);
 }
