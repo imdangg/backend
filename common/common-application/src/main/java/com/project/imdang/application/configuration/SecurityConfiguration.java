@@ -46,7 +46,7 @@ public class SecurityConfiguration {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/members").access(this::hasIpAddress)
+                        .requestMatchers("/members","/members/info").access(this::hasIpAddress)
                         .requestMatchers("/auth/kakao", "/auth/google", "/auth/apple",
                                 "/swagger-resources/**", "/swagger-ui/**","/v3/api-docs/**", "/apartment-complexes").permitAll()
                         .anyRequest().authenticated())

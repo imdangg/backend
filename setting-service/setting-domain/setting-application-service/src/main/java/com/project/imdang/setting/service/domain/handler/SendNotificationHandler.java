@@ -1,11 +1,6 @@
 package com.project.imdang.setting.service.domain.handler;
 
-import com.google.firebase.messaging.AndroidConfig;
-import com.google.firebase.messaging.AndroidNotification;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingException;
-import com.google.firebase.messaging.Message;
-import com.google.firebase.messaging.Notification;
+import com.google.firebase.messaging.*;
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.setting.service.domain.dto.PushNotificationRequest;
 import com.project.imdang.setting.service.domain.exception.NotificationDomainException;
@@ -17,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
+
+import java.time.ZonedDateTime;
 
 import static com.project.imdang.domain.exception.ErrorCode.MEMBER_NOT_EXIST;
 
@@ -43,7 +40,8 @@ public class SendNotificationHandler {
         Message message = Message.builder()
                 .setToken(token)
                 .setNotification(notification)
-                .setAndroidConfig(androidConfig)
+                .putData("time", ZonedDateTime.now().toString())
+//                .setAndroidConfig(androidConfig)
                 .build();
 
         try {
