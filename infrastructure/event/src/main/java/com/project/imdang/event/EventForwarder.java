@@ -45,7 +45,7 @@ public class EventForwarder {
             }
         } catch (Exception e) {
             // TODO - 로깅
-            log.warn("Error!");
+            log.warn(e.getMessage());
         }
         return processedCount;
     }

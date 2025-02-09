@@ -1,9 +1,6 @@
 package com.project.imdang.member.service.domain.mapper;
 
-import com.project.imdang.domain.valueobject.MemberId;
-import com.project.imdang.member.service.domain.dto.coupon.IssueMemberCouponCommand;
-import com.project.imdang.member.service.domain.dto.coupon.ListMemberCouponResponse;
-import com.project.imdang.member.service.domain.dto.coupon.UseMemberCouponCommandResponse;
+import com.project.imdang.member.service.domain.dto.coupon.DetailMyCouponResponse;
 import com.project.imdang.member.service.domain.entity.Coupon;
 import com.project.imdang.member.service.domain.entity.Member;
 import com.project.imdang.member.service.domain.entity.MemberCoupon;
@@ -16,11 +13,11 @@ import java.util.stream.IntStream;
 @Component
 public class MemberCouponDataMapper {
 
-    public ListMemberCouponResponse memberCouponsToListMemberCouponResponse(List<MemberCoupon> memberCoupons) {
+    public DetailMyCouponResponse memberCouponsToDetailMyCouponResponse(List<MemberCoupon> memberCoupons) {
         if(memberCoupons.isEmpty()){
-            return new ListMemberCouponResponse(0, null);
+            return new DetailMyCouponResponse(0, null);
         }
-        return new ListMemberCouponResponse(memberCoupons.size(), memberCoupons.get(0).getId().getValue());
+        return new DetailMyCouponResponse(memberCoupons.size(), memberCoupons.get(0).getId().getValue());
     }
 
     public List<MemberCoupon> issueMemberCouponCommandToMemberCoupons(Member member, Coupon coupon, Integer quantity) {
@@ -30,9 +27,5 @@ public class MemberCouponDataMapper {
                         .couponId(coupon.getId())
                         .used(Boolean.FALSE)
                         .build()).collect(Collectors.toList());
-    }
-
-    public UseMemberCouponCommandResponse memberCouponToUseMemberCouponResponse(MemberCoupon memberCoupon) {
-        return new UseMemberCouponCommandResponse(memberCoupon.getId().getValue());
     }
 }

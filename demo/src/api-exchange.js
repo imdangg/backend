@@ -1,6 +1,6 @@
 import {API_URL, getAuthHeaders} from "./common.js";
 
-export async function requestExchange(requestedInsightId, requestMemberInsightId) {
+export async function requestExchange(requestedInsightId, requestMemberInsightId, memberCouponId) {
     const response = await fetch(`${API_URL}/exchanges/request`, {
         method: 'POST',
         headers: {
@@ -9,7 +9,8 @@ export async function requestExchange(requestedInsightId, requestMemberInsightId
         },
         body: JSON.stringify({
             requestedInsightId: requestedInsightId,
-            requestMemberInsightId: requestMemberInsightId
+            requestMemberInsightId: requestMemberInsightId,
+            memberCouponId: memberCouponId
         }),
     });
 
