@@ -20,7 +20,7 @@ public class MemberDataMapper {
                 .memberId(member.getId().getValue())
                 .nickname(member.getNickname())
                 .birthDate(member.getBirthDate())
-                .gender(member.getGender().name())
+                .gender(member.getGender() != null ? member.getGender().name() : null)
                 .deviceToken(member.getDeviceToken())
                 .exchangeCount(member.getExchangeCount())
                 .rejectedCount(member.getRejectedCount())

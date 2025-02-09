@@ -15,6 +15,7 @@ public interface ExchangeRequestJpaRepository extends JpaRepository<ExchangeRequ
     Optional<ExchangeRequestEntity> findByRequestMemberIdAndRequestedInsightId(UUID requestMemberId, UUID requestedInsightId);
     Optional<ExchangeRequestEntity> findByRequestedMemberIdAndRequestedInsightId(UUID requestedMemberId, UUID requestedInsightId);
     Optional<ExchangeRequestEntity> findByRequestedMemberIdAndRequestMemberInsightId(UUID requestedMemberId, UUID requestMemberInsightId);
+    Optional<ExchangeRequestEntity> findByRequestMemberInsightIdAndRequestedInsightId(UUID requestMemberInsightId, UUID requestedInsightId);
 
     Page<ExchangeRequestEntity> findAllByRequestMemberIdAndStatus(UUID requestMemberId, ExchangeRequestStatus status, Pageable pageable);
     Page<ExchangeRequestEntity> findAllByRequestedMemberIdAndStatus(UUID requestedMemberId, ExchangeRequestStatus status, Pageable pageable);

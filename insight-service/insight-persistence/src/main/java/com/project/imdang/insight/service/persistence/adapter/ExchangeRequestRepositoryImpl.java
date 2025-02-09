@@ -66,6 +66,12 @@ public class ExchangeRequestRepositoryImpl implements ExchangeRequestRepository 
     }
 
     @Override
+    public Optional<ExchangeRequest> findByRequestMemberInsightIdAndRequestedInsightId(InsightId requestMemberInsightId, InsightId requestedInsightId) {
+        return exchangeRequestJpaRepository.findByRequestMemberInsightIdAndRequestedInsightId(requestMemberInsightId.getValue(), requestedInsightId.getValue())
+                .map(exchangeRequestPersistenceMapper::exchangeRequestEntityToExchangeRequest);
+    }
+
+    @Override
     public Page<ExchangeRequest> findAllByRequestMemberIdAndExchangeRequestStatus(MemberId requestMemberId, ExchangeRequestStatus exchangeRequestStatus, PageRequest pageRequest) {
         return exchangeRequestJpaRepository.findAllByRequestMemberIdAndStatus(requestMemberId.getValue(), exchangeRequestStatus, pageRequest)
                 .map(exchangeRequestPersistenceMapper::exchangeRequestEntityToExchangeRequest);

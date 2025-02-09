@@ -10,6 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,5 +27,7 @@ public class DistrictEntity {
     private String siDo;
     private String siGunGu;
     private String eupMyeonDong;
-//    private String li;
+    private String li;
+    private LocalDate createdAt;
+    private LocalDate deletedAt;
 }

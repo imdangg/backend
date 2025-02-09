@@ -6,6 +6,7 @@ import com.project.imdang.member.service.domain.dto.TokenReissueCommand;
 import com.project.imdang.member.service.domain.dto.TokenResponse;
 import com.project.imdang.member.service.domain.dto.oauth.apple.AppleLoginCommand;
 import com.project.imdang.member.service.domain.dto.oauth.google.GoogleLoginCommand;
+import com.project.imdang.member.service.domain.handler.auth.MockLoginCommand;
 import com.project.imdang.member.service.domain.dto.oauth.kakao.KakaoLoginCommand;
 import com.project.imdang.member.service.domain.ports.input.service.MemberApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,7 +18,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
@@ -62,6 +67,12 @@ public class AuthController {
     @PostMapping("/google")
     public ResponseEntity<LoginResponse> login(@RequestBody GoogleLoginCommand googleLoginCommand) {
         LoginResponse response = memberApplicationService.login(googleLoginCommand);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/mock")
+    public ResponseEntity<LoginResponse> login(@RequestBody MockLoginCommand mockLoginCommand) {
+        LoginResponse response = memberApplicationService.login(mockLoginCommand);
         return ResponseEntity.ok(response);
     }
 

@@ -94,9 +94,11 @@ public class DetailInsightCommandHandler {
                         Boolean exchangeRequestCreatedByMe = exchangeRequest.getRequestMemberId().equals(requestedBy);
                         ExchangeRequestId exchangeRequestId = exchangeRequest.getId();
                         // TODO - CHECK : OR snapshotRepository
-                        return insightDataMapper.insightToDetailInsightResponse(insight, memberNickname, recommended, accused, exchangeRequestStatus, exchangeRequestCreatedByMe, exchangeRequestId);
+                        return insightDataMapper.insightToDetailInsightResponse(
+                                insight, memberNickname, recommended, accused, exchangeRequestStatus, exchangeRequestCreatedByMe, exchangeRequestId, true);
                     } else {
-                        return insightDataMapper.insightToDetailInsightResponse(insight, memberNickname, recommended, accused, null, null, null);
+                        return insightDataMapper.insightToDetailInsightResponse(
+                                insight, memberNickname, recommended, accused, null, null, null, true);
                     }
 
                 } else {
@@ -129,11 +131,12 @@ public class DetailInsightCommandHandler {
                                     viewCount,
                                     exchangeRequestStatus,
                                     exchangeRequestCreatedByMe,
-                                    exchangeRequestId);
+                                    exchangeRequestId,
+                                    false);
                         } else {
                             // PENDING, REJECTED
                             return insightDataMapper.insightToDetailInsightResponse(
-                                    insight, memberNickname, recommended, accused, exchangeRequestStatus, exchangeRequestCreatedByMe, exchangeRequestId)
+                                    insight, memberNickname, recommended, accused, exchangeRequestStatus, exchangeRequestCreatedByMe, exchangeRequestId, false)
                                     .toPreviewInsightResponse();
                         }
 
@@ -164,17 +167,19 @@ public class DetailInsightCommandHandler {
                                         viewCount,
                                         exchangeRequestStatus,
                                         exchangeRequestCreatedByMe,
-                                        exchangeRequestId);
+                                        exchangeRequestId,
+                                        false);
                             } else {
                                 // PENDING, REJECTED
                                 return insightDataMapper.insightToDetailInsightResponse(
-                                                insight, memberNickname, recommended, accused, exchangeRequestStatus, exchangeRequestCreatedByMe, exchangeRequestId)
+                                        insight, memberNickname, recommended, accused, exchangeRequestStatus, exchangeRequestCreatedByMe, exchangeRequestId, false)
                                         .toPreviewInsightResponse();
                             }
 
                         } else {
                             // 교환 신청 X - 교환 완료해야 추천 가능
-                            return insightDataMapper.insightToDetailInsightResponse(insight, memberNickname, recommended, accused, null, null, null)
+                            return insightDataMapper.insightToDetailInsightResponse(
+                                    insight, memberNickname, recommended, accused, null, null, null, false)
                                     .toPreviewInsightResponse();
                         }
                     }

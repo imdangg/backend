@@ -8,12 +8,14 @@ import com.project.imdang.insight.service.domain.valueobject.District;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 public interface InsightRepository {
 
     Page<Insight> findAll(PageRequest pageRequest);
+    Page<Insight> findAllByDate(LocalDate date, PageRequest pageRequest);
     List<Insight> findAllByIds(List<InsightId> insightIds);
 
     Page<Insight> findAllByDistrict(District district, PageRequest pageRequest);

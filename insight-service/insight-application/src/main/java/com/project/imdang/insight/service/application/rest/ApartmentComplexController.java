@@ -47,16 +47,4 @@ public class ApartmentComplexController {
         ApartmentComplexApiResponse response = apartmentComplexApiRestClient.getApartmentInfoList(pageNumber, pageSize, API_KEY, address);
         return ResponseEntity.ok(response);
     }
-
-    // 내가 다녀온 apartmentComplexName 리스트 API
-    @Operation(description = "내가 다녀온 아파트 단지 이름 목록 API")
-    @ApiResponse(responseCode = "200", description = "내가 다녀온 아파트 단지 이름 목록 조회 성공")
-    @GetMapping("/my-visited")
-    public ResponseEntity<List<ApartmentComplex>> listByMyVisited(@AuthenticationPrincipal UUID memberId
-//            @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
-//            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize
-    ) {
-        List<ApartmentComplex> apartmentComplexes = insightApplicationService.listMyVisitedApartmentComplex(memberId);
-        return ResponseEntity.ok(apartmentComplexes);
-    }
 }

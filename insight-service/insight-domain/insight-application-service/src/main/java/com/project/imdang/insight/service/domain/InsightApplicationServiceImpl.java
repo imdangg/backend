@@ -13,6 +13,7 @@ import com.project.imdang.insight.service.domain.dto.insight.list.DistrictRespon
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightSimpleResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightByApartmentComplexQuery;
+import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightByDateQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightByDistrictQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListMyInsightCreatedByMeQuery;
@@ -27,6 +28,7 @@ import com.project.imdang.insight.service.domain.handler.insight.DeleteInsightCo
 import com.project.imdang.insight.service.domain.handler.insight.DetailInsightCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.ListDistrictCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.ListInsightByApartmentComplexCommandHandler;
+import com.project.imdang.insight.service.domain.handler.insight.ListInsightByDateCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.ListInsightByDistrictCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.ListInsightCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.ListMyInsightApartmentComplexByDistrictCommandHandler;
@@ -53,6 +55,7 @@ import java.util.UUID;
 public class InsightApplicationServiceImpl implements InsightApplicationService {
 
     private final ListInsightCommandHandler listInsightCommandHandler;
+    private final ListInsightByDateCommandHandler listInsightByDateCommandHandler;
     private final ListInsightByDistrictCommandHandler listInsightByDistrictCommandHandler;
     private final ListInsightByApartmentComplexCommandHandler listInsightByApartmentComplexCommandHandler;
     private final ListMyVisitedApartmentComplexCommandHandler listMyVisitedApartmentComplexCommandHandler;
@@ -74,6 +77,11 @@ public class InsightApplicationServiceImpl implements InsightApplicationService 
     @Override
     public Page<InsightResponse> listInsight(ListInsightQuery listInsightQuery) {
         return listInsightCommandHandler.listInsight(listInsightQuery);
+    }
+
+    @Override
+    public Page<InsightResponse> listInsightByDate(ListInsightByDateQuery listInsightByDateQuery) {
+        return listInsightByDateCommandHandler.listInsightByDate(listInsightByDateQuery);
     }
 
     @Override
