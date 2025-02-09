@@ -1,5 +1,6 @@
 package com.project.imdang.insight.service.domain.handler.exchange;
 
+import com.project.imdang.domain.exception.ErrorCode;
 import com.project.imdang.domain.message.ExchangeRequestCreatedRequestMessage;
 import com.project.imdang.domain.valueobject.InsightId;
 import com.project.imdang.domain.valueobject.MemberCouponId;
@@ -65,7 +66,13 @@ public class RequestExchangeCommandHandler {
         ExchangeRequestCreatedEvent exchangeRequestCreatedEvent;
         if (requestExchangeInsightCommand.getRequestMemberInsightId() != null) {
 
+            // 상호 교환 불가
             InsightId requestMemberInsightId = new InsightId(requestExchangeInsightCommand.getRequestMemberInsightId());
+            exchangeRequestRepository.findByRequestMemberInsightIdAndRequestedInsightId(requestedInsightId, requestMemberInsightId)
+                    .ifPresent((e) -> {
+                        throw new InsightApplicationServiceException(ErrorCode.ALREADY_EXCHANGE_REQUESTED);
+                    });
+
             Snapshot requestMemberSnapshot = snapshotRepository.findLatestByInsightId(requestMemberInsightId)
                     .orElseThrow(() -> new SnapshotNotFoundException(requestedInsightId));
 

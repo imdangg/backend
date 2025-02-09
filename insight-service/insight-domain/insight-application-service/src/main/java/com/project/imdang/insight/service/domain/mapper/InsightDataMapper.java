@@ -84,7 +84,8 @@ public class InsightDataMapper {
                                                                 Boolean accused,
                                                                 ExchangeRequestStatus exchangeRequestStatus,
                                                                 Boolean exchangeRequestCreatedByMe,
-                                                                ExchangeRequestId exchangeRequestId) {
+                                                                ExchangeRequestId exchangeRequestId,
+                                                                Boolean createdByMe) {
         return DetailInsightResponse.builder()
                 .memberId(insight.getMemberId().getValue())
                 .memberNickname(memberNickname)
@@ -112,6 +113,7 @@ public class InsightDataMapper {
                 .exchangeRequestStatus(exchangeRequestStatus)
                 .exchangeRequestCreatedByMe(exchangeRequestCreatedByMe)
                 .exchangeRequestId(exchangeRequestId != null ? exchangeRequestId.getValue() : null)
+                .createdByMe(createdByMe)
                 .build();
     }
 }

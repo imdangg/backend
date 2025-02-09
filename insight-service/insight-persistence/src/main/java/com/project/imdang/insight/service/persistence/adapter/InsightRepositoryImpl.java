@@ -17,6 +17,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -35,26 +39,15 @@ public class InsightRepositoryImpl implements InsightRepository {
         return insightJpaRepository.findAll(pageRequest)
                 .map(insightPersistenceMapper::insightEntityToInsight);
     }
-/*
+
     @Override
-    public Page<Insight> findAllByIds(Set<InsightId> insightIds, PagingRequest pagingRequest) {
-        PageRequest pageRequest = PageRequest.of(pagingRequest.getPageNumber(), pagingRequest.getPageSize(), Sort.Direction.valueOf(pagingRequest.getDirection()), pagingRequest.getProperties());
-        Set<UUID> _insightIds = insightIds.stream()
-                .map(BaseId::getValue)
-                .collect(Collectors.toSet());
-        Page<InsightEntity> pagedInsightEntities = insightJpaRepository.findAllByIdIn(_insightIds, pageRequest);
-        List<Insight> insights = pagedInsightEntities.getContent().stream()
-                .map(insightPersistenceMapper::insightEntityToInsight)
-                .toList();
-        return Paged.<Insight>builder()
-                .contents(insights)
-                .number(pagedInsightEntities.getNumber())
-                .size(pagedInsightEntities.getSize())
-                .numberOfElements(pagedInsightEntities.getNumberOfElements())
-                .totalPages(pagedInsightEntities.getTotalPages())
-                .totalElements(pagedInsightEntities.getTotalElements())
-                .build();
-    }*/
+    public Page<Insight> findAllByDate(LocalDate date, PageRequest pageRequest) {
+        final ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime startOfDay = date.atStartOfDay(zoneId);
+        ZonedDateTime endOfDay = date.atTime(LocalTime.MAX).atZone(zoneId);
+        return insightJpaRepository.findAllByCreatedAtBetween(startOfDay, endOfDay, pageRequest)
+                .map(insightPersistenceMapper::insightEntityToInsight);
+    }
 
     @Override
     public List<Insight> findAllByIds(List<InsightId> insightIds) {

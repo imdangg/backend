@@ -61,6 +61,7 @@ public class DetailInsightResponse {
     private ExchangeRequestStatus exchangeRequestStatus;
     private Boolean exchangeRequestCreatedByMe;
     private UUID exchangeRequestId;
+    private Boolean createdByMe;
 
     public DetailInsightResponse toPreviewInsightResponse() {
         return DetailInsightResponse.builder()
@@ -87,6 +88,7 @@ public class DetailInsightResponse {
                 .exchangeRequestStatus(exchangeRequestStatus)
                 .exchangeRequestCreatedByMe(exchangeRequestCreatedByMe)
                 .exchangeRequestId(exchangeRequestId)
+                .createdByMe(createdByMe)
                 .build();
     }
 }

@@ -40,7 +40,8 @@ public class SnapshotDataMapper {
                                                                  Integer viewCount,
                                                                  ExchangeRequestStatus exchangeRequestStatus,
                                                                  Boolean exchangeRequestCreatedByMe,
-                                                                 ExchangeRequestId exchangeRequestId) {
+                                                                 ExchangeRequestId exchangeRequestId,
+                                                                 Boolean createdByMe) {
         return DetailInsightResponse.builder()
                 .memberId(snapshot.getMemberId().getValue())
                 .memberNickname(memberNickname)
@@ -67,6 +68,7 @@ public class SnapshotDataMapper {
                 .exchangeRequestStatus(exchangeRequestStatus)
                 .exchangeRequestCreatedByMe(exchangeRequestCreatedByMe)
                 .exchangeRequestId(exchangeRequestId != null ? exchangeRequestId.getValue() : null)
+                .createdByMe(createdByMe)
                 .build();
     }
 }

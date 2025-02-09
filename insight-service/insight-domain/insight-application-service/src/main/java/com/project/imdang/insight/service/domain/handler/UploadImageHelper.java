@@ -18,6 +18,11 @@ public class UploadImageHelper {
     private final FileService fileService;
 
     public String uploadImage(MultipartFile image) {
+
+        if (image == null || image.isEmpty()) {
+            return null;
+        }
+
         try {
             return fileService.upload(DIRECTORY, image);
         } catch (IOException e) {
