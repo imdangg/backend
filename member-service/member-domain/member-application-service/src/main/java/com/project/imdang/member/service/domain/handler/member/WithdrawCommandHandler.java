@@ -4,13 +4,12 @@ import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.member.service.domain.MemberDomainService;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthWithdrawCommand;
 import com.project.imdang.member.service.domain.entity.Member;
-import com.project.imdang.member.service.domain.exception.MemberDomainException;
-import com.project.imdang.member.service.domain.exception.MemberNotFoundException;
+import com.project.imdang.member.service.domain.handler.MemberHelper;
 import com.project.imdang.member.service.domain.handler.auth.OAuthApiClientHandler;
-import com.project.imdang.member.service.domain.ports.output.MemberRepository;
 import com.project.imdang.member.service.domain.valueobject.OAuthType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -21,43 +20,30 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 public class WithdrawCommandHandler {
-    private final MemberRepository memberRepository;
     private final Map<OAuthType, OAuthApiClientHandler> apiClients;
     private final MemberDomainService memberDomainService;
+    private final MemberHelper memberHelper;
 
-    public WithdrawCommandHandler(MemberRepository memberRepository, List<OAuthApiClientHandler> apiClients, MemberDomainService memberDomainService) {
-        this.memberRepository = memberRepository;
+    public WithdrawCommandHandler(List<OAuthApiClientHandler> apiClients,
+                                  MemberDomainService memberDomainService,
+                                  MemberHelper memberHelper) {
         this.apiClients = apiClients.stream()
                 .collect(Collectors.toUnmodifiableMap(OAuthApiClientHandler::oAuthType, Function.identity()));
         this.memberDomainService = memberDomainService;
+        this.memberHelper = memberHelper;
     }
 
-    public void withdraw(UUID memberId, OAuthWithdrawCommand oAuthWithdrawCommand) {
+    @Transactional
+    public void withdraw(UUID _memberId, OAuthWithdrawCommand oAuthWithdrawCommand) {
         // 1. 멤버 찾기
-        Member member = check(memberId);
+        MemberId memberId = new MemberId(_memberId);
+        Member member = memberHelper.get(memberId);
         // 2. 탈퇴 처리
         OAuthApiClientHandler withdrawHandler = apiClients.get(oAuthWithdrawCommand.oAuthType());
         withdrawHandler.withdraw(oAuthWithdrawCommand);
         // 3. 사용자 삭제 및 토큰 만료
-        saveMember(memberDomainService.withdraw(member));
-        log.info("Member[id:{}] is withdrew", member.getId().getValue());
-    }
-
-    private Member check(UUID _memberId) {
-        MemberId memberId = new MemberId(_memberId);
-        Member findMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
-        return findMember;
-    }
-
-    private Member saveMember(Member member) {
-        Member savedMember =  memberRepository.save(member);
-        if (savedMember == null) {
-            String errorMessage = "Could not save Member!";
-            log.error("Could not save Member!");
-            throw new MemberDomainException(errorMessage);
-        }
-        log.info("Member[id : {}] is saved.", member.getId().getValue());
-        return savedMember;
+        Member withdrew = memberDomainService.withdraw(member);
+        Member saved = memberHelper.save(withdrew);
+        log.info("Member[id:{}] is withdrew.", saved.getId().getValue());
     }
 }

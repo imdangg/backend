@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -51,6 +52,7 @@ public class ListExchangeRequestedByOthersHandler {
 
         List<InsightId> requestMemberInsightIds = paged.getContent().stream()
                 .map(ExchangeRequest::getRequestMemberInsightId)
+                .filter(Objects::nonNull)
                 .toList();
         List<Insight> requestMemberInsights = insightRepository.findAllByIds(requestMemberInsightIds);
         List<InsightResponse> insightResponses = getInsightResponses(requestMemberInsights);

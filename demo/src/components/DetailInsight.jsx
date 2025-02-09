@@ -3,11 +3,9 @@ import {useParams} from 'react-router-dom';
 import {accuseInsight, fetchInsight, recommendInsight} from "../api-insight.js";
 import {fetchInsightsCreatedByMe} from "../api-my-insight.js";
 import {acceptExchangeRequest, rejectExchangeRequest, requestExchange} from "../api-exchange.js";
-import {useMember} from "../context/MemberContext.jsx";
+import {fetchMyCoupon} from "../api-my-coupon.js";
 
 export default function DetailInsight() {
-    const { member } = useMember();
-
     const { id } = useParams();
     const [insight, setInsight] = useState(null);
     const [recommended, setRecommended] = useState(null);
@@ -18,6 +16,9 @@ export default function DetailInsight() {
     const [exchangeRequested, setExchangeRequested] = useState(false);
     const [myInsights, setMyInsights] = useState([]);
     const [myInsightId, setMyInsightId] = useState(null);
+
+    const [myCoupon, setMyCoupon] = useState(null);
+    const [myCouponId, setMyCouponId] = useState(null);
 
     useEffect(() => {
         fetchInsight(id)
@@ -37,6 +38,12 @@ export default function DetailInsight() {
     const handleExchangeRequest = () => {
         if (!exchangeRequested) {
             setExchangeRequested(true);
+            fetchMyCoupon()
+                .then(data => {
+                    console.log(data);
+                    return data;
+                })
+                .then(setMyCoupon);
             fetchInsightsCreatedByMe()
                 .then(data => {
                     // console.log(data);
@@ -51,10 +58,16 @@ export default function DetailInsight() {
 
     const handleChooseMyInsight = (myInsightId) => {
         setMyInsightId(myInsightId);
+        setMyCouponId(null);
+    }
+
+    const handleChooseMyCoupon = (myCouponId) => {
+        setMyCouponId(myCouponId);
+        setMyInsightId(null);
     }
 
     const handleConfirm = () => {
-        requestExchange(id, myInsightId).then(result => {
+        requestExchange(id, myInsightId, myCouponId).then(result => {
             handleExchangeRequest();
             // console.log(result);
             fetchInsight(id)
@@ -189,10 +202,30 @@ export default function DetailInsight() {
                             {content}
                             {exchangeRequested && (
                                 <>
-                                    <table className="min-w-full table-auto border-collapse border border-gray-300">
+                                    <table className="mt-2 mb-2 min-w-full table-auto border-collapse border border-gray-300">
                                         <thead>
                                         <tr className="bg-gray-200">
-                                            {/*<th>ID</th>*/}
+                                            <th className="px-4 py-2 text-left text-black font-bold border border-gray-300">MemberCoupon ID</th>
+                                            <th className="px-4 py-2 text-left text-black font-bold border border-gray-300">Coupon Count</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {myCoupon && (
+                                            <tr className="bg-gray-200" key={myCoupon.memberCouponId}
+                                                onClick={() => handleChooseMyCoupon(myCoupon.memberCouponId)}
+                                                style={{
+                                                    cursor: 'pointer',
+                                                    backgroundColor: myCouponId === myCoupon.memberCouponId ? '#f0f0f0' : 'white',
+                                                }}>
+                                                <td className="px-4 py-2 text-gray-700 border border-gray-300">{myCoupon.memberCouponId}</td>
+                                                <td className="px-4 py-2 text-gray-700 border border-gray-300">{myCoupon.couponCount}</td>
+                                            </tr>
+                                        )}
+                                        </tbody>
+                                    </table>
+                                    <table className="mt-2 mb-2 min-w-full table-auto border-collapse border border-gray-300">
+                                        <thead>
+                                        <tr className="bg-gray-200">
                                             <th className="px-4 py-2 text-left text-black font-bold border border-gray-300">Title</th>
                                             <th className="px-4 py-2 text-left text-black font-bold border border-gray-300">Recommended Count</th>
                                             <th className="px-4 py-2 text-left text-black font-bold border border-gray-300">Address</th>
@@ -200,7 +233,7 @@ export default function DetailInsight() {
                                         </thead>
                                         <tbody>
                                         {myInsights.map((myInsight) => (
-                                            <tr  className="bg-gray-200" key={myInsight.insightId}
+                                            <tr className="bg-gray-200" key={myInsight.insightId}
                                                  onClick={() => handleChooseMyInsight(myInsight.insightId)}
                                                  style={{
                                                      cursor: 'pointer',
@@ -214,7 +247,7 @@ export default function DetailInsight() {
                                         </tbody>
                                     </table>
                                     <button
-                                        className="px-6 py-2 bg-gray-400 text-white font-semibold rounded-lg shadow-md hover:bg-black-600 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75 transition duration-200 ease-in-out"
+                                        className="px-6 py-2 bg-gray-400 text-white font-semibold rounded-lg shadow-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75 transition duration-200 ease-in-out"
                                         onClick={handleConfirm}>확인</button>
                                 </>
                             )}
