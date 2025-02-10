@@ -14,6 +14,7 @@ public class NotificationDataMapper {
                 .category(createNotificationCommand.getCategory())
                 .receiverId(new MemberId(createNotificationCommand.getReceiverId()))
                 .message(createNotificationCommand.getMessage())
+                .isChecked(Boolean.FALSE)
                 .build();
     }
 

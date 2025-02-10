@@ -13,7 +13,6 @@ public class NotificationDomainServiceImpl implements NotificationDomainService 
     @Override
     public NotificationCreatedEvent createNotification(Notification notification) {
         notification.initialize();
-        log.info("Notification[id: {}] is created.", notification.getId().getValue());
         return new NotificationCreatedEvent(notification, ZonedDateTime.now(ZoneId.of("UTC")));
     }
 

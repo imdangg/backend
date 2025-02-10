@@ -47,10 +47,10 @@ public class JdbcEventManager implements EventManager {
     @Override
     public List<EventEntry> get(long offset, long limit) {
         return jdbcTemplate.query(
-                "select * from event_entry order by id asc limit ?, ?",
+                "select * from event_entry order by id asc limit ? offset ?",
                 ps -> {
-                    ps.setLong(1, offset);
-                    ps.setLong(2, limit);
+                    ps.setLong(1, limit);
+                    ps.setLong(2, offset);
                 },
                 (rs, rowNum) -> new EventEntry(
                         rs.getLong("id"),

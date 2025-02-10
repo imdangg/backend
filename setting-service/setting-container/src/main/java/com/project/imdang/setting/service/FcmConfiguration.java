@@ -30,7 +30,7 @@ public class FcmConfiguration {
             FirebaseOptions options = FirebaseOptions.builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();
-
+            log.info("Initialize Firebase Admin SDK complete");
             return FirebaseApp.initializeApp(options);
         } catch (FileNotFoundException e) {
             throw new IllegalStateException();
