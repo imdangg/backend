@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 public class MemberCouponPersistenceMapper {
     public MemberCouponEntity memberCouponToMemberCouponEntity(MemberCoupon memberCoupon) {
         return MemberCouponEntity.builder()
-                .id(memberCoupon.getId().getValue())
                 .couponId(memberCoupon.getCouponId().getValue())
                 .memberId(memberCoupon.getMemberId().getValue())
                 .expiredAt(memberCoupon.getExpiredAt())
