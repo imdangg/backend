@@ -25,6 +25,7 @@ public class InsightDataMapper {
                 .title(insight.getTitle())
                 .mainImage(insight.getMainImage())
                 .memberNickname(memberNickname)
+                .createdAt(insight.getCreatedAt())
                 .build();
     }
 
@@ -83,7 +84,8 @@ public class InsightDataMapper {
                                                                 Boolean accused,
                                                                 ExchangeRequestStatus exchangeRequestStatus,
                                                                 Boolean exchangeRequestCreatedByMe,
-                                                                ExchangeRequestId exchangeRequestId) {
+                                                                ExchangeRequestId exchangeRequestId,
+                                                                Boolean createdByMe) {
         return DetailInsightResponse.builder()
                 .memberId(insight.getMemberId().getValue())
                 .memberNickname(memberNickname)
@@ -110,7 +112,8 @@ public class InsightDataMapper {
                 .createdAt(insight.getCreatedAt())
                 .exchangeRequestStatus(exchangeRequestStatus)
                 .exchangeRequestCreatedByMe(exchangeRequestCreatedByMe)
-                .exchangeRequestId(exchangeRequestId.getValue())
+                .exchangeRequestId(exchangeRequestId != null ? exchangeRequestId.getValue() : null)
+                .createdByMe(createdByMe)
                 .build();
     }
 }

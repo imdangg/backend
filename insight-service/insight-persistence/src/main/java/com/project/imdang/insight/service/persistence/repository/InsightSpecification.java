@@ -17,6 +17,15 @@ public final class InsightSpecification {
         };
     }
 
+    public static Specification<InsightEntity> equalsSiDo(String siDo) {
+        return (Root<InsightEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {
+            if (siDo == null || siDo.isEmpty()) {
+                return criteriaBuilder.conjunction();
+            }
+            return criteriaBuilder.equal(root.get("address").get("siDo"), siDo);
+        };
+    }
+
     public static Specification<InsightEntity> equalsSiGunGu(String siGunGu) {
         return (Root<InsightEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {
             if (siGunGu == null || siGunGu.isEmpty()) {

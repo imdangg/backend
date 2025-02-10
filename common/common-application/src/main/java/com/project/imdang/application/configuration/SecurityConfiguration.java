@@ -46,8 +46,8 @@ public class SecurityConfiguration {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/members","/members/info").access(this::hasIpAddress)
-                        .requestMatchers("/auth/kakao", "/auth/google", "/auth/apple",
+                        .requestMatchers("/members", "/members/info").access(this::hasIpAddress)
+                        .requestMatchers("/auth/kakao", "/auth/google", "/auth/apple", "/auth/reissue",
                                 "/swagger-resources/**", "/swagger-ui/**","/v3/api-docs/**", "/apartment-complexes").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(new JwtAuthFilter(jwtTokenUtil), UsernamePasswordAuthenticationFilter.class)

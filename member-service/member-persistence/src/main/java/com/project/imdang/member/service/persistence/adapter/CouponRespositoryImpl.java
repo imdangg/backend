@@ -21,4 +21,10 @@ public class CouponRespositoryImpl implements CouponRepository {
         return couponJpaRespository.findById(couponId.getValue())
                 .map(couponPersistenceMapper::couponEntityToCoupon);
     }
+
+    @Override
+    public Optional<Coupon> findByName(String name) {
+        return couponJpaRespository.findByName(name)
+                .map(couponPersistenceMapper::couponEntityToCoupon);
+    }
 }

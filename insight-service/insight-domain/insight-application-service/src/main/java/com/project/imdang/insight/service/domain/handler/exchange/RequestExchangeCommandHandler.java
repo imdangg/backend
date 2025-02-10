@@ -1,5 +1,6 @@
 package com.project.imdang.insight.service.domain.handler.exchange;
 
+import com.project.imdang.domain.exception.ErrorCode;
 import com.project.imdang.domain.message.ExchangeRequestCreatedRequestMessage;
 import com.project.imdang.domain.valueobject.InsightId;
 import com.project.imdang.domain.valueobject.MemberCouponId;
@@ -13,10 +14,10 @@ import com.project.imdang.insight.service.domain.entity.Snapshot;
 import com.project.imdang.insight.service.domain.event.ExchangeRequestCreatedEvent;
 import com.project.imdang.insight.service.domain.exception.InsightApplicationServiceException;
 import com.project.imdang.insight.service.domain.exception.SnapshotNotFoundException;
-import com.project.imdang.insight.service.domain.handler.ExchangeRequestCreatedRequestMessagePublisherImpl;
 import com.project.imdang.insight.service.domain.handler.ExchangeRequestHelper;
 import com.project.imdang.insight.service.domain.mapper.ExchangeRequestDataMapper;
 import com.project.imdang.insight.service.domain.ports.output.lookup.InsightMemberLookup;
+import com.project.imdang.insight.service.domain.ports.output.publisher.ExchangeRequestCreatedRequestMessagePublisher;
 import com.project.imdang.insight.service.domain.ports.output.repository.ExchangeRequestRepository;
 import com.project.imdang.insight.service.domain.ports.output.repository.SnapshotRepository;
 import com.project.imdang.insight.service.domain.valueobject.MemberInfo;
@@ -45,7 +46,7 @@ public class RequestExchangeCommandHandler {
 
     private final InsightMemberLookup insightMemberLookup;
 
-    private final ExchangeRequestCreatedRequestMessagePublisherImpl exchangeRequestCreatedRequestMessagePublisher;
+    private final ExchangeRequestCreatedRequestMessagePublisher exchangeRequestCreatedRequestMessagePublisher;
     private final EventPublisher eventPublisher;
 
     @Transactional
@@ -65,7 +66,13 @@ public class RequestExchangeCommandHandler {
         ExchangeRequestCreatedEvent exchangeRequestCreatedEvent;
         if (requestExchangeInsightCommand.getRequestMemberInsightId() != null) {
 
+            // 상호 교환 불가
             InsightId requestMemberInsightId = new InsightId(requestExchangeInsightCommand.getRequestMemberInsightId());
+            exchangeRequestRepository.findByRequestMemberInsightIdAndRequestedInsightId(requestedInsightId, requestMemberInsightId)
+                    .ifPresent((e) -> {
+                        throw new InsightApplicationServiceException(ErrorCode.ALREADY_EXCHANGE_REQUESTED);
+                    });
+
             Snapshot requestMemberSnapshot = snapshotRepository.findLatestByInsightId(requestMemberInsightId)
                     .orElseThrow(() -> new SnapshotNotFoundException(requestedInsightId));
 

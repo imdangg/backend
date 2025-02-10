@@ -6,6 +6,7 @@ import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.entity.Insight;
 import com.project.imdang.insight.service.domain.ports.output.repository.InsightRepository;
 import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
+import com.project.imdang.insight.service.domain.valueobject.District;
 import com.project.imdang.insight.service.persistence.entity.InsightEntity;
 import com.project.imdang.insight.service.persistence.mapper.InsightPersistenceMapper;
 import com.project.imdang.insight.service.persistence.repository.InsightJpaRepository;
@@ -16,6 +17,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -34,26 +39,15 @@ public class InsightRepositoryImpl implements InsightRepository {
         return insightJpaRepository.findAll(pageRequest)
                 .map(insightPersistenceMapper::insightEntityToInsight);
     }
-/*
+
     @Override
-    public Page<Insight> findAllByIds(Set<InsightId> insightIds, PagingRequest pagingRequest) {
-        PageRequest pageRequest = PageRequest.of(pagingRequest.getPageNumber(), pagingRequest.getPageSize(), Sort.Direction.valueOf(pagingRequest.getDirection()), pagingRequest.getProperties());
-        Set<UUID> _insightIds = insightIds.stream()
-                .map(BaseId::getValue)
-                .collect(Collectors.toSet());
-        Page<InsightEntity> pagedInsightEntities = insightJpaRepository.findAllByIdIn(_insightIds, pageRequest);
-        List<Insight> insights = pagedInsightEntities.getContent().stream()
-                .map(insightPersistenceMapper::insightEntityToInsight)
-                .toList();
-        return Paged.<Insight>builder()
-                .contents(insights)
-                .number(pagedInsightEntities.getNumber())
-                .size(pagedInsightEntities.getSize())
-                .numberOfElements(pagedInsightEntities.getNumberOfElements())
-                .totalPages(pagedInsightEntities.getTotalPages())
-                .totalElements(pagedInsightEntities.getTotalElements())
-                .build();
-    }*/
+    public Page<Insight> findAllByDate(LocalDate date, PageRequest pageRequest) {
+        final ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime startOfDay = date.atStartOfDay(zoneId);
+        ZonedDateTime endOfDay = date.atTime(LocalTime.MAX).atZone(zoneId);
+        return insightJpaRepository.findAllByCreatedAtBetween(startOfDay, endOfDay, pageRequest)
+                .map(insightPersistenceMapper::insightEntityToInsight);
+    }
 
     @Override
     public List<Insight> findAllByIds(List<InsightId> insightIds) {
@@ -63,6 +57,16 @@ public class InsightRepositoryImpl implements InsightRepository {
         return insightJpaRepository.findAllByIdIn(_insightIds).stream()
                 .map(insightPersistenceMapper::insightEntityToInsight)
                 .toList();
+    }
+
+    @Override
+    public Page<Insight> findAllByDistrict(District district, PageRequest pageRequest) {
+        Specification<InsightEntity> specification =
+                Specification.where(InsightSpecification.equalsSiDo(district.getSiDo()))
+                        .and(InsightSpecification.equalsSiGunGu(district.getSiGunGu()))
+                        .and(InsightSpecification.equalsEupMyeonDong(district.getEupMyeonDong()));
+        return insightJpaRepository.findAll(specification, pageRequest)
+                .map(insightPersistenceMapper::insightEntityToInsight);
     }
 
     @Override

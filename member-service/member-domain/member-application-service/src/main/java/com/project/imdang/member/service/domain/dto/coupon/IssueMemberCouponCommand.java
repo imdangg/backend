@@ -13,5 +13,5 @@ public class IssueMemberCouponCommand {
     @Setter
     private UUID memberId;
     @NotNull
-    private UUID couponId;
+    private String name;
 }

@@ -20,8 +20,8 @@ import org.springframework.stereotype.Service;
 public class ExchangeApplicationServiceImpl implements ExchangeApplicationService {
 
     private final RequestExchangeCommandHandler requestExchangeCommandHandler;
-    private final AcceptExchangeCommandHandler acceptExchangeCommandHandler;
-    private final RejectExchangeCommandHandler rejectExchangeCommandHandler;
+    private final AcceptExchangeRequestCommandHandler acceptExchangeRequestCommandHandler;
+    private final RejectExchangeRequestCommandHandler rejectExchangeRequestCommandHandler;
     private final ListExchangeRequestedByMeHandler listExchangeRequestedByMeHandler;
     private final ListExchangeRequestedByOthersHandler listExchangeRequestedByOthersHandler;
 
@@ -32,12 +32,12 @@ public class ExchangeApplicationServiceImpl implements ExchangeApplicationServic
 
     @Override
     public AcceptExchangeRequestResponse acceptExchangeRequest(AcceptExchangeRequestCommand acceptExchangeRequestCommand) {
-        return acceptExchangeCommandHandler.acceptExchangeRequest(acceptExchangeRequestCommand);
+        return acceptExchangeRequestCommandHandler.acceptExchangeRequest(acceptExchangeRequestCommand);
     }
 
     @Override
     public RejectExchangeRequestResponse rejectExchangeRequest(RejectExchangeRequestCommand rejectExchangeRequestCommand) {
-       return rejectExchangeCommandHandler.rejectExchangeRequest(rejectExchangeRequestCommand);
+       return rejectExchangeRequestCommandHandler.rejectExchangeRequest(rejectExchangeRequestCommand);
     }
 
     @Override

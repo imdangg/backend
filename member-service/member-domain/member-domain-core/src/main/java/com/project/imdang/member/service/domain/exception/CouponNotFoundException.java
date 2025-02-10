@@ -8,7 +8,7 @@ public class CouponNotFoundException extends CouponDomainException {
         this(String.format("Could not find coupon[id: %s]!", couponId.getValue()));
     }
 
-    private CouponNotFoundException(String message) {
+    public CouponNotFoundException(String message) {
         super(message);
     }
 

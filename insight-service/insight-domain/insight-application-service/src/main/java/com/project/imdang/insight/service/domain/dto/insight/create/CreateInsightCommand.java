@@ -32,8 +32,6 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateInsightCommand {
-    // TODO : 모든 요소 필수값
-    // TODO : 최소 1글자 최대 20글자
 
     @Setter
     private UUID memberId; // createdBy

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class NotificationPersistenceMapper {
+
     public NotificationEntity notificationToNotificationEntity(Notification notification) {
         return NotificationEntity.builder()
                 .category(notification.getCategory())

@@ -13,6 +13,8 @@ import com.project.imdang.insight.service.domain.dto.insight.list.DistrictRespon
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.InsightSimpleResponse;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightByApartmentComplexQuery;
+import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightByDateQuery;
+import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightByDistrictQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListInsightQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListMyInsightCreatedByMeQuery;
 import com.project.imdang.insight.service.domain.dto.insight.list.ListMyInsightQuery;
@@ -24,7 +26,10 @@ import com.project.imdang.insight.service.domain.handler.insight.AccuseInsightCo
 import com.project.imdang.insight.service.domain.handler.insight.CreateInsightCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.DeleteInsightCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.DetailInsightCommandHandler;
+import com.project.imdang.insight.service.domain.handler.insight.ListDistrictCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.ListInsightByApartmentComplexCommandHandler;
+import com.project.imdang.insight.service.domain.handler.insight.ListInsightByDateCommandHandler;
+import com.project.imdang.insight.service.domain.handler.insight.ListInsightByDistrictCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.ListInsightCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.ListMyInsightApartmentComplexByDistrictCommandHandler;
 import com.project.imdang.insight.service.domain.handler.insight.ListMyInsightCommandHandler;
@@ -50,9 +55,11 @@ import java.util.UUID;
 public class InsightApplicationServiceImpl implements InsightApplicationService {
 
     private final ListInsightCommandHandler listInsightCommandHandler;
+    private final ListInsightByDateCommandHandler listInsightByDateCommandHandler;
+    private final ListInsightByDistrictCommandHandler listInsightByDistrictCommandHandler;
     private final ListInsightByApartmentComplexCommandHandler listInsightByApartmentComplexCommandHandler;
     private final ListMyVisitedApartmentComplexCommandHandler listMyVisitedApartmentComplexCommandHandler;
-
+    private final ListDistrictCommandHandler listDistrictCommandHandler;
 
     private final ListMyInsightDistrictCommandHandler listMyInsightDistrictCommandHandler;
     private final ListMyInsightApartmentComplexByDistrictCommandHandler listMyInsightApartmentComplexByDistrictCommandHandler;
@@ -73,6 +80,16 @@ public class InsightApplicationServiceImpl implements InsightApplicationService 
     }
 
     @Override
+    public Page<InsightResponse> listInsightByDate(ListInsightByDateQuery listInsightByDateQuery) {
+        return listInsightByDateCommandHandler.listInsightByDate(listInsightByDateQuery);
+    }
+
+    @Override
+    public Page<InsightResponse> listInsightByDistrict(ListInsightByDistrictQuery listInsightByDistrictQuery) {
+        return listInsightByDistrictCommandHandler.listInsightByDistrict(listInsightByDistrictQuery);
+    }
+
+    @Override
     public Page<InsightResponse> listInsightByApartmentComplex(ListInsightByApartmentComplexQuery listInsightByApartmentComplexQuery) {
         return listInsightByApartmentComplexCommandHandler.listInsightByApartmentComplex(listInsightByApartmentComplexQuery);
     }
@@ -80,6 +97,11 @@ public class InsightApplicationServiceImpl implements InsightApplicationService 
     @Override
     public List<ApartmentComplex> listMyVisitedApartmentComplex(UUID memberId) {
         return listMyVisitedApartmentComplexCommandHandler.listMyVisitedApartmentComplex(memberId);
+    }
+
+    @Override
+    public Page<District> listDistrict(String siDo, String siGunGu, Integer pageNumber, Integer pageSize) {
+        return listDistrictCommandHandler.listDistrict(siDo, siGunGu, pageNumber, pageSize);
     }
 
     @Override

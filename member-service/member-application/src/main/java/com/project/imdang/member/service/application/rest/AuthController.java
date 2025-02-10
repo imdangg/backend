@@ -2,9 +2,11 @@ package com.project.imdang.member.service.application.rest;
 
 import com.project.imdang.member.service.domain.dto.JoinCommand;
 import com.project.imdang.member.service.domain.dto.LoginResponse;
+import com.project.imdang.member.service.domain.dto.TokenReissueCommand;
 import com.project.imdang.member.service.domain.dto.TokenResponse;
 import com.project.imdang.member.service.domain.dto.oauth.apple.AppleLoginCommand;
 import com.project.imdang.member.service.domain.dto.oauth.google.GoogleLoginCommand;
+import com.project.imdang.member.service.domain.handler.auth.MockLoginCommand;
 import com.project.imdang.member.service.domain.dto.oauth.kakao.KakaoLoginCommand;
 import com.project.imdang.member.service.domain.ports.input.service.MemberApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,7 +18,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
@@ -64,6 +70,12 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/mock")
+    public ResponseEntity<LoginResponse> login(@RequestBody MockLoginCommand mockLoginCommand) {
+        LoginResponse response = memberApplicationService.login(mockLoginCommand);
+        return ResponseEntity.ok(response);
+    }
+
     /**
      * 회원가입
      */
@@ -81,8 +93,8 @@ public class AuthController {
     @Operation(description = "토큰 재발급 API")
     @ApiResponse(responseCode = "200", description = "토큰 재발급 완료")
     @PostMapping("/reissue")
-    public ResponseEntity<TokenResponse> reissue(@AuthenticationPrincipal UUID memberId) {
-        TokenResponse tokenResponse = memberApplicationService.reissue(memberId);
+    public ResponseEntity<TokenResponse> reissue(@RequestBody @Valid TokenReissueCommand tokenReissueCommand) {
+        TokenResponse tokenResponse = memberApplicationService.reissue(tokenReissueCommand);
         return ResponseEntity.ok(tokenResponse);
     }
 }

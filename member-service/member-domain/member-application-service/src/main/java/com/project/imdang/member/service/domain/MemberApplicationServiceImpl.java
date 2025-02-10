@@ -1,11 +1,6 @@
 package com.project.imdang.member.service.domain;
 
-import com.project.imdang.member.service.domain.dto.DetailMyPageQuery;
-import com.project.imdang.member.service.domain.dto.DetailMyPageResponse;
-import com.project.imdang.member.service.domain.dto.JoinCommand;
-import com.project.imdang.member.service.domain.dto.LoginResponse;
-import com.project.imdang.member.service.domain.dto.MemberResponse;
-import com.project.imdang.member.service.domain.dto.TokenResponse;
+import com.project.imdang.member.service.domain.dto.*;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginCommand;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthWithdrawCommand;
 import com.project.imdang.member.service.domain.handler.auth.JoinCommandHandler;
@@ -75,7 +70,7 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
     }
 
     @Override
-    public TokenResponse reissue(UUID memberId) {
-        return reissueCommandHandler.reissue(memberId);
+    public TokenResponse reissue(TokenReissueCommand tokenReissueCommand) {
+        return reissueCommandHandler.reissue(tokenReissueCommand);
     }
 }

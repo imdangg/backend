@@ -31,7 +31,6 @@ public class ExchangeRequestEntity {
     @Id
     private UUID id;
 
-    // TODO - CHECK : 복합키 가능
     @Column(columnDefinition = "CHAR(36)")
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID requestMemberId;

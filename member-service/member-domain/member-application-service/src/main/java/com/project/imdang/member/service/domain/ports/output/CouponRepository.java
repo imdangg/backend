@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface CouponRepository {
     Optional<Coupon> findById(CouponId couponId);
+
+    Optional<Coupon> findByName(String name);
 }

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MemberRepository {
-    Optional<Member> findByOAuthIdAndOAuthType(String oAuthId, OAuthType oAuthType);
+    Optional<Member> findByOAuthIdAndOAuthTypeAndIsDeleted(String oAuthId, OAuthType oAuthType);
     Optional<Member> findById(MemberId memberId);
     List<Member> findAllByIds(List<MemberId> memberIds);
 

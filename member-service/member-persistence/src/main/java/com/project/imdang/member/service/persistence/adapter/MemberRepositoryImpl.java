@@ -25,8 +25,8 @@ public class MemberRepositoryImpl implements MemberRepository {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Member> findByOAuthIdAndOAuthType(String oAuthId, OAuthType oAuthType) {
-        Optional<MemberEntity> memberEntity = memberJpaRepository.findByAuthIdAndAuthType(oAuthId, oAuthType);
+    public Optional<Member> findByOAuthIdAndOAuthTypeAndIsDeleted(String oAuthId, OAuthType oAuthType) {
+        Optional<MemberEntity> memberEntity = memberJpaRepository.findByAuthIdAndAuthTypeAndIsDeleted(oAuthId, oAuthType, Boolean.FALSE);
         return memberEntity.map(memberPersistenceMapper::memberEntityToMember);
     }
 

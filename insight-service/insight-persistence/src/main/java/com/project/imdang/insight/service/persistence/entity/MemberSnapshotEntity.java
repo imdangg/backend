@@ -40,5 +40,9 @@ public class MemberSnapshotEntity {
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID insightId;
 
+    @Column(columnDefinition = "CHAR(36)")
+    @JdbcTypeCode(SqlTypes.CHAR)
+    private UUID exchangeRequestId;
+
     private ZonedDateTime createdAt;
 }

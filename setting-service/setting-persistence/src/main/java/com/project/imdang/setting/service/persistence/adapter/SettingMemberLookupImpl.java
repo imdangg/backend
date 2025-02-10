@@ -32,9 +32,8 @@ public class SettingMemberLookupImpl implements SettingMemberLookup {
                             .nickname(memberInfoResponse.getNickname())
                             .build());
         } catch (Exception e) {
-            // TODO - 로그
-            e.printStackTrace();
+            // TODO - 예외 처리
+            throw new RuntimeException(e.getMessage());
         }
-        return Optional.empty();
     }
 }

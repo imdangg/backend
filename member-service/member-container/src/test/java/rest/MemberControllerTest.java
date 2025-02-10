@@ -1,6 +1,5 @@
 package rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.member.service.domain.ports.output.MemberRepository;
 import com.project.imdang.domain.jwt.JwtTokenProvider;

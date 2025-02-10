@@ -40,21 +40,21 @@ public class OAuthLoginCommandHandler {
 
         // 1. 로그인
         // TODO - REVIEW
-        boolean isJoined = false;
-        Optional<Member> optional = memberRepository.findByOAuthIdAndOAuthType(oAuthInfo.getId(), oAuthInfo.getOAuthType());
+        Optional<Member> optional = memberRepository.findByOAuthIdAndOAuthTypeAndIsDeleted(oAuthInfo.getId(), oAuthInfo.getOAuthType());
+        // 지워지지 않은 사용자라면 가져오고, 아니라면 새로 생성
         Member member;
+        boolean isJoined = false;
         if (optional.isEmpty()) {
             member = memberDomainService.createMember(oAuthInfo.getId(), oAuthInfo.getOAuthType());
-            saveMember(member);
         } else {
             member = optional.get();
             isJoined = (member.getNickname() != null);
         }
-
         // 2. 토큰 생성
         TokenResponse tokenResponse = tokenRequestHandler.generate(member);
         // 3. RefreshToken 저장
         memberDomainService.storeRefreshToken(member, tokenResponse.getRefreshToken());
+        saveMember(member);
         return LoginResponse.from(tokenResponse, isJoined, member.getId().getValue(), oAuthInfo.getRefreshToken());
     }
 

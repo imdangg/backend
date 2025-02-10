@@ -30,6 +30,7 @@ public class ExchangeRequestRejectedRequestMessageListenerImpl implements Exchan
         MemberCoupon memberCoupon = memberCouponRepository.findById(memberCouponId)
                 .orElseThrow(() -> new MemberCouponNotFoundException(memberCouponId));
         memberCouponDomainService.cancel(memberCoupon);
+        memberCouponRepository.save(memberCoupon);
 
         // update
         MemberCouponCancelledResponseMessage memberCouponCancelledResponseMessage = new MemberCouponCancelledResponseMessage(

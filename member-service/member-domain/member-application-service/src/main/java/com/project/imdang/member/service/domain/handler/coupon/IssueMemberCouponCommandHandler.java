@@ -1,6 +1,5 @@
 package com.project.imdang.member.service.domain.handler.coupon;
 
-import com.project.imdang.domain.valueobject.CouponId;
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.member.service.domain.MemberCouponDomainService;
 import com.project.imdang.member.service.domain.dto.coupon.IssueMemberCouponCommand;
@@ -9,18 +8,17 @@ import com.project.imdang.member.service.domain.entity.Member;
 import com.project.imdang.member.service.domain.entity.MemberCoupon;
 import com.project.imdang.member.service.domain.exception.CouponNotFoundException;
 import com.project.imdang.member.service.domain.exception.MemberCouponDomainException;
-import com.project.imdang.member.service.domain.exception.MemberNotFoundException;
+import com.project.imdang.member.service.domain.handler.MemberHelper;
 import com.project.imdang.member.service.domain.handler.coupon.policy.CouponPolicy;
 import com.project.imdang.member.service.domain.mapper.MemberCouponDataMapper;
 import com.project.imdang.member.service.domain.ports.output.CouponRepository;
 import com.project.imdang.member.service.domain.ports.output.MemberCouponRepository;
-import com.project.imdang.member.service.domain.ports.output.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -30,15 +28,20 @@ public class IssueMemberCouponCommandHandler {
     private final MemberCouponDataMapper memberCouponDataMapper;
     private final MemberCouponRepository memberCouponRepository;
     private final CouponRepository couponRepository;
-    private final MemberRepository memberRepository;
+    private final MemberHelper memberHelper;
     private final MemberCouponDomainService memberCouponDomainService;
     private final Map<String, CouponPolicy> couponPolicies;
 
-    public IssueMemberCouponCommandHandler(MemberCouponDataMapper memberCouponDataMapper, MemberCouponRepository memberCouponRepository, CouponRepository couponRepository, MemberRepository memberRepository, MemberCouponDomainService memberCouponDomainService, List<CouponPolicy> couponPolicies) {
+    public IssueMemberCouponCommandHandler(MemberCouponDataMapper memberCouponDataMapper,
+                                           MemberCouponRepository memberCouponRepository,
+                                           CouponRepository couponRepository,
+                                           MemberHelper memberHelper,
+                                           MemberCouponDomainService memberCouponDomainService,
+                                           List<CouponPolicy> couponPolicies) {
         this.memberCouponDataMapper = memberCouponDataMapper;
         this.memberCouponRepository = memberCouponRepository;
         this.couponRepository = couponRepository;
-        this.memberRepository = memberRepository;
+        this.memberHelper = memberHelper;
         this.memberCouponDomainService = memberCouponDomainService;
         this.couponPolicies = couponPolicies.stream()
                 .collect(Collectors.toMap(couponPolicy ->
@@ -46,13 +49,16 @@ public class IssueMemberCouponCommandHandler {
                         Function.identity()));
     }
 
+    @Transactional
     public void issue(IssueMemberCouponCommand issueMemberCouponCommand) {
         // 1. 쿠폰 종류 확인
-        Coupon coupon = checkCoupon(issueMemberCouponCommand.getCouponId());
+        Coupon coupon = checkCoupon(issueMemberCouponCommand.getName());
         // 2. 사용자 확인
-        Member member = checkMember(issueMemberCouponCommand.getMemberId());
+        MemberId memberId = new MemberId(issueMemberCouponCommand.getMemberId());
+        Member member = memberHelper.get(memberId);
         // 3. 쿠폰 정책 적용
-        Integer couponQuantity = couponPolicies.get(coupon.getName()).apply(coupon, member);
+        CouponPolicy couponPolicy = couponPolicies.get(issueMemberCouponCommand.getName());
+        Integer couponQuantity = couponPolicy.apply(coupon, member);
         // 4. 쿠폰 발급
         List<MemberCoupon> memberCoupons = memberCouponDataMapper.issueMemberCouponCommandToMemberCoupons(member, coupon, couponQuantity);
         memberCoupons.forEach(memberCouponDomainService::issue);
@@ -72,15 +78,8 @@ public class IssueMemberCouponCommandHandler {
         return saved;
     }
 
-    private Coupon checkCoupon(UUID _couponId) {
-        CouponId couponId = new CouponId(_couponId);
-        return couponRepository.findById(couponId)
-                .orElseThrow(() -> new CouponNotFoundException(couponId));
-    }
-
-    private Member checkMember(UUID _memberId) {
-        MemberId memberId = new MemberId(_memberId);
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
+    private Coupon checkCoupon(String couponName) {
+        return couponRepository.findByName(couponName)
+                .orElseThrow(() -> new CouponNotFoundException(String.format("Could not find Coupon [name : %s]", couponName)));
     }
 }

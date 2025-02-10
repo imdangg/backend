@@ -11,5 +11,6 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class MemberAccusedResponseMessage {
-    private UUID accusedInsightId;
+    private boolean isCompleted;
+    private UUID accusedMemberId;
 }

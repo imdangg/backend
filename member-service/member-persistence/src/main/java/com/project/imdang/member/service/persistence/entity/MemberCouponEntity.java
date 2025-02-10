@@ -25,7 +25,7 @@ import java.util.UUID;
 @Getter
 @Table(name = "member_coupon")
 @Entity
-public class MemberCouponEntity{
+public class MemberCouponEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
