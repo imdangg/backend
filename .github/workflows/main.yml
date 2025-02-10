@@ -42,7 +42,7 @@ jobs:
           cd ./imdang-container/src/main/resources/key
           touch ./AuthKey_2AGQTHACLC.p8
           echo "${{ secrets.APPLE_KEY }}" > ./AuthKey_2AGQTHACLC.p8
-          touch ./firebase_imdang.json          
+          touch ./imdangadmin-firebase-adminsdk-bfo4p-7662bcfaee.json          
           echo "${{ secrets.FIREBASE_KEY_RELEASE }}" | base64 -d > ./imdangadmin-firebase-adminsdk-bfo4p-7662bcfaee.json
 
       # 권한 부여
