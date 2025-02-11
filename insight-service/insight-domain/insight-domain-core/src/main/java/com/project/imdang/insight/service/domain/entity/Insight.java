@@ -142,7 +142,9 @@ public class Insight extends AggregateRoot<InsightId> {
             throw new InsightDomainException("Author does not match!");
         }
 
-        this.mainImage = mainImage;
+        if (mainImage != null) {
+            this.mainImage = mainImage;
+        }
         this.title = title;
         this.address = address;
         this.apartmentComplex = apartmentComplex;

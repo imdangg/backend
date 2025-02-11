@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExchangeRequestRejectedCountMessageListenerImpl implements ExchangeRequestRejectedCountMessageListener {
 
-    private final static String FRIST_CHEERUP = "FirstCheerup";
+    private final static String FIRST_CHEERUP = "FirstCheerup";
     private final static String SECOND_CHEERUP = "SecondCheerup";
     private final static String THIRD_CHEERUP = "ThirdCheerup";
 
@@ -44,7 +44,7 @@ public class ExchangeRequestRejectedCountMessageListenerImpl implements Exchange
     private void checkRejectedCountAndIssueCoupon(Member member) {
         switch (member.getRejectedCount()) {
             case 5:
-                issueMemberCouponCommandHandler.issue(new IssueMemberCouponCommand(member.getId().getValue(), FRIST_CHEERUP));
+                issueMemberCouponCommandHandler.issue(new IssueMemberCouponCommand(member.getId().getValue(), FIRST_CHEERUP));
                 break;
             case 10:
                 issueMemberCouponCommandHandler.issue(new IssueMemberCouponCommand(member.getId().getValue(), SECOND_CHEERUP));
