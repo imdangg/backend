@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ExchangeRequesrAcceptedCountMessageListenerImpl implements ExchangeRequestAcceptedCountMessageListener {
+public class ExchangeRequestAcceptedCountMessageListenerImpl implements ExchangeRequestAcceptedCountMessageListener {
 
     private final MemberRepository memberRepository;
     private final MemberDomainService memberDomainService;

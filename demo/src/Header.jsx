@@ -15,9 +15,9 @@ const Header = () => {
                         {/*<span className="text-lg">birthDate: {member.birthDate}</span>*/}
                         {/*<span className="text-lg">gender: {member.gender}</span>*/}
                         {/*<span className="text-lg">deviceToken: {member.deviceToken}</span>*/}
-                        {/*<span className="text-lg">exchangeCount: {member.exchangeCount}</span>*/}
-                        {/*<span className="text-lg">insightCount: {member.insightCount}</span>*/}
-                        {/*<span className="text-lg">requestCount: {member.requestCount}</span>*/}
+                        <span className="text-lg">exchangeCount: {member.exchangeCount}</span>
+                        <span className="text-lg">insightCount: {member.insightCount}</span>
+                        <span className="text-lg">requestCount: {member.requestCount}</span>
                     </>
                 ) : (
                     <span className="text-gray-400">?</span>
