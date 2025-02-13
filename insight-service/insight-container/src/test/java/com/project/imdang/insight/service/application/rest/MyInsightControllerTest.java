@@ -31,8 +31,8 @@ public class MyInsightControllerTest {
     @MockBean
     private JwtTokenProvider jwtTokenProvider;
 
-    private String requestMemberToken = "request-member-token";
-    private String requestedMemberToken = "requested-member-token";
+    private final String requestMemberToken = "request-member-token";
+    private final String requestedMemberToken = "requested-member-token";
 
     @BeforeEach
     void init() {

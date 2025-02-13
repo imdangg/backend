@@ -32,8 +32,4 @@ public class MemberSnapshotHelper {
         log.info("memberSnapshot[id: {}] is saved.", saved.getId().getValue());
         return saved;
     }
-
-    public void deleteByMemberIdAndInsightId(MemberId memberId, InsightId insightId) {
-        memberSnapshotRepository.deleteByMemberIdAndInsightId(memberId, insightId);
-    }
 }

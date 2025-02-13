@@ -30,18 +30,22 @@ public class ExchangeRequestNotificationListener implements EventListener {
 
     @Override
     public void process(EventEntry eventEntry) {
+
         NotificationCategory category = NotificationCategory.getType(eventEntry.getType());
         UUID receiverId = getReceiverId(eventEntry.getPayload());
+
         Optional<MemberInfo> memberInfo = settingMemberLookup.lookupByMemberId(new MemberId(receiverId));
-        String message = String.format(category.getNotificationContent(), memberInfo.get().nickname());
+        if (memberInfo.isPresent()) {
+            String message = String.format(category.getNotificationContent(), memberInfo.get().nickname());
 
-        // 1. 알림 생성
-        CreateNotificationCommand createNotificationCommand = new CreateNotificationCommand(category, receiverId, message);
-        createNotificationCommandHandler.createNotification(createNotificationCommand);
+            // 1. 알림 생성
+            CreateNotificationCommand createNotificationCommand = new CreateNotificationCommand(category, receiverId, message);
+            createNotificationCommandHandler.createNotification(createNotificationCommand);
 
-        // 2. 푸시알림 생성
-        PushNotificationRequest pushNotificationRequest = new PushNotificationRequest(receiverId, category, category.getTitle(), category.getPushNotificationContent(), ZonedDateTime.now());
-        sendNotificationHandler.send(pushNotificationRequest);
+            // 2. 푸시알림 생성
+            PushNotificationRequest pushNotificationRequest = new PushNotificationRequest(receiverId, category, category.getTitle(), category.getPushNotificationContent(), ZonedDateTime.now());
+            sendNotificationHandler.send(pushNotificationRequest);
+        }
     }
 
     private UUID getReceiverId(String payload) {

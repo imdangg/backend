@@ -16,8 +16,8 @@ import java.util.UUID;
 @Getter
 public class Member extends AggregateRoot<MemberId> {
 
-    private String oAuthId;
-    private OAuthType oAuthType;
+    private final String oAuthId;
+    private final OAuthType oAuthType;
 
     private String nickname;
     private String birthDate;

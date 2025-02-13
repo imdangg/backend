@@ -16,7 +16,7 @@ public class MemberCoupon extends AggregateRoot<MemberCouponId> {
 
     private final CouponId couponId;
     private final MemberId memberId;
-    private ZonedDateTime expiredAt;
+    private final ZonedDateTime expiredAt;
 
     private String remark;  // reason
     private ZonedDateTime createdAt;

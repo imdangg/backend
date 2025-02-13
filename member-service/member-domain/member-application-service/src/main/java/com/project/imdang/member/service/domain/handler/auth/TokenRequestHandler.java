@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.UUID;
 
 @Component
 @Slf4j
@@ -35,7 +34,7 @@ public class TokenRequestHandler {
         return new TokenResponse(accessToken, refreshToken,ACCESS_TOKEN_EXPIRE_TIME / 1000L);
     }
 
-    public void validateRefereshToken(String refreshToken) {
+    public void validateRefreshToken(String refreshToken) {
         jwtTokenProvider.verifyToken(refreshToken);
     }
 }

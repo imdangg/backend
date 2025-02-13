@@ -49,7 +49,7 @@ public class ListMyInsightCommandHandler {
         Boolean onlyMine = listMyInsightQuery.getOnlyMine();
 
         // TODO - CHECK : EntityGraph
-        Page<MemberSnapshot> paged = null;
+        Page<MemberSnapshot> paged;
         if (listMyInsightQuery.getApartmentComplexName() != null) {
             // 단지별 보기
             ApartmentComplex apartmentComplex

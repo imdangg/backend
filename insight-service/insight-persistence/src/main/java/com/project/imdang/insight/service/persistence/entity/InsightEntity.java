@@ -107,8 +107,6 @@ public class InsightEntity {
     @Column(columnDefinition = "json")
     private FavorableNews favorableNews;
 
-//    private Boolean isDeleted;
-
     private int recommendedCount;
     private int accusedCount;
     private int viewCount;
@@ -118,4 +116,6 @@ public class InsightEntity {
     // TODO - BaseEntity?
     private ZonedDateTime createdAt;
     // TODO - updatedAt;
+
+    private boolean isDeleted;
 }

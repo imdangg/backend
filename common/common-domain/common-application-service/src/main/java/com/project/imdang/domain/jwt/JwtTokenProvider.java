@@ -28,7 +28,7 @@ public final class JwtTokenProvider implements InitializingBean {
     }
 
     /**
-     * AcessToken 생성 함수
+     * AccessToken 생성 함수
      */
     public String generateAccessToken(String subject, Date expiredAt) {
         return Jwts.builder()
@@ -100,7 +100,7 @@ public final class JwtTokenProvider implements InitializingBean {
      */
 
     /**
-     * RefrshToken 저장
+     * RefreshToken 저장
      */
 
 }

@@ -1,0 +1,16 @@
+ALTER TABLE accuse ADD CONSTRAINT unique_accuse_1 UNIQUE (accuse_member_id, accused_insight_id);
+
+ALTER TABLE exchange_request ADD CONSTRAINT unique_exchange_request_1 UNIQUE (request_member_id, requested_insight_id);
+ALTER TABLE exchange_request ADD CONSTRAINT unique_exchange_request_2 UNIQUE (requested_member_id, member_coupon_id, request_member_insight_id);
+ALTER TABLE exchange_request ADD CONSTRAINT unique_exchange_request_3 UNIQUE (request_member_insight_id, requested_insight_id);
+
+ALTER TABLE member_snapshot ADD CONSTRAINT unique_member_snapshot_1 UNIQUE (insight_id, member_id);
+
+ALTER TABLE recommend ADD CONSTRAINT unique_recommend_1 UNIQUE (recommend_member_id, recommended_insight_id);
+
+ALTER TABLE member_coupon ADD CONSTRAINT unique_member_coupon_1 UNIQUE (coupon_id, member_id);
+
+ALTER TABLE member ADD CONSTRAINT unique_member_1 UNIQUE (nickname);
+ALTER TABLE member ADD CONSTRAINT unique_member_2 UNIQUE (auth_id, auth_type, is_deleted);
+
+ALTER TABLE terms_agreement ADD CONSTRAINT unique_terms_agreement_1 UNIQUE (member_id, terms_id);

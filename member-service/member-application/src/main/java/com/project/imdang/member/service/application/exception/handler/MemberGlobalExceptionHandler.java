@@ -1,7 +1,6 @@
 package com.project.imdang.member.service.application.exception.handler;
 
 import com.project.imdang.application.handler.ErrorDTO;
-import com.project.imdang.member.service.domain.exception.MemberCouponDomainException;
 import com.project.imdang.member.service.domain.exception.MemberCouponNotFoundException;
 import com.project.imdang.member.service.domain.exception.MemberDomainException;
 import com.project.imdang.member.service.domain.exception.MemberNotFoundException;

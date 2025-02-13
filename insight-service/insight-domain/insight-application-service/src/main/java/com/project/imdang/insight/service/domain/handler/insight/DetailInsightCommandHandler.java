@@ -82,25 +82,8 @@ public class DetailInsightCommandHandler {
 
                 // 본인의 인사이트
                 if (insightCreatedBy.equals(requestedBy)) {
-
-                    // 교환 신청 여부 확인
-                    // 로그인 유저(본인)가 교환 요청을 받았는가?
-                    Optional<ExchangeRequest> optional =
-                            exchangeRequestRepository.findByRequestedMemberIdAndRequestedInsightId(requestedBy, insightId);
-                    // 교환 요청 받은 사람이 로그인 유저(본인)인 경우
-                    if (optional.isPresent()) {
-                        ExchangeRequest exchangeRequest = optional.get();
-                        ExchangeRequestStatus exchangeRequestStatus = exchangeRequest.getStatus();
-                        Boolean exchangeRequestCreatedByMe = exchangeRequest.getRequestMemberId().equals(requestedBy);
-                        ExchangeRequestId exchangeRequestId = exchangeRequest.getId();
-                        // TODO - CHECK : OR snapshotRepository
-                        return insightDataMapper.insightToDetailInsightResponse(
-                                insight, memberNickname, recommended, accused, exchangeRequestStatus, exchangeRequestCreatedByMe, exchangeRequestId, true);
-                    } else {
-                        return insightDataMapper.insightToDetailInsightResponse(
-                                insight, memberNickname, recommended, accused, null, null, null, true);
-                    }
-
+                    return insightDataMapper.insightToDetailInsightResponse(
+                            insight, memberNickname, recommended, accused, null, null, null, true);
                 } else {
                     // 타인의 인사이트
 
@@ -143,7 +126,7 @@ public class DetailInsightCommandHandler {
                     } else {
                         // 2) 로그인 유저가 교환 요청을 받은 경우
                         Optional<ExchangeRequest> exchangeRequestCreatedByOtherOptional =
-                                exchangeRequestRepository.findByRequestedMemberIdAndRequestMemberInsightId(requestedBy, insightId);
+                                exchangeRequestRepository.findByRequestedMemberIdAndMemberCouponIdAndRequestMemberInsightId(requestedBy, null, insightId);
                         if (exchangeRequestCreatedByOtherOptional.isPresent()) {
                             ExchangeRequest exchangeRequest = exchangeRequestCreatedByOtherOptional.get();
                             ExchangeRequestStatus exchangeRequestStatus = exchangeRequest.getStatus();

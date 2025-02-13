@@ -8,13 +8,12 @@ import java.util.Arrays;
 public enum Gender {
     MALE("남자"), FEMALE("여자");
 
-    private final String genderName;
+    private final String name;
 
-    public static Gender getGenderType(String genderName) {
-        //TODO : 예외처리
+    public static Gender getType(String name) {
         return Arrays.stream(Gender.values())
-                .filter(creditCard -> genderName.equals(genderName))
+                .filter(gender -> gender.name().equals(name))
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(() -> new IllegalArgumentException("Illegal argument: " + name));
     }
 }

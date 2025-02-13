@@ -96,9 +96,4 @@ public class MemberSnapshotRepositoryImpl implements MemberSnapshotRepository {
                 .orElseThrow(RuntimeException::new);
         memberSnapshotEntity.setSnapshotId(snapshotId.getValue());
     }
-
-    @Override
-    public void deleteByMemberIdAndInsightId(MemberId memberId, InsightId insightId) {
-        memberSnapshotJpaRepository.deleteByMemberIdAndInsightId(memberId.getValue(), insightId.getValue());
-    }
 }

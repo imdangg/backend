@@ -2,7 +2,7 @@ package com.project.imdang.member.service.persistence.adapter;
 
 import com.project.imdang.domain.valueobject.CouponId;
 import com.project.imdang.member.service.persistence.mapper.CouponPersistenceMapper;
-import com.project.imdang.member.service.persistence.repository.CouponJpaRespository;
+import com.project.imdang.member.service.persistence.repository.CouponJpaRepository;
 import com.project.imdang.member.service.domain.entity.Coupon;
 import com.project.imdang.member.service.domain.ports.output.CouponRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,19 +12,19 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class CouponRespositoryImpl implements CouponRepository {
-    private final CouponJpaRespository couponJpaRespository;
+public class CouponRepositoryImpl implements CouponRepository {
+    private final CouponJpaRepository couponJpaRepository;
     private final CouponPersistenceMapper couponPersistenceMapper;
 
     @Override
     public Optional<Coupon> findById(CouponId couponId) {
-        return couponJpaRespository.findById(couponId.getValue())
+        return couponJpaRepository.findById(couponId.getValue())
                 .map(couponPersistenceMapper::couponEntityToCoupon);
     }
 
     @Override
     public Optional<Coupon> findByName(String name) {
-        return couponJpaRespository.findByName(name)
+        return couponJpaRepository.findByName(name)
                 .map(couponPersistenceMapper::couponEntityToCoupon);
     }
 }

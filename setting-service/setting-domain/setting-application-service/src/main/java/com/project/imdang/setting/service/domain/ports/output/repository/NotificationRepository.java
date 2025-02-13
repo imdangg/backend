@@ -7,13 +7,9 @@ import org.springframework.data.domain.PageRequest;
 
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Optional;
 
 public interface NotificationRepository {
-    List<Notification> findAllByReciverIdAndIsChecked(MemberId memberId, Boolean isChecked);
-    List<Notification> findAllByIds(List<Long> notificationIds);
+    List<Notification> findAllByReceiverIdAndIsChecked(MemberId memberId, Boolean isChecked);
     Page<Notification> findAllByReceiverIdAndIsCheckedAndCreatedAt(MemberId memberId, Boolean isChecked, ZonedDateTime time, PageRequest pageRequest);
     Notification save(Notification notification);
-
-//    void updateIsChecked(List<Long> notificationIds, Boolean isChecked);
 }

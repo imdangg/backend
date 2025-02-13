@@ -5,13 +5,9 @@ import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.member.service.domain.entity.Coupon;
 import com.project.imdang.member.service.domain.entity.Member;
 import com.project.imdang.member.service.domain.exception.MemberCouponDomainException;
-import com.project.imdang.member.service.domain.exception.MemberNotFoundException;
 import com.project.imdang.member.service.domain.ports.output.MemberCouponRepository;
-import com.project.imdang.member.service.domain.ports.output.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component("ThirdCheerUp")
 @RequiredArgsConstructor

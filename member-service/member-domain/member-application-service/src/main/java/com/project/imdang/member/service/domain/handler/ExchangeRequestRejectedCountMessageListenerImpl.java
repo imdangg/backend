@@ -43,15 +43,12 @@ public class ExchangeRequestRejectedCountMessageListenerImpl implements Exchange
 
     private void checkRejectedCountAndIssueCoupon(Member member) {
         switch (member.getRejectedCount()) {
-            case 5:
-                issueMemberCouponCommandHandler.issue(new IssueMemberCouponCommand(member.getId().getValue(), FIRST_CHEERUP));
-                break;
-            case 10:
-                issueMemberCouponCommandHandler.issue(new IssueMemberCouponCommand(member.getId().getValue(), SECOND_CHEERUP));
-                break;
-            case 20:
-                issueMemberCouponCommandHandler.issue(new IssueMemberCouponCommand(member.getId().getValue(), THIRD_CHEERUP));
-                break;
+            case 5 ->
+                    issueMemberCouponCommandHandler.issue(new IssueMemberCouponCommand(member.getId().getValue(), FIRST_CHEERUP));
+            case 10 ->
+                    issueMemberCouponCommandHandler.issue(new IssueMemberCouponCommand(member.getId().getValue(), SECOND_CHEERUP));
+            case 20 ->
+                    issueMemberCouponCommandHandler.issue(new IssueMemberCouponCommand(member.getId().getValue(), THIRD_CHEERUP));
         }
     }
 }

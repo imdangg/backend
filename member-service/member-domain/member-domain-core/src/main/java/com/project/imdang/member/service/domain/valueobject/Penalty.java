@@ -17,8 +17,8 @@ public enum Penalty {
     // 계정 정지
     PERMANENT_BANNED(MemberStatus.PERMANENT_BANNED,-1);
 
-    private MemberStatus memberStatus;
-    private int days;
+    private final MemberStatus memberStatus;
+    private final int days;
 
     Penalty(MemberStatus memberStatus, int days) {
         this.memberStatus = memberStatus;

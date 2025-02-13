@@ -1,9 +1,12 @@
 package com.project.imdang.member.service.domain.dto.oauth.kakao;
 
-import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginCommand;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthWithdrawCommand;
 import com.project.imdang.member.service.domain.valueobject.OAuthType;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 

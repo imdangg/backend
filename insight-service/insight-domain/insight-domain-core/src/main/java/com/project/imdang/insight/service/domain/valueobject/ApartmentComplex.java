@@ -15,11 +15,6 @@ import java.util.Objects;
 public class ApartmentComplex {
 
     private String name;
-//    private String key;
-
-    // TODO - CHECK
-//    private Address address;
-
 
     @Override
     public boolean equals(Object o) {

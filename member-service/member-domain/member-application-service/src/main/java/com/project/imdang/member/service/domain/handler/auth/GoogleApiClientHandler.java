@@ -4,7 +4,6 @@ import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginCommand;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthLoginResponse;
 import com.project.imdang.member.service.domain.dto.oauth.OAuthWithdrawCommand;
 import com.project.imdang.member.service.domain.dto.oauth.google.GoogleLoginResponse;
-import com.project.imdang.member.service.domain.dto.oauth.kakao.KakaoWithdrawResponse;
 import com.project.imdang.member.service.domain.valueobject.OAuthType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
