@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 @RequiredArgsConstructor
-public class KaKaoApiClientHandler implements OAuthApiClientHandler{
+public class KaKaoApiClientHandler implements OAuthApiClientHandler {
     private final RestTemplate restTemplate;
 
     @Value("${oauth.kakao.url.api}")

@@ -50,7 +50,10 @@ public class ExchangeRequestRepositoryImpl implements ExchangeRequestRepository 
 
     @Override
     public Optional<ExchangeRequest> findByRequestedMemberIdAndMemberCouponIdAndRequestMemberInsightId(MemberId requestedMemberId, MemberCouponId memberCouponId, InsightId requestMemberInsightId) {
-        return exchangeRequestJpaRepository.findByRequestedMemberIdAndMemberCouponIdAndRequestMemberInsightId(requestedMemberId.getValue(), memberCouponId.getValue(), requestMemberInsightId.getValue())
+        return exchangeRequestJpaRepository.findByRequestedMemberIdAndMemberCouponIdAndRequestMemberInsightId(
+                        requestedMemberId.getValue(),
+                        memberCouponId != null ? memberCouponId.getValue() : null,
+                        requestMemberInsightId != null ? requestMemberInsightId.getValue() : null)
                 .map(exchangeRequestPersistenceMapper::exchangeRequestEntityToExchangeRequest);
     }
 

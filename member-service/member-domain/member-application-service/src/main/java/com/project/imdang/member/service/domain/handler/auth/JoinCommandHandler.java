@@ -9,6 +9,7 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -20,6 +21,7 @@ public class JoinCommandHandler {
     private final MemberDomainService memberDomainService;
     private final MemberHelper memberHelper;
 
+    @Transactional
     public void join(UUID memberId, JoinCommand joinCommand) {
         // 1. 토큰에서 유저 정보 추출 후 검증
         Member member = checkMember(memberId);

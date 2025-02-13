@@ -10,6 +10,7 @@ import com.project.imdang.member.service.domain.handler.MemberHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -21,6 +22,7 @@ public class ReissueCommandHandler {
     private final MemberHelper memberHelper;
     private final TokenRequestHandler tokenRequestHandler;
 
+    @Transactional
     public TokenResponse reissue(TokenReissueCommand tokenReissueCommand) {
         Member member = check(tokenReissueCommand.getMemberId());
         validate(tokenReissueCommand.getRefreshToken(), member);

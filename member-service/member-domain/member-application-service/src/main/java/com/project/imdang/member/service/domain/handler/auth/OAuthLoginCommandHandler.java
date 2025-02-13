@@ -10,6 +10,7 @@ import com.project.imdang.member.service.domain.handler.MemberHelper;
 import com.project.imdang.member.service.domain.valueobject.OAuthType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,7 @@ public class OAuthLoginCommandHandler {
         this.memberHelper = memberHelper;
     }
 
+    @Transactional
     public LoginResponse login(OAuthLoginCommand loginCommand) {
         OAuthApiClientHandler client = apiClients.get(loginCommand.oAuthType());
         OAuthLoginResponse oAuthInfo = client.getOAuthInfo(loginCommand);
