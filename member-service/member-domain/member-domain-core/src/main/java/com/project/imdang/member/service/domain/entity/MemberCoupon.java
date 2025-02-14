@@ -40,12 +40,13 @@ public class MemberCoupon extends AggregateRoot<MemberCouponId> {
         this.createdAt = ZonedDateTime.now();
     }
 
-    public void use() {
+    public MemberCoupon use() {
         if (used) {
             throw new MemberCouponDomainException("Already used memberCoupon!");
         }
         this.used = true;
         this.usedAt = ZonedDateTime.now();
+        return this;
     }
 
     public void cancel() {

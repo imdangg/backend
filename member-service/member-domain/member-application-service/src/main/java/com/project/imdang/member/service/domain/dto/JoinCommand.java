@@ -17,10 +17,8 @@ import lombok.NoArgsConstructor;
 public class JoinCommand {
     @NotBlank
     private String nickname;
-    @NotBlank
     @Pattern(regexp = "^[0-9.]+$")
     private String birthDate;
-    @NotNull
     private Gender gender;
     private String deviceToken;
 }

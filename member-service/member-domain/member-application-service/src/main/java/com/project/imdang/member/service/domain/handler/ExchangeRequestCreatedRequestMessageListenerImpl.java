@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Component
@@ -24,12 +25,13 @@ public class ExchangeRequestCreatedRequestMessageListenerImpl implements Exchang
 
     // TODO - vs TransactionalEventListener
     @EventListener
+    @Transactional
     public void handle(ExchangeRequestCreatedRequestMessage exchangeRequestCreatedRequestMessage) {
 
         MemberCouponId memberCouponId = new MemberCouponId(exchangeRequestCreatedRequestMessage.getMemberCouponId());
         MemberCoupon memberCoupon = memberCouponRepository.findById(memberCouponId)
                 .orElseThrow(() -> new MemberCouponNotFoundException(memberCouponId));
-        memberCouponDomainService.use(memberCoupon);
+        memberCoupon = memberCouponDomainService.use(memberCoupon);
         memberCouponRepository.save(memberCoupon);
 
         // update
