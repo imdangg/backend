@@ -29,6 +29,7 @@ public class Member extends AggregateRoot<MemberId> {
     private int exchangeCount;
     // TODO - CHECK : 데이터를 쌓아서 GROUP BY로?
     private int rejectedCount;
+    private Boolean isCouponReceived;
 
     private String refreshToken;
     private Boolean isLogin;
@@ -45,6 +46,7 @@ public class Member extends AggregateRoot<MemberId> {
                 .oAuthType(oAuthType)
                 .isDeleted(Boolean.FALSE)
                 .isLogin(Boolean.TRUE)
+                .isCouponReceived(Boolean.FALSE)
                 .status(MemberStatus.ACTIVE)
                 .build();
     }
@@ -63,6 +65,7 @@ public class Member extends AggregateRoot<MemberId> {
                   String refreshToken, 
                   Boolean isLogin, 
                   Boolean isDeleted,
+                  Boolean isCouponReceived,
                   int accusedCount,
                   MemberStatus status,
                   PenaltyPeriod penaltyPeriod) {
@@ -79,6 +82,7 @@ public class Member extends AggregateRoot<MemberId> {
         this.refreshToken = refreshToken;
         this.isLogin = isLogin;
         this.isDeleted = isDeleted;
+        this.isCouponReceived = isCouponReceived;
         this.accusedCount = accusedCount;
         this.status = status;
         this.penaltyPeriod = penaltyPeriod;
@@ -134,6 +138,11 @@ public class Member extends AggregateRoot<MemberId> {
 
     public Member increaseExchangeRequestCount() {
         this.exchangeCount++;
+        return this;
+    }
+
+    public Member updateCouponReceivedStatus() {
+        this.isCouponReceived = Boolean.TRUE;
         return this;
     }
 }

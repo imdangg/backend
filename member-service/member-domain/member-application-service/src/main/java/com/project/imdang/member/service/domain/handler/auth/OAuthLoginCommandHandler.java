@@ -58,6 +58,6 @@ public class OAuthLoginCommandHandler {
         // 3. RefreshToken 저장
         memberDomainService.storeRefreshToken(member, tokenResponse.getRefreshToken());
         memberHelper.save(member);
-        return LoginResponse.from(tokenResponse, isJoined, member.getId().getValue(), oAuthInfo.getRefreshToken());
+        return LoginResponse.from(tokenResponse, isJoined, member.getIsCouponReceived(), member.getId().getValue(), oAuthInfo.getRefreshToken());
     }
 }

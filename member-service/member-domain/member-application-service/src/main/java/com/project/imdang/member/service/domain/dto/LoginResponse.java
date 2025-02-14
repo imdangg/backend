@@ -20,10 +20,11 @@ public class LoginResponse {
     private Long expiresIn;
     @Schema(description = "온보딩 여부")
     private boolean isJoined;
+    private boolean isCouponReceived;
     private UUID memberId;
     private String appleRefreshToken;
 
-    public static LoginResponse from(TokenResponse response, boolean isJoined, UUID memberId, String refreshToken) {
-        return new LoginResponse(response.getAccessToken(), response.getRefreshToken(), response.getExpiresIn(), isJoined, memberId, refreshToken);
+    public static LoginResponse from(TokenResponse response, boolean isJoined, boolean isCouponReceived, UUID memberId, String refreshToken) {
+        return new LoginResponse(response.getAccessToken(), response.getRefreshToken(), response.getExpiresIn(), isJoined, isCouponReceived, memberId, refreshToken);
     }
 }
