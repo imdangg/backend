@@ -30,7 +30,7 @@ public class CouponController {
     @ApiResponse(responseCode = "200", description = "쿠폰 발행 성공")
     @PostMapping("/issue")
     public ResponseEntity<Void> issue(@AuthenticationPrincipal UUID memberId) {
-        memberCouponApplicationService.issueMemberCoupon(new IssueMemberCouponCommand(memberId, "Welcomme"));
+        memberCouponApplicationService.issueMemberCoupon(new IssueMemberCouponCommand(memberId, "Welcome"));
         return ResponseEntity.ok().build();
     }
 }
