@@ -1,5 +1,6 @@
 package com.project.imdang.member.service.domain;
 
+import com.project.imdang.member.service.domain.entity.Member;
 import com.project.imdang.member.service.domain.entity.MemberCoupon;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,9 +13,9 @@ public class MemberCouponDomainServiceImpl implements MemberCouponDomainService 
     }
 
     @Override
-    public void use(MemberCoupon memberCoupon) {
-        memberCoupon.use();
+    public MemberCoupon use(MemberCoupon memberCoupon) {
         log.info("MemberCoupon[id:{}] is used.", memberCoupon.getId().getValue());
+        return memberCoupon.use();
     }
 
     @Override
