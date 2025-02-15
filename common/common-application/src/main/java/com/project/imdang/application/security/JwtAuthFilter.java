@@ -59,27 +59,27 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     log.debug("Authentication[id: {}] saved in Security Context", memberId);
                 } else {
                     request.setAttribute("exception", ADDITIONAL_REQUIRED_TOKEN.getErrorCode());
-                    log.error("JwtAuthFilter: Caught Exception {}", request.getAttribute("exception"));
+                    log.warn("JwtAuthFilter: Caught Exception {}", request.getAttribute("exception"));
                 }
             } catch (MalformedJwtException e) {
                 request.setAttribute("exception", MAL_FORMED_TOKEN.getErrorCode());
-                log.error("JwtAuthFilter: Caught MalformedJwtException {}", request.getAttribute("exception"), e);
+                log.warn("JwtAuthFilter: Caught MalformedJwtException {}", request.getAttribute("exception"), e);
 
             } catch (ExpiredJwtException e) {
                 request.setAttribute("exception", EXPIRED_TOKEN.getErrorCode());
-                log.error("JwtAuthFilter: Caught ExpiredJwtException {}", request.getAttribute("exception"), e);
+                log.warn("JwtAuthFilter: Caught ExpiredJwtException {}", request.getAttribute("exception"), e);
 
             } catch (UnsupportedJwtException e) {
                 request.setAttribute("exception", UNSUPPORTED_TOKEN.getErrorCode());
-                log.error("JwtAuthFilter: Caught UnsupportedJwtException {}", request.getAttribute("exception"), e);
+                log.warn("JwtAuthFilter: Caught UnsupportedJwtException {}", request.getAttribute("exception"), e);
 
             } catch (IllegalArgumentException e) {
                 request.setAttribute("exception", ILLEGAL_TOKEN.getErrorCode());
-                log.error("JwtAuthFilter: Caught IllegalArgumentException {}", request.getAttribute("exception"), e);
+                log.warn("JwtAuthFilter: Caught IllegalArgumentException {}", request.getAttribute("exception"), e);
 
             } catch (Exception e) {
                 request.setAttribute("exception", UNKNOWN_ERROR.getErrorCode());
-                log.error("JwtAuthFilter: Caught Exception {}", request.getAttribute("exception"), e);
+                log.warn("JwtAuthFilter: Caught Exception {}", request.getAttribute("exception"), e);
             }
             log.info("spring context : {}",SecurityContextHolder.getContext().getAuthentication());
 
