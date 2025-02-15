@@ -37,6 +37,7 @@ subprojects {
 
     repositories {
         mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
 
     dependencies {
@@ -80,6 +81,7 @@ project(':imdang-container') {
 
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'com.github.napstr:logback-discord-appender:1.0.0'
     }
 }
 

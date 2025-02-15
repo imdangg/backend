@@ -31,7 +31,7 @@ public class DetailMyCouponHandler {
         Member member = memberHelper.get(memberId);
         // MemberCoupon 조회
         List<MemberCoupon> memberCoupons = memberCouponRepository.findAllByMemberIdAndUsed(member.getId(), Boolean.FALSE);
-        log.info("Member[id:{}] have {} Coupons", member.getId().getValue(), memberCoupons.size());
+        log.info("Member[id: {}] has {} coupons.", member.getId().getValue(), memberCoupons.size());
         return memberCouponDataMapper.memberCouponsToDetailMyCouponResponse(memberCoupons);
     }
 }

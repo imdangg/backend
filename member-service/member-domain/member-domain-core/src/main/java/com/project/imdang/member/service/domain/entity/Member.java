@@ -16,8 +16,8 @@ import java.util.UUID;
 @Getter
 public class Member extends AggregateRoot<MemberId> {
 
-    private String oAuthId;
-    private OAuthType oAuthType;
+    private final String oAuthId;
+    private final OAuthType oAuthType;
 
     private String nickname;
     private String birthDate;
@@ -29,6 +29,7 @@ public class Member extends AggregateRoot<MemberId> {
     private int exchangeCount;
     // TODO - CHECK : 데이터를 쌓아서 GROUP BY로?
     private int rejectedCount;
+    private Boolean isCouponReceived;
 
     private String refreshToken;
     private Boolean isLogin;
@@ -106,14 +107,13 @@ public class Member extends AggregateRoot<MemberId> {
         this.deviceToken = null;
     }
 
-    public void storeRefeashToken(String refreshToken) {
+    public void storeRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
 
-    public void increaseAccusedCount() {
+    public void increaseAccusedCount(AccusePenaltyPolicy accusePenaltyPolicy) {
         this.accusedCount++;
-        // TODO - 배치
-//        accusePenaltyPolicy.apply(this);
+        accusePenaltyPolicy.apply(this);
     }
 
     public void applyPenalty(Penalty penalty) {
@@ -127,16 +127,24 @@ public class Member extends AggregateRoot<MemberId> {
         this.penaltyPeriod = null;
     }
 
-    public void plusRejectedCount() {
+    public Member increaseRejectedCount() {
         this.rejectedCount++;
+        return this;
     }
 
-    public void plusInsightCount() {
+    public Member increaseInsightCount() {
         this.insightCount++;
+        return this;
     }
 
-    public void plusExchangeRequestCount() {
+    public Member increaseExchangeRequestCount() {
         this.exchangeCount++;
+        return this;
+    }
+
+    public Member updateCouponReceivedStatus() {
+        this.isCouponReceived = Boolean.TRUE;
+        return this;
     }
 
     public void updateCouponReceivedStatus() {

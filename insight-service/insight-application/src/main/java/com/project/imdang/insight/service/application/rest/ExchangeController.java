@@ -83,7 +83,7 @@ public class ExchangeController {
     public ResponseEntity<RejectExchangeRequestResponse> reject(@AuthenticationPrincipal UUID memberId, @RequestBody @Valid RejectExchangeRequestCommand rejectExchangeRequestCommand) {
         rejectExchangeRequestCommand.setRequestedMemberId(memberId);
         RejectExchangeRequestResponse rejectExchangeRequestResponse = exchangeApplicationService.rejectExchangeRequest(rejectExchangeRequestCommand);
-        log.info("ExchangeRequest[id:{}] is rejected.", rejectExchangeRequestCommand.getExchangeRequestId());
+        log.info("ExchangeRequest[id: {}] is rejected.", rejectExchangeRequestCommand.getExchangeRequestId());
         return ResponseEntity.ok(rejectExchangeRequestResponse);
     }
 }

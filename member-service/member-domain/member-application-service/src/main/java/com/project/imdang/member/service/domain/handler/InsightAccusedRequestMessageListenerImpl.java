@@ -7,6 +7,7 @@ import com.project.imdang.member.service.domain.entity.Member;
 import com.project.imdang.member.service.domain.exception.MemberNotFoundException;
 import com.project.imdang.member.service.domain.ports.input.listener.InsightAccusedRequestMessageListener;
 import com.project.imdang.member.service.domain.ports.output.MemberRepository;
+import com.project.imdang.member.service.domain.valueobject.AccusePenaltyPolicy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
@@ -18,6 +19,7 @@ public class InsightAccusedRequestMessageListenerImpl implements InsightAccusedR
 
     private final ApplicationEventPublisher applicationEventPublisher;
     private final MemberRepository memberRepository;
+    private final AccusePenaltyPolicy accusePenaltyPolicy;
 
     // TODO - vs TransactionalEventListener
     @EventListener
@@ -26,7 +28,8 @@ public class InsightAccusedRequestMessageListenerImpl implements InsightAccusedR
         MemberId accusedMemberId = new MemberId(insightAccusedRequestMessage.getAccusedMemberId());
         Member accusedMember = memberRepository.findById(accusedMemberId)
                 .orElseThrow(() -> new MemberNotFoundException(accusedMemberId));
-        accusedMember.increaseAccusedCount();
+        // TODO - CHECK
+        accusedMember.increaseAccusedCount(accusePenaltyPolicy);
         memberRepository.save(accusedMember);
 
         MemberAccusedResponseMessage memberAccusedResponseMessage = new MemberAccusedResponseMessage(true, accusedMemberId.getValue());

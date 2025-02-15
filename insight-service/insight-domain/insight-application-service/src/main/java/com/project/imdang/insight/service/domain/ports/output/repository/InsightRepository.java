@@ -22,7 +22,6 @@ public interface InsightRepository {
     Page<Insight> findAllByApartmentComplex(ApartmentComplex apartmentComplex, PageRequest pageRequest);
     Optional<Insight> findById(InsightId insightId);
     Insight save(Insight insight);
-    void deleteById(InsightId insightId);
 
     List<ApartmentComplex> findDistinctApartmentComplexByMemberId(MemberId memberId);
 }

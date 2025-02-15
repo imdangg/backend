@@ -6,11 +6,11 @@ import com.project.imdang.member.service.domain.dto.TokenReissueCommand;
 import com.project.imdang.member.service.domain.dto.TokenResponse;
 import com.project.imdang.member.service.domain.entity.Member;
 import com.project.imdang.member.service.domain.exception.MemberDomainException;
-import com.project.imdang.member.service.domain.exception.MemberNotFoundException;
-import com.project.imdang.member.service.domain.ports.output.MemberRepository;
+import com.project.imdang.member.service.domain.handler.MemberHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -18,22 +18,23 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 public class ReissueCommandHandler {
-    private final MemberRepository memberRepository;
     private final MemberDomainService memberDomainService;
+    private final MemberHelper memberHelper;
     private final TokenRequestHandler tokenRequestHandler;
 
+    @Transactional
     public TokenResponse reissue(TokenReissueCommand tokenReissueCommand) {
         Member member = check(tokenReissueCommand.getMemberId());
         validate(tokenReissueCommand.getRefreshToken(), member);
         TokenResponse tokenResponse = tokenRequestHandler.generate(member);
-        log.info("Member[id:{}] token reissued", member.getId().getValue());
-        saveMember(memberDomainService.storeRefreshToken(member, tokenResponse.getRefreshToken()));
+        log.info("Member[id: {}] token is reissued.", member.getId().getValue());
+        memberHelper.save(memberDomainService.storeRefreshToken(member, tokenResponse.getRefreshToken()));
         return tokenResponse;
     }
 
     private void validate(String refreshToken, Member member) {
         // 1. 유효한 리프레쉬인지
-        tokenRequestHandler.validateRefereshToken(refreshToken);
+        tokenRequestHandler.validateRefreshToken(refreshToken);
         // 2. 일치하는 리프레쉬토큰인지
         if (!member.getRefreshToken().equals(refreshToken)) {
             //TODO : 보완
@@ -43,19 +44,6 @@ public class ReissueCommandHandler {
 
     private Member check(UUID _memberId) {
         MemberId memberId = new MemberId(_memberId);
-        Member findMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
-        return findMember;
-    }
-
-    private Member saveMember(Member member) {
-        Member savedMember =  memberRepository.save(member);
-        if (savedMember == null) {
-            String errorMessage = "Could not save Member!";
-            log.error("Could not save Member!");
-            throw new MemberDomainException(errorMessage);
-        }
-        log.info("Member[id : {}] is saved.", member.getId().getValue());
-        return savedMember;
+        return memberHelper.get(memberId);
     }
 }

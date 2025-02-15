@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -25,15 +23,8 @@ public class NotificationRepositoryImpl implements NotificationRepository {
     private final NotificationPersistenceMapper notificationPersistenceMapper;
 
     @Override
-    public List<Notification> findAllByReciverIdAndIsChecked(MemberId memberId, Boolean isChecked) {
+    public List<Notification> findAllByReceiverIdAndIsChecked(MemberId memberId, Boolean isChecked) {
         return notificationJpaRepository.findAllByReceiverIdAndIsChecked(memberId.getValue(), isChecked).stream()
-                .map(notificationPersistenceMapper::notificationEntityToNotification)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Notification> findAllByIds(List<Long> notificationIds) {
-        return notificationJpaRepository.findAllById(notificationIds).stream()
                 .map(notificationPersistenceMapper::notificationEntityToNotification)
                 .collect(Collectors.toList());
     }

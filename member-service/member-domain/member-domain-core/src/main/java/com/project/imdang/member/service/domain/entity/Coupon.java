@@ -8,11 +8,8 @@ import lombok.Getter;
 
 @Getter
 public class Coupon extends AggregateRoot<CouponId> {
-    private String name;
-    private int count;
-    // 초기, 3
-    // cheer-up, 1/3/5
-    private String expirationDate;
+    private final String name;
+    private final String expirationDate;
 
     @Builder
     public Coupon(CouponId id, String name, String expirationDate) {

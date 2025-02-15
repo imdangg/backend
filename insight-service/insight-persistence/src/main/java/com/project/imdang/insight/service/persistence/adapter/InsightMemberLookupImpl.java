@@ -3,12 +3,15 @@ package com.project.imdang.insight.service.persistence.adapter;
 import com.project.imdang.domain.valueobject.BaseId;
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.feign.MemberFeignClient;
+import com.project.imdang.feign.MemberInfoResponse;
 import com.project.imdang.insight.service.domain.ports.output.lookup.InsightMemberLookup;
 import com.project.imdang.insight.service.domain.valueobject.MemberInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -23,7 +26,8 @@ public class InsightMemberLookupImpl implements InsightMemberLookup {
     public Optional<MemberInfo> lookupByMemberId(MemberId _memberId) {
         UUID memberId = _memberId.getValue();
         try {
-            return Optional.ofNullable(memberFeignClient.getMemberInfo(memberId))
+            ResponseEntity<MemberInfoResponse> responseEntity = memberFeignClient.getMemberInfo(memberId);
+            return Optional.ofNullable(responseEntity)
                     .map(HttpEntity::getBody)
                     .map(memberInfoResponse -> MemberInfo.builder()
                             .memberId(new MemberId(memberInfoResponse.getMemberId()))
@@ -48,7 +52,11 @@ public class InsightMemberLookupImpl implements InsightMemberLookup {
                 .map(BaseId::getValue)
                 .toList();
         try {
-            return memberFeignClient.listMemberInfo(memberIds).getBody().stream()
+            List<MemberInfoResponse> memberInfoResponses = memberFeignClient.listMemberInfo(memberIds).getBody();
+            if (memberInfoResponses == null) {
+                return Collections.emptyList();
+            }
+            return memberInfoResponses.stream()
                     .map(memberInfoResponse -> MemberInfo.builder()
                             .memberId(new MemberId(memberInfoResponse.getMemberId()))
                             .nickname(memberInfoResponse.getNickname())

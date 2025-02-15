@@ -56,6 +56,7 @@ public class IssueMemberCouponCommandHandler {
         // 2. 사용자 확인
         MemberId memberId = new MemberId(issueMemberCouponCommand.getMemberId());
         Member member = memberHelper.get(memberId);
+        // 2-1. 웰컴 쿠폰 받기 저장
         if(issueMemberCouponCommand.getName().equals("Welcome")) {
             member.updateCouponReceivedStatus();
             memberHelper.save(member);
@@ -68,7 +69,7 @@ public class IssueMemberCouponCommandHandler {
         memberCoupons.forEach(memberCouponDomainService::issue);
         // 5. 쿠폰 저장
         save(memberCoupons);
-        log.info("MemberCoupons are issued by Member[id:{}].", member.getId().getValue());
+        log.info("MemberCoupons are issued by Member[id: {}].", member.getId().getValue());
     }
 
     private List<MemberCoupon> save(List<MemberCoupon> memberCoupons) {

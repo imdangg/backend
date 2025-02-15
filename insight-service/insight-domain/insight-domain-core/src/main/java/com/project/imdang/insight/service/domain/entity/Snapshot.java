@@ -29,23 +29,23 @@ public class Snapshot extends BaseEntity<SnapshotId> {
     private final String title;
 
     private final Address address;
-    private ApartmentComplex apartmentComplex;
+    private final ApartmentComplex apartmentComplex;
 
-    private LocalDate visitAt;
-    private Set<VisitTime> visitTimes;
-    private Set<VisitMethod> visitMethods;
-    private Access access;
+    private final LocalDate visitAt;
+    private final Set<VisitTime> visitTimes;
+    private final Set<VisitMethod> visitMethods;
+    private final Access access;
 
-    private String summary;
+    private final String summary;
 
     // 인프라
-    private Infra infra;
+    private final Infra infra;
     // 단지 환경
-    private ComplexEnvironment complexEnvironment;
+    private final ComplexEnvironment complexEnvironment;
     // 단지 시설
-    private ComplexFacility complexFacility;
+    private final ComplexFacility complexFacility;
     // (예정된) 호재
-    private FavorableNews favorableNews;
+    private final FavorableNews favorableNews;
 
     @Builder
     public Snapshot(SnapshotId id,

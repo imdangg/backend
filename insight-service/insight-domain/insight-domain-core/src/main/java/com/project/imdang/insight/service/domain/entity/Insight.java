@@ -49,8 +49,6 @@ public class Insight extends AggregateRoot<InsightId> {
     // (예정된) 호재
     private FavorableNews favorableNews;
 
-//    private Boolean isDeleted;
-
     private int recommendedCount;
     // 신고 횟수
     private int accusedCount;
@@ -60,6 +58,8 @@ public class Insight extends AggregateRoot<InsightId> {
     private int score;
     private ZonedDateTime createdAt;
     // TODO - CHECK : updatedAt;
+
+    private boolean isDeleted;
 
     @Builder
     public Insight(InsightId id,
@@ -81,7 +81,8 @@ public class Insight extends AggregateRoot<InsightId> {
                    int accusedCount,
                    int viewCount,
                    int score,
-                   ZonedDateTime createdAt) {
+                   ZonedDateTime createdAt,
+                   boolean isDeleted) {
         setId(id);
         this.memberId = memberId;
         this.mainImage = mainImage;
@@ -102,6 +103,7 @@ public class Insight extends AggregateRoot<InsightId> {
         this.viewCount = viewCount;
         this.score = score;
         this.createdAt = createdAt;
+        this.isDeleted = isDeleted;
     }
 
     public Snapshot capture() {
@@ -112,7 +114,6 @@ public class Insight extends AggregateRoot<InsightId> {
         InsightId insightId = new InsightId(UUID.randomUUID());
         setId(insightId);
         this.mainImage = mainImage;
-//        this.isDeleted = Boolean.FALSE;
         this.recommendedCount = 0;
         this.accusedCount = 0;
         this.viewCount = 0;
@@ -142,7 +143,9 @@ public class Insight extends AggregateRoot<InsightId> {
             throw new InsightDomainException("Author does not match!");
         }
 
-        this.mainImage = mainImage;
+        if (mainImage != null) {
+            this.mainImage = mainImage;
+        }
         this.title = title;
         this.address = address;
         this.apartmentComplex = apartmentComplex;
@@ -158,12 +161,12 @@ public class Insight extends AggregateRoot<InsightId> {
         this.score = score;
         return this;
     }
-/*
+
     public void delete() {
         // 교환 완료 시점의 인사이트 내용 유지
         // 교환 후 해당 인사이트가 삭제되어도, 교환한 유저의 보관함에는 그대로 유지
-        this.isDeleted = Boolean.TRUE;
-    }*/
+        this.isDeleted = true;
+    }
 
     // TODO - 동시성 체크
     public Recommend recommend(MemberId recommendedBy) {

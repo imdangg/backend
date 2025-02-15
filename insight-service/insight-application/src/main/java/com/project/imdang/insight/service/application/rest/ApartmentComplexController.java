@@ -2,8 +2,6 @@ package com.project.imdang.insight.service.application.rest;
 
 import com.project.imdang.insight.service.application.client.ApartmentComplexApiResponse;
 import com.project.imdang.insight.service.application.client.ApartmentComplexApiRestClient;
-import com.project.imdang.insight.service.domain.ports.input.service.InsightApplicationService;
-import com.project.imdang.insight.service.domain.valueobject.ApartmentComplex;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,15 +11,11 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Tag(name = "ApartmentComplexController", description = "아파트 단지 이름 목록 조회 API ")
@@ -31,9 +25,9 @@ import java.util.UUID;
 @Validated
 public class ApartmentComplexController {
 
+    // TODO
     private final String API_KEY = "api-key";
     private final ApartmentComplexApiRestClient apartmentComplexApiRestClient;
-    private final InsightApplicationService insightApplicationService;
 
     // 주소에 해당하는 apartmentComplexName 리스트 API
     @Operation(description = "주소에 해당하는 아파트 단지 이름 목록 API")

@@ -28,5 +28,4 @@ public interface MemberSnapshotRepository {
 
     MemberSnapshot save(MemberSnapshot memberSnapshot);
     void updateSnapshotIdByMemberIdAndInsightId(SnapshotId snapshotId, MemberId memberId, InsightId insightId);
-    void deleteByMemberIdAndInsightId(MemberId memberId, InsightId insightId);
 }

@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.UUID;
 
 @Component
 @Slf4j
@@ -27,15 +26,15 @@ public class TokenRequestHandler {
 
         String subject = member.getId().getValue().toString();
         String accessToken = jwtTokenProvider.generateAccessToken(subject, accessTokenExpiredAt);
-        log.info("Member[id : {}] AccessToken is Generated : {}", member.getId().getValue(), accessToken);
+        log.info("AccessToken of member[id : {}] is generated : {}.", member.getId().getValue(), accessToken);
 
         String refreshToken = jwtTokenProvider.generateRefreshToken(refreshTokenExpiredAt);
-        log.info("Member[id : {}] RefreshToken is Generated : {}", member.getId().getValue(), refreshToken);
+        log.info("RefreshToken of member[id : {}] is generated : {}.", member.getId().getValue(), refreshToken);
 
         return new TokenResponse(accessToken, refreshToken,ACCESS_TOKEN_EXPIRE_TIME / 1000L);
     }
 
-    public void validateRefereshToken(String refreshToken) {
+    public void validateRefreshToken(String refreshToken) {
         jwtTokenProvider.verifyToken(refreshToken);
     }
 }

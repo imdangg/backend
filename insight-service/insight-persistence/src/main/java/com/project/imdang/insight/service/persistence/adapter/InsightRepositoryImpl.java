@@ -91,12 +91,6 @@ public class InsightRepositoryImpl implements InsightRepository {
     }
 
     @Override
-    public void deleteById(InsightId insightId) {
-        UUID _insightId = insightId.getValue();
-        insightJpaRepository.deleteById(_insightId);
-    }
-
-    @Override
     public List<ApartmentComplex> findDistinctApartmentComplexByMemberId(MemberId memberId) {
         return insightJpaRepository.findDistinctApartmentComplexByMemberId(memberId.getValue());
     }

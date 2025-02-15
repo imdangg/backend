@@ -4,13 +4,12 @@ import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.member.service.domain.MemberDomainService;
 import com.project.imdang.member.service.domain.dto.JoinCommand;
 import com.project.imdang.member.service.domain.entity.Member;
-import com.project.imdang.member.service.domain.exception.MemberDomainException;
-import com.project.imdang.member.service.domain.exception.MemberNotFoundException;
-import com.project.imdang.member.service.domain.ports.output.MemberRepository;
+import com.project.imdang.member.service.domain.handler.MemberHelper;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -20,8 +19,9 @@ import java.util.UUID;
 public class JoinCommandHandler {
 
     private final MemberDomainService memberDomainService;
-    private final MemberRepository memberRepository;
+    private final MemberHelper memberHelper;
 
+    @Transactional
     public void join(UUID memberId, JoinCommand joinCommand) {
         // 1. 토큰에서 유저 정보 추출 후 검증
         Member member = checkMember(memberId);
@@ -30,30 +30,18 @@ public class JoinCommandHandler {
         // 3. 회원가입 (입력 정보 업데이트)
         Member updatedMember = memberDomainService.join(member, joinCommand.getNickname(), joinCommand.getBirthDate(), joinCommand.getGender(), joinCommand.getDeviceToken());
         // 4. 저장
-        saveMember(updatedMember);
+        memberHelper.save(updatedMember);
     }
 
     private Member checkMember(UUID _memberId) {
         MemberId memberId = new MemberId(_memberId);
-        Member findMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(memberId));
-        log.info("Member[id : {}] logged in.", findMember.getId().getValue());
-        return findMember;
+        Member member = memberHelper.get(memberId);
+        log.info("Member[id : {}] logged in.", member.getId().getValue());
+        return member;
     }
 
-    private Member saveMember(Member member) {
-        Member savedMember =  memberRepository.save(member);
-        if (savedMember == null) {
-            String errorMessage = "Could not save Member!";
-            log.error("Could not save Member!");
-            throw new MemberDomainException(errorMessage);
-        }
-        log.info("Member[id : {}] is created.", member.getId().getValue());
-        return savedMember;
-    }
-
-    private void checkDuplicateNickname(String nickName) {
-         if (memberRepository.findByNickname(nickName).isPresent()) {
+    private void checkDuplicateNickname(String nickname) {
+         if (memberHelper.getByNickname(nickname).isPresent()) {
              String errorMessage = "Nickname is already used!";
              log.error(errorMessage);
              throw new ConstraintViolationException(errorMessage, null);

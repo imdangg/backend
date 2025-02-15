@@ -31,25 +31,22 @@ public class MemberDomainServiceImpl implements MemberDomainService {
 
     @Override
     public Member storeRefreshToken(Member member, String refreshToken) {
-        member.storeRefeashToken(refreshToken);
+        member.storeRefreshToken(refreshToken);
         return member;
     }
 
     @Override
     public Member updateRejectedCount(Member member) {
-        member.plusRejectedCount();
-        return member;
+        return member.increaseRejectedCount();
     }
 
     @Override
     public Member updateInsightCreatedCount(Member member) {
-        member.plusInsightCount();
-        return member;
+        return member.increaseInsightCount();
     }
 
     @Override
     public Member updateExchangeRequestAcceptedCount(Member member) {
-        member.plusExchangeRequestCount();
-        return member;
+        return member.increaseExchangeRequestCount();
     }
 }

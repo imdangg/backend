@@ -4,12 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.imdang.domain.jwt.JwtTokenProvider;
 import com.project.imdang.domain.valueobject.CouponId;
 import com.project.imdang.domain.valueobject.MemberId;
-import com.project.imdang.member.service.domain.ports.output.CouponRepository;
 import com.project.imdang.member.service.domain.dto.coupon.IssueMemberCouponCommand;
 import com.project.imdang.member.service.domain.entity.MemberCoupon;
+import com.project.imdang.member.service.domain.ports.output.CouponRepository;
 import com.project.imdang.member.service.domain.ports.output.MemberCouponRepository;
 import com.project.imdang.member.service.domain.ports.output.MemberRepository;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -29,9 +30,17 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static rest.TestData.*;
-import static rest.TestData.memberId;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static rest.TestData.accessToken;
+import static rest.TestData.firstCoupon;
+import static rest.TestData.member;
+import static rest.TestData.member_2;
+import static rest.TestData.member_3;
+import static rest.TestData.member_4;
+import static rest.TestData.secondCoupon;
+import static rest.TestData.thirdCoupon;
+import static rest.TestData.welcomeCoupon;
 
 @AutoConfigureMockMvc
 @SpringBootTest(classes = TestConfiguration.class)
@@ -71,13 +80,12 @@ class CouponControllerTest {
     void list() throws Exception{
         //given
         memberCouponRepository.saveAll(IntStream.range(0, 3)
-                        .mapToObj(i -> {
-                            return MemberCoupon.builder()
-                                    .couponId(new CouponId(UUID.randomUUID()))
-                                    .used(Boolean.FALSE)
-                                    .memberId(new MemberId(memberId))
-                                    .createdAt(ZonedDateTime.now()).build();
-                        }).collect(Collectors.toList()));
+                        .mapToObj(i -> MemberCoupon.builder()
+                                .couponId(new CouponId(UUID.randomUUID()))
+                                .used(Boolean.FALSE)
+                                .memberId(new MemberId(memberId))
+                                .createdAt(ZonedDateTime.now()).build())
+                .collect(Collectors.toList()));
         //when
         //then
         mockMvc.perform(get("/coupons/{memberId}", memberId)

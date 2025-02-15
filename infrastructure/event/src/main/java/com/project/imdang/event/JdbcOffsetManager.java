@@ -21,7 +21,7 @@ public class JdbcOffsetManager implements OffsetManager {
     @Override
     public void update(long nextOffset) {
         jdbcTemplate.update(
-                "insert into offset(value) values (?)",
+                "update offset set value = ?",
                 ps -> ps.setLong(1, nextOffset));
     }
 }

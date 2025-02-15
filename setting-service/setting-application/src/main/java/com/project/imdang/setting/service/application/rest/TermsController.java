@@ -1,7 +1,6 @@
 package com.project.imdang.setting.service.application.rest;
 
 import com.project.imdang.setting.service.domain.dto.AgreeTermsCommand;
-import com.project.imdang.setting.service.domain.dto.NotificationResponse;
 import com.project.imdang.setting.service.domain.dto.TermsResponse;
 import com.project.imdang.setting.service.domain.ports.input.service.TermsApplicationService;
 import io.swagger.v3.oas.annotations.Operation;

@@ -12,14 +12,15 @@ public class MemberCouponDomainServiceImpl implements MemberCouponDomainService 
     }
 
     @Override
-    public void use(MemberCoupon memberCoupon) {
+    public MemberCoupon use(MemberCoupon memberCoupon) {
         memberCoupon.use();
-        log.info("MemberCoupon[id:{}] is used.", memberCoupon.getId().getValue());
+        log.info("MemberCoupon[id: {}] is used.", memberCoupon.getId().getValue());
+        return memberCoupon;
     }
 
     @Override
     public void cancel(MemberCoupon memberCoupon) {
         memberCoupon.cancel();
-        log.info("MemberCoupon[id:{}] is cancelled.", memberCoupon.getId().getValue());
+        log.info("MemberCoupon[id: {}] is cancelled.", memberCoupon.getId().getValue());
     }
 }

@@ -71,6 +71,4 @@ public interface MemberSnapshotJpaRepository extends JpaRepository<MemberSnapsho
             "where ms.member_id = :memberId and s.address_si_do = :siDo and s.address_si_gun_gu = :siGunGu and s.address_eup_myeon_dong = :eupMyeonDong ",
             nativeQuery = true)
     Tuple countAllByMemberIdAndDistrict(String memberId, String siDo, String siGunGu, String eupMyeonDong);
-
-    void deleteByMemberIdAndInsightId(UUID memberId, UUID insightId);
 }

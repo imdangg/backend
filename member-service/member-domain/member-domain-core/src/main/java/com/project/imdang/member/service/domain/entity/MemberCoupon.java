@@ -16,7 +16,7 @@ public class MemberCoupon extends AggregateRoot<MemberCouponId> {
 
     private final CouponId couponId;
     private final MemberId memberId;
-    private ZonedDateTime expiredAt;
+    private final ZonedDateTime expiredAt;
 
     private String remark;  // reason
     private ZonedDateTime createdAt;
@@ -40,12 +40,13 @@ public class MemberCoupon extends AggregateRoot<MemberCouponId> {
         this.createdAt = ZonedDateTime.now();
     }
 
-    public void use() {
+    public MemberCoupon use() {
         if (used) {
             throw new MemberCouponDomainException("Already used memberCoupon!");
         }
         this.used = true;
         this.usedAt = ZonedDateTime.now();
+        return this;
     }
 
     public void cancel() {

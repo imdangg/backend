@@ -36,8 +36,4 @@ public class InsightHelper {
         log.info("Insight[id: {}] is saved.", saved.getId().getValue());
         return saved;
     }
-
-    public void delete(InsightId insightId) {
-        insightRepository.deleteById(insightId);
-    }
 }

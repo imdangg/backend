@@ -67,7 +67,7 @@ public class InsightDomainServiceImpl implements InsightDomainService {
         if (!deletedBy.equals(insight.getMemberId())) {
             throw new InsightDomainException("Author does not match!");
         }
-//        insight.delete();
+        insight.delete();
         log.info("Insight[id: {}] is deleted.", insight.getId().getValue());
         return new InsightDeletedEvent(insight, ZonedDateTime.now(ZoneId.of("UTC")));
     }

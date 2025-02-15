@@ -41,7 +41,7 @@ public class SendNotificationHandler {
                 .setToken(token)
                 .setNotification(notification)
                 .putData("time", ZonedDateTime.now().toString())
-//                .setAndroidConfig(androidConfig)
+                .setAndroidConfig(androidConfig)
                 .build();
 
         try {

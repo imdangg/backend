@@ -26,7 +26,7 @@ public class CouponEventTest {
 
     @Test
     @DisplayName("이벤트가 호출되는지 확인")
-    void exchangeRequestRejectedCountMessageEventListner() {
+    void exchangeRequestRejectedCountMessageEventListener() {
         // Given
         ExchangeRequestRejectedCountRequestMessage message = new ExchangeRequestRejectedCountRequestMessage(memberId);
         // When

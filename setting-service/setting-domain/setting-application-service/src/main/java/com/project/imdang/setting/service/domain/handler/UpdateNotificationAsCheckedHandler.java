@@ -48,6 +48,6 @@ public class UpdateNotificationAsCheckedHandler {
 
     private List<Notification> getUncheckedNotification(UUID _receiverId) {
         MemberId receiverId = new MemberId(_receiverId);
-       return notificationRepository.findAllByReciverIdAndIsChecked(receiverId, Boolean.FALSE);
+       return notificationRepository.findAllByReceiverIdAndIsChecked(receiverId, Boolean.FALSE);
     }
 }

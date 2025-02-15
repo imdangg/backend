@@ -2,6 +2,7 @@ package com.project.imdang.insight.service.persistence.adapter;
 
 import com.project.imdang.domain.valueobject.ExchangeRequestId;
 import com.project.imdang.domain.valueobject.InsightId;
+import com.project.imdang.domain.valueobject.MemberCouponId;
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
 import com.project.imdang.insight.service.domain.ports.output.repository.ExchangeRequestRepository;
@@ -16,7 +17,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -34,12 +37,6 @@ public class ExchangeRequestRepositoryImpl implements ExchangeRequestRepository 
         return exchangeRequestPersistenceMapper.exchangeRequestEntityToExchangeRequest(saved);
     }
 
-    @Transactional
-    @Override
-    public void deleteById(ExchangeRequestId exchangeRequestId) {
-        exchangeRequestJpaRepository.deleteById(exchangeRequestId.getValue());
-    }
-
     @Transactional(readOnly = true)
     @Override
     public Optional<ExchangeRequest> findById(ExchangeRequestId exchangeRequestId) {
@@ -48,27 +45,41 @@ public class ExchangeRequestRepositoryImpl implements ExchangeRequestRepository 
     }
 
     @Override
-    public Optional<ExchangeRequest> findByRequestMemberIdAndRequestedInsightId(MemberId requestMemberId, InsightId requestedInsightId) {
-        return exchangeRequestJpaRepository.findByRequestMemberIdAndRequestedInsightId(requestMemberId.getValue(), requestedInsightId.getValue())
-                .map(exchangeRequestPersistenceMapper::exchangeRequestEntityToExchangeRequest);
+    public List<ExchangeRequest> findByRequestMemberIdAndRequestedInsightId(MemberId requestMemberId, InsightId requestedInsightId) {
+        return exchangeRequestJpaRepository.findByRequestMemberIdAndRequestedInsightId(requestMemberId.getValue(), requestedInsightId.getValue()).stream()
+                .map(exchangeRequestPersistenceMapper::exchangeRequestEntityToExchangeRequest)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<ExchangeRequest> findByRequestedMemberIdAndRequestedInsightId(MemberId requestedMemberId, InsightId requestedInsightId) {
-        return exchangeRequestJpaRepository.findByRequestedMemberIdAndRequestedInsightId(requestedMemberId.getValue(), requestedInsightId.getValue())
-                .map(exchangeRequestPersistenceMapper::exchangeRequestEntityToExchangeRequest);
+    public List<ExchangeRequest> findByRequestedMemberIdAndMemberCouponIdAndRequestMemberInsightId(MemberId requestedMemberId, MemberCouponId memberCouponId, InsightId requestMemberInsightId) {
+        return exchangeRequestJpaRepository.findByRequestedMemberIdAndMemberCouponIdAndRequestMemberInsightId(
+                        requestedMemberId.getValue(),
+                        memberCouponId != null ? memberCouponId.getValue() : null,
+                        requestMemberInsightId != null ? requestMemberInsightId.getValue() : null).stream()
+                .map(exchangeRequestPersistenceMapper::exchangeRequestEntityToExchangeRequest)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<ExchangeRequest> findByRequestedMemberIdAndRequestMemberInsightId(MemberId requestedMemberId, InsightId requestMemberInsightId) {
-        return exchangeRequestJpaRepository.findByRequestedMemberIdAndRequestMemberInsightId(requestedMemberId.getValue(), requestMemberInsightId.getValue())
-                .map(exchangeRequestPersistenceMapper::exchangeRequestEntityToExchangeRequest);
+    public List<ExchangeRequest> findByRequestMemberInsightIdAndRequestedInsightId(InsightId requestMemberInsightId, InsightId requestedInsightId) {
+        return exchangeRequestJpaRepository.findByRequestMemberInsightIdAndRequestedInsightId(requestMemberInsightId.getValue(), requestedInsightId.getValue()).stream()
+                .map(exchangeRequestPersistenceMapper::exchangeRequestEntityToExchangeRequest)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<ExchangeRequest> findByRequestMemberInsightIdAndRequestedInsightId(InsightId requestMemberInsightId, InsightId requestedInsightId) {
-        return exchangeRequestJpaRepository.findByRequestMemberInsightIdAndRequestedInsightId(requestMemberInsightId.getValue(), requestedInsightId.getValue())
-                .map(exchangeRequestPersistenceMapper::exchangeRequestEntityToExchangeRequest);
+    public List<ExchangeRequest> findByRequestMemberIdAndRequestedInsightIdAndMemberCouponIsNotNull(MemberId requestMemberId, InsightId requestedInsightId) {
+        return exchangeRequestJpaRepository.findByRequestMemberIdAndRequestedInsightIdAndMemberCouponIsNotNull(requestMemberId.getValue(), requestedInsightId.getValue()).stream()
+                .map(exchangeRequestPersistenceMapper::exchangeRequestEntityToExchangeRequest)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ExchangeRequest> findByRequestedMemberIdAndRequestMemberInsightId(MemberId requestedMemberId, InsightId requestMemberInsightId) {
+        return exchangeRequestJpaRepository.findByRequestedMemberIdAndRequestMemberInsightId(requestedMemberId.getValue(), requestMemberInsightId.getValue()).stream()
+                .map(exchangeRequestPersistenceMapper::exchangeRequestEntityToExchangeRequest)
+                .collect(Collectors.toList());
     }
 
     @Override
