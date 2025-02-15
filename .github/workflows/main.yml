@@ -3,14 +3,14 @@ name: Build and Deploy to EC2
 # 워크플로우가 언제 실행될 것인지 조건 명시
 on:
   push:
-    branches: [ "release"]
+    branches: [ "develop"]
 
 # AWS 관련 값 변수로 설정
 env:
   AWS_REGION: ap-northeast-2
-  AWS_S3_BUCKET: imdang-release-bucket
-  AWS_CODE_DEPLOY_APPLICATION: imdang-release
-  AWS_CODE_DEPLOY_GROUP: imdang-release-deploy
+  AWS_S3_BUCKET: imdang-bucket
+  AWS_CODE_DEPLOY_APPLICATION: imdang-application
+  AWS_CODE_DEPLOY_GROUP: imdang-deployment-group
 
 jobs:
   deploy:
@@ -34,7 +34,7 @@ jobs:
           mkdir -p ./imdang-container/src/main/resources
           cd ./imdang-container/src/main/resources
           touch ./application.yml
-          echo "${{ secrets.APPLICATION_RELEASE }}" > ./application.yml
+          echo "${{ secrets.APPLICATION }}" > ./application.yml
 
       - name: make key
         run: |
@@ -42,8 +42,8 @@ jobs:
           cd ./imdang-container/src/main/resources/key
           touch ./AuthKey_2AGQTHACLC.p8
           echo "${{ secrets.APPLE_KEY }}" > ./AuthKey_2AGQTHACLC.p8
-          touch ./imdangadmin-firebase-adminsdk-bfo4p-7662bcfaee.json          
-          echo "${{ secrets.FIREBASE_KEY_RELEASE }}" | base64 -d > ./imdangadmin-firebase-adminsdk-bfo4p-7662bcfaee.json
+          touch ./imdang-firebase-adminsdk-4nx5g-28d31540f4.json          
+          echo "${{ secrets.FIREBASE_KEY }}" | base64 -d > ./imdang-firebase-adminsdk-4nx5g-28d31540f4.json
 
       # 권한 부여
       - name: Grant execute permission for gradlew
@@ -63,8 +63,8 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: ${{ env.AWS_REGION }}
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_RELEASE }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_RELEASE }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       # S3 버킷에 빌드파일(zip 파일)을 업로드
       - name: Upload to S3
