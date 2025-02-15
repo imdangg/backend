@@ -8,6 +8,7 @@ import com.project.imdang.insight.service.domain.ports.output.lookup.InsightMemb
 import com.project.imdang.insight.service.domain.valueobject.MemberInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -25,7 +26,8 @@ public class InsightMemberLookupImpl implements InsightMemberLookup {
     public Optional<MemberInfo> lookupByMemberId(MemberId _memberId) {
         UUID memberId = _memberId.getValue();
         try {
-            return Optional.ofNullable(memberFeignClient.getMemberInfo(memberId))
+            ResponseEntity<MemberInfoResponse> responseEntity = memberFeignClient.getMemberInfo(memberId);
+            return Optional.ofNullable(responseEntity)
                     .map(HttpEntity::getBody)
                     .map(memberInfoResponse -> MemberInfo.builder()
                             .memberId(new MemberId(memberInfoResponse.getMemberId()))

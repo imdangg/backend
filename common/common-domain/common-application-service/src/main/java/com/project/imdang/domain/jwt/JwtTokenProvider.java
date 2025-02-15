@@ -1,6 +1,12 @@
 package com.project.imdang.domain.jwt;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
@@ -60,19 +66,19 @@ public final class JwtTokenProvider implements InitializingBean {
 
             return claims.getBody().getExpiration().after(new Date());
         } catch (SecurityException | MalformedJwtException e) {
-            log.info("잘못된 JWT 서명입니다.");
+            log.warn("잘못된 JWT 서명입니다.");
             throw e;
         } catch (ExpiredJwtException e) {
-            log.info("만료된 JWT 토큰입니다.");
+            log.warn("만료된 JWT 토큰입니다.");
             throw e;
         } catch (UnsupportedJwtException e) {
-            log.info("지원되지 않는 JWT 토큰입니다.");
+            log.warn("지원되지 않는 JWT 토큰입니다.");
             throw e;
         } catch (IllegalArgumentException e) {
-            log.info("JWT 토큰이 잘못되었습니다.");
+            log.warn("JWT 토큰이 잘못되었습니다.");
             throw e;
         } catch (Exception e) {
-            log.info(e.getMessage());
+            log.warn("예외가 발생했습니다.");
             throw e;
         }
     }

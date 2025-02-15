@@ -69,7 +69,7 @@ public class IssueMemberCouponCommandHandler {
         memberCoupons.forEach(memberCouponDomainService::issue);
         // 5. 쿠폰 저장
         save(memberCoupons);
-        log.info("MemberCoupons are issued by Member[id:{}].", member.getId().getValue());
+        log.info("MemberCoupons are issued by Member[id: {}].", member.getId().getValue());
     }
 
     private List<MemberCoupon> save(List<MemberCoupon> memberCoupons) {

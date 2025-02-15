@@ -27,7 +27,7 @@ public class ReissueCommandHandler {
         Member member = check(tokenReissueCommand.getMemberId());
         validate(tokenReissueCommand.getRefreshToken(), member);
         TokenResponse tokenResponse = tokenRequestHandler.generate(member);
-        log.info("Member[id:{}] token reissued", member.getId().getValue());
+        log.info("Member[id: {}] token is reissued.", member.getId().getValue());
         memberHelper.save(memberDomainService.storeRefreshToken(member, tokenResponse.getRefreshToken()));
         return tokenResponse;
     }

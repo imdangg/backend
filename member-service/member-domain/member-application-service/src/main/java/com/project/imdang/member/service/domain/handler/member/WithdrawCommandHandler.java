@@ -44,6 +44,6 @@ public class WithdrawCommandHandler {
         // 3. 사용자 삭제 및 토큰 만료
         Member withdrew = memberDomainService.withdraw(member);
         Member saved = memberHelper.save(withdrew);
-        log.info("Member[id:{}] is withdrew.", saved.getId().getValue());
+        log.info("Member[id: {}] is withdrew.", saved.getId().getValue());
     }
 }

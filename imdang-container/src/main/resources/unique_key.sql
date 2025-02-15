@@ -1,9 +1,5 @@
 ALTER TABLE accuse ADD CONSTRAINT unique_accuse_1 UNIQUE (accuse_member_id, accused_insight_id);
 
-ALTER TABLE exchange_request ADD CONSTRAINT unique_exchange_request_1 UNIQUE (request_member_id, requested_insight_id);
-ALTER TABLE exchange_request ADD CONSTRAINT unique_exchange_request_2 UNIQUE (requested_member_id, member_coupon_id, request_member_insight_id);
-ALTER TABLE exchange_request ADD CONSTRAINT unique_exchange_request_3 UNIQUE (request_member_insight_id, requested_insight_id);
-
 ALTER TABLE member_snapshot ADD CONSTRAINT unique_member_snapshot_1 UNIQUE (insight_id, member_id);
 
 ALTER TABLE recommend ADD CONSTRAINT unique_recommend_1 UNIQUE (recommend_member_id, recommended_insight_id);

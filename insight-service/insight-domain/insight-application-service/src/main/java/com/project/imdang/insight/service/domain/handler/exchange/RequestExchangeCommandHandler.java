@@ -10,16 +10,19 @@ import com.project.imdang.insight.service.domain.ExchangeDomainService;
 import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightResponse;
 import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
+import com.project.imdang.insight.service.domain.entity.Insight;
 import com.project.imdang.insight.service.domain.entity.Snapshot;
 import com.project.imdang.insight.service.domain.event.ExchangeRequestCreatedEvent;
 import com.project.imdang.insight.service.domain.exception.InsightApplicationServiceException;
 import com.project.imdang.insight.service.domain.exception.SnapshotNotFoundException;
 import com.project.imdang.insight.service.domain.handler.ExchangeRequestHelper;
+import com.project.imdang.insight.service.domain.handler.InsightHelper;
 import com.project.imdang.insight.service.domain.mapper.ExchangeRequestDataMapper;
 import com.project.imdang.insight.service.domain.ports.output.lookup.InsightMemberLookup;
 import com.project.imdang.insight.service.domain.ports.output.publisher.ExchangeRequestCreatedRequestMessagePublisher;
 import com.project.imdang.insight.service.domain.ports.output.repository.ExchangeRequestRepository;
 import com.project.imdang.insight.service.domain.ports.output.repository.SnapshotRepository;
+import com.project.imdang.insight.service.domain.valueobject.ExchangeRequestStatus;
 import com.project.imdang.insight.service.domain.valueobject.MemberInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +44,7 @@ public class RequestExchangeCommandHandler {
     private final ExchangeRequestRepository exchangeRequestRepository;
     private final ExchangeRequestDataMapper exchangeRequestDataMapper;
     private final ExchangeRequestHelper exchangeRequestHelper;
+    private final InsightHelper insightHelper;
 
     private final SnapshotRepository snapshotRepository;
 
@@ -56,23 +60,42 @@ public class RequestExchangeCommandHandler {
         MemberId requestMemberId = new MemberId(requestExchangeInsightCommand.getRequestMemberId());
         checkMember(requestMemberId);
 
-        ExchangeRequest exchangeRequest = exchangeRequestDataMapper.requestExchangeInsightCommandToExchangeRequest(requestExchangeInsightCommand);
-        checkIsAlreadyExistedExchangeRequest(exchangeRequest);
-
         InsightId requestedInsightId = new InsightId(requestExchangeInsightCommand.getRequestedInsightId());
-        Snapshot requestedSnapshot = snapshotRepository.findLatestByInsightId(requestedInsightId)
-                .orElseThrow(() -> new SnapshotNotFoundException(requestedInsightId));
+        Insight requestedInsight = checkInsight(requestedInsightId);
+
+        // 동일한 요청(수락/대기중) 내역 존재 시, 요청 불가
+        exchangeRequestRepository.findByRequestMemberIdAndRequestedInsightId(requestMemberId, requestedInsightId).stream()
+                .filter(e -> !e.getStatus().equals(ExchangeRequestStatus.REJECTED))
+                .findAny()
+                .ifPresent((e) -> {
+                    throw new InsightApplicationServiceException(ErrorCode.ALREADY_EXCHANGE_REQUESTED);
+                });
 
         ExchangeRequestCreatedEvent exchangeRequestCreatedEvent;
         if (requestExchangeInsightCommand.getRequestMemberInsightId() != null) {
 
             // 상호 교환 불가
             InsightId requestMemberInsightId = new InsightId(requestExchangeInsightCommand.getRequestMemberInsightId());
-            exchangeRequestRepository.findByRequestMemberInsightIdAndRequestedInsightId(requestedInsightId, requestMemberInsightId)
+            checkInsight(requestMemberInsightId);
+
+            exchangeRequestRepository.findByRequestMemberInsightIdAndRequestedInsightId(requestedInsightId, requestMemberInsightId).stream()
+                    .filter(e -> !e.getStatus().equals(ExchangeRequestStatus.REJECTED))
+                    .findAny()
                     .ifPresent((e) -> {
                         throw new InsightApplicationServiceException(ErrorCode.ALREADY_EXCHANGE_REQUESTED);
                     });
 
+            // 쿠폰으로 요청된 이력이 있는 경우 - 요청 불가
+            exchangeRequestRepository.findByRequestMemberIdAndRequestedInsightIdAndMemberCouponIsNotNull(requestedInsight.getMemberId(), requestMemberInsightId).stream()
+                    .filter(e -> !e.getStatus().equals(ExchangeRequestStatus.REJECTED))
+                    .findAny()
+                    .ifPresent((e) -> {
+                        throw new InsightApplicationServiceException(ErrorCode.ALREADY_EXCHANGE_REQUESTED);
+                    });
+
+            ExchangeRequest exchangeRequest = exchangeRequestDataMapper.requestExchangeInsightCommandToExchangeRequest(requestExchangeInsightCommand);
+            Snapshot requestedSnapshot = snapshotRepository.findLatestByInsightId(requestedInsightId)
+                    .orElseThrow(() -> new SnapshotNotFoundException(requestedInsightId));
             Snapshot requestMemberSnapshot = snapshotRepository.findLatestByInsightId(requestMemberInsightId)
                     .orElseThrow(() -> new SnapshotNotFoundException(requestedInsightId));
 
@@ -83,9 +106,21 @@ public class RequestExchangeCommandHandler {
             Assert.notNull(requestExchangeInsightCommand.getMemberCouponId(), "MemberCouponId must not be null!");
             MemberCouponId memberCouponId = new MemberCouponId(requestExchangeInsightCommand.getMemberCouponId());
 
+            // 인사이트로 요청된 이력이 있는 경우 - 요청 불가
+            exchangeRequestRepository.findByRequestedMemberIdAndRequestMemberInsightId(requestMemberId, requestedInsightId).stream()
+                    .filter(e -> !e.getStatus().equals(ExchangeRequestStatus.REJECTED))
+                    .findAny()
+                    .ifPresent((e) -> {
+                        throw new InsightApplicationServiceException(ErrorCode.ALREADY_EXCHANGE_REQUESTED);
+                    });
+
             // publish
             exchangeRequestCreatedRequestMessagePublisher.publish(
                     new ExchangeRequestCreatedRequestMessage(memberCouponId.getValue()));
+
+            ExchangeRequest exchangeRequest = exchangeRequestDataMapper.requestExchangeInsightCommandToExchangeRequest(requestExchangeInsightCommand);
+            Snapshot requestedSnapshot = snapshotRepository.findLatestByInsightId(requestedInsightId)
+                    .orElseThrow(() -> new SnapshotNotFoundException(requestedInsightId));
             exchangeRequestCreatedEvent = exchangeDomainService.requestExchangeWithCoupon(exchangeRequest, requestedSnapshot, memberCouponId);
         }
 
@@ -106,8 +141,7 @@ public class RequestExchangeCommandHandler {
         }
     }
 
-    private void checkIsAlreadyExistedExchangeRequest(ExchangeRequest exchangeRequest) {
-        // TODO : SnapShot 조회
-        exchangeRequestRepository.findByRequestMemberIdAndRequestedInsightId(exchangeRequest.getRequestMemberId(), exchangeRequest.getRequestedInsightId());
+    private Insight checkInsight(InsightId insightId) {
+        return insightHelper.get(insightId);
     }
 }

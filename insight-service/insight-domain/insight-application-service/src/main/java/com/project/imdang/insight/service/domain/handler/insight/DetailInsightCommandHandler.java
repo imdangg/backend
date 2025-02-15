@@ -1,6 +1,5 @@
 package com.project.imdang.insight.service.domain.handler.insight;
 
-import com.project.imdang.domain.valueobject.ExchangeRequestId;
 import com.project.imdang.domain.valueobject.InsightId;
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.insight.service.domain.dto.insight.detail.DetailInsightQuery;
@@ -27,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -83,22 +83,25 @@ public class DetailInsightCommandHandler {
                 // 본인의 인사이트
                 if (insightCreatedBy.equals(requestedBy)) {
                     return insightDataMapper.insightToDetailInsightResponse(
-                            insight, memberNickname, recommended, accused, null, null, null, true);
+                            insight, memberNickname, recommended, accused, null, null, null, Boolean.TRUE);
                 } else {
                     // 타인의 인사이트
 
                     // 교환 신청 여부 확인
                     // 1) 로그인 유저(requestedBy)가 교환 요청을 한 경우
-                    Optional<ExchangeRequest> exchangeRequestCreatedByMeOptional =
-                            exchangeRequestRepository.findByRequestMemberIdAndRequestedInsightId(requestedBy, insightId);
-                    if (exchangeRequestCreatedByMeOptional.isPresent()) {
-                        ExchangeRequest exchangeRequest = exchangeRequestCreatedByMeOptional.get();
-                        ExchangeRequestStatus exchangeRequestStatus = exchangeRequest.getStatus();
-                        Boolean exchangeRequestCreatedByMe = Boolean.TRUE;
-                        ExchangeRequestId exchangeRequestId = exchangeRequest.getId();
+                    // exchangeRequestCreatedByMe
+                    List<ExchangeRequest> requestList = exchangeRequestRepository.findByRequestMemberIdAndRequestedInsightId(requestedBy, insightId);
+                    if (!requestList.isEmpty()) {
 
-                        if (ExchangeRequestStatus.ACCEPTED.equals(exchangeRequestStatus)) {
-                            SnapshotId snapshotId = exchangeRequest.getRequestedSnapshotId();
+                        List<ExchangeRequest> acceptedList = requestList.stream()
+                                .filter(exchangeRequestCreatedByMe -> ExchangeRequestStatus.ACCEPTED.equals(exchangeRequestCreatedByMe.getStatus()))
+                                .toList();
+                        if (acceptedList.size() > 1) {
+                            throw new IllegalStateException("ACCEPTED ExchangeRequest cannot be more than one!");
+                        }
+                        if (acceptedList.size() == 1) {
+                            ExchangeRequest accepted = acceptedList.get(0);
+                            SnapshotId snapshotId = accepted.getRequestedSnapshotId();
                             Snapshot snapshot = snapshotRepository.findById(snapshotId)
                                     .orElseThrow(() -> new SnapshotNotFoundException(snapshotId));
                             Integer recommendedCount = insight.getRecommendedCount();
@@ -112,29 +115,55 @@ public class DetailInsightCommandHandler {
                                     recommendedCount,
                                     accusedCount,
                                     viewCount,
-                                    exchangeRequestStatus,
-                                    exchangeRequestCreatedByMe,
-                                    exchangeRequestId,
-                                    false);
+                                    ExchangeRequestStatus.ACCEPTED,
+                                    Boolean.TRUE,
+                                    null,
+                                    Boolean.FALSE);
                         } else {
-                            // PENDING, REJECTED
-                            return insightDataMapper.insightToDetailInsightResponse(
-                                    insight, memberNickname, recommended, accused, exchangeRequestStatus, exchangeRequestCreatedByMe, exchangeRequestId, false)
-                                    .toPreviewInsightResponse();
+
+                            List<ExchangeRequest> pendingList = requestList.stream()
+                                    .filter(exchangeRequestCreatedByMe -> ExchangeRequestStatus.PENDING.equals(exchangeRequestCreatedByMe.getStatus()))
+                                    .toList();
+                            if (pendingList.size() > 1) {
+                                throw new IllegalStateException("PENDING ExchangeRequest cannot be more than one!");
+                            }
+                            if (pendingList.size() == 1) {
+                                ExchangeRequest pending = pendingList.get(0);
+                                return insightDataMapper.insightToDetailInsightResponse(
+                                        insight, memberNickname, recommended, accused, ExchangeRequestStatus.PENDING, Boolean.TRUE, pending.getId(), Boolean.FALSE)
+                                        .toPreviewInsightResponse();
+                            } else {
+
+                                List<ExchangeRequest> rejectedList = requestList.stream()
+                                        .filter(exchangeRequestCreatedByMe -> ExchangeRequestStatus.REJECTED.equals(exchangeRequestCreatedByMe.getStatus()))
+                                        .toList();
+                                if (rejectedList.isEmpty()) {
+                                    throw new IllegalStateException("REJECTED ExchangeRequest should be more than zero!");
+                                }
+                                return insightDataMapper.insightToDetailInsightResponse(
+                                                insight, memberNickname, recommended, accused, ExchangeRequestStatus.REJECTED, Boolean.TRUE, null, Boolean.FALSE)
+                                        .toPreviewInsightResponse();
+
+                            }
                         }
 
                     } else {
-                        // 2) 로그인 유저가 교환 요청을 받은 경우
-                        Optional<ExchangeRequest> exchangeRequestCreatedByOtherOptional =
-                                exchangeRequestRepository.findByRequestedMemberIdAndMemberCouponIdAndRequestMemberInsightId(requestedBy, null, insightId);
-                        if (exchangeRequestCreatedByOtherOptional.isPresent()) {
-                            ExchangeRequest exchangeRequest = exchangeRequestCreatedByOtherOptional.get();
-                            ExchangeRequestStatus exchangeRequestStatus = exchangeRequest.getStatus();
-                            Boolean exchangeRequestCreatedByMe = Boolean.FALSE;
-                            ExchangeRequestId exchangeRequestId = exchangeRequest.getId();
 
-                            if (ExchangeRequestStatus.ACCEPTED.equals(exchangeRequestStatus)) {
-                                SnapshotId snapshotId = exchangeRequest.getRequestMemberSnapshotId();
+                        // 2) 로그인 유저가 교환 요청을 받은 경우
+                        List<ExchangeRequest> requestedList =
+                                exchangeRequestRepository.findByRequestedMemberIdAndMemberCouponIdAndRequestMemberInsightId(requestedBy, null, insightId);
+                        if (!requestedList.isEmpty()) {
+
+                            List<ExchangeRequest> acceptedList = requestedList.stream()
+                                    .filter(exchangeRequestCreatedByOther -> ExchangeRequestStatus.ACCEPTED.equals(exchangeRequestCreatedByOther.getStatus()))
+                                    .toList();
+                            if (acceptedList.size() > 1) {
+                                throw new IllegalStateException("ACCEPTED ExchangeRequest cannot be more than one!");
+                            }
+
+                            if (acceptedList.size() == 1) {
+                                ExchangeRequest accepted = acceptedList.get(0);
+                                SnapshotId snapshotId = accepted.getRequestMemberSnapshotId();
                                 Snapshot snapshot = snapshotRepository.findById(snapshotId)
                                         .orElseThrow(() -> new SnapshotNotFoundException(snapshotId));
                                 Integer recommendedCount = insight.getRecommendedCount();
@@ -148,21 +177,54 @@ public class DetailInsightCommandHandler {
                                         recommendedCount,
                                         accusedCount,
                                         viewCount,
-                                        exchangeRequestStatus,
-                                        exchangeRequestCreatedByMe,
-                                        exchangeRequestId,
-                                        false);
+                                        ExchangeRequestStatus.ACCEPTED,
+                                        Boolean.FALSE,
+                                        null,
+                                        Boolean.FALSE);
                             } else {
-                                // PENDING, REJECTED
-                                return insightDataMapper.insightToDetailInsightResponse(
-                                        insight, memberNickname, recommended, accused, exchangeRequestStatus, exchangeRequestCreatedByMe, exchangeRequestId, false)
-                                        .toPreviewInsightResponse();
-                            }
 
+                                List<ExchangeRequest> pendingList = requestedList.stream()
+                                        .filter(exchangeRequestCreatedByOther -> ExchangeRequestStatus.PENDING.equals(exchangeRequestCreatedByOther.getStatus()))
+                                        .toList();
+                                if (pendingList.size() > 1) {
+                                    throw new IllegalStateException("PENDING ExchangeRequest cannot be more than one!");
+                                }
+                                if (pendingList.size() == 1) {
+                                    ExchangeRequest pending = pendingList.get(0);
+                                    return insightDataMapper.insightToDetailInsightResponse(
+                                                    insight,
+                                                    memberNickname,
+                                                    recommended,
+                                                    accused,
+                                                    ExchangeRequestStatus.PENDING,
+                                                    Boolean.FALSE,
+                                                    pending.getId(),
+                                                    Boolean.FALSE)
+                                            .toPreviewInsightResponse();
+                                } else {
+
+                                    List<ExchangeRequest> rejectedList = requestedList.stream()
+                                            .filter(exchangeRequestCreatedByMe -> ExchangeRequestStatus.REJECTED.equals(exchangeRequestCreatedByMe.getStatus()))
+                                            .toList();
+                                    if (rejectedList.isEmpty()) {
+                                        throw new IllegalStateException("REJECTED ExchangeRequest should be more than zero!");
+                                    }
+                                    return insightDataMapper.insightToDetailInsightResponse(
+                                                    insight,
+                                                    memberNickname,
+                                                    recommended,
+                                                    accused,
+                                                    ExchangeRequestStatus.REJECTED,
+                                                    Boolean.FALSE,
+                                                    null,
+                                                    Boolean.FALSE)
+                                            .toPreviewInsightResponse();
+                                }
+                            }
                         } else {
                             // 교환 신청 X - 교환 완료해야 추천 가능
                             return insightDataMapper.insightToDetailInsightResponse(
-                                    insight, memberNickname, recommended, accused, null, null, null, false)
+                                            insight, memberNickname, recommended, accused, null, null, null, Boolean.FALSE)
                                     .toPreviewInsightResponse();
                         }
                     }

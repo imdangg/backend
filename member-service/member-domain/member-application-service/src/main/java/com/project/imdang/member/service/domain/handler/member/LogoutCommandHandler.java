@@ -26,6 +26,6 @@ public class LogoutCommandHandler {
 
         Member logout = memberDomainService.logout(member);
         Member saved = memberHelper.save(logout);
-        log.info("Member[id:{}] is logout.", saved.getId().getValue());
+        log.info("Member[id: {}] is logout.", saved.getId().getValue());
     }
 }

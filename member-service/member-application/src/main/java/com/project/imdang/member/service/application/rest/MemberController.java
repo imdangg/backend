@@ -42,14 +42,14 @@ public class MemberController {
     public ResponseEntity<DetailMyPageResponse> detail(@AuthenticationPrincipal UUID memberId) {
         DetailMyPageQuery detailMyPageQuery = new DetailMyPageQuery(memberId);
         DetailMyPageResponse detailMyPageResponse = memberApplicationService.detailMyPage(detailMyPageQuery);
-        log.info("MyPage of Member[id : {}] is viewed", memberId);
+        log.info("MyPage of Member[id : {}] is viewed.", memberId);
         return ResponseEntity.ok(detailMyPageResponse);
     }
 
     @GetMapping("/info")
     public ResponseEntity<MemberResponse> info(@RequestParam UUID memberId) {
         MemberResponse memberResponse = memberApplicationService.detailMember(memberId);
-        log.info("Member[id :{}] is retrieved", memberId);
+        log.info("Member[id :{}] is retrieved.", memberId);
         return ResponseEntity.ok(memberResponse);
     }
 

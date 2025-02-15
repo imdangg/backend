@@ -45,7 +45,7 @@ public class NotificationController {
                                                                   @RequestParam(name = "properties", defaultValue = "created_at") String[] properties) {
 
         notificationApplicationService.updateNotificationAsChecked(memberId);
-        log.info("Member[id:{}] new notification is checked", memberId);
+        log.info("New notifications of Member[id: {}] is checked.", memberId);
 
         ListNotificationQuery listNotificationQuery = ListNotificationQuery.builder()
                 .receiverId(memberId)
@@ -56,7 +56,7 @@ public class NotificationController {
                 .properties(properties)
                 .build();
         Page<NotificationResponse> paged = notificationApplicationService.listNotification(listNotificationQuery);
-        log.info("Member[id:{}] notification list is retrieved", memberId);
+        log.info("Notifications of Member[id: {}] are retrieved.", memberId);
         return ResponseEntity.ok(paged);
     }
 }

@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `accuse` (
                                         CONSTRAINT `fk_accuse_insight_1` FOREIGN KEY (`accused_insight_id`) REFERENCES `insight` (`id`) ON DELETE RESTRICT,
                                         CONSTRAINT `fk_accuse_member_1` FOREIGN KEY (`accuse_member_id`) REFERENCES `member` (`id`) ON DELETE RESTRICT,
                                         CONSTRAINT `fk_accuse_member_2` FOREIGN KEY (`accused_member_id`) REFERENCES `member` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 내보낼 데이터가 선택되어 있지 않습니다.
 
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `event_entry` (
                                              `id` int NOT NULL AUTO_INCREMENT,
                                              `timestamp` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
                                              PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 내보낼 데이터가 선택되어 있지 않습니다.
 
@@ -83,21 +83,21 @@ CREATE TABLE IF NOT EXISTS `exchange_request` (
                                                   `requested_insight_id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
                                                   `requested_member_id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
                                                   `status` enum('ACCEPTED','PENDING','REJECTED') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                                  PRIMARY KEY (`id`),
-                                                  UNIQUE KEY `unique_exchange_request_1` (`request_member_id`,`requested_insight_id`),
-                                                  UNIQUE KEY `unique_exchange_request_2` (`requested_member_id`,`member_coupon_id`,`request_member_insight_id`),
-                                                  UNIQUE KEY `unique_exchange_request_3` (`request_member_insight_id`,`requested_insight_id`),
+                                                  PRIMARY KEY (`id`) USING BTREE,
                                                   KEY `fk_exchange_request_member_coupon_1` (`member_coupon_id`),
-                                                  KEY `fk_exchange_request_member_snapshot_1` (`request_member_snapshot_id`),
                                                   KEY `fk_exchange_request_snapshot_1` (`requested_snapshot_id`),
+                                                  KEY `fk_exchange_request_snapshot_2` (`request_member_snapshot_id`),
+                                                  KEY `fk_exchange_request_member_1` (`request_member_id`),
+                                                  KEY `fk_exchange_request_member_2` (`requested_member_id`),
+                                                  KEY `fk_exchange_request_insight_1` (`request_member_insight_id`),
                                                   KEY `fk_exchange_request_insight_2` (`requested_insight_id`),
                                                   CONSTRAINT `fk_exchange_request_insight_1` FOREIGN KEY (`request_member_insight_id`) REFERENCES `insight` (`id`) ON DELETE RESTRICT,
                                                   CONSTRAINT `fk_exchange_request_insight_2` FOREIGN KEY (`requested_insight_id`) REFERENCES `insight` (`id`) ON DELETE RESTRICT,
                                                   CONSTRAINT `fk_exchange_request_member_1` FOREIGN KEY (`request_member_id`) REFERENCES `member` (`id`) ON DELETE RESTRICT,
                                                   CONSTRAINT `fk_exchange_request_member_2` FOREIGN KEY (`requested_member_id`) REFERENCES `member` (`id`) ON DELETE RESTRICT,
                                                   CONSTRAINT `fk_exchange_request_member_coupon_1` FOREIGN KEY (`member_coupon_id`) REFERENCES `member_coupon` (`id`) ON DELETE RESTRICT,
-                                                  CONSTRAINT `fk_exchange_request_member_snapshot_1` FOREIGN KEY (`request_member_snapshot_id`) REFERENCES `member_snapshot` (`id`) ON DELETE RESTRICT,
-                                                  CONSTRAINT `fk_exchange_request_snapshot_1` FOREIGN KEY (`requested_snapshot_id`) REFERENCES `snapshot` (`id`) ON DELETE RESTRICT
+                                                  CONSTRAINT `fk_exchange_request_snapshot_1` FOREIGN KEY (`requested_snapshot_id`) REFERENCES `snapshot` (`id`) ON DELETE RESTRICT,
+                                                  CONSTRAINT `fk_exchange_request_snapshot_2` FOREIGN KEY (`request_member_snapshot_id`) REFERENCES `snapshot` (`id`) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 내보낼 데이터가 선택되어 있지 않습니다.
@@ -181,7 +181,7 @@ CREATE TABLE IF NOT EXISTS `member_coupon` (
                                                KEY `fk_member_coupon_member_1` (`member_id`),
                                                CONSTRAINT `fk_member_coupon_coupon_1` FOREIGN KEY (`coupon_id`) REFERENCES `coupon` (`id`) ON DELETE RESTRICT,
                                                CONSTRAINT `fk_member_coupon_member_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 내보낼 데이터가 선택되어 있지 않습니다.
 
@@ -200,7 +200,7 @@ CREATE TABLE IF NOT EXISTS `member_snapshot` (
                                                  CONSTRAINT `fk_member_snapshot_insight_1` FOREIGN KEY (`insight_id`) REFERENCES `insight` (`id`) ON DELETE RESTRICT,
                                                  CONSTRAINT `fk_member_snapshot_member_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE RESTRICT,
                                                  CONSTRAINT `fk_member_snapshot_snapshot_1` FOREIGN KEY (`snapshot_id`) REFERENCES `snapshot` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 내보낼 데이터가 선택되어 있지 않습니다.
 
@@ -222,10 +222,8 @@ CREATE TABLE IF NOT EXISTS `notification` (
 
 -- 테이블 imdang.offset 구조 내보내기
 CREATE TABLE IF NOT EXISTS `offset` (
-                                        `value` int unsigned NOT NULL,
-                                        `id` int NOT NULL AUTO_INCREMENT,
-                                        PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    `value` int unsigned NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 내보낼 데이터가 선택되어 있지 않습니다.
 
@@ -243,7 +241,7 @@ CREATE TABLE IF NOT EXISTS `recommend` (
                                            CONSTRAINT `fk_recommend_insight` FOREIGN KEY (`recommended_insight_id`) REFERENCES `insight` (`id`) ON DELETE RESTRICT,
                                            CONSTRAINT `fk_recommend_member_1` FOREIGN KEY (`recommend_member_id`) REFERENCES `member` (`id`) ON DELETE RESTRICT,
                                            CONSTRAINT `fk_recommend_member_2` FOREIGN KEY (`recommended_member_id`) REFERENCES `member` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 내보낼 데이터가 선택되어 있지 않습니다.
 
@@ -277,7 +275,7 @@ CREATE TABLE IF NOT EXISTS `snapshot` (
                                           KEY `fk_snapshot_member_1` (`member_id`),
                                           CONSTRAINT `fk_snapshot_insight_1` FOREIGN KEY (`insight_id`) REFERENCES `insight` (`id`) ON DELETE RESTRICT,
                                           CONSTRAINT `fk_snapshot_member_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- 내보낼 데이터가 선택되어 있지 않습니다.
 

@@ -3,12 +3,12 @@ ALTER TABLE accuse ADD CONSTRAINT fk_accuse_member_2 FOREIGN KEY (accused_member
 ALTER TABLE accuse ADD CONSTRAINT fk_accuse_insight_1 FOREIGN KEY (accused_insight_id) REFERENCES insight(id) on delete restrict;
 
 ALTER TABLE exchange_request ADD CONSTRAINT fk_exchange_request_member_coupon_1 FOREIGN KEY (member_coupon_id) REFERENCES member_coupon(id) on delete restrict;
-ALTER TABLE exchange_request ADD CONSTRAINT fk_exchange_request_member_snapshot_1 FOREIGN KEY (request_member_snapshot_id) REFERENCES member_snapshot(id) on delete restrict;
 ALTER TABLE exchange_request ADD CONSTRAINT fk_exchange_request_snapshot_1 FOREIGN KEY (requested_snapshot_id) REFERENCES snapshot(id) on delete restrict;
+ALTER TABLE exchange_request ADD CONSTRAINT fk_exchange_request_snapshot_2 FOREIGN KEY (request_member_snapshot_id) REFERENCES snapshot(id) on delete restrict;
 ALTER TABLE exchange_request ADD CONSTRAINT fk_exchange_request_member_1 FOREIGN KEY (request_member_id) REFERENCES member(id) on delete restrict;
+ALTER TABLE exchange_request ADD CONSTRAINT fk_exchange_request_member_2 FOREIGN KEY (requested_member_id) REFERENCES member(id) on delete restrict;
 ALTER TABLE exchange_request ADD CONSTRAINT fk_exchange_request_insight_1 FOREIGN KEY (request_member_insight_id) REFERENCES insight(id) on delete restrict;
 ALTER TABLE exchange_request ADD CONSTRAINT fk_exchange_request_insight_2 FOREIGN KEY (requested_insight_id) REFERENCES insight(id) on delete restrict;
-ALTER TABLE exchange_request ADD CONSTRAINT fk_exchange_request_member_2 FOREIGN KEY (requested_member_id) REFERENCES member(id) on delete restrict;
 
 ALTER TABLE insight ADD CONSTRAINT fk_insight_member_1 FOREIGN KEY (member_id) REFERENCES member(id) on delete restrict;
 
