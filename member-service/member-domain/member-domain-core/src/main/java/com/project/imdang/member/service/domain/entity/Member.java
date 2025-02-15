@@ -33,6 +33,7 @@ public class Member extends AggregateRoot<MemberId> {
     private String refreshToken;
     private Boolean isLogin;
     private Boolean isDeleted;
+    private Boolean isCouponReceived;
   
     private int accusedCount;
     private MemberStatus status;
@@ -45,6 +46,7 @@ public class Member extends AggregateRoot<MemberId> {
                 .oAuthType(oAuthType)
                 .isDeleted(Boolean.FALSE)
                 .isLogin(Boolean.TRUE)
+                .isCouponReceived(Boolean.FALSE)
                 .status(MemberStatus.ACTIVE)
                 .build();
     }
@@ -63,6 +65,7 @@ public class Member extends AggregateRoot<MemberId> {
                   String refreshToken, 
                   Boolean isLogin, 
                   Boolean isDeleted,
+                  Boolean isCouponReceived,
                   int accusedCount,
                   MemberStatus status,
                   PenaltyPeriod penaltyPeriod) {
@@ -79,6 +82,7 @@ public class Member extends AggregateRoot<MemberId> {
         this.refreshToken = refreshToken;
         this.isLogin = isLogin;
         this.isDeleted = isDeleted;
+        this.isCouponReceived = isCouponReceived;
         this.accusedCount = accusedCount;
         this.status = status;
         this.penaltyPeriod = penaltyPeriod;
@@ -133,5 +137,9 @@ public class Member extends AggregateRoot<MemberId> {
 
     public void plusExchangeRequestCount() {
         this.exchangeCount++;
+    }
+
+    public void updateCouponReceivedStatus() {
+        this.isCouponReceived = Boolean.TRUE;
     }
 }

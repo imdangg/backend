@@ -56,6 +56,7 @@ public class MemberEntity {
     private String refreshToken;
     private Boolean isLogin;
     private Boolean isDeleted;
+    private Boolean isCouponReceived;
 
     private int accusedCount;
     @Enumerated(EnumType.STRING)
