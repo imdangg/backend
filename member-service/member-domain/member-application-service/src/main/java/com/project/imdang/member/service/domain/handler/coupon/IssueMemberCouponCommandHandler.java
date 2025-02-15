@@ -57,7 +57,7 @@ public class IssueMemberCouponCommandHandler {
         MemberId memberId = new MemberId(issueMemberCouponCommand.getMemberId());
         Member member = memberHelper.get(memberId);
         // 2-1. 웰컴 쿠폰 받기 저장
-        if (issueMemberCouponCommand.getName().equals("Welcome")) {
+        if(issueMemberCouponCommand.getName().equals("Welcome")) {
             member.updateCouponReceivedStatus();
             memberHelper.save(member);
         }

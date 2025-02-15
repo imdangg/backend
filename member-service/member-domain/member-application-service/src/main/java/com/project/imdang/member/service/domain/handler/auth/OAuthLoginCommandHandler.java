@@ -59,5 +59,6 @@ public class OAuthLoginCommandHandler {
         memberDomainService.storeRefreshToken(member, tokenResponse.getRefreshToken());
         memberHelper.save(member);
         return LoginResponse.from(tokenResponse, isJoined, member.getIsCouponReceived(), member.getId().getValue(), oAuthInfo.getRefreshToken());
+      
     }
 }
