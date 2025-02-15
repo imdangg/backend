@@ -34,7 +34,6 @@ public class Member extends AggregateRoot<MemberId> {
     private String refreshToken;
     private Boolean isLogin;
     private Boolean isDeleted;
-    private Boolean isCouponReceived;
   
     private int accusedCount;
     private MemberStatus status;
@@ -145,9 +144,5 @@ public class Member extends AggregateRoot<MemberId> {
     public Member updateCouponReceivedStatus() {
         this.isCouponReceived = Boolean.TRUE;
         return this;
-    }
-
-    public void updateCouponReceivedStatus() {
-        this.isCouponReceived = Boolean.TRUE;
     }
 }
