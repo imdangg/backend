@@ -42,4 +42,9 @@ public class MemberHelper {
         log.info("Member[id : {}] is saved.", member.getId().getValue());
         return savedMember;
     }
+
+    public Member getByIdAndIsDeleted(MemberId memberId) {
+        return memberRepository.findByIdAndIsDeleted(memberId)
+                .orElseThrow(() -> new MemberNotFoundException(memberId));
+    }
 }

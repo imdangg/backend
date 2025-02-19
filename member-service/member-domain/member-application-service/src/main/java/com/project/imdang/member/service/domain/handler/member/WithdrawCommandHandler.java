@@ -37,7 +37,7 @@ public class WithdrawCommandHandler {
     public void withdraw(UUID _memberId, OAuthWithdrawCommand oAuthWithdrawCommand) {
         // 1. 멤버 찾기
         MemberId memberId = new MemberId(_memberId);
-        Member member = memberHelper.get(memberId);
+        Member member = memberHelper.getByIdAndIsDeleted(memberId);
         // 2. 탈퇴 처리
         OAuthApiClientHandler withdrawHandler = apiClients.get(oAuthWithdrawCommand.oAuthType());
         withdrawHandler.withdraw(oAuthWithdrawCommand);

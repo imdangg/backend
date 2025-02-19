@@ -56,6 +56,12 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
+    public Optional<Member> findByIdAndIsDeleted(MemberId memberId) {
+        Optional<MemberEntity> memberEntity = memberJpaRepository.findByIdAndIsDeleted(memberId.getValue(), Boolean.FALSE);
+        return memberEntity.map(memberPersistenceMapper::memberEntityToMember);
+    }
+
+    @Override
     @Transactional
     public Member save(Member member) {
         MemberEntity memberEntity = memberPersistenceMapper.memberToMemberEntity(member);

@@ -11,7 +11,7 @@ public interface MemberRepository {
     Optional<Member> findByOAuthIdAndOAuthTypeAndIsDeleted(String oAuthId, OAuthType oAuthType, Boolean isDeleted);
     Optional<Member> findById(MemberId memberId);
     List<Member> findAllByIds(List<MemberId> memberIds);
-
     Optional<Member> findByNickname(String nickname);
+    Optional<Member> findByIdAndIsDeleted(MemberId memberId);
     Member save(Member member);
 }
