@@ -10,4 +10,5 @@ import java.util.UUID;
 public interface MemberJpaRepository extends JpaRepository<MemberEntity, UUID> {
     Optional<MemberEntity> findByAuthIdAndAuthTypeAndIsDeleted(String authId, OAuthType authType, Boolean isDeleted);
     Optional<MemberEntity> findByNickname(String nickname);
+    Optional<MemberEntity> findByIdAndIsDeleted(UUID memberId, Boolean isDeleted);
 }
