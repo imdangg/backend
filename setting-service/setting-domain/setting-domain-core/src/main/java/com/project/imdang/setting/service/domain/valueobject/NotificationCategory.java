@@ -19,7 +19,7 @@ public enum NotificationCategory {
     REJECTED("교환 거절", "ExchangeRequestRejectedEvent", "요청하신 인사이트 교환이 거절됐어요\uD83D\uDE22 지금 눌러서 확인하기.",
             "%s님이 인사이트 교환을 거절했어요."),
 
-    REQUESTED_BY_COUPON("교환 요청", "ExchangeRequestCreatedEvent","누군가가 내 인사이트에 교환을 요청했어요\uD83E\uDD13 지금 눌러서 확인하기.",
+    REQUESTED_BY_COUPON("교환 요청", "ExchangeRequestByCouponCreatedEvent","누군가가 내 인사이트에 교환을 요청했어요\uD83E\uDD13 지금 눌러서 확인하기.",
             "%s님이 패스권을 사용하여 인사이트 교환을 요청했어요.\n인사이트 확인 후 수락 및 거절을 선택해주세요.");
 
     private final String title;
