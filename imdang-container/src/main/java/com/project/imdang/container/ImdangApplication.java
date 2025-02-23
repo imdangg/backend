@@ -16,7 +16,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
         "com.project.imdang.member.service.persistence",
         "com.project.imdang.setting.service.persistence"
 })
-@EnableScheduling
+//@EnableScheduling
 @SpringBootApplication(scanBasePackages = "com.project.imdang")
 public class ImdangApplication {
     public static void main(String[] args) {
