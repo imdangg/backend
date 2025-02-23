@@ -12,6 +12,7 @@ import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExc
 import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
 import com.project.imdang.insight.service.domain.entity.Insight;
 import com.project.imdang.insight.service.domain.entity.Snapshot;
+import com.project.imdang.insight.service.domain.event.ExchangeRequestByCouponCreatedEvent;
 import com.project.imdang.insight.service.domain.event.ExchangeRequestCreatedEvent;
 import com.project.imdang.insight.service.domain.exception.InsightApplicationServiceException;
 import com.project.imdang.insight.service.domain.exception.SnapshotNotFoundException;
@@ -71,7 +72,7 @@ public class RequestExchangeCommandHandler {
                     throw new InsightApplicationServiceException(ErrorCode.ALREADY_EXCHANGE_REQUESTED);
                 });
 
-        ExchangeRequestCreatedEvent exchangeRequestCreatedEvent;
+        ExchangeRequest saved;
         if (requestExchangeInsightCommand.getRequestMemberInsightId() != null) {
 
             // 상호 교환 불가
@@ -99,8 +100,9 @@ public class RequestExchangeCommandHandler {
             Snapshot requestMemberSnapshot = snapshotRepository.findLatestByInsightId(requestMemberInsightId)
                     .orElseThrow(() -> new SnapshotNotFoundException(requestedInsightId));
 
-            exchangeRequestCreatedEvent = exchangeDomainService.requestExchange(exchangeRequest, requestedSnapshot, requestMemberSnapshot);
-
+            ExchangeRequestCreatedEvent exchangeRequestCreatedEvent = exchangeDomainService.requestExchange(exchangeRequest, requestedSnapshot, requestMemberSnapshot);
+            saved = exchangeRequestHelper.save(exchangeRequestCreatedEvent.getExchangeRequest());
+            eventPublisher.publish(exchangeRequestCreatedEvent);
         } else {
             // 쿠폰 사용
             Assert.notNull(requestExchangeInsightCommand.getMemberCouponId(), "MemberCouponId must not be null!");
@@ -121,11 +123,10 @@ public class RequestExchangeCommandHandler {
             ExchangeRequest exchangeRequest = exchangeRequestDataMapper.requestExchangeInsightCommandToExchangeRequest(requestExchangeInsightCommand);
             Snapshot requestedSnapshot = snapshotRepository.findLatestByInsightId(requestedInsightId)
                     .orElseThrow(() -> new SnapshotNotFoundException(requestedInsightId));
-            exchangeRequestCreatedEvent = exchangeDomainService.requestExchangeWithCoupon(exchangeRequest, requestedSnapshot, memberCouponId);
+            ExchangeRequestByCouponCreatedEvent exchangeRequestByCouponCreatedEvent = exchangeDomainService.requestExchangeWithCoupon(exchangeRequest, requestedSnapshot, memberCouponId);
+            saved = exchangeRequestHelper.save(exchangeRequestByCouponCreatedEvent.getExchangeRequest());
+            eventPublisher.publish(exchangeRequestByCouponCreatedEvent);
         }
-
-        ExchangeRequest saved = exchangeRequestHelper.save(exchangeRequestCreatedEvent.getExchangeRequest());
-        eventPublisher.publish(exchangeRequestCreatedEvent);
 
         return exchangeRequestDataMapper.exchangeRequestToRequestExchangeInsightResponse(saved);
     }

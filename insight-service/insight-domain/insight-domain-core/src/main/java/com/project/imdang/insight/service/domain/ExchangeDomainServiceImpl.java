@@ -4,6 +4,7 @@ import com.project.imdang.domain.valueobject.MemberCouponId;
 import com.project.imdang.insight.service.domain.entity.ExchangeRequest;
 import com.project.imdang.insight.service.domain.entity.Snapshot;
 import com.project.imdang.insight.service.domain.event.ExchangeRequestAcceptedEvent;
+import com.project.imdang.insight.service.domain.event.ExchangeRequestByCouponCreatedEvent;
 import com.project.imdang.insight.service.domain.event.ExchangeRequestCreatedEvent;
 import com.project.imdang.insight.service.domain.event.ExchangeRequestRejectedEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +22,10 @@ public class ExchangeDomainServiceImpl implements ExchangeDomainService {
     }
 
     @Override
-    public ExchangeRequestCreatedEvent requestExchangeWithCoupon(ExchangeRequest exchangeRequest, Snapshot requestedSnapshot, MemberCouponId memberCouponId) {
+    public ExchangeRequestByCouponCreatedEvent requestExchangeWithCoupon(ExchangeRequest exchangeRequest, Snapshot requestedSnapshot, MemberCouponId memberCouponId) {
         exchangeRequest.initialize(requestedSnapshot, null, memberCouponId);
         log.info("ExchangeRequest[id: {}] is initialized.", exchangeRequest.getId().getValue());
-        return new ExchangeRequestCreatedEvent(exchangeRequest, ZonedDateTime.now());
+        return new ExchangeRequestByCouponCreatedEvent(exchangeRequest, ZonedDateTime.now());
     }
 
     @Override
