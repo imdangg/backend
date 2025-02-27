@@ -19,7 +19,7 @@ public class EventForwarder {
     private final EventListener eventListener;
 
 
-    @Scheduled(initialDelay = 7000L, fixedDelay = 7000L)
+    @Scheduled(initialDelay = 1000L, fixedDelay = 30000L)
     public void getAndSend() {
         long nextOffset = getNextOffset();
         List<EventEntry> eventEntries = eventManager.get(nextOffset, DEFAULT_LIMIT_SIZE);
