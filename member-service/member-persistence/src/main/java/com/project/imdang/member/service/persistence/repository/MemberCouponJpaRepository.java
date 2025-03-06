@@ -9,5 +9,5 @@ import java.util.UUID;
 
 public interface MemberCouponJpaRepository extends JpaRepository<MemberCouponEntity, Long> {
     List<MemberCouponEntity> findAllByMemberIdAndUsed(UUID memberId, Boolean used);
-    Optional<MemberCouponEntity> findByCouponIdAndMemberId(UUID couponId, UUID memberId);
+    Boolean existsByCouponIdAndMemberId(UUID couponId, UUID memberId);
 }
