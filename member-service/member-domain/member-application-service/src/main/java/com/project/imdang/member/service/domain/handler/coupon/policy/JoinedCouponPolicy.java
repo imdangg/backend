@@ -28,7 +28,7 @@ public class JoinedCouponPolicy implements CouponPolicy{
 
     // 재발급 검사
     private Boolean checkReissue(CouponId couponId, MemberId memberId) {
-        if(memberCouponRepository.findByCouponIdAndMemberId(couponId, memberId).isPresent()){
+        if(memberCouponRepository.existsByCouponIdAndMemberId(couponId, memberId)){
             throw new MemberCouponDomainException("Already issued Coupon!");
         }
         return Boolean.TRUE;

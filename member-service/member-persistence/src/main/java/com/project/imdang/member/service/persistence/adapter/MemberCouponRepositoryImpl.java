@@ -49,9 +49,8 @@ public class MemberCouponRepositoryImpl implements MemberCouponRepository {
     }
 
     @Override
-    public Optional<MemberCoupon> findByCouponIdAndMemberId(CouponId couponId, MemberId memberId) {
-        return memberCouponJpaRepository.findByCouponIdAndMemberId(couponId.getValue(), memberId.getValue())
-                .map(memberCouponPersistenceMapper::memberCouponEntityToMemberCoupon);
+    public Boolean existsByCouponIdAndMemberId(CouponId couponId, MemberId memberId) {
+        return memberCouponJpaRepository.existsByCouponIdAndMemberId(couponId.getValue(), memberId.getValue());
     }
 
     @Override
