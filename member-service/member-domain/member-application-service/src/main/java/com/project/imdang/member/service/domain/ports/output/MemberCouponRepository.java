@@ -14,7 +14,7 @@ public interface MemberCouponRepository {
     MemberCoupon save(MemberCoupon memberCoupon);
     List<MemberCoupon> saveAll(List<MemberCoupon> memberCoupons);
 
-    Optional<MemberCoupon> findByCouponIdAndMemberId(CouponId couponId, MemberId memberId);
+    Boolean existsByCouponIdAndMemberId(CouponId couponId, MemberId memberId);
 
     Optional<MemberCoupon> findById(MemberCouponId memberCouponId);
 }
