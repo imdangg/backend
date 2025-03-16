@@ -4,7 +4,7 @@ import com.project.imdang.domain.message.ExchangeRequestRejectedCountRequestMess
 import com.project.imdang.domain.message.ExchangeRequestRejectedRequestMessage;
 import com.project.imdang.domain.valueobject.ExchangeRequestId;
 import com.project.imdang.domain.valueobject.MemberCouponId;
-import com.project.imdang.event.EventPublisher;
+import com.project.imdang.event.EventProcessor;
 import com.project.imdang.insight.service.domain.ExchangeDomainService;
 import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.reject.RejectExchangeRequestResponse;
@@ -32,7 +32,7 @@ public class RejectExchangeRequestCommandHandler {
 
     private final ExchangeRequestRejectedRequestMessagePublisher exchangeRequestRejectedRequestMessagePublisher;
     private final ExchangeRequestRejectedCountMessagePublisher exchangeRequestRejectedCountMessagePublisher;
-    private final EventPublisher eventPublisher;
+    private final EventProcessor eventProcessor;
 
     @Transactional
     public RejectExchangeRequestResponse rejectExchangeRequest(
@@ -61,7 +61,7 @@ public class RejectExchangeRequestCommandHandler {
         ExchangeRequestRejectedCountRequestMessage exchangeRequestRejectedCountRequestMessage = new ExchangeRequestRejectedCountRequestMessage(
                 exchangeRequestRejectedEvent.getExchangeRequest().getRequestMemberId().getValue());
         exchangeRequestRejectedCountMessagePublisher.publish(exchangeRequestRejectedCountRequestMessage);
-        eventPublisher.publish(exchangeRequestRejectedEvent);
+        eventProcessor.process(exchangeRequestRejectedEvent);
 
         log.info("ExchangeRequest[id: {}] is rejected.", exchangeRequest.getId().getValue());
         ExchangeRequest saved = exchangeRequestHelper.save(exchangeRequestRejectedEvent.getExchangeRequest());

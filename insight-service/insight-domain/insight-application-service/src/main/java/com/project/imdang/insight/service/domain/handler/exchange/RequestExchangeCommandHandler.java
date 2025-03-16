@@ -5,7 +5,7 @@ import com.project.imdang.domain.message.ExchangeRequestCreatedRequestMessage;
 import com.project.imdang.domain.valueobject.InsightId;
 import com.project.imdang.domain.valueobject.MemberCouponId;
 import com.project.imdang.domain.valueobject.MemberId;
-import com.project.imdang.event.EventPublisher;
+import com.project.imdang.event.EventProcessor;
 import com.project.imdang.insight.service.domain.ExchangeDomainService;
 import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.request.RequestExchangeInsightResponse;
@@ -52,7 +52,7 @@ public class RequestExchangeCommandHandler {
     private final InsightMemberLookup insightMemberLookup;
 
     private final ExchangeRequestCreatedRequestMessagePublisher exchangeRequestCreatedRequestMessagePublisher;
-    private final EventPublisher eventPublisher;
+    private final EventProcessor eventProcessor;
 
     @Transactional
     public RequestExchangeInsightResponse requestExchange(RequestExchangeInsightCommand requestExchangeInsightCommand) {
@@ -102,7 +102,7 @@ public class RequestExchangeCommandHandler {
 
             ExchangeRequestCreatedEvent exchangeRequestCreatedEvent = exchangeDomainService.requestExchange(exchangeRequest, requestedSnapshot, requestMemberSnapshot);
             saved = exchangeRequestHelper.save(exchangeRequestCreatedEvent.getExchangeRequest());
-            eventPublisher.publish(exchangeRequestCreatedEvent);
+            eventProcessor.process(exchangeRequestCreatedEvent);
         } else {
             // 쿠폰 사용
             Assert.notNull(requestExchangeInsightCommand.getMemberCouponId(), "MemberCouponId must not be null!");
@@ -125,7 +125,7 @@ public class RequestExchangeCommandHandler {
                     .orElseThrow(() -> new SnapshotNotFoundException(requestedInsightId));
             ExchangeRequestByCouponCreatedEvent exchangeRequestByCouponCreatedEvent = exchangeDomainService.requestExchangeWithCoupon(exchangeRequest, requestedSnapshot, memberCouponId);
             saved = exchangeRequestHelper.save(exchangeRequestByCouponCreatedEvent.getExchangeRequest());
-            eventPublisher.publish(exchangeRequestByCouponCreatedEvent);
+            eventProcessor.process(exchangeRequestByCouponCreatedEvent);
         }
 
         return exchangeRequestDataMapper.exchangeRequestToRequestExchangeInsightResponse(saved);

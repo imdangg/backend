@@ -1,10 +1,10 @@
 package com.project.imdang.setting.service.domain;
 
-import com.project.imdang.setting.service.domain.dto.CreateNotificationCommand;
 import com.project.imdang.setting.service.domain.dto.ListNotificationQuery;
-import com.project.imdang.setting.service.domain.dto.PushNotificationRequest;
 import com.project.imdang.setting.service.domain.dto.NotificationResponse;
-import com.project.imdang.setting.service.domain.handler.*;
+import com.project.imdang.setting.service.domain.handler.CheckNewNotificationCommandHandler;
+import com.project.imdang.setting.service.domain.handler.ListNotificationCommandHandler;
+import com.project.imdang.setting.service.domain.handler.UpdateNotificationAsCheckedHandler;
 import com.project.imdang.setting.service.domain.ports.input.service.NotificationApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,9 +20,7 @@ public class NotificationApplicationServiceImpl implements NotificationApplicati
 
     private final CheckNewNotificationCommandHandler checkNewNotificationCommandHandler;
     private final ListNotificationCommandHandler listNotificationCommandHandler;
-    private final CreateNotificationCommandHandler createNotificationCommandHandler;
     private final UpdateNotificationAsCheckedHandler updateNotificationAsCheckedHandler;
-    private final SendNotificationHandler sendNotificationHandler;
 
     @Override
     public Boolean checkNewNotification(UUID memberId) {
@@ -34,27 +32,10 @@ public class NotificationApplicationServiceImpl implements NotificationApplicati
         return listNotificationCommandHandler.listNotification(listNotificationQuery);
     }
 
-    @Override
-    public void createNotification(CreateNotificationCommand createNotificationCommand) {
-        createNotificationCommandHandler.createNotification(createNotificationCommand);
-    }
-
     // 조회 API 실행 시
     // TODO : Async 처리
     @Override
     public void updateNotificationAsChecked(UUID memberId) {
         updateNotificationAsCheckedHandler.updateAsChecked(memberId);
     }
-
-    @Override
-    public void sendNotification(PushNotificationRequest notificationRequest) {
-        sendNotificationHandler.send(notificationRequest);
-    }
-
-    // 조회 API 실행 시
-    // TODO : Async 처리
-//    @Override
-//    public void updateNotificationAsChecked(Long notificationId) {
-//        updateNotificationAsCheckedHandler.updateAsChecked(notificationId);
-//    }
 }
