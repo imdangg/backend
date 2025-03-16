@@ -2,7 +2,7 @@ package com.project.imdang.insight.service.domain.handler.exchange;
 
 import com.project.imdang.domain.message.ExchangeRequestAcceptedCountRequestMessage;
 import com.project.imdang.domain.valueobject.ExchangeRequestId;
-import com.project.imdang.event.EventPublisher;
+import com.project.imdang.event.EventProcessor;
 import com.project.imdang.insight.service.domain.ExchangeDomainService;
 import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExchangeRequestCommand;
 import com.project.imdang.insight.service.domain.dto.exchange.accept.AcceptExchangeRequestResponse;
@@ -29,7 +29,7 @@ public class AcceptExchangeRequestCommandHandler {
 
     private final MemberSnapshotHelper memberSnapshotHelper;
     private final ExchangeRequestAcceptedCountMessagePublisher exchangeRequestAcceptedCountMessagePublisher;
-    private final EventPublisher eventPublisher;
+    private final EventProcessor eventProcessor;
 
     @Transactional
     public AcceptExchangeRequestResponse acceptExchangeRequest(
@@ -57,7 +57,7 @@ public class AcceptExchangeRequestCommandHandler {
         ExchangeRequestAcceptedCountRequestMessage event = new ExchangeRequestAcceptedCountRequestMessage(
                 exchangeRequest.getRequestMemberId().getValue());
         exchangeRequestAcceptedCountMessagePublisher.publish(event);
-        eventPublisher.publish(exchangeRequestAcceptedEvent);
+        eventProcessor.process(exchangeRequestAcceptedEvent);
 
         log.info("ExchangeRequest[id: {}] is accepted.", exchangeRequest.getId().getValue());
         ExchangeRequest saved = exchangeRequestHelper.save(exchangeRequestAcceptedEvent.getExchangeRequest());
