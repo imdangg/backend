@@ -61,7 +61,7 @@ public class SendNotificationListener implements EventListener {
     private UUID getReceiverId(String payload) {
         try {
             JsonNode jsonNode = objectMapper.readTree(payload);
-            String receiverId = jsonNode.get("exchangeRequest").get("requestMemberId").get("value").asText();
+            String receiverId = jsonNode.get("exchangeRequest").get("requestedMemberId").get("value").asText();
             return UUID.fromString(receiverId);
         } catch (JsonProcessingException e) {
             // TODO - 예외 처리
