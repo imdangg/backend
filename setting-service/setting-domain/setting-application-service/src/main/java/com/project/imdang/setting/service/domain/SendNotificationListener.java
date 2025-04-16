@@ -38,9 +38,12 @@ public class SendNotificationListener implements EventListener {
         try {
 
             NotificationCategory category = NotificationCategory.getType(eventEntry.getType());
-            UUID receiverId = getReceiverId(eventEntry.getPayload());
+            // 요청한 사람
+            UUID senderId = getMemberId(eventEntry.getPayload(), "requestMemberId");
+            // 받는 사람
+            UUID receiverId = getMemberId(eventEntry.getPayload(), "requestedMemberId");
 
-            Optional<MemberInfo> memberInfo = settingMemberLookup.lookupByMemberId(new MemberId(receiverId));
+            Optional<MemberInfo> memberInfo = settingMemberLookup.lookupByMemberId(new MemberId(senderId));
             if (memberInfo.isPresent()) {
                 String message = String.format(category.getNotificationContent(), memberInfo.get().nickname());
 
@@ -58,11 +61,11 @@ public class SendNotificationListener implements EventListener {
         }
     }
 
-    private UUID getReceiverId(String payload) {
+    private UUID getMemberId(String payload, String target) {
         try {
             JsonNode jsonNode = objectMapper.readTree(payload);
-            String receiverId = jsonNode.get("exchangeRequest").get("requestedMemberId").get("value").asText();
-            return UUID.fromString(receiverId);
+            String memberId = jsonNode.get("exchangeRequest").get(target).get("value").asText();
+            return UUID.fromString(memberId);
         } catch (JsonProcessingException e) {
             // TODO - 예외 처리
             throw new DomainException("JSON ERROR!");
