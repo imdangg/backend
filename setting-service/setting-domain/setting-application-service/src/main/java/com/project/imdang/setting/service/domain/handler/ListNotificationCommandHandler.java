@@ -4,6 +4,7 @@ import com.project.imdang.domain.utils.PagingUtils;
 import com.project.imdang.domain.valueobject.MemberId;
 import com.project.imdang.setting.service.domain.dto.ListNotificationQuery;
 import com.project.imdang.setting.service.domain.dto.NotificationResponse;
+import com.project.imdang.setting.service.domain.entity.Notification;
 import com.project.imdang.setting.service.domain.mapper.NotificationDataMapper;
 import com.project.imdang.setting.service.domain.ports.output.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +30,8 @@ public class ListNotificationCommandHandler {
                 listNotificationQuery.getPageNumber(), listNotificationQuery.getPageSize(), listNotificationQuery.getDirection(), listNotificationQuery.getProperties());
         MemberId memberId = new MemberId(listNotificationQuery.getReceiverId());
         ZonedDateTime minusOneYear = ZonedDateTime.now().minusYears(1);
+        Page<Notification> test = notificationRepository.findAllByReceiverIdAndIsCheckedAndCreatedAt(memberId, listNotificationQuery.isChecked(), minusOneYear, pageRequest);
 
-        return notificationRepository.findAllByReceiverIdAndIsCheckedAndCreatedAt(memberId, listNotificationQuery.isChecked(), minusOneYear, pageRequest)
-                .map(notificationDataMapper::notificationToNotificationResponse);
+        return test.map(notificationDataMapper::notificationToNotificationResponse);
     }
 }
