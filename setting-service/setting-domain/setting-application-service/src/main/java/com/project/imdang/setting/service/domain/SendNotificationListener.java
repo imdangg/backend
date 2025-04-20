@@ -39,9 +39,22 @@ public class SendNotificationListener implements EventListener {
 
             NotificationCategory category = NotificationCategory.getType(eventEntry.getType());
             // 요청한 사람
-            UUID senderId = getMemberId(eventEntry.getPayload(), "requestMemberId");
+            UUID requestMemberId = getMemberId(eventEntry.getPayload(), "requestMemberId");
             // 받는 사람
-            UUID receiverId = getMemberId(eventEntry.getPayload(), "requestedMemberId");
+            UUID requestedMemberId = getMemberId(eventEntry.getPayload(), "requestedMemberId");
+            UUID receiverId;
+            UUID senderId;
+
+            //1. 교환 요청 -> 요청 받은 사람에게
+            if (category.equals(NotificationCategory.REQUESTED) || category.equals(NotificationCategory.REQUESTED_BY_COUPON)) {
+                senderId = requestMemberId;
+                receiverId = requestedMemberId;
+            }
+            // 2. 승인 및 거절은 요청한 사람에게
+            else {
+                senderId = requestedMemberId;
+                receiverId = requestMemberId;
+            }
 
             Optional<MemberInfo> memberInfo = settingMemberLookup.lookupByMemberId(new MemberId(senderId));
             if (memberInfo.isPresent()) {

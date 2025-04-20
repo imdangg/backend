@@ -31,7 +31,7 @@ public class NotificationRepositoryImpl implements NotificationRepository {
 
     @Override
     public Page<Notification> findAllByReceiverIdAndIsCheckedAndCreatedAt(MemberId receiverId, Boolean checked, ZonedDateTime time, PageRequest pageRequest) {
-        return notificationJpaRepository.findAllByReceiverIdAndIsCheckedAndCreatedAtAfter(receiverId.getValue(),checked,time,pageRequest)
+        return notificationJpaRepository.findAllByReceiverIdAndIsCheckedAndCreatedAtAfter(receiverId.getValue().toString(),checked,time,pageRequest)
                 .map(notificationPersistenceMapper::notificationEntityToNotification);
     }
 
