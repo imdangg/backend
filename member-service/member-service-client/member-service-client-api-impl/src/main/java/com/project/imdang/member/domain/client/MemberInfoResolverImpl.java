@@ -13,20 +13,22 @@ import java.util.UUID;
 @Component
 public class MemberInfoResolverImpl implements MemberDataResolver {
 
-    private final MemberFeignClient memberFeignClient;
+//    private final MemberFeignClient memberFeignClient;
 
     @Override
     public Optional<MemberData> resolve(MemberId memberId) {
-        UUID id = memberId.getValue();
-        MemberData memberData = memberFeignClient.getMemberData(id).getBody();
-        return Optional.ofNullable(memberData);
+        return Optional.empty();
+//        UUID id = memberId.getValue();
+//        MemberData memberData = memberFeignClient.getMemberData(id).getBody();
+//        return Optional.ofNullable(memberData);
     }
 
     @Override
     public List<MemberData> resolve(List<MemberId> memberIds) {
-        List<UUID> ids = memberIds.stream()
-                .map(BaseId::getValue)
-                .toList();
-        return memberFeignClient.listMemberData(ids).getBody();
+        return null;
+//        List<UUID> ids = memberIds.stream()
+//                .map(BaseId::getValue)
+//                .toList();
+//        return memberFeignClient.listMemberData(ids).getBody();
     }
 }

@@ -16,11 +16,17 @@ dependencies {
     implementation project(':insight-service:insight-persistence')
     implementation project(':insight-service:insight-domain:insight-application-service')
     implementation project(':insight-service:insight-domain:insight-domain-core')
+    implementation project(':insight-service:insight-messaging:listener')
+    implementation project(':insight-service:insight-messaging:message')
+    implementation project(':insight-service:insight-messaging:publisher')
 
     implementation project(':member-service:member-application')
     implementation project(':member-service:member-persistence')
     implementation project(':member-service:member-domain:member-application-service')
     implementation project(':member-service:member-domain:member-domain-core')
+    implementation project(':member-service:member-messaging:listener')
+    implementation project(':member-service:member-messaging:message')
+    implementation project(':member-service:member-messaging:publisher')
 
     implementation project(':setting-service:setting-application')
     implementation project(':setting-service:setting-persistence')

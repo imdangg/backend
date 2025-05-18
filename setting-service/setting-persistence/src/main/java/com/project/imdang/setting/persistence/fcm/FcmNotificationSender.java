@@ -23,7 +23,7 @@ import java.time.ZonedDateTime;
 @Component
 public class FcmNotificationSender implements NotificationSender {
 
-    private final FirebaseMessaging firebaseMessaging;
+//    private final FirebaseMessaging firebaseMessaging;
     private final MemberDataResolver memberResolver;
 
     @Retryable(
@@ -54,12 +54,12 @@ public class FcmNotificationSender implements NotificationSender {
                 .putData("time", ZonedDateTime.now().toString())
                 .setAndroidConfig(androidConfig)
                 .build();
-        try {
-            firebaseMessaging.send(message);
-        } catch (FirebaseMessagingException e) {
-            // TODO - 예외 처리
-            throw new RuntimeException(e);
-        }
+//        try {
+//            firebaseMessaging.send(message);
+//        } catch (FirebaseMessagingException e) {
+//            // TODO - 예외 처리
+//            throw new RuntimeException(e);
+//        }
     }
 
     private AndroidConfig getAndroidConfig(String title, String body) {
