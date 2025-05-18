@@ -1,6 +1,16 @@
-bootJar {
-    enabled = false
-}
-jar {
-    enabled = true
+dependencies {
+    implementation project(':member-service:member-domain:member-application-service')
+    implementation project(':member-service:member-domain:member-domain-core')
+    implementation project(':common:common-domain:common-domain-core')
+
+    implementation project(':infrastructure:feign')
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    implementation 'io.jsonwebtoken:jjwt:0.12.6'
+    implementation 'com.auth0:java-jwt:4.0.0'
+    implementation 'org.bouncycastle:bcpkix-jdk18on:1.72'
 }

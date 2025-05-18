@@ -1,6 +1,18 @@
-bootJar {
-    enabled = false
-}
-jar {
-    enabled = true
+dependencies {
+    implementation project(':setting-service:setting-domain:setting-application-service')
+    implementation project(':setting-service:setting-domain:setting-domain-core')
+    implementation project(':common:common-domain:common-domain-core')
+
+    implementation project(':member-service:member-service-client:member-service-client-api')
+    implementation project(':member-service:member-service-client:member-service-client-api-impl')
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    implementation 'org.springframework.retry:spring-retry'
+    implementation 'org.springframework:spring-aspects'
+
+    implementation 'com.google.firebase:firebase-admin:9.2.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
 }

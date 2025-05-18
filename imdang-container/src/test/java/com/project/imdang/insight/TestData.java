@@ -1,0 +1,137 @@
+package com.project.imdang.insight;
+
+import com.project.imdang.common.domain.valueobject.Access;
+import com.project.imdang.common.domain.valueobject.Address;
+import com.project.imdang.common.domain.valueobject.ApartmentComplex;
+import com.project.imdang.common.domain.valueobject.ComplexEnvironment;
+import com.project.imdang.common.domain.valueobject.Infra;
+import com.project.imdang.common.domain.valueobject.InsightId;
+import com.project.imdang.common.domain.valueobject.MemberId;
+import com.project.imdang.common.domain.valueobject.ObjectiveItem;
+import com.project.imdang.common.domain.valueobject.VisitMethod;
+import com.project.imdang.common.domain.valueobject.VisitTime;
+import com.project.imdang.insight.domain.dto.insight.accuse.AccuseInsightCommand;
+import com.project.imdang.insight.domain.dto.insight.create.CreateInsightCommand;
+import com.project.imdang.insight.domain.dto.insight.delete.DeleteInsightCommand;
+import com.project.imdang.insight.domain.dto.insight.recommend.RecommendInsightCommand;
+import com.project.imdang.insight.domain.dto.insight.update.UpdateInsightCommand;
+import org.springframework.util.Assert;
+
+import java.time.LocalDate;
+import java.util.Set;
+import java.util.UUID;
+
+public class TestData {
+
+    public final static UUID memberId = UUID.fromString("3eff967b-84b8-4ec4-941b-ef3f0a26c0b9");
+    private InsightId insightId;
+
+    public TestData() {}
+
+    public TestData(UUID insightId) {
+        this.insightId = new InsightId(insightId);
+    }
+
+    CreateInsightCommand createInsightCommand() {
+//        byte[] bytes = "content".getBytes();
+//        MockMultipartFile mainImage = new MockMultipartFile("mainImage-1", bytes);
+        return CreateInsightCommand.builder()
+                .memberId(new MemberId(memberId))
+                .score(80)
+//                .mainImage(mainImage)
+                .title("title-1")
+                .address(TestData.address)
+                .apartmentComplex(TestData.apartmentComplex)
+                .visitAt(LocalDate.now().minusDays(14))
+                .visitTimes(Set.of(VisitTime.아침))
+                .visitMethods(Set.of(VisitMethod.대중교통))
+                .access(Access.허락시_가능)
+                .summary("지하철역과 도보 10분 거리로 접근성이 좋지만, 근처 공사로 소음 문제가 있을 수 있을 것 같아요. 지하철역과 도보 10분 거리로 접근성이 좋지만, 근처 공사로 소음 문제가 있을 수 있을 것 같아요. 하지만 단지 내 공원이 잘 조성되어 있어 가족 단위 거주자에게 적합할 것 같아요.")
+                .infra(TestData.infra)
+                .complexEnvironment(TestData.complexEnvironment)
+                .build();
+    }
+
+    UpdateInsightCommand updateInsightCommand() {
+        Assert.notNull(insightId, "InsightId must not be null!");
+        return UpdateInsightCommand.builder()
+                .insightId(insightId)
+                .score(95)
+//                .mainImage(updatedMainImage)
+                .title("updated-title-1")
+                .address(TestData.address)
+                .apartmentComplex(TestData.apartmentComplex)
+                .visitAt(LocalDate.now().minusDays(13))
+                .visitTimes(Set.of(VisitTime.저녁))
+                .visitMethods(Set.of(VisitMethod.자차, VisitMethod.도보))
+                .access(Access.허락시_가능)
+                .summary("updated-summary-1")
+                .infra(TestData.updatedInfra)
+                .complexEnvironment(TestData.updatedComplexEnvironment)
+                .build();
+    }
+
+    DeleteInsightCommand deleteInsightCommand() {
+        Assert.notNull(insightId, "InsightId must not be null!");
+        return DeleteInsightCommand.builder()
+                .insightId(insightId)
+                .build();
+    }
+
+    RecommendInsightCommand recommendInsightCommand() {
+        Assert.notNull(insightId, "InsightId must not be null!");
+        return RecommendInsightCommand.builder()
+                .insightId(insightId)
+                .build();
+    }
+
+    AccuseInsightCommand accuseInsightCommand() {
+        Assert.notNull(insightId, "InsightId must not be null!");
+        return AccuseInsightCommand.builder()
+                .insightId(insightId)
+                .accuseMemberId(new MemberId(UUID.randomUUID()))
+                .build();
+    }
+
+    static Address address = Address.builder()
+            .siDo("서울시")
+            .siGunGu("강남구")
+            .eupMyeonDong("신논현동")
+            .buildingNumber("1")
+            .build();
+    static ApartmentComplex apartmentComplex = ApartmentComplex.builder()
+            .name("신논현 더 센트럴 푸르지오")
+            .build();
+
+    static Infra infra = Infra.builder()
+            .transportations(Set.of(Infra.Transportation.버스_정류장_주변, Infra.Transportation.주차_편리))
+            .schoolDistricts(Set.of(Infra.SchoolDistrict.고등학교))
+            .amenities(Set.of(Infra.Amenity.병원))
+            .facilities(Set.of(Infra.Facility.도서관, Infra.Facility.수영장))
+            .surroundings(Set.of(Infra.Surroundings.강, Infra.Surroundings.교회))
+            .text("infra_text")
+            .build();
+
+    static ComplexEnvironment complexEnvironment = ComplexEnvironment.builder()
+            .buildingCondition(ObjectiveItem.좋아요)
+            .security(ObjectiveItem.평범해요)
+            .childrenFacility(ObjectiveItem.최고예요)
+            .text("complex_environment_text")
+            .build();
+
+    static Infra updatedInfra = Infra.builder()
+            .transportations(Set.of(Infra.Transportation.해당_없음))
+            .schoolDistricts(Set.of(Infra.SchoolDistrict.어린이집, Infra.SchoolDistrict.초품아))
+            .amenities(Set.of(Infra.Amenity.해당_없음))
+            .facilities(Set.of(Infra.Facility.해당_없음))
+            .surroundings(Set.of(Infra.Surroundings.해당_없음))
+            .text("updated_infra_text")
+            .build();
+
+    static ComplexEnvironment updatedComplexEnvironment = ComplexEnvironment.builder()
+            .buildingCondition(ObjectiveItem.별로에요)
+            .security(ObjectiveItem.별로에요)
+            .childrenFacility(ObjectiveItem.별로에요)
+            .text("updated_complex_environment_text")
+            .build();
+}
