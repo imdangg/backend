@@ -1,0 +1,48 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.4'
+    id 'io.spring.dependency-management' version '1.1.6'
+}
+
+bootJar {
+    enabled = true
+}
+jar {
+    enabled = false
+}
+
+dependencies {
+    implementation project(':insight-service:insight-application')
+    implementation project(':insight-service:insight-persistence')
+    implementation project(':insight-service:insight-domain:insight-application-service')
+    implementation project(':insight-service:insight-domain:insight-domain-core')
+
+    implementation project(':member-service:member-application')
+    implementation project(':member-service:member-persistence')
+    implementation project(':member-service:member-domain:member-application-service')
+    implementation project(':member-service:member-domain:member-domain-core')
+
+    implementation project(':setting-service:setting-application')
+    implementation project(':setting-service:setting-persistence')
+    implementation project(':setting-service:setting-domain:setting-application-service')
+    implementation project(':setting-service:setting-domain:setting-domain-core')
+
+    implementation project(':common:common-application')
+    implementation project(':common:common-domain:common-application-service')
+    implementation project(':common:common-domain:common-domain-core')
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+    implementation 'com.github.napstr:logback-discord-appender:1.0.0'
+
+    //JWT
+    implementation 'io.jsonwebtoken:jjwt:0.12.6'
+    implementation 'com.auth0:java-jwt:4.0.0'
+    implementation 'org.bouncycastle:bcpkix-jdk18on:1.72'
+}
+
+tasks.named('bootJar') {
+    mainClass.set('com.project.imdang.ImdangApplication')
+}

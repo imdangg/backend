@@ -30,18 +30,6 @@ CREATE TABLE IF NOT EXISTS `accuse` (
                                         CONSTRAINT `fk_accuse_member_2` FOREIGN KEY (`accused_member_id`) REFERENCES `member` (`id`) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- 내보낼 데이터가 선택되어 있지 않습니다.
-
--- 테이블 imdang.coupon 구조 내보내기
-CREATE TABLE IF NOT EXISTS `coupon` (
-                                        `id` char(36) COLLATE utf8mb4_general_ci NOT NULL,
-                                        `expiration_date` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-                                        `name` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-                                        PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- 내보낼 데이터가 선택되어 있지 않습니다.
-
 -- 테이블 imdang.district 구조 내보내기
 CREATE TABLE IF NOT EXISTS `district` (
                                           `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
@@ -55,52 +43,6 @@ CREATE TABLE IF NOT EXISTS `district` (
                                           `ex_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
                                           PRIMARY KEY (`code`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- 내보낼 데이터가 선택되어 있지 않습니다.
-
--- 테이블 imdang.event_entry 구조 내보내기
-CREATE TABLE IF NOT EXISTS `event_entry` (
-                                             `type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                             `payload` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                             `content_type` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                             `id` int NOT NULL AUTO_INCREMENT,
-                                             `timestamp` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                             PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- 내보낼 데이터가 선택되어 있지 않습니다.
-
--- 테이블 imdang.exchange_request 구조 내보내기
-CREATE TABLE IF NOT EXISTS `exchange_request` (
-                                                  `member_coupon_id` bigint DEFAULT NULL,
-                                                  `request_member_snapshot_id` bigint DEFAULT NULL,
-                                                  `requested_at` datetime(6) NOT NULL,
-                                                  `requested_snapshot_id` bigint NOT NULL,
-                                                  `responded_at` datetime(6) DEFAULT NULL,
-                                                  `id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                                  `request_member_id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                                  `request_member_insight_id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-                                                  `requested_insight_id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                                  `requested_member_id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                                  `status` enum('ACCEPTED','PENDING','REJECTED') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                                  PRIMARY KEY (`id`) USING BTREE,
-                                                  KEY `fk_exchange_request_member_coupon_1` (`member_coupon_id`),
-                                                  KEY `fk_exchange_request_snapshot_1` (`requested_snapshot_id`),
-                                                  KEY `fk_exchange_request_snapshot_2` (`request_member_snapshot_id`),
-                                                  KEY `fk_exchange_request_member_1` (`request_member_id`),
-                                                  KEY `fk_exchange_request_member_2` (`requested_member_id`),
-                                                  KEY `fk_exchange_request_insight_1` (`request_member_insight_id`),
-                                                  KEY `fk_exchange_request_insight_2` (`requested_insight_id`),
-                                                  CONSTRAINT `fk_exchange_request_insight_1` FOREIGN KEY (`request_member_insight_id`) REFERENCES `insight` (`id`) ON DELETE RESTRICT,
-                                                  CONSTRAINT `fk_exchange_request_insight_2` FOREIGN KEY (`requested_insight_id`) REFERENCES `insight` (`id`) ON DELETE RESTRICT,
-                                                  CONSTRAINT `fk_exchange_request_member_1` FOREIGN KEY (`request_member_id`) REFERENCES `member` (`id`) ON DELETE RESTRICT,
-                                                  CONSTRAINT `fk_exchange_request_member_2` FOREIGN KEY (`requested_member_id`) REFERENCES `member` (`id`) ON DELETE RESTRICT,
-                                                  CONSTRAINT `fk_exchange_request_member_coupon_1` FOREIGN KEY (`member_coupon_id`) REFERENCES `member_coupon` (`id`) ON DELETE RESTRICT,
-                                                  CONSTRAINT `fk_exchange_request_snapshot_1` FOREIGN KEY (`requested_snapshot_id`) REFERENCES `snapshot` (`id`) ON DELETE RESTRICT,
-                                                  CONSTRAINT `fk_exchange_request_snapshot_2` FOREIGN KEY (`request_member_snapshot_id`) REFERENCES `snapshot` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- 내보낼 데이터가 선택되어 있지 않습니다.
 
 -- 테이블 imdang.insight 구조 내보내기
 CREATE TABLE IF NOT EXISTS `insight` (
@@ -137,8 +79,6 @@ CREATE TABLE IF NOT EXISTS `insight` (
                                          CONSTRAINT `fk_insight_member_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 내보낼 데이터가 선택되어 있지 않습니다.
-
 -- 테이블 imdang.member 구조 내보내기
 CREATE TABLE IF NOT EXISTS `member` (
                                         `id` char(36) COLLATE utf8mb4_general_ci NOT NULL,
@@ -164,46 +104,6 @@ CREATE TABLE IF NOT EXISTS `member` (
                                         CONSTRAINT `member_chk_1` CHECK ((`gender` between 0 and 1))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 내보낼 데이터가 선택되어 있지 않습니다.
-
--- 테이블 imdang.member_coupon 구조 내보내기
-CREATE TABLE IF NOT EXISTS `member_coupon` (
-                                               `id` bigint NOT NULL AUTO_INCREMENT,
-                                               `coupon_id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                               `created_at` datetime(6) NOT NULL,
-                                               `expired_at` datetime(6) DEFAULT NULL,
-                                               `member_id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                               `remark` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-                                               `used` bit(1) NOT NULL,
-                                               `used_at` datetime(6) DEFAULT NULL,
-                                               PRIMARY KEY (`id`),
-                                               UNIQUE KEY `unique_member_coupon_1` (`coupon_id`,`member_id`),
-                                               KEY `fk_member_coupon_member_1` (`member_id`),
-                                               CONSTRAINT `fk_member_coupon_coupon_1` FOREIGN KEY (`coupon_id`) REFERENCES `coupon` (`id`) ON DELETE RESTRICT,
-                                               CONSTRAINT `fk_member_coupon_member_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- 내보낼 데이터가 선택되어 있지 않습니다.
-
--- 테이블 imdang.member_snapshot 구조 내보내기
-CREATE TABLE IF NOT EXISTS `member_snapshot` (
-                                                 `created_at` datetime(6) NOT NULL,
-                                                 `id` bigint NOT NULL AUTO_INCREMENT,
-                                                 `snapshot_id` bigint NOT NULL,
-                                                 `insight_id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                                 `member_id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                                 `exchange_request_id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-                                                 PRIMARY KEY (`id`),
-                                                 UNIQUE KEY `unique_member_snapshot_1` (`insight_id`,`member_id`),
-                                                 KEY `fk_member_snapshot_snapshot_1` (`snapshot_id`),
-                                                 KEY `fk_member_snapshot_member_1` (`member_id`),
-                                                 CONSTRAINT `fk_member_snapshot_insight_1` FOREIGN KEY (`insight_id`) REFERENCES `insight` (`id`) ON DELETE RESTRICT,
-                                                 CONSTRAINT `fk_member_snapshot_member_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE RESTRICT,
-                                                 CONSTRAINT `fk_member_snapshot_snapshot_1` FOREIGN KEY (`snapshot_id`) REFERENCES `snapshot` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- 내보낼 데이터가 선택되어 있지 않습니다.
-
 -- 테이블 imdang.notification 구조 내보내기
 CREATE TABLE IF NOT EXISTS `notification` (
                                               `id` bigint NOT NULL AUTO_INCREMENT,
@@ -217,15 +117,6 @@ CREATE TABLE IF NOT EXISTS `notification` (
                                               KEY `fk_notification_member_1` (`receiver_id`),
                                               CONSTRAINT `fk_notification_member_1` FOREIGN KEY (`receiver_id`) REFERENCES `member` (`id`) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- 내보낼 데이터가 선택되어 있지 않습니다.
-
--- 테이블 imdang.offset 구조 내보내기
-CREATE TABLE IF NOT EXISTS `offset` (
-    `value` int unsigned NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- 내보낼 데이터가 선택되어 있지 않습니다.
 
 -- 테이블 imdang.recommend 구조 내보내기
 CREATE TABLE IF NOT EXISTS `recommend` (
@@ -243,42 +134,6 @@ CREATE TABLE IF NOT EXISTS `recommend` (
                                            CONSTRAINT `fk_recommend_member_2` FOREIGN KEY (`recommended_member_id`) REFERENCES `member` (`id`) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 내보낼 데이터가 선택되어 있지 않습니다.
-
--- 테이블 imdang.snapshot 구조 내보내기
-CREATE TABLE IF NOT EXISTS `snapshot` (
-                                          `visit_at` date NOT NULL,
-                                          `id` bigint NOT NULL AUTO_INCREMENT,
-                                          `insight_id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                          `member_id` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                          `address_building_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-                                          `address_detail` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-                                          `address_eup_myeon_dong` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                          `address_road_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-                                          `address_si_do` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                          `address_si_gun_gu` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                          `complex_environment` json NOT NULL,
-                                          `complex_facility` json NOT NULL,
-                                          `complex_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                          `favorable_news` json NOT NULL,
-                                          `infra` json NOT NULL,
-                                          `main_image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                          `summary` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                          `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                          `visit_methods` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                          `visit_times` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                          `access` enum('자유로움','제한됨','허락시_가능') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                          `address_latitude` double DEFAULT NULL,
-                                          `address_longitude` double DEFAULT NULL,
-                                          PRIMARY KEY (`id`),
-                                          KEY `fk_snapshot_insight_1` (`insight_id`),
-                                          KEY `fk_snapshot_member_1` (`member_id`),
-                                          CONSTRAINT `fk_snapshot_insight_1` FOREIGN KEY (`insight_id`) REFERENCES `insight` (`id`) ON DELETE RESTRICT,
-                                          CONSTRAINT `fk_snapshot_member_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- 내보낼 데이터가 선택되어 있지 않습니다.
-
 -- 테이블 imdang.terms 구조 내보내기
 CREATE TABLE IF NOT EXISTS `terms` (
                                        `id` bigint NOT NULL AUTO_INCREMENT,
@@ -287,8 +142,6 @@ CREATE TABLE IF NOT EXISTS `terms` (
                                        `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
                                        PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- 내보낼 데이터가 선택되어 있지 않습니다.
 
 -- 테이블 imdang.terms_agreement 구조 내보내기
 CREATE TABLE IF NOT EXISTS `terms_agreement` (
@@ -302,8 +155,6 @@ CREATE TABLE IF NOT EXISTS `terms_agreement` (
                                                  CONSTRAINT `fk_terms_agreement_member_1` FOREIGN KEY (`member_id`) REFERENCES `member` (`id`) ON DELETE RESTRICT,
                                                  CONSTRAINT `fk_terms_agreement_terms_1` FOREIGN KEY (`terms_id`) REFERENCES `terms` (`id`) ON DELETE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- 내보낼 데이터가 선택되어 있지 않습니다.
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

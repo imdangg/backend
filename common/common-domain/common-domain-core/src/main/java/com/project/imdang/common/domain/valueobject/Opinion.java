@@ -1,0 +1,30 @@
+package com.project.imdang.common.domain.valueobject;
+
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class Opinion<T> {
+    private T choice;
+    private String text;
+
+    @Builder
+    public Opinion(T choice, String text) {
+        if (choice == null) {
+            // TODO - CHECK
+            throw new RuntimeException();
+        }
+        this.choice = choice;
+        this.text = text;
+    }
+
+    public void validate() {
+        if (this.choice == null) {
+            // TODO - exception
+            throw new RuntimeException();
+        }
+    }
+}
