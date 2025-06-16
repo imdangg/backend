@@ -18,4 +18,6 @@ public interface TokenProvider {
      * 토큰 유효성 검증
      */
     boolean verifyToken(String token);
+
+    String extractSubject(String token);
 }

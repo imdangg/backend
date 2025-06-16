@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Builder
@@ -30,7 +31,7 @@ public class InsightDetailResult {
 
     private InsightId insightId;
 
-    private String mainImage;
+    private List<String> mainImage;
     private String title;
 
     private Address address;

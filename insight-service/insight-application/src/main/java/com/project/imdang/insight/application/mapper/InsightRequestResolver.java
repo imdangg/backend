@@ -17,6 +17,7 @@ import com.project.imdang.insight.domain.dto.insight.update.UpdateInsightCommand
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -24,12 +25,11 @@ import java.util.UUID;
 public class InsightRequestResolver {
 
     public CreateInsightCommand toCreateInsightCommand(UUID memberId,
-                                                       File mainImage,
+                                                       List<File> mainImages,
                                                        CreateInsightRequest createInsightRequest) {
         return CreateInsightCommand.builder()
                 .memberId(new MemberId(memberId))
-                .score(createInsightRequest.getScore())
-                .mainImage(mainImage)
+                .images(mainImages)
                 .title(createInsightRequest.getTitle())
                 .address(toAddress(createInsightRequest.getAddress()))
                 .apartmentComplex(toApartmentComplex(createInsightRequest.getApartmentComplex()))
@@ -44,7 +44,7 @@ public class InsightRequestResolver {
     }
 
     public UpdateInsightCommand toUpdateInsightCommand(UUID memberId,
-                                                       File mainImage,
+                                                       List<File> mainImage,
                                                        UpdateInsightRequest updateInsightRequest) {
         return UpdateInsightCommand.builder()
                 .memberId(new MemberId(memberId))

@@ -10,6 +10,7 @@ import com.project.imdang.common.domain.valueobject.MemberId;
 import com.project.imdang.common.domain.valueobject.ObjectiveItem;
 import com.project.imdang.common.domain.valueobject.VisitMethod;
 import com.project.imdang.common.domain.valueobject.VisitTime;
+import com.project.imdang.insight.application.dto.insight.*;
 import com.project.imdang.insight.domain.dto.insight.accuse.AccuseInsightCommand;
 import com.project.imdang.insight.domain.dto.insight.create.CreateInsightCommand;
 import com.project.imdang.insight.domain.dto.insight.delete.DeleteInsightCommand;
@@ -23,7 +24,8 @@ import java.util.UUID;
 
 public class TestData {
 
-    public final static UUID memberId = UUID.fromString("3eff967b-84b8-4ec4-941b-ef3f0a26c0b9");
+//    public final static UUID memberId = UUID.fromString("3eff967b-84b8-4ec4-941b-ef3f0a26c0b9");
+    public final static UUID memberId = UUID.fromString("01637237-636f-42b3-b268-03366d28b0ea");
     private InsightId insightId;
 
     public TestData() {}
@@ -37,7 +39,6 @@ public class TestData {
 //        MockMultipartFile mainImage = new MockMultipartFile("mainImage-1", bytes);
         return CreateInsightCommand.builder()
                 .memberId(new MemberId(memberId))
-                .score(80)
 //                .mainImage(mainImage)
                 .title("title-1")
                 .address(TestData.address)
@@ -49,6 +50,25 @@ public class TestData {
                 .summary("지하철역과 도보 10분 거리로 접근성이 좋지만, 근처 공사로 소음 문제가 있을 수 있을 것 같아요. 지하철역과 도보 10분 거리로 접근성이 좋지만, 근처 공사로 소음 문제가 있을 수 있을 것 같아요. 하지만 단지 내 공원이 잘 조성되어 있어 가족 단위 거주자에게 적합할 것 같아요.")
                 .infra(TestData.infra)
                 .complexEnvironment(TestData.complexEnvironment)
+                .build();
+    }
+
+    CreateInsightRequest createInsightRequest() {
+//        byte[] bytes = "content".getBytes();
+//        MockMultipartFile mainImage = new MockMultipartFile("mainImage-1", bytes);
+        return CreateInsightRequest.builder()
+                .score(80)
+//                .mainImage(mainImage)
+                .title("title-1")
+                .address(TestData.addressDTO)
+                .apartmentComplex(TestData.apartmentComplexDTO)
+                .visitAt(LocalDate.now().minusDays(14))
+                .visitTimes(Set.of(VisitTime.아침))
+                .visitMethods(Set.of(VisitMethod.대중교통))
+                .summary("지하철역과 도보 10분 거리로 접근성이 좋지만, 근처 공사로 소음 문제가 있을 수 있을 것 같아요. 지하철역과 도보 10분 거리로 접근성이 좋지만, 근처 공사로 소음 문제가 있을 수 있을 것 같아요. 하지만 단지 내 공원이 잘 조성되어 있어 가족 단위 거주자에게 적합할 것 같아요.")
+                .access(Access.허락시_가능)
+                .infra(TestData.infraDTO)
+                .complexEnvironment(TestData.complexEnvironmentDTO)
                 .build();
     }
 
@@ -99,9 +119,25 @@ public class TestData {
             .eupMyeonDong("신논현동")
             .buildingNumber("1")
             .build();
+
+    static AddressDTO addressDTO = new AddressDTO(
+            "서울특별시",
+            "종로구",
+            "효제동",
+            "율곡로",
+            "191",
+            "101동 202호",
+            12.345678,
+            123.45678
+    );
+
     static ApartmentComplex apartmentComplex = ApartmentComplex.builder()
             .name("신논현 더 센트럴 푸르지오")
             .build();
+
+    static ApartmentComplexDTO apartmentComplexDTO = new ApartmentComplexDTO(
+            "신논현 더 센트럴 푸르지오"
+    );
 
     static Infra infra = Infra.builder()
             .transportations(Set.of(Infra.Transportation.버스_정류장_주변, Infra.Transportation.주차_편리))
@@ -112,12 +148,28 @@ public class TestData {
             .text("infra_text")
             .build();
 
+    static InfraDTO infraDTO = new InfraDTO(
+            Set.of(Infra.Transportation.버스_정류장_주변, Infra.Transportation.주차_편리),
+            Set.of(Infra.SchoolDistrict.고등학교),
+            Set.of(Infra.Amenity.병원),
+            Set.of(Infra.Facility.도서관,Infra.Facility.수영장),
+            Set.of(Infra.Surroundings.강,Infra.Surroundings.교회),
+            "infra_text"
+    );
+
     static ComplexEnvironment complexEnvironment = ComplexEnvironment.builder()
             .buildingCondition(ObjectiveItem.좋아요)
             .security(ObjectiveItem.평범해요)
             .childrenFacility(ObjectiveItem.최고예요)
             .text("complex_environment_text")
             .build();
+
+    public static final ComplexEnvironmentDTO complexEnvironmentDTO = new ComplexEnvironmentDTO(
+            ObjectiveItem.좋아요,
+            ObjectiveItem.평범해요,
+            ObjectiveItem.최고예요,
+            "complex_environment_text"
+    );
 
     static Infra updatedInfra = Infra.builder()
             .transportations(Set.of(Infra.Transportation.해당_없음))

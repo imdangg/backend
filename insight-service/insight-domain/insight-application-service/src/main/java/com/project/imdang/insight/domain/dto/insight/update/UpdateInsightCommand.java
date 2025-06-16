@@ -17,6 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Builder
@@ -32,7 +33,7 @@ public class UpdateInsightCommand {
 
     private int score;
     private String title;
-    private File mainImage;
+    private List<File> mainImage;
     private String summary;
 
     private LocalDate visitAt;

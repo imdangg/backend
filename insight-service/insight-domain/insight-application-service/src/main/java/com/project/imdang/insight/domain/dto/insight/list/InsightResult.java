@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -19,7 +20,7 @@ public class InsightResult {
     private Integer recommendedCount;
     private Address address;
     private String title;
-    private String mainImage;
+    private List<String> mainImage;
     private String memberNickname;
     private ZonedDateTime createdAt;
 }

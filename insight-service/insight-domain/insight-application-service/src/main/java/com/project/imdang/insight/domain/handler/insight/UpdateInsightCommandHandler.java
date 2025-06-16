@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -34,7 +36,7 @@ public class UpdateInsightCommandHandler {
 
         // validation check
         MemberId updatedBy = updateInsightCommand.getMemberId();
-        String mainImage = uploadImage(updateInsightCommand.getMainImage());
+        List<String> mainImage = uploadImages(updateInsightCommand.getMainImage());
         InsightUpdatedEvent insightUpdatedEvent = insightDomainService.updateInsight(
                 insight,
                 updatedBy,
@@ -64,5 +66,18 @@ public class UpdateInsightCommandHandler {
             throw new InsightDomainException(e.getMessage());
         }
         return mainImage;
+    }
+
+    private List<String> uploadImages(List<File> imageFiles) {
+        List<String> uploadedImages = new ArrayList<>();
+        for (File imageFile : imageFiles) {
+            try {
+                String uploadedUrl = fileService.upload(imageFile);
+                uploadedImages.add(uploadedUrl);
+            } catch (IOException e) {
+                throw new InsightDomainException("이미지 업로드 실패: " + e.getMessage());
+            }
+        }
+        return uploadedImages;
     }
 }

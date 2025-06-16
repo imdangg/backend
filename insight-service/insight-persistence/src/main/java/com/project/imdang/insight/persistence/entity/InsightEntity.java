@@ -39,7 +39,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter @Setter
-@Table(name = "insight")
+@Table(name = "insight_test")
 @Entity
 public class InsightEntity {
 
@@ -53,7 +53,6 @@ public class InsightEntity {
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID memberId;
 
-    private String mainImage;
     private String title;
 
     @Embedded
@@ -99,7 +98,7 @@ public class InsightEntity {
     private int accusedCount;
     private int viewCount;
 
-    private int score;
+//    private int score;
 
     // TODO - BaseEntity?
     private ZonedDateTime createdAt;

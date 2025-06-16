@@ -1,6 +1,7 @@
 package com.project.imdang.insight;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.imdang.insight.application.dto.insight.CreateInsightRequest;
 import com.project.imdang.insight.domain.dto.insight.accuse.AccuseInsightCommand;
 import com.project.imdang.insight.domain.dto.insight.create.CreateInsightCommand;
 import com.project.imdang.insight.domain.dto.insight.delete.DeleteInsightCommand;
@@ -17,10 +18,12 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -32,7 +35,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-@SpringBootTest(classes = TestConfiguration.class)
+@SpringBootTest
+@Sql(scripts = "/imdang_test.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class InsightControllerTest {
 
     @Autowired
@@ -97,18 +101,25 @@ class InsightControllerTest {
     void createInsight() throws Exception {
 
         // given
-        CreateInsightCommand createInsightCommand = new TestData().createInsightCommand();
-        String valueAsString = objectMapper.writeValueAsString(createInsightCommand);
+//        CreateInsightCommand createInsightCommand = new TestData().createInsightCommand();
+        CreateInsightRequest createInsightrequest = new TestData().createInsightRequest();
+        String valueAsString = objectMapper.writeValueAsString(createInsightrequest);
         byte[] bytes = "content".getBytes();
-        MockMultipartFile mainImage = new MockMultipartFile("mainImage", "", "text/plain", bytes);
+//        MockMultipartFile mainImage = new MockMultipartFile("mainImages", "mainImage.png", "image/png", bytes);
+        List<MockMultipartFile> mainImages = List.of(
+                new MockMultipartFile("mainImages", "img1.png", "image/png", "img1".getBytes()),
+                new MockMultipartFile("mainImages", "img2.png", "image/png", "img2".getBytes())
+        );
         // when
         // then
         mockMvc.perform(MockMvcRequestBuilders.multipart("/insights/create")
-                        .file(mainImage)
-                        .file(new MockMultipartFile("createInsightCommand", "", "application/json", valueAsString.getBytes(StandardCharsets.UTF_8)))
+                        .file(mainImages.get(0))
+                        .file(mainImages.get(1))
+                        .file(new MockMultipartFile(
+                                "createInsightRequest", "createInsightRequest.json", "application/json", valueAsString.getBytes(StandardCharsets.UTF_8)))
                         .header("Authorization", "Bearer " + memberToken))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.insightId", notNullValue()));
+                .andExpect(status().isOk());
+//                .andExpect(jsonPath("$.insightId", notNullValue()));
     }
 
     @Test

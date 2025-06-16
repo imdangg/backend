@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,11 +35,12 @@ public class CreateInsightCommandHandler {
     @Transactional
     public InsightId createInsight(CreateInsightCommand createInsightCommand) {
         Insight insight = insightDataMapper.createInsightCommandToInsight(createInsightCommand);
+        List<String> uploadImages = uploadImages(createInsightCommand.getImages());
+        Insight created = insightDomainService.createInsight(insight, uploadImages);
 
-        String mainImage = uploadImage(createInsightCommand.getMainImage());
-        Insight created = insightDomainService.createInsight(insight, mainImage);
         Insight savedInsight = insightHelper.save(created);
         log.info("Insight[id: {}] is created.", savedInsight.getId().getValue());
+
 
         // publish
         InsightCreatedEventMessage insightCreatedEventMessage
@@ -46,13 +49,16 @@ public class CreateInsightCommandHandler {
         return savedInsight.getId();
     }
 
-    private String uploadImage(File mainImageFile) {
-        String mainImage;
-        try {
-            mainImage = fileService.upload(mainImageFile);
-        } catch (IOException e) {
-            throw new InsightDomainException(e.getMessage());
+    private List<String> uploadImages(List<File> images) {
+        List<String> uploadedImages = new ArrayList<>();
+        for (File file : images) {
+            try {
+                String uploadedUrl = fileService.upload(file);
+                uploadedImages.add(uploadedUrl);
+            } catch (IOException e) {
+                throw new InsightDomainException("이미지 업로드 실패: " + e.getMessage());
+            }
         }
-        return mainImage;
+        return uploadedImages;
     }
 }

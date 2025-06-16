@@ -51,8 +51,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             try {
                 if (StringUtils.hasText(token) && tokenProvider.verifyToken(token)) {
                     // 3-1. 토큰 파싱해서 사용자 정보 가져오기
-                    String memberId = null;
-//                    String memberId = tokenProvider.extractSubject(token);
+//                    String memberId = null;
+                    String memberId = tokenProvider.extractSubject(token);
 
                     // 3-2. MemberId로 Authentication 정보 생성
                     Authentication auth = new UsernamePasswordAuthenticationToken(UUID.fromString(memberId), "", Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
