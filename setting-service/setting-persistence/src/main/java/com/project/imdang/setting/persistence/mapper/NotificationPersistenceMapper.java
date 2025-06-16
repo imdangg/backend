@@ -11,6 +11,7 @@ public class NotificationPersistenceMapper {
 
     public NotificationEntity notificationToNotificationEntity(Notification notification) {
         return NotificationEntity.builder()
+                .id(notification.getId() != null ? notification.getId().getValue() : null)
                 .category(notification.getCategory())
                 .message(notification.getMessage())
                 .createdAt(notification.getCreatedAt())
