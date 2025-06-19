@@ -23,14 +23,13 @@ import java.util.Date;
 public final class JwtTokenProvider implements TokenProvider, InitializingBean {
 
     private Key key;
-    @Value("${jwt.secret-key}")
-    private String secretKey;
+
 
     @Override
     public void afterPropertiesSet() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        this.key = Keys.hmacShaKeyFor(keyBytes);
-        log.info("생성 후 초기화 완료");
+//        byte[] keyBytes =
+//        this.key =
+//        log.info("생성 후 초기화 완료");
     }
 
     @Override

@@ -21,12 +21,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.UUID;
 
-import static com.project.imdang.common.application.response.code.ErrorCode.ADDITIONAL_REQUIRED_TOKEN;
-import static com.project.imdang.common.application.response.code.ErrorCode.EXPIRED_TOKEN;
-import static com.project.imdang.common.application.response.code.ErrorCode.ILLEGAL_TOKEN;
-import static com.project.imdang.common.application.response.code.ErrorCode.MAL_FORMED_TOKEN;
-import static com.project.imdang.common.application.response.code.ErrorCode.UNKNOWN_ERROR;
-import static com.project.imdang.common.application.response.code.ErrorCode.UNSUPPORTED_TOKEN;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -37,56 +31,56 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
-        // TODO - 수정
-        String requestURI = request.getRequestURI();
-        if ("/members/info".equals(requestURI) || "/members".equals(requestURI)) {
-            log.info(">>> [JwtAuthFilter] requestURI: {}", requestURI);
-        } else {
-
-            // 1. 헤더로부터 토큰 추출
-            String token = resolveToken(request);
-
-            // 2. 토큰이 있는 경우, 유효성 검증
-            try {
-                if (StringUtils.hasText(token) && tokenProvider.verifyToken(token)) {
-                    // 3-1. 토큰 파싱해서 사용자 정보 가져오기
-                    String memberId = null;
-//                    String memberId = tokenProvider.extractSubject(token);
-
-                    // 3-2. MemberId로 Authentication 정보 생성
-                    Authentication auth = new UsernamePasswordAuthenticationToken(UUID.fromString(memberId), "", Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
-                    SecurityContextHolder.getContext().setAuthentication(auth);
-                    log.debug("Authentication[id: {}] saved in Security Context", memberId);
-                } else {
-                    request.setAttribute("exception", ADDITIONAL_REQUIRED_TOKEN.getErrorCode());
-                    log.warn("JwtAuthFilter: Caught Exception {}", request.getAttribute("exception"));
-                }
-            } catch (MalformedJwtException e) {
-                request.setAttribute("exception", MAL_FORMED_TOKEN.getErrorCode());
-                log.warn("JwtAuthFilter: Caught MalformedJwtException {}", request.getAttribute("exception"), e);
-
-            } catch (ExpiredJwtException e) {
-                request.setAttribute("exception", EXPIRED_TOKEN.getErrorCode());
-                log.warn("JwtAuthFilter: Caught ExpiredJwtException {}", request.getAttribute("exception"), e);
-
-            } catch (UnsupportedJwtException e) {
-                request.setAttribute("exception", UNSUPPORTED_TOKEN.getErrorCode());
-                log.warn("JwtAuthFilter: Caught UnsupportedJwtException {}", request.getAttribute("exception"), e);
-
-            } catch (IllegalArgumentException e) {
-                request.setAttribute("exception", ILLEGAL_TOKEN.getErrorCode());
-                log.warn("JwtAuthFilter: Caught IllegalArgumentException {}", request.getAttribute("exception"), e);
-
-            } catch (Exception e) {
-                request.setAttribute("exception", UNKNOWN_ERROR.getErrorCode());
-                log.warn("JwtAuthFilter: Caught Exception {}", request.getAttribute("exception"), e);
-            }
-            log.info("spring context : {}",SecurityContextHolder.getContext().getAuthentication());
-
-        }
-
-        filterChain.doFilter(request, response);
+//
+//        // TODO - 수정
+//        String requestURI = request.getRequestURI();
+//        if ("/members/info".equals(requestURI) || "/members".equals(requestURI)) {
+//            log.info(">>> [JwtAuthFilter] requestURI: {}", requestURI);
+//        } else {
+//
+//            // 1. 헤더로부터 토큰 추출
+//            String token = resolveToken(request);
+//
+//            // 2. 토큰이 있는 경우, 유효성 검증
+//            try {
+//                if (StringUtils.hasText(token) && tokenProvider.verifyToken(token)) {
+//                    // 3-1. 토큰 파싱해서 사용자 정보 가져오기
+//                    String memberId = null;
+////                    String memberId = tokenProvider.extractSubject(token);
+//
+//                    // 3-2. MemberId로 Authentication 정보 생성
+//                    Authentication auth = new UsernamePasswordAuthenticationToken(UUID.fromString(memberId), "", Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
+//                    SecurityContextHolder.getContext().setAuthentication(auth);
+//                    log.debug("Authentication[id: {}] saved in Security Context", memberId);
+//                } else {
+//                    request.setAttribute("exception", ADDITIONAL_REQUIRED_TOKEN.getErrorCode());
+//                    log.warn("JwtAuthFilter: Caught Exception {}", request.getAttribute("exception"));
+//                }
+//            } catch (MalformedJwtException e) {
+//                request.setAttribute("exception", MAL_FORMED_TOKEN.getErrorCode());
+//                log.warn("JwtAuthFilter: Caught MalformedJwtException {}", request.getAttribute("exception"), e);
+//
+//            } catch (ExpiredJwtException e) {
+//                request.setAttribute("exception", EXPIRED_TOKEN.getErrorCode());
+//                log.warn("JwtAuthFilter: Caught ExpiredJwtException {}", request.getAttribute("exception"), e);
+//
+//            } catch (UnsupportedJwtException e) {
+//                request.setAttribute("exception", UNSUPPORTED_TOKEN.getErrorCode());
+//                log.warn("JwtAuthFilter: Caught UnsupportedJwtException {}", request.getAttribute("exception"), e);
+//
+//            } catch (IllegalArgumentException e) {
+//                request.setAttribute("exception", ILLEGAL_TOKEN.getErrorCode());
+//                log.warn("JwtAuthFilter: Caught IllegalArgumentException {}", request.getAttribute("exception"), e);
+//
+//            } catch (Exception e) {
+//                request.setAttribute("exception", UNKNOWN_ERROR.getErrorCode());
+//                log.warn("JwtAuthFilter: Caught Exception {}", request.getAttribute("exception"), e);
+//            }
+//            log.info("spring context : {}",SecurityContextHolder.getContext().getAuthentication());
+//
+//        }
+//
+//        filterChain.doFilter(request, response);
     }
 
     private String resolveToken(HttpServletRequest request) {

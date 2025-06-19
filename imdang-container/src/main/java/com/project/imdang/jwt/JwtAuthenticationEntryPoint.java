@@ -22,13 +22,13 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-        String code = String.valueOf(request.getAttribute("exception"));
-
-        response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-
-        ErrorCode errorCode = ErrorCode.getErrorCode(code);
-        ErrorResponse errorResponse = ErrorResponse.of(errorCode);
-        response.getWriter().print(objectMapper.writeValueAsString(errorResponse));
+//        String code = String.valueOf(request.getAttribute("exception"));
+//
+//        response.setContentType("application/json;charset=UTF-8");
+//        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//
+//        ErrorCode errorCode = ErrorCode.getErrorCode(code);
+//        ErrorResponse errorResponse = ErrorResponse.of(errorCode);
+//        response.getWriter().print(objectMapper.writeValueAsString(errorResponse));
     }
 }

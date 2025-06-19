@@ -41,23 +41,37 @@
   - 역참조 방지
 - 주요 기술 스택
   - Backend: Spring Boot, Java 17, JPA, ~~Kafka, Redis,~~ Spring Batch
-  - Database: MySQL
+  - Database: MySQL/
   - CI/CD: Github Actions, ~~Docker~~
   - Frontend: AOS, IOS
   - Infrastructure: AWS(EC2, RDS, S3, CodeDeploy)
-  - ~~Load Test: Locust~~
+  - Test
+    - regression test
+  ~~- ~~Load Test: Locust~~
     - 오픈 소스 부하 테스트 도구
-    - 사용자가 Python으로 시나리오를 작성하여 웹 애플리케이션의 성능을 측정
+    - 사용자가 Python으로 시나리오를 작성하여 웹 애플리케이션의 성능을 측정~~
   - ~~Monitoring~~
-
+## + admin 페이지
+### + 예외 응답
+### + 응답 클래스 정의
 ## 3. 모듈 구조 및 도메인 모델링
 ### # backend(rootProject)
 
 ### # insight-service
 - 인사이트 관련 서비스
-- `Insight`
+
 ### # member-service
-- `Member`
+- 권한 부여 서버(모듈)
+  - 노출하는 OAuth2 관련 Endpoint
+    - 토큰 endpoint
+    - 권한 부여 endpoint
+    - 지원되는 grant_type
+  - 기능
+    - 클라이언트 등록
+    - 클라이언트 범위 정의
+    - 액세스 토큰 발행
+- 리소스 서버(모듈)
+
 ### # setting-service
 - 알림 관련 서비스
 - `Notification`

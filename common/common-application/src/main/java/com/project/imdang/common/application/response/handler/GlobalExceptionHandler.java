@@ -1,6 +1,6 @@
 package com.project.imdang.common.application.response.handler;
 
-import com.project.imdang.common.application.response.ErrorResponse;
+import com.project.imdang.common.application.response.ApiResponse;
 import com.project.imdang.common.application.response.code.ErrorCode;
 import com.project.imdang.common.domain.exception.DomainAlreadyExistException;
 import com.project.imdang.common.domain.exception.DomainException;
@@ -9,6 +9,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,43 +20,43 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
+// NOTE: 예외 메세지는 로그로만!
     @ExceptionHandler(DomainException.class)
-    public ResponseEntity<ErrorResponse> handleDomainException(DomainException ex) {
-        ErrorCode invalidRequest = ErrorCode.INVALID_REQUEST;
-        ErrorResponse errorResponse = ErrorResponse.of(invalidRequest, ex.getMessage());
-        return new ResponseEntity<>(errorResponse, invalidRequest.getHttpStatus());
+    public ResponseEntity<ApiResponse<Void>> handleDomainException(DomainException ex) {
+        log.error(ex.getMessage(), ex);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.error(ErrorCode.INVALID_REQUEST));
     }
 
     @ExceptionHandler(DomainNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleDomainNotFoundException(DomainNotFoundException ex) {
-        ErrorCode notFound = ErrorCode.NOT_FOUND;
-        ErrorResponse errorResponse = ErrorResponse.of(notFound, ex.getMessage());
-        return new ResponseEntity<>(errorResponse, notFound.getHttpStatus());
+    public ResponseEntity<ApiResponse<Void>> handleDomainNotFoundException(DomainNotFoundException ex) {
+        log.error(ex.getMessage(), ex);
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.error(ErrorCode.NOT_FOUND));
     }
 
     @ExceptionHandler(DomainAlreadyExistException.class)
-    public ResponseEntity<ErrorResponse> handleDomainAlreadyExistException(DomainAlreadyExistException ex) {
-        ErrorCode alreadyExist = ErrorCode.ALREADY_EXIST;
-        ErrorResponse errorResponse = ErrorResponse.of(alreadyExist, ex.getMessage());
-        return new ResponseEntity<>(errorResponse, alreadyExist.getHttpStatus());
+    public ResponseEntity<ApiResponse<Void>> handleDomainAlreadyExistException(DomainAlreadyExistException ex) {
+        log.error(ex.getMessage(), ex);
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ApiResponse.error(ErrorCode.ALREADY_EXIST));
     }
 
     @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<ErrorResponse> handleValidationException(ValidationException ex) {
-
-        ErrorCode invalidRequest = ErrorCode.INVALID_REQUEST;
-
-        String message;
+    public ResponseEntity<ApiResponse<Void>> handleValidationException(ValidationException ex) {
+        log.error(ex.getMessage(), ex);
         if (ex instanceof ConstraintViolationException) {
-            message = extractViolationsFromException((ConstraintViolationException) ex);
-        } else {
-            message = ex.getMessage();
+            String errorMessage = extractViolationsFromException((ConstraintViolationException) ex);
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(ApiResponse.error(ErrorCode.INVALID_REQUEST, errorMessage));
         }
-
-//        log.error(message, ex);
-        ErrorResponse errorResponse = ErrorResponse.of(invalidRequest, message);
-        return new ResponseEntity<>(errorResponse, invalidRequest.getHttpStatus());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.error(ErrorCode.INVALID_REQUEST));
     }
 
     private String extractViolationsFromException(ConstraintViolationException validationException) {
@@ -66,17 +67,19 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        ErrorCode invalidRequest = ErrorCode.INVALID_REQUEST;
-        String message = "Please input " + ex.getParameter().getParameterName();
-        ErrorResponse errorResponse = ErrorResponse.of(invalidRequest, message);
-        return new ResponseEntity<>(errorResponse, invalidRequest.getHttpStatus());
+    public ResponseEntity<ApiResponse<Void>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        log.error(ex.getMessage(), ex);
+        String errorMessage = "Please input " + ex.getParameter().getParameterName();
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.error(ErrorCode.INVALID_REQUEST, errorMessage));
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleException(Exception ex) {
-        ErrorCode internalServerError = ErrorCode.INTERNAL_SERVER_ERROR;
-        ErrorResponse errorResponse = ErrorResponse.of(internalServerError, ex.getMessage());
-        return new ResponseEntity<>(errorResponse, internalServerError.getHttpStatus());
+    public ResponseEntity<ApiResponse<Void>> handleException(Exception ex) {
+        log.error(ex.getMessage(), ex);
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.error(ErrorCode.INTERNAL_SERVER_ERROR));
     }
 }
