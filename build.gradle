@@ -1,18 +1,11 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.3.4'
-    id 'io.spring.dependency-management' version '1.1.6'
+    id 'org.springframework.boot' version '3.3.4' apply false
+    id 'io.spring.dependency-management' version '1.1.6' apply false
 }
 
 repositories {
     mavenCentral()
-}
-
-bootJar {
-    enabled = false
-}
-jar {
-    enabled = true
 }
 
 subprojects {
@@ -20,8 +13,14 @@ subprojects {
     version = '0.0.1-SNAPSHOT'
 
     apply plugin: 'java'
-    apply plugin: 'org.springframework.boot'
+    apply plugin: 'java-library'
     apply plugin: 'io.spring.dependency-management'
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.boot:spring-boot-dependencies:3.3.4"
+        }
+    }
 
     java {
         toolchain {
@@ -41,311 +40,14 @@ subprojects {
     }
 
     dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter-logging'
-        implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
-        compileOnly 'org.projectlombok:lombok'
-//        developmentOnly 'org.springframework.boot:spring-boot-devtools'
-        annotationProcessor 'org.projectlombok:lombok'
+        implementation 'org.projectlombok:lombok:1.18.24'
+        annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
 
     tasks.named('test') {
         useJUnitPlatform()
-    }
-}
-
-project(':imdang-container') {
-    dependencies {
-        implementation project(':insight-service:insight-container')
-        implementation project(':insight-service:insight-application')
-        implementation project(':insight-service:insight-persistence')
-        implementation project(':insight-service:insight-domain:insight-application-service')
-        implementation project(':insight-service:insight-domain:insight-domain-core')
-
-        implementation project(':member-service:member-container')
-        implementation project(':member-service:member-application')
-        implementation project(':member-service:member-persistence')
-        implementation project(':member-service:member-domain:member-application-service')
-        implementation project(':member-service:member-domain:member-domain-core')
-
-        implementation project(':setting-service:setting-container')
-        implementation project(':setting-service:setting-application')
-        implementation project(':setting-service:setting-persistence')
-        implementation project(':setting-service:setting-domain:setting-application-service')
-        implementation project(':setting-service:setting-domain:setting-domain-core')
-
-        implementation project(':common:common-application')
-        implementation project(':common:common-domain:common-application-service')
-        implementation project(':common:common-domain:common-domain-core')
-
-        implementation 'org.springframework.boot:spring-boot-starter-web'
-        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-        implementation 'com.github.napstr:logback-discord-appender:1.0.0'
-    }
-}
-
-project(':common:common-application') {
-    dependencies {
-        implementation 'io.jsonwebtoken:jjwt:0.12.6'
-        implementation 'org.springframework.boot:spring-boot-starter-validation'
-        implementation 'org.springframework.boot:spring-boot-starter-web'
-        implementation project(':common:common-domain:common-application-service')
-
-        implementation 'org.springframework.boot:spring-boot-starter-security'
-        testImplementation 'org.springframework.security:spring-security-test'
-    }
-}
-
-project(':common:common-domain:common-application-service') {
-    dependencies {
-        //JWT
-        implementation 'io.jsonwebtoken:jjwt:0.12.6'
-        implementation 'com.auth0:java-jwt:4.0.0'
-        implementation 'org.bouncycastle:bcpkix-jdk18on:1.72'
-
-        implementation 'org.springframework.data:spring-data-commons'
-    }
-}
-
-project(':infrastructure:aws:s3') {
-    dependencies {
-        implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-    }
-}
-
-project(':infrastructure:event') {
-    dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-
-        implementation project(':common:common-domain:common-domain-core')
-    }
-}
-
-project(':infrastructure:saga') {
-    dependencies {
-        implementation project(':common:common-domain:common-domain-core')
-    }
-}
-
-project(':infrastructure:feign') {
-    dependencies {
-        implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.3'
-        implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
-    }
-}
-
-project(':insight-service:insight-domain:insight-domain-core') {
-    dependencies {
-        implementation project(':common:common-domain:common-domain-core')
-    }
-}
-
-project(':insight-service:insight-domain:insight-application-service') {
-    dependencies {
-        implementation project(':insight-service:insight-domain:insight-domain-core')
-        implementation project(':common:common-domain:common-application-service')
-        implementation project(':common:common-domain:common-domain-core')
-
-        implementation project(':infrastructure:saga')
-        implementation project(':infrastructure:event')
-
-        implementation 'org.springframework.boot:spring-boot-starter-validation'
-        implementation 'org.springframework.data:spring-data-commons'
-        implementation 'org.springframework:spring-tx'
-    }
-}
-
-project(':insight-service:insight-application') {
-    dependencies {
-        implementation project(':insight-service:insight-domain:insight-application-service')
-        // TODO - CHECK
-        implementation project(':insight-service:insight-domain:insight-domain-core')
-        implementation project(':common:common-application')
-        implementation project(':common:common-domain:common-domain-core')
-
-        implementation 'org.springframework.boot:spring-boot-starter-web'
-        implementation 'org.springframework.boot:spring-boot-starter-validation'
-        implementation 'org.springframework.data:spring-data-commons'
-
-        implementation 'org.springframework.boot:spring-boot-starter-security'
-    }
-}
-
-project(':insight-service:insight-persistence') {
-    dependencies {
-        implementation project(':insight-service:insight-domain:insight-application-service')
-        implementation project(':insight-service:insight-domain:insight-domain-core')
-//        implementation project(':common:common-application')
-        implementation project(':common:common-domain:common-domain-core')
-
-        implementation project(':infrastructure:aws:s3')
-        implementation project(':infrastructure:feign')
-
-        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-        implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-        runtimeOnly 'com.mysql:mysql-connector-j'
-
-        implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
-    }
-}
-
-project(':insight-service:insight-container') {
-    dependencies {
-        implementation project(':insight-service:insight-application')
-        implementation project(':insight-service:insight-persistence')
-        implementation project(':insight-service:insight-domain:insight-application-service')
-        implementation project(':insight-service:insight-domain:insight-domain-core')
-
-        implementation project(':common:common-domain:common-application-service')
-        implementation project(':common:common-domain:common-domain-core')
-
-        implementation 'org.springframework.boot:spring-boot-starter'
-        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
-        implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-        implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
-    }
-}
-
-project(':member-service:member-domain:member-domain-core') {
-    dependencies {
-        implementation project(':common:common-domain:common-domain-core')
-    }
-}
-
-project(':member-service:member-domain:member-application-service') {
-    dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter-web'
-        implementation 'io.jsonwebtoken:jjwt:0.12.6'
-        implementation 'com.auth0:java-jwt:4.0.0'
-        implementation 'org.bouncycastle:bcpkix-jdk18on:1.72'
-
-        implementation 'org.springframework.boot:spring-boot-starter-validation'
-        implementation 'org.springframework.data:spring-data-commons'
-        implementation 'org.springframework:spring-tx'
-
-        implementation project(':member-service:member-domain:member-domain-core')
-        implementation project(':common:common-domain:common-application-service')
-        implementation project(':common:common-domain:common-domain-core')
-    }
-}
-
-project(':member-service:member-application') {
-    dependencies {
-        implementation project(':member-service:member-domain:member-application-service')
-        implementation project(':member-service:member-domain:member-domain-core')
-        implementation project(':common:common-application')
-        implementation project(':common:common-domain:common-domain-core')
-
-        implementation 'org.springframework.boot:spring-boot-starter-security'
-        implementation 'org.springframework.boot:spring-boot-starter-web'
-        implementation 'org.springframework.boot:spring-boot-starter-validation'
-        implementation 'org.springframework.data:spring-data-commons'
-    }
-}
-
-project(':member-service:member-persistence') {
-    dependencies {
-        implementation project(':member-service:member-domain:member-application-service')
-        implementation project(':member-service:member-domain:member-domain-core')
-        implementation project(':common:common-domain:common-domain-core')
-
-        implementation project(':infrastructure:feign')
-
-        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-        implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-        runtimeOnly 'com.mysql:mysql-connector-j'
-    }
-}
-
-project(':member-service:member-container') {
-    dependencies {
-        implementation project(':member-service:member-application')
-        implementation project(':member-service:member-persistence')
-        implementation project(':member-service:member-domain:member-application-service')
-        implementation project(':member-service:member-domain:member-domain-core')
-
-        implementation project(':common:common-domain:common-application-service')
-        implementation project(':common:common-domain:common-domain-core')
-
-        implementation 'org.springframework.boot:spring-boot-starter-web'
-        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    }
-}
-
-project(':setting-service:setting-domain:setting-domain-core') {
-    dependencies {
-        implementation project(':common:common-domain:common-domain-core')
-    }
-}
-
-project(':setting-service:setting-domain:setting-application-service') {
-    dependencies {
-        implementation project(':setting-service:setting-domain:setting-domain-core')
-        implementation project(':common:common-domain:common-application-service')
-        implementation project(':common:common-domain:common-domain-core')
-
-        implementation project(':infrastructure:event')
-
-        implementation 'org.springframework.boot:spring-boot-starter-validation'
-        implementation 'org.springframework.data:spring-data-commons'
-        implementation 'org.springframework:spring-tx'
-        implementation 'org.springframework.retry:spring-retry'
-        implementation 'org.springframework:spring-aspects'
-
-        implementation 'com.google.firebase:firebase-admin:9.2.0'
-    }
-}
-
-project(':setting-service:setting-application') {
-    dependencies {
-        implementation project(':setting-service:setting-domain:setting-application-service')
-        implementation project(':setting-service:setting-domain:setting-domain-core')
-        implementation project(':common:common-application')
-        implementation project(':common:common-domain:common-domain-core')
-
-        implementation 'org.springframework.boot:spring-boot-starter-web'
-        implementation 'org.springframework.boot:spring-boot-starter-validation'
-        implementation 'org.springframework.data:spring-data-commons'
-
-        implementation 'org.springframework.boot:spring-boot-starter-security'
-    }
-}
-
-project(':setting-service:setting-persistence') {
-    dependencies {
-        implementation project(':setting-service:setting-domain:setting-application-service')
-        implementation project(':setting-service:setting-domain:setting-domain-core')
-//        implementation project(':common:common-application')
-        implementation project(':common:common-domain:common-domain-core')
-
-        implementation project(':infrastructure:feign')
-
-        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-        implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-        runtimeOnly 'com.mysql:mysql-connector-j'
-
-        implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
-    }
-}
-
-project(':setting-service:setting-container') {
-    dependencies {
-        implementation project(':setting-service:setting-application')
-        implementation project(':setting-service:setting-persistence')
-        implementation project(':setting-service:setting-domain:setting-application-service')
-        implementation project(':setting-service:setting-domain:setting-domain-core')
-
-        implementation project(':common:common-domain:common-application-service')
-        implementation project(':common:common-domain:common-domain-core')
-
-        implementation 'org.springframework.boot:spring-boot-starter'
-        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-        implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-
-        implementation 'com.google.firebase:firebase-admin:9.2.0'
-
-        testImplementation 'org.springframework.security:spring-security-test'
     }
 }

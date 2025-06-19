@@ -1,6 +1,6 @@
-bootJar {
-    enabled = false
-}
-jar {
-    enabled = true
+dependencies {
+    implementation project(':common:common-domain:common-domain-core')
+
+    // TODO - api, 구현체 분리
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
 }

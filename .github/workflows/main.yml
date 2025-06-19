@@ -16,6 +16,7 @@ env:
   AWS_CODE_DEPLOY_GROUP_RELEASE: imdang-release-deploy
 
 jobs:
+  # develop 브랜치
   deploy-develop:
     #if: github.ref == 'refs/heads/develop'
     if: false
@@ -58,10 +59,26 @@ jobs:
       - name: Build and Test
         run: ./gradlew imdang-container:clean imdang-container:assemble
 
+      - name: Build Batch Module
+        run: ./gradlew batch:clean batch:assemble
+
       # 빌드 파일을 zip 형식으로 압축 - S3에서는 jar 저장이 안되기 때문에 zip으로 생성
+#      - name: Make zip file
+#        run: zip -r ./$GITHUB_SHA.zip .
+#        shell: bash
+
+      # backend(root)/
+      # -- imdang-container/
+      # ---- build/libs/imdang-container.jar
+      # -- batch/
+      # ---- build/libs/batch.jar
+      # -- build.gradle
+      # -- .github/workflows/main.yml
       - name: Make zip file
-        run: zip -r ./$GITHUB_SHA.zip .
-        shell: bash
+        run: |
+          mkdir deploy
+          cp imdang-container/build/libs/*.jar deploy/
+          cp batch/build/libs/*.jar
 
       # AWS 권한
       - name: AWS credential 설정
@@ -79,6 +96,7 @@ jobs:
       - name: EC2에 배포
         run: aws deploy create-deployment --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} --s3-location bucket=$AWS_S3_BUCKET,key=$GITHUB_SHA.zip,bundleType=zip
 
+  # release 브랜치
   deploy-release:
     if: github.ref == 'refs/heads/release'
     runs-on: ubuntu-latest

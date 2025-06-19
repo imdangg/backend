@@ -1,6 +1,16 @@
-bootJar {
-    enabled = false
-}
-jar {
-    enabled = true
+dependencies {
+    implementation project(':setting-service:setting-domain:setting-domain-core')
+    implementation project(':common:common-domain:common-application-service')
+    implementation project(':common:common-domain:common-domain-core')
+
+    implementation project(':member-service:member-service-client:member-service-client-api')
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+    // TODO - CHECK
+    implementation 'org.springframework:spring-tx'
+    implementation 'org.springframework.data:spring-data-commons'
+
+    // TODO - CHECK
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
 }

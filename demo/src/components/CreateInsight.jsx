@@ -41,32 +41,12 @@ export default function CreateInsight() {
             amenities: ["소형마트"],
             facilities: ["헬스장"],
             surroundings: ["산책로"],
-            landmarks: ["전망대"],
-            unpleasantFacilities: ["쓰레기_소각장"],
             text: "총평"
         },
         complexEnvironment: {
             buildingCondition: "잘_모르겠어요",
             security: "잘_모르겠어요",
             childrenFacility: "잘_모르겠어요",
-            seniorFacility: "잘_모르겠어요",
-            text: "총평"
-        },
-        complexFacility: {
-            familyFacilities: ["해당_없음"],
-            multipurposeFacilities: ["다목적실"],
-            leisureFacilities: ["독서실"],
-            surroundings: ["테이블_및_의자"],
-            text: "총평"
-        },
-        favorableNews: {
-            transportations: ["지하철_개통"],
-            developments: ["재개발"],
-            educations: ["초등학교_신설_예정"],
-            environments: ["대형_공원"],
-            cultures: ["잘_모르겠어요"],
-            industries: ["잘_모르겠어요"],
-            policies: ["잘_모르겠어요"],
             text: "총평"
         }
     });
@@ -126,40 +106,18 @@ export default function CreateInsight() {
                     amenities: ["소형마트"],
                     facilities: ["헬스장"],
                     surroundings: ["산책로"],
-                    landmarks: ["전망대"],
-                    unpleasantFacilities: ["쓰레기_소각장"],
                     text: "총평"
                 },
                 complexEnvironment: {
                     buildingCondition: "잘_모르겠어요",
                     security: "잘_모르겠어요",
                     childrenFacility: "잘_모르겠어요",
-                    seniorFacility: "잘_모르겠어요",
-                    text: "총평"
-                },
-                complexFacility: {
-                    familyFacilities: ["해당_없음"],
-                    multipurposeFacilities: ["다목적실"],
-                    leisureFacilities: ["독서실"],
-                    surroundings: ["테이블_및_의자"],
-                    text: "총평"
-                },
-                favorableNews: {
-                    transportations: ["지하철_개통"],
-                    developments: ["재개발"],
-                    educations: ["초등학교_신설_예정"],
-                    environments: ["대형_공원"],
-                    cultures: ["잘_모르겠어요"],
-                    industries: ["잘_모르겠어요"],
-                    policies: ["잘_모르겠어요"],
                     text: "총평"
                 }
                 // access: formData.access,
                 // address: formData.address,
                 // apartmentComplex: formData.apartmentComplex,
                 // complexEnvironment: formData.complexEnvironment,
-                // complexFacility: formData.complexFacility,
-                // favorableNews: formData.favorableNews,
                 // infra: formData.infra,
                 // score: formData.score,
                 // summary: formData.summary,
