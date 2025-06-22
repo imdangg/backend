@@ -44,6 +44,6 @@ public class Infra {
     }
 
     public enum Surroundings {
-        해당_없음, 강, 바다, 산, 공원, 산책로, 교회, 성당, 식당가, 시장
+        해당_없음, 강, 산, 공원, 산책로, 식당가, 시장
     }
 }
