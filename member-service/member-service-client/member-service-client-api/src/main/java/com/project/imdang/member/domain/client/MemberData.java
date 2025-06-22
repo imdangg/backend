@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -20,4 +21,5 @@ public class MemberData {
     private String deviceToken;
     private int accusedCount;
     private int insightCount;
+    private LocalDate latestInsightCreateDate;
 }

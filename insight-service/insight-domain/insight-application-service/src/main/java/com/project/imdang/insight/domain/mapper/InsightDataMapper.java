@@ -63,7 +63,6 @@ public class InsightDataMapper {
                 .recommendedCount(insight.getRecommendedCount())
                 .accusedCount(insight.getAccusedCount())
                 .viewCount(insight.getViewCount())
-                .score(insight.getScore())
                 .createdAt(insight.getCreatedAt())
                 .createdByMe(createdByMe)
                 .build();

@@ -46,4 +46,9 @@ public class MemberDomainServiceImpl implements MemberDomainService {
     public Member increaseInsightCount(Member member) {
         return member.increaseInsightCount();
     }
+
+    @Override
+    public Member updateInsightCreateDate(Member member) {
+        return member.updateInsightCreateDate();
+    }
 }

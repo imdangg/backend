@@ -20,8 +20,11 @@ public class UpdateInsightCountCommandHandler {
     @Transactional
     public void increaseInsightCount(MemberId memberId) {
         Member member = memberHelper.get(memberId);
+        //인사이트 작성 횟수 증가
         Member accusedMember = memberDomainService.increaseInsightCount(member);
-        memberHelper.save(accusedMember);
+        //인사이트 작성일 수정
+        Member accusedMember_ = memberDomainService.updateInsightCreateDate(accusedMember);
+        memberHelper.save(accusedMember_);
     }
 
     @Transactional

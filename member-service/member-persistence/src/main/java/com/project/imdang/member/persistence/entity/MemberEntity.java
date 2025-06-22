@@ -22,6 +22,7 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Builder
@@ -47,6 +48,7 @@ public class MemberEntity {
     private String deviceToken;
 
     private int insightCount;
+    private LocalDate latestInsightCreateDate;
 
     private String refreshToken;
     private Boolean isLogin;

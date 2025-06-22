@@ -23,6 +23,7 @@ public class MemberDataMapper {
                 .gender(member.getGender() != null ? member.getGender().name() : null)
                 .deviceToken(member.getDeviceToken())
                 .insightCount(member.getInsightCount())
+                .latestInsightCreateDate(member.getLatestInsightCreateDate())
                 .build();
     }
 }

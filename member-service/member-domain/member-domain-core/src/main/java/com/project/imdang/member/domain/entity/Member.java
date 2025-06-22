@@ -11,6 +11,7 @@ import com.project.imdang.member.domain.valueobject.AccusePenaltyPolicy;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -25,6 +26,7 @@ public class Member extends AggregateRoot<MemberId> {
     private String deviceToken;
 
     private int insightCount;
+    private LocalDate latestInsightCreateDate; //가장 최근 인사이트 게시물 등록일자
 
     private String refreshToken;
     private Boolean isLogin;
@@ -54,6 +56,7 @@ public class Member extends AggregateRoot<MemberId> {
                   String oAuthId,
                   OAuthType oAuthType,
                   int insightCount,
+                  LocalDate latestInsightCreateDate,
                   String refreshToken,
                   Boolean isLogin, 
                   Boolean isDeleted,
@@ -68,6 +71,7 @@ public class Member extends AggregateRoot<MemberId> {
         this.oAuthId = oAuthId;
         this.oAuthType = oAuthType;
         this.insightCount = insightCount;
+        this.latestInsightCreateDate = latestInsightCreateDate;
         this.refreshToken = refreshToken;
         this.isLogin = isLogin;
         this.isDeleted = isDeleted;
@@ -116,6 +120,11 @@ public class Member extends AggregateRoot<MemberId> {
 
     public Member increaseInsightCount() {
         this.insightCount++;
+        return this;
+    }
+
+    public Member updateInsightCreateDate() {
+        this.latestInsightCreateDate = LocalDate.now();
         return this;
     }
 }

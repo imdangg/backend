@@ -20,4 +20,5 @@ public interface MemberDomainService {
     Member storeRefreshToken(Member member, String refreshToken);
 
     Member increaseInsightCount(Member member);
+    Member updateInsightCreateDate(Member member);
 }
