@@ -10,12 +10,7 @@ import lombok.Getter;
 public class ListMyInsightQuery extends PagingQuery {
 
     private MemberId memberId;
-
     private District district;
-//    private String siDo;
-//    private String siGunGu;
-//    private String eupMyeonDong;
-
     private String apartmentComplexName;
     private Boolean onlyMine;
 
@@ -26,9 +21,6 @@ public class ListMyInsightQuery extends PagingQuery {
                                String apartmentComplexName, Boolean onlyMine) {
         super(pageNumber, pageSize, direction, properties);
         this.memberId = memberId;
-//        this.siDo = siDo;
-//        this.siGunGu = siGunGu;
-//        this.eupMyeonDong = eupMyeonDong;
         this.district = new District(siDo, siGunGu, eupMyeonDong, null);
         this.apartmentComplexName = apartmentComplexName;
         this.onlyMine = onlyMine;

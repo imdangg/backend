@@ -3,12 +3,12 @@ package com.project.imdang.insight.domain.handler.insight;
 import com.project.imdang.common.domain.valueobject.District;
 import com.project.imdang.common.domain.valueobject.MemberId;
 import com.project.imdang.insight.domain.dto.insight.list.MyDistrictResult;
+import com.project.imdang.insight.domain.ports.output.repository.InsightRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,9 +17,12 @@ import java.util.stream.Collectors;
 @Component
 public class ListMyInsightDistrictQueryHandler {
 
+    private final InsightRepository insightRepository;
+
     @Transactional(readOnly = true)
     public List<MyDistrictResult> listMyInsightDistrict(MemberId memberId) {
-        List<Object[]> districts = new ArrayList<>();
+        // 내가 작성한 인사이트 + 추천한 인사이트 지역 목록 조회
+        List<Object[]> districts = insightRepository.findAllDistrictByMemberId(memberId);
 
         // TODO - 쿼리 개선
         return districts.stream()
@@ -32,10 +35,12 @@ public class ListMyInsightDistrictQueryHandler {
                             .siGunGu(siGunGu)
                             .eupMyeonDong(eupMyeonDong)
                             .build();
-                    Long[] result = new Long[10];
 
+                    // 지역 별 단지 수 및 인사이트 개수 조회
+                    Long[] result = insightRepository.countAllByMemberIdAndDistrict(memberId, district);
                     Long apartmentComplexCount = result[0];
                     Long insightCount = result[1];
+
                     return MyDistrictResult.builder()
                             .siDo(siDo)
                             .siGunGu(siGunGu)

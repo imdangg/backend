@@ -5,6 +5,7 @@ import com.project.imdang.common.domain.valueobject.MemberId;
 import com.project.imdang.insight.domain.dto.insight.detail.DetailInsightQuery;
 import com.project.imdang.insight.domain.dto.insight.detail.InsightDetailResult;
 import com.project.imdang.insight.domain.entity.Insight;
+import com.project.imdang.insight.domain.exception.InsightDomainException;
 import com.project.imdang.insight.domain.exception.InsightNotFoundException;
 import com.project.imdang.insight.domain.exception.MemberNotFoundException;
 import com.project.imdang.insight.domain.mapper.InsightDataMapper;
@@ -17,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -35,17 +38,32 @@ public class DetailInsightQueryHandler {
     @Transactional(readOnly = true)
     public InsightDetailResult detailInsight(DetailInsightQuery detailInsightQuery) {
 
+        //조회 요청자 정보 얻기
+        MemberId requestedBy = detailInsightQuery.getMemberId();
+        MemberData requestMember = memberResolver.resolve(requestedBy)
+                .orElseThrow(() -> new MemberNotFoundException(requestedBy));
+
+        // 작성한 인사이트가 없거나, 최신 작성 날짜가 한달 이상인 경우
+        if (requestMember.getInsightCount() < 1 || requestMember.getLatestInsightCreateDate().isBefore(LocalDate.now().minusDays(30))) {
+            throw new InsightDomainException("Latest insight create Date is before one month");
+        }
+
+        //인사이트 객체
         InsightId insightId = detailInsightQuery.getInsightId();
         Insight insight = insightRepository.findById(insightId)
                 .orElseThrow(() -> new InsightNotFoundException(insightId));
 
-        MemberId requestedBy = detailInsightQuery.getMemberId();
+        //해당 인사이트 추천 여부 검사
         boolean recommended = recommendRepository.findByRecommendMemberIdAndRecommendedInsightId(requestedBy, insightId).isPresent();
+        //해당 인사이트 신고 여부 검사
         boolean accused = accuseRepository.findByAccuseMemberIdAndAccusedInsightId(requestedBy, insightId).isPresent();
+
+        //인사이트 작성자 정보 얻기
         MemberId insightCreatedBy = insight.getMemberId();
         MemberData member = memberResolver.resolve(insightCreatedBy)
                 .orElseThrow(() -> new MemberNotFoundException(insightCreatedBy));
         String memberNickname = member.getNickname();
+
         return insightDataMapper.insightToDetailInsightResponse(
                 insight, memberNickname, recommended, accused, insightCreatedBy.equals(requestedBy));
     }

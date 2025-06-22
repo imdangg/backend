@@ -1,6 +1,5 @@
 package com.project.imdang.insight.domain;
 
-import com.project.imdang.common.domain.valueobject.ApartmentComplex;
 import com.project.imdang.common.domain.valueobject.District;
 import com.project.imdang.common.domain.valueobject.InsightId;
 import com.project.imdang.common.domain.valueobject.MemberId;
@@ -9,16 +8,7 @@ import com.project.imdang.insight.domain.dto.insight.create.CreateInsightCommand
 import com.project.imdang.insight.domain.dto.insight.delete.DeleteInsightCommand;
 import com.project.imdang.insight.domain.dto.insight.detail.DetailInsightQuery;
 import com.project.imdang.insight.domain.dto.insight.detail.InsightDetailResult;
-import com.project.imdang.insight.domain.dto.insight.list.MyApartmentComplexResult;
-import com.project.imdang.insight.domain.dto.insight.list.MyDistrictResult;
-import com.project.imdang.insight.domain.dto.insight.list.InsightResult;
-import com.project.imdang.insight.domain.dto.insight.list.InsightSimpleResult;
-import com.project.imdang.insight.domain.dto.insight.list.ListInsightByApartmentComplexQuery;
-import com.project.imdang.insight.domain.dto.insight.list.ListInsightByDateQuery;
-import com.project.imdang.insight.domain.dto.insight.list.ListInsightByDistrictQuery;
-import com.project.imdang.insight.domain.dto.insight.list.ListInsightQuery;
-import com.project.imdang.insight.domain.dto.insight.list.ListMyInsightCreatedByMeQuery;
-import com.project.imdang.insight.domain.dto.insight.list.ListMyInsightQuery;
+import com.project.imdang.insight.domain.dto.insight.list.*;
 import com.project.imdang.insight.domain.dto.insight.recommend.RecommendInsightCommand;
 import com.project.imdang.insight.domain.dto.insight.update.UpdateInsightCommand;
 import com.project.imdang.insight.domain.handler.insight.AccuseInsightCommandHandler;
@@ -85,7 +75,7 @@ public class InsightApplicationServiceImpl implements InsightApplicationService 
     }
 
     @Override
-    public List<ApartmentComplex> listMyVisitedApartmentComplex(MemberId memberId) {
+    public List<ApartmentComplexResult> listMyVisitedApartmentComplex(MemberId memberId) {
         return listMyVisitedApartmentComplexQueryHandler.listMyVisitedApartmentComplex(memberId);
     }
 
@@ -115,7 +105,7 @@ public class InsightApplicationServiceImpl implements InsightApplicationService 
     }
 
     @Override
-    public Page<InsightSimpleResult> listMyInsightCreatedByMe(ListMyInsightCreatedByMeQuery listMyInsightCreatedByMeQuery) {
+    public Page<InsightResult> listMyInsightCreatedByMe(ListMyInsightCreatedByMeQuery listMyInsightCreatedByMeQuery) {
         return listMyInsightCreatedByMeQueryHandler.listMyInsightCreatedByMe(listMyInsightCreatedByMeQuery);
     }
 
