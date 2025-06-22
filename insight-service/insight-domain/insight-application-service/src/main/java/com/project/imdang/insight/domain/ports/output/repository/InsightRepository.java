@@ -16,12 +16,20 @@ public interface InsightRepository {
 
     Page<Insight> findAll(PageRequest pageRequest);
     Page<Insight> findAllByDate(LocalDate date, PageRequest pageRequest);
-    List<Insight> findAllByIds(List<InsightId> insightIds);
 
     Page<Insight> findAllByDistrict(District district, PageRequest pageRequest);
     Page<Insight> findAllByApartmentComplex(ApartmentComplex apartmentComplex, PageRequest pageRequest);
+    Page<Insight> findAllByMemberId(MemberId memberId, PageRequest pageRequest);
     Optional<Insight> findById(InsightId insightId);
     Insight save(Insight insight);
 
     List<ApartmentComplex> findDistinctApartmentComplexByMemberId(MemberId memberId);
+    List<Object[]> findAllDistrictByMemberId(MemberId memberId);
+    Long[] countAllByMemberIdAndDistrict(MemberId memberId, District district);
+    List<Object[]> findAllDistinctApartmentComplexAndInsightCountByMemberIdAndDistrict(MemberId memberId, District district);
+    Page<Insight> findAllByMemberIdAndApartmentComplexAndOnlyMine(MemberId memberId, ApartmentComplex apartmentComplex, PageRequest pageRequest);
+    Page<Insight> findAllByMemberIdAndApartmentComplex(MemberId memberId, ApartmentComplex apartmentComplex, PageRequest pageRequest);
+    Page<Insight> findAllByMemberIdAndDistrictAndOnlyMine(MemberId memberId, District district, PageRequest pageRequest);
+    Page<Insight> findAllByMemberIdAndDistrict(MemberId memberId, District district, PageRequest pageRequest);
+
 }
