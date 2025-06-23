@@ -41,4 +41,32 @@ public class InsightHelper {
         log.info("Insight[id: {}] is saved.", saved.getId().getValue());
         return saved;
     }
+
+    public Insight update(Insight insight) {
+        InsightId insightId = insight.getId();
+        insightImageRepository.deleteByInsightId(insightId.getValue());
+        Insight saved = insightRepository.save(insight);
+        List<InsightImage> imageSaved = insightImageRepository.saveAll(insight.getImages());
+        if (saved == null || imageSaved == null) {
+            String errorMessage = "Could not save insight!";
+            log.error(errorMessage);
+            throw new InsightDomainException(errorMessage);
+        }
+
+        log.info("Insight[id: {}] is saved.", saved.getId().getValue());
+        return saved;
+    }
+
+    public Insight delete(Insight insight) {
+        InsightId insightId = insight.getId();
+        insightImageRepository.deleteByInsightId(insightId.getValue());
+        Insight saved = insightRepository.save(insight);
+        if (saved == null) {
+            String errorMessage = "Could not save insight!";
+            log.error(errorMessage);
+            throw new InsightDomainException(errorMessage);
+        }
+        log.info("Insight[id: {}] is deleted.", saved.getId().getValue());
+        return saved;
+    }
 }

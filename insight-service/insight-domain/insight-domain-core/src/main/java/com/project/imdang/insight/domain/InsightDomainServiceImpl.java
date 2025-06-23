@@ -51,8 +51,7 @@ public class InsightDomainServiceImpl implements InsightDomainService {
                                              Access access,
                                              String summary,
                                              Infra infra,
-                                             ComplexEnvironment complexEnvironment,
-                                             int score) {
+                                             ComplexEnvironment complexEnvironment) {
         insight.urlsToInsightImages(insight.getId(), images);
         insight.update(memberId, insight.getImages(), title, address, apartmentComplex,
                 visitAt, visitTimes, visitMethods, access, summary,

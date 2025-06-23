@@ -1,10 +1,7 @@
 package com.project.imdang.insight.domain.ports.output.repository;
 
-import com.project.imdang.common.domain.valueobject.InsightId;
-import com.project.imdang.common.domain.valueobject.MemberId;
+import com.project.imdang.common.domain.valueobject.*;
 import com.project.imdang.insight.domain.entity.Insight;
-import com.project.imdang.common.domain.valueobject.ApartmentComplex;
-import com.project.imdang.common.domain.valueobject.District;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -20,6 +17,7 @@ public interface InsightRepository {
 
     Page<Insight> findAllByDistrict(District district, PageRequest pageRequest);
     Page<Insight> findAllByApartmentComplex(ApartmentComplex apartmentComplex, PageRequest pageRequest);
+    Page<Insight> findAllByAddress(Address address, PageRequest pageRequest);
     Optional<Insight> findById(InsightId insightId);
     Insight save(Insight insight);
 

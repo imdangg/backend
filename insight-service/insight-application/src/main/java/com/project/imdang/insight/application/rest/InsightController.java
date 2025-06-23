@@ -4,7 +4,7 @@ import com.project.imdang.common.domain.valueobject.File;
 import com.project.imdang.common.domain.valueobject.InsightId;
 import com.project.imdang.common.domain.valueobject.MemberId;
 import com.project.imdang.insight.application.dto.insight.AccuseInsightRequest;
-import com.project.imdang.insight.domain.dto.insight.list.ApartmentComplexResult;
+import com.project.imdang.insight.domain.dto.insight.list.*;
 import com.project.imdang.insight.application.dto.insight.CreateInsightRequest;
 import com.project.imdang.insight.application.dto.insight.DeleteInsightRequest;
 import com.project.imdang.insight.application.dto.insight.RecommendInsightRequest;
@@ -15,11 +15,6 @@ import com.project.imdang.insight.domain.dto.insight.create.CreateInsightCommand
 import com.project.imdang.insight.domain.dto.insight.delete.DeleteInsightCommand;
 import com.project.imdang.insight.domain.dto.insight.detail.DetailInsightQuery;
 import com.project.imdang.insight.domain.dto.insight.detail.InsightDetailResult;
-import com.project.imdang.insight.domain.dto.insight.list.InsightResult;
-import com.project.imdang.insight.domain.dto.insight.list.ListInsightByApartmentComplexQuery;
-import com.project.imdang.insight.domain.dto.insight.list.ListInsightByDateQuery;
-import com.project.imdang.insight.domain.dto.insight.list.ListInsightByDistrictQuery;
-import com.project.imdang.insight.domain.dto.insight.list.ListInsightQuery;
 import com.project.imdang.insight.domain.dto.insight.recommend.RecommendInsightCommand;
 import com.project.imdang.insight.domain.dto.insight.update.UpdateInsightCommand;
 import com.project.imdang.insight.domain.ports.input.service.InsightApplicationService;
@@ -101,7 +96,7 @@ public class InsightController {
                 .direction("DESC")
                 .properties(new String[]{"recommendedCount"})
                 .build();
-        Page<InsightResult> insightResults = insightApplicationService.listInsight(listInsightQuery);
+        Page<InsightResult> insightResults = insightApplicationService.listWithImages(listInsightQuery);
         return ResponseEntity.ok(insightResults);
     }
 
@@ -138,7 +133,29 @@ public class InsightController {
                 .direction("DESC")
                 .properties(new String[]{"createdAt"})
                 .build();
-        Page<InsightResult> insightResults = insightApplicationService.listInsightByApartmentComplex(listInsightByApartmentComplexQuery);
+        Page<InsightResult> insightResults = insightApplicationService.listInsightWithImagesByApartmentComplex(listInsightByApartmentComplexQuery);
+        return ResponseEntity.ok(insightResults);
+    }
+
+    @Operation(description = "동네(시도-시군구-읍면동) 인사이트 목록 조회 API")
+    @ApiResponse(responseCode = "200", description = "동네(시도-시군구-읍면동)별 인사이트 목록이 조회되었습니다.")
+    @GetMapping("/by-address")
+    public ResponseEntity<Page<InsightResult>> listByApartmentComplex(@RequestParam(name = "siDo") String siDo,
+                                                                      @RequestParam(name = "siGunGu") String siGunGu,
+                                                                      @RequestParam(name = "eupMyeonDong") String eupMyeonDong,
+                                                                      @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
+                                                                      @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+
+        ListInsightByAddressQuery listInsightByAddressQuery = ListInsightByAddressQuery.builder()
+                .siDo(siDo)
+                .siGunGu(siGunGu)
+                .eupMyeonDong(eupMyeonDong)
+                .pageNumber(pageNumber)
+                .pageSize(pageSize)
+                .direction("DESC")
+                .properties(new String[]{"createdAt"})
+                .build();
+        Page<InsightResult> insightResults = insightApplicationService.listInsightWithImagesByAddress(listInsightByAddressQuery);
         return ResponseEntity.ok(insightResults);
     }
 

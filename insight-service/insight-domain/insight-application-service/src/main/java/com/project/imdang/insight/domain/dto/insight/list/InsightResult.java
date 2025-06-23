@@ -20,7 +20,9 @@ public class InsightResult {
     private Integer recommendedCount;
     private Address address;
     private String title;
-    private List<String> mainImage;
+    private List<String> images;        // image URL 리스트
+    private List<Integer> types;        // 이미지 타입 리스트
+    private List<Integer> sortNums;     // 정렬 순서 리스트
     private String memberNickname;
     private ZonedDateTime createdAt;
 }

@@ -25,7 +25,7 @@ import java.util.UUID;
 public class TestData {
 
 //    public final static UUID memberId = UUID.fromString("3eff967b-84b8-4ec4-941b-ef3f0a26c0b9");
-    public final static UUID memberId = UUID.fromString("01637237-636f-42b3-b268-03366d28b0ea");
+    public final static UUID memberId = UUID.fromString("fb2b3270-65e3-4006-a994-71e74a676a8a");
     private InsightId insightId;
 
     public TestData() {}
@@ -76,7 +76,6 @@ public class TestData {
         Assert.notNull(insightId, "InsightId must not be null!");
         return UpdateInsightCommand.builder()
                 .insightId(insightId)
-                .score(95)
 //                .mainImage(updatedMainImage)
                 .title("updated-title-1")
                 .address(TestData.address)
@@ -91,10 +90,34 @@ public class TestData {
                 .build();
     }
 
+    UpdateInsightRequest updateInsightRequest() {
+        Assert.notNull(insightId, "InsightId must not be null!");
+        return UpdateInsightRequest.builder()
+                .insightId(insightId.getValue())
+                .title("updated-title-1")
+                .address(TestData.addressDTO)
+                .apartmentComplex(TestData.apartmentComplexDTO)
+                .visitAt(LocalDate.now().minusDays(13))
+                .visitTimes(Set.of(VisitTime.저녁))
+                .visitMethods(Set.of(VisitMethod.자차, VisitMethod.도보))
+                .access(Access.허락시_가능)
+                .summary("수정 - 지하철역과 도보 10분 거리로 접근성이 좋지만, 근처 공사로 소음 문제가 있을 수 있을 것 같아요. 지하철역과 도보 10분 거리로 접근성이 좋지만, 근처 공사로 소음 문제가 있을 수 있을 것 같아요. 하지만 단지 내 공원이 잘 조성되어 있어 가족 단위 거주자에게 적합할 것 같아요.")
+                .infra(TestData.infraDTO)
+                .complexEnvironment(TestData.complexEnvironmentDTO)
+                .build();
+    }
+
     DeleteInsightCommand deleteInsightCommand() {
         Assert.notNull(insightId, "InsightId must not be null!");
         return DeleteInsightCommand.builder()
                 .insightId(insightId)
+                .build();
+    }
+
+    DeleteInsightRequest deleteInsightRequest() {
+        Assert.notNull(insightId, "InsightId must not be null!");
+        return DeleteInsightRequest.builder()
+                .insightId(insightId.getValue())
                 .build();
     }
 
@@ -114,9 +137,9 @@ public class TestData {
     }
 
     static Address address = Address.builder()
-            .siDo("서울시")
-            .siGunGu("강남구")
-            .eupMyeonDong("신논현동")
+            .siDo("서울특별시")
+            .siGunGu("종로구")
+            .eupMyeonDong("효제동")
             .buildingNumber("1")
             .build();
 

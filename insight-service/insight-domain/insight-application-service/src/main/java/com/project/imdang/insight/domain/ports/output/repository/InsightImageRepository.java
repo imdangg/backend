@@ -12,19 +12,22 @@ import org.springframework.data.domain.PageRequest;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 public interface InsightImageRepository {
 
-//    Page<Insight> findAll(PageRequest pageRequest);
-//    Page<Insight> findAllByDate(LocalDate date, PageRequest pageRequest);
-//    List<Insight> findAllByIds(List<InsightId> insightIds);
+//    Page<InsightImage> findAll(PageRequest pageRequest);
+//    Page<InsightImage> findAllByDate(LocalDate date, PageRequest pageRequest);
+    List<InsightImage> findByInsightId(InsightId insightId);
+    List<InsightImage> findByInsightIdIn(List<InsightId> insightIds);
 //
-//    Page<Insight> findAllByDistrict(District district, PageRequest pageRequest);
-//    Page<Insight> findAllByApartmentComplex(ApartmentComplex apartmentComplex, PageRequest pageRequest);
-//    Optional<Insight> findById(InsightId insightId);
+//    Page<InsightImage> findAllByDistrict(District district, PageRequest pageRequest);
+//    Page<InsightImage> findAllByApartmentComplex(ApartmentComplex apartmentComplex, PageRequest pageRequest);
+//    Optional<InsightImage> findById(InsightId insightId);
 
     InsightImage save(InsightImage image);
     List<InsightImage> saveAll(List<InsightImage> images);
+    void deleteByInsightId(UUID insightId);  // 구현체에서 작성할 메서드
 
-//    List<ApartmentComplex> findDistinctApartmentComplexByMemberId(MemberId memberId);
 }

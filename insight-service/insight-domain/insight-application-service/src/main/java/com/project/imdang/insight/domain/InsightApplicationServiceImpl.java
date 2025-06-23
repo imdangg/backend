@@ -9,16 +9,7 @@ import com.project.imdang.insight.domain.dto.insight.create.CreateInsightCommand
 import com.project.imdang.insight.domain.dto.insight.delete.DeleteInsightCommand;
 import com.project.imdang.insight.domain.dto.insight.detail.DetailInsightQuery;
 import com.project.imdang.insight.domain.dto.insight.detail.InsightDetailResult;
-import com.project.imdang.insight.domain.dto.insight.list.MyApartmentComplexResult;
-import com.project.imdang.insight.domain.dto.insight.list.MyDistrictResult;
-import com.project.imdang.insight.domain.dto.insight.list.InsightResult;
-import com.project.imdang.insight.domain.dto.insight.list.InsightSimpleResult;
-import com.project.imdang.insight.domain.dto.insight.list.ListInsightByApartmentComplexQuery;
-import com.project.imdang.insight.domain.dto.insight.list.ListInsightByDateQuery;
-import com.project.imdang.insight.domain.dto.insight.list.ListInsightByDistrictQuery;
-import com.project.imdang.insight.domain.dto.insight.list.ListInsightQuery;
-import com.project.imdang.insight.domain.dto.insight.list.ListMyInsightCreatedByMeQuery;
-import com.project.imdang.insight.domain.dto.insight.list.ListMyInsightQuery;
+import com.project.imdang.insight.domain.dto.insight.list.*;
 import com.project.imdang.insight.domain.dto.insight.recommend.RecommendInsightCommand;
 import com.project.imdang.insight.domain.dto.insight.update.UpdateInsightCommand;
 import com.project.imdang.insight.domain.handler.insight.AccuseInsightCommandHandler;
@@ -70,6 +61,11 @@ public class InsightApplicationServiceImpl implements InsightApplicationService 
     }
 
     @Override
+    public Page<InsightResult> listWithImages(ListInsightQuery listInsightQuery) {
+        return listInsightQueryHandler.listWithImages(listInsightQuery);
+    }
+
+    @Override
     public Page<InsightResult> listInsightByDate(ListInsightByDateQuery listInsightByDateQuery) {
         return listInsightQueryHandler.listByDate(listInsightByDateQuery);
     }
@@ -82,6 +78,16 @@ public class InsightApplicationServiceImpl implements InsightApplicationService 
     @Override
     public Page<InsightResult> listInsightByApartmentComplex(ListInsightByApartmentComplexQuery listInsightByApartmentComplexQuery) {
         return listInsightQueryHandler.listByApartmentComplex(listInsightByApartmentComplexQuery);
+    }
+
+    @Override
+    public Page<InsightResult> listInsightWithImagesByApartmentComplex(ListInsightByApartmentComplexQuery listInsightByApartmentComplexQuery) {
+        return listInsightQueryHandler.listWithImagesByApartmentComplex(listInsightByApartmentComplexQuery);
+    }
+
+    @Override
+    public Page<InsightResult> listInsightWithImagesByAddress(ListInsightByAddressQuery listInsightByAddressQuery) {
+        return listInsightQueryHandler.listInsightWithImagesByAddress(listInsightByAddressQuery);
     }
 
     @Override

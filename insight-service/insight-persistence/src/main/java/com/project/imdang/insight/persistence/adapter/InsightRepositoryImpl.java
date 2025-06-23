@@ -1,12 +1,8 @@
 package com.project.imdang.insight.persistence.adapter;
 
-import com.project.imdang.common.domain.valueobject.BaseId;
-import com.project.imdang.common.domain.valueobject.InsightId;
-import com.project.imdang.common.domain.valueobject.MemberId;
+import com.project.imdang.common.domain.valueobject.*;
 import com.project.imdang.insight.domain.entity.Insight;
 import com.project.imdang.insight.domain.ports.output.repository.InsightRepository;
-import com.project.imdang.common.domain.valueobject.ApartmentComplex;
-import com.project.imdang.common.domain.valueobject.District;
 import com.project.imdang.insight.persistence.repository.InsightJpaRepository;
 import com.project.imdang.insight.persistence.repository.InsightSpecification;
 import com.project.imdang.insight.persistence.entity.InsightEntity;
@@ -72,6 +68,16 @@ public class InsightRepositoryImpl implements InsightRepository {
     @Override
     public Page<Insight> findAllByApartmentComplex(ApartmentComplex apartmentComplex, PageRequest pageRequest) {
         Specification<InsightEntity> specification = Specification.where(InsightSpecification.equalsApartmentComplexName(apartmentComplex.getName()));
+        return insightJpaRepository.findAll(specification, pageRequest)
+                .map(insightPersistenceMapper::insightEntityToInsight);
+    }
+
+    @Override
+    public Page<Insight> findAllByAddress(Address address, PageRequest pageRequest) {
+        Specification<InsightEntity> specification = Specification
+                .where(InsightSpecification.equalsSiDo(address.getSiDo()))
+                .and(InsightSpecification.equalsSiGunGu(address.getSiGunGu()))
+                .and(InsightSpecification.equalsEupMyeonDong(address.getEupMyeonDong()));
         return insightJpaRepository.findAll(specification, pageRequest)
                 .map(insightPersistenceMapper::insightEntityToInsight);
     }

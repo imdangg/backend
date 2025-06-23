@@ -27,18 +27,17 @@ import java.util.Set;
 public class UpdateInsightCommand {
     private InsightId insightId;
     private MemberId memberId;
+    private List<File> images;
 
+    private String title;
     private Address address;
     private ApartmentComplex apartmentComplex;
-
-    private int score;
-    private String title;
-    private List<File> mainImage;
-    private String summary;
 
     private LocalDate visitAt;
     private Set<VisitTime> visitTimes;
     private Set<VisitMethod> visitMethods;
+
+    private String summary;
     private Access access;
 
     // 인프라

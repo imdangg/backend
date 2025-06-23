@@ -1,11 +1,6 @@
 package com.project.imdang.insight.application.mapper;
 
-import com.project.imdang.common.domain.valueobject.Address;
-import com.project.imdang.common.domain.valueobject.ApartmentComplex;
-import com.project.imdang.common.domain.valueobject.ComplexEnvironment;
-import com.project.imdang.common.domain.valueobject.File;
-import com.project.imdang.common.domain.valueobject.Infra;
-import com.project.imdang.common.domain.valueobject.MemberId;
+import com.project.imdang.common.domain.valueobject.*;
 import com.project.imdang.insight.application.dto.insight.AddressDTO;
 import com.project.imdang.insight.application.dto.insight.ApartmentComplexDTO;
 import com.project.imdang.insight.application.dto.insight.ComplexEnvironmentDTO;
@@ -47,9 +42,9 @@ public class InsightRequestResolver {
                                                        List<File> mainImage,
                                                        UpdateInsightRequest updateInsightRequest) {
         return UpdateInsightCommand.builder()
+                .insightId(new InsightId(updateInsightRequest.getInsightId()))
                 .memberId(new MemberId(memberId))
-                .score(updateInsightRequest.getScore())
-                .mainImage(mainImage)
+                .images(mainImage)
                 .title(updateInsightRequest.getTitle())
                 .address(toAddress(updateInsightRequest.getAddress()))
                 .apartmentComplex(toApartmentComplex(updateInsightRequest.getApartmentComplex()))

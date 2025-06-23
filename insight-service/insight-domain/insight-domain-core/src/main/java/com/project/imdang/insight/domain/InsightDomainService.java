@@ -32,8 +32,7 @@ public interface InsightDomainService {
                                       Access access,
                                       String summary,
                                       Infra infra,
-                                      ComplexEnvironment complexEnvironment,
-                                      int score);
+                                      ComplexEnvironment complexEnvironment);
     InsightDeletedEvent deleteInsight(Insight insight, MemberId deletedBy);
     InsightRecommendedEvent recommendInsight(Insight insight, MemberId recommendedBy);
     InsightAccusedEvent accuseInsight(Insight insight, MemberId accusedBy);

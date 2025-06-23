@@ -27,6 +27,7 @@ public class InsightPersistenceMapper {
                 .accusedCount(insight.getAccusedCount())
                 .viewCount(insight.getViewCount())
                 .createdAt(insight.getCreatedAt())
+                .isDeleted(insight.isDeleted())
                 .build();
     }
 

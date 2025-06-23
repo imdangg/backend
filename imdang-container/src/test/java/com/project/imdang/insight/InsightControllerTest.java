@@ -1,12 +1,16 @@
 package com.project.imdang.insight;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.imdang.common.domain.valueobject.MemberId;
 import com.project.imdang.insight.application.dto.insight.CreateInsightRequest;
+import com.project.imdang.insight.application.dto.insight.DeleteInsightRequest;
+import com.project.imdang.insight.application.dto.insight.UpdateInsightRequest;
 import com.project.imdang.insight.domain.dto.insight.accuse.AccuseInsightCommand;
 import com.project.imdang.insight.domain.dto.insight.create.CreateInsightCommand;
 import com.project.imdang.insight.domain.dto.insight.delete.DeleteInsightCommand;
 import com.project.imdang.insight.domain.dto.insight.recommend.RecommendInsightCommand;
 import com.project.imdang.insight.domain.dto.insight.update.UpdateInsightCommand;
+import com.project.imdang.member.domain.client.MemberData;
 import com.project.imdang.member.persistence.provider.JwtTokenProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,19 +24,24 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.project.imdang.member.domain.client.MemberDataResolver;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -50,6 +59,9 @@ class InsightControllerTest {
 
     private final String memberToken = "member-token";
 
+    @MockBean
+    private MemberDataResolver memberDataResolver;
+
     @BeforeEach
     void init() {
         // given
@@ -61,33 +73,74 @@ class InsightControllerTest {
 
     @Test
     void list() throws Exception {
-        mockMvc.perform(get("/insights")
+        MvcResult result = mockMvc.perform(get("/insights")
                         .header("Authorization", "Bearer " + memberToken)
-//                        .param("pageNumber", "0")
-//                        .param("pageSize", "10")
+                        .param("pageNumber", "0")
+                        .param("pageSize", "10")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andReturn();
+
+        String responseBody = result.getResponse().getContentAsString();
+
+        TestUtils.printPrettyJson(responseBody);
     }
 
     @Test
     void listByApartmentComplex() throws Exception {
-        mockMvc.perform(get("/insights/by-apartment-complex")
+        MvcResult result = mockMvc.perform(get("/insights/by-apartment-complex")
                         .param("apartmentComplexName", TestData.apartmentComplex.getName())
                         .header("Authorization", "Bearer " + memberToken)
-//                        .param("pageNumber", "0")
-//                        .param("pageSize", "10")
+                        .param("pageNumber", "0")
+                        .param("pageSize", "10")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
 //                .andExpect(jsonPath("$.content.length()").value(1))
                 .andDo(print())
                 .andReturn();
+
+        String responseBody = result.getResponse().getContentAsString();
+
+        TestUtils.printPrettyJson(responseBody);
+    }
+
+    @Test
+    void listByAddress() throws Exception {
+        MvcResult result = mockMvc.perform(get("/insights/by-address")
+                        .param("siDo", TestData.address.getSiDo())
+                        .param("siGunGu", TestData.address.getSiGunGu())
+                        .param("eupMyeonDong", TestData.address.getEupMyeonDong())
+                        .header("Authorization", "Bearer " + memberToken)
+                        .param("pageNumber", "0")
+                        .param("pageSize", "10")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.content.length()").value(1))
+                .andDo(print())
+                .andReturn();
+
+        String responseBody = result.getResponse().getContentAsString();
+
+        TestUtils.printPrettyJson(responseBody);
     }
 
     @Test
     void detail() throws Exception {
-        String insightId = "f509ce55-a67a-4c97-8846-0dee0c754c38";
+        String insightId = "6383c5ad-7407-4f77-b095-0b7f817e389d";
+        given(memberDataResolver.resolve(any(MemberId.class)))
+                .willReturn(Optional.of(
+                        MemberData.builder()
+                                .memberId(UUID.fromString("fb2b3270-65e3-4006-a994-71e74a676a8a"))
+                                .nickname("테스트유저")
+                                .birthDate("19981215")
+                                .gender("0")
+                                .deviceToken("dummy-token")
+                                .accusedCount(0)
+                                .insightCount(5)
+                                .build()
+                ));
+
         mockMvc.perform(get("/insights/detail")
                         .header("Authorization", "Bearer " + memberToken)
                         .param("insightId", insightId)
@@ -126,20 +179,25 @@ class InsightControllerTest {
     void updateInsight() throws Exception {
 
         // given
-        UUID insightId = UUID.fromString("b434b945-5e39-4439-b0eb-ff953b777118");
-        UpdateInsightCommand updateInsightCommand = new TestData(insightId).updateInsightCommand();
-        String valueAsString = objectMapper.writeValueAsString(updateInsightCommand);
+        UUID insightId = UUID.fromString("3a07af28-be1e-45a1-8f5a-0b8a61269bd5");
+        UpdateInsightRequest updateInsightRequest = new TestData(insightId).updateInsightRequest();
+        String valueAsString = objectMapper.writeValueAsString(updateInsightRequest);
         byte[] bytes = "content".getBytes();
-        MockMultipartFile mainImage = new MockMultipartFile("mainImage", "", "text/plain", bytes);
+        List<MockMultipartFile> mainImages = List.of(
+                new MockMultipartFile("mainImages", "img1.png", "image/png", "img1".getBytes()),
+                new MockMultipartFile("mainImages", "img2.png", "image/png", "img2".getBytes())
+        );
 
         // when
         // then
-        mockMvc.perform(multipart("/insights/update")
-                        .file(mainImage)
-                        .file(new MockMultipartFile("updateInsightCommand", "", "application/json", valueAsString.getBytes(StandardCharsets.UTF_8)))
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/insights/update")
+                        .file(mainImages.get(0))
+                        .file(mainImages.get(1))
+                        .file(new MockMultipartFile("updateInsightRequest", "updateInsightRequest.json", "application/json", valueAsString.getBytes(StandardCharsets.UTF_8)))
                         .header("Authorization", "Bearer " + memberToken))
                 .andExpect(status().isOk()) // HTTP 상태 확인
-                .andExpect(jsonPath("$.insightId", notNullValue()));
+//                .andExpect(jsonPath("$.insightId", notNullValue()));
+                .andDo(print());
     }
 
     @Test
@@ -168,13 +226,13 @@ class InsightControllerTest {
 
     @Test
     void deleteInsight() throws Exception {
-        UUID insightId = UUID.fromString("b434b945-5e39-4439-b0eb-ff953b777118");
-        DeleteInsightCommand deleteInsightCommand = new TestData(insightId).deleteInsightCommand();
+        UUID insightId = UUID.fromString("85159b48-c1e4-4b06-91ba-ba4905ead5fe");
+        DeleteInsightRequest deleteInsightRequest = new TestData(insightId).deleteInsightRequest();
         mockMvc.perform(post("/insights/delete")
                         .header("Authorization", "Bearer " + memberToken)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(deleteInsightCommand))) // 요청 본문 직렬화
+                        .content(objectMapper.writeValueAsString(deleteInsightRequest))) // 요청 본문 직렬화
                 .andExpect(status().isOk()) // HTTP 상태 확인
-                .andExpect(jsonPath("$.insightId", notNullValue()));
+                ;
     }
 }

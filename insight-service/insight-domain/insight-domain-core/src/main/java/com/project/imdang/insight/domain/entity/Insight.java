@@ -169,4 +169,8 @@ public class Insight extends AggregateRoot<InsightId> {
                 ))
                 .collect(Collectors.toList());
     }
+
+    public void setImages(List<InsightImage> images) {
+        this.images = images;
+    }
 }

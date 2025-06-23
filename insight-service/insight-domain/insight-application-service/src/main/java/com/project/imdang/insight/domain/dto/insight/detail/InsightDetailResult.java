@@ -55,6 +55,10 @@ public class InsightDetailResult {
     private Integer score;
     private ZonedDateTime createdAt;
     private Boolean createdByMe;
+    private List<String> images;        // image URL 리스트
+    private List<Integer> types;        // 이미지 타입 리스트
+    private List<Integer> sortNums;     // 정렬 순서 리스트
+
 
     public InsightDetailResult toPreviewInsightResponse() {
         return InsightDetailResult.builder()

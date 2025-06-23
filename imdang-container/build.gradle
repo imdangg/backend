@@ -33,6 +33,8 @@ dependencies {
     implementation project(':setting-service:setting-domain:setting-application-service')
     implementation project(':setting-service:setting-domain:setting-domain-core')
 
+    testImplementation project(':member-service:member-service-client:member-service-client-api')
+
     implementation project(':common:common-application')
     implementation project(':common:common-domain:common-application-service')
     implementation project(':common:common-domain:common-domain-core')

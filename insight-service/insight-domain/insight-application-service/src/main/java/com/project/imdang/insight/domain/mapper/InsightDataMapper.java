@@ -23,6 +23,20 @@ public class InsightDataMapper {
                 .build();
     }
 
+    public InsightResult insightToInsightResponse(Insight insight, String memberNickname, List<InsightImage> images) {
+        return InsightResult.builder()
+                .insightId(insight.getId())
+                .recommendedCount(insight.getRecommendedCount())
+                .address(insight.getAddress())
+                .title(insight.getTitle())
+                .images(images.stream().map(InsightImage::getImage).toList())
+                .types(images.stream().map(InsightImage::getType).toList())
+                .sortNums(images.stream().map(InsightImage::getSortNum).toList())
+                .memberNickname(memberNickname)
+                .createdAt(insight.getCreatedAt())
+                .build();
+    }
+
     public Insight createInsightCommandToInsight(CreateInsightCommand createInsightCommand) {
         return Insight.builder()
                 .memberId(createInsightCommand.getMemberId())
@@ -43,7 +57,8 @@ public class InsightDataMapper {
                                                               String memberNickname,
                                                               Boolean recommended,
                                                               Boolean accused,
-                                                              Boolean createdByMe) {
+                                                              Boolean createdByMe,
+                                                              List<InsightImage> images) {
         return InsightDetailResult.builder()
                 .memberId(insight.getMemberId())
                 .memberNickname(memberNickname)
@@ -65,6 +80,9 @@ public class InsightDataMapper {
                 .viewCount(insight.getViewCount())
                 .createdAt(insight.getCreatedAt())
                 .createdByMe(createdByMe)
+                .images(images.stream().map(InsightImage::getImage).toList())
+                .types(images.stream().map(InsightImage::getType).toList())
+                .sortNums(images.stream().map(InsightImage::getSortNum).toList())
                 .build();
     }
 }

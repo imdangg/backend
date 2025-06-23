@@ -16,6 +16,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -50,15 +53,21 @@ public class InsightImageRepositoryImpl implements InsightImageRepository {
 //                .map(insightPersistenceMapper::insightEntityToInsight);
 //    }
 //
-//    @Override
-//    public List<Insight> findAllByIds(List<InsightId> insightIds) {
-//        Set<UUID> _insightIds = insightIds.stream()
-//                .map(BaseId::getValue)
-//                .collect(Collectors.toSet());
-//        return insightJpaRepository.findAllByIdIn(_insightIds).stream()
-//                .map(insightPersistenceMapper::insightEntityToInsight)
-//                .toList();
-//    }
+    @Override
+    public List<InsightImage> findByInsightId(InsightId insightId) {
+        List<InsightImageEntity> entities = insightImageJpaRepository.findByInsightId(insightId.getValue());
+        return insightImagePersistenceMapper.toDomains(entities);
+    }
+
+    @Override
+    public List<InsightImage> findByInsightIdIn(List<InsightId> insightIds) {
+        Set<UUID> insightUuidSet = insightIds.stream()
+                .map(BaseId::getValue)
+                .collect(Collectors.toSet());
+
+        List<InsightImageEntity> entities = insightImageJpaRepository.findAllByInsightIdIn(insightUuidSet);
+        return insightImagePersistenceMapper.toDomains(entities);
+    }
 //
 //    @Override
 //    public Page<Insight> findAllByDistrict(District district, PageRequest pageRequest) {
@@ -101,4 +110,9 @@ public class InsightImageRepositoryImpl implements InsightImageRepository {
 //    public List<ApartmentComplex> findDistinctApartmentComplexByMemberId(MemberId memberId) {
 //        return insightJpaRepository.findDistinctApartmentComplexByMemberId(memberId.getValue());
 //    }
+
+    @Override
+    public void deleteByInsightId(UUID insightId) {
+        insightImageJpaRepository.deleteByInsightId(insightId);
+    }
 }

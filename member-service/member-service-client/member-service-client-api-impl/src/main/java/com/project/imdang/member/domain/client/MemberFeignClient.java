@@ -14,8 +14,8 @@ import java.util.UUID;
 public interface MemberFeignClient {
 
     @GetMapping("/info")
-    ResponseEntity<MemberData> getMemberData(@RequestParam UUID memberId);
+    ResponseEntity<MemberData> getMemberData(@RequestParam("memberId") UUID memberId);
 
     @GetMapping
-    ResponseEntity<List<MemberData>> listMemberData(@RequestParam List<UUID> memberIds);
+    ResponseEntity<List<MemberData>> listMemberData(@RequestParam("memberIds") List<UUID> memberIds);
 }

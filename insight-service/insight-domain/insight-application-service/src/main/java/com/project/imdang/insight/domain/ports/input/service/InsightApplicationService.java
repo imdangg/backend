@@ -9,16 +9,7 @@ import com.project.imdang.insight.domain.dto.insight.create.CreateInsightCommand
 import com.project.imdang.insight.domain.dto.insight.delete.DeleteInsightCommand;
 import com.project.imdang.insight.domain.dto.insight.detail.DetailInsightQuery;
 import com.project.imdang.insight.domain.dto.insight.detail.InsightDetailResult;
-import com.project.imdang.insight.domain.dto.insight.list.MyApartmentComplexResult;
-import com.project.imdang.insight.domain.dto.insight.list.MyDistrictResult;
-import com.project.imdang.insight.domain.dto.insight.list.InsightResult;
-import com.project.imdang.insight.domain.dto.insight.list.InsightSimpleResult;
-import com.project.imdang.insight.domain.dto.insight.list.ListInsightByApartmentComplexQuery;
-import com.project.imdang.insight.domain.dto.insight.list.ListInsightByDateQuery;
-import com.project.imdang.insight.domain.dto.insight.list.ListInsightByDistrictQuery;
-import com.project.imdang.insight.domain.dto.insight.list.ListInsightQuery;
-import com.project.imdang.insight.domain.dto.insight.list.ListMyInsightCreatedByMeQuery;
-import com.project.imdang.insight.domain.dto.insight.list.ListMyInsightQuery;
+import com.project.imdang.insight.domain.dto.insight.list.*;
 import com.project.imdang.insight.domain.dto.insight.recommend.RecommendInsightCommand;
 import com.project.imdang.insight.domain.dto.insight.update.UpdateInsightCommand;
 import org.springframework.data.domain.Page;
@@ -27,10 +18,13 @@ import java.util.List;
 
 public interface InsightApplicationService {
     Page<InsightResult> listInsight(ListInsightQuery listInsightQuery);
+    Page<InsightResult> listWithImages(ListInsightQuery listInsightQuery);
     Page<InsightResult> listInsightByDate(ListInsightByDateQuery listInsightByDateQuery);
     Page<InsightResult> listInsightByDistrict(ListInsightByDistrictQuery listInsightByDistrictQuery);
     Page<InsightResult> listInsightByApartmentComplex(ListInsightByApartmentComplexQuery listInsightByApartmentComplexQuery);
+    Page<InsightResult> listInsightWithImagesByApartmentComplex(ListInsightByApartmentComplexQuery listInsightByApartmentComplexQuery);
     List<ApartmentComplex> listMyVisitedApartmentComplex(MemberId memberId);
+    Page<InsightResult> listInsightWithImagesByAddress(ListInsightByAddressQuery listInsightByAddressQuery);
     Page<District> listDistrict(String siDo, String siGunGu, Integer pageNumber, Integer pageSize);
 
     List<MyDistrictResult> listMyInsightDistrict(MemberId memberId);

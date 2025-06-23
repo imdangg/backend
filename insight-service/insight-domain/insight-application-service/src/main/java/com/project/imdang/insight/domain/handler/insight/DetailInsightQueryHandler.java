@@ -5,10 +5,12 @@ import com.project.imdang.common.domain.valueobject.MemberId;
 import com.project.imdang.insight.domain.dto.insight.detail.DetailInsightQuery;
 import com.project.imdang.insight.domain.dto.insight.detail.InsightDetailResult;
 import com.project.imdang.insight.domain.entity.Insight;
+import com.project.imdang.insight.domain.entity.InsightImage;
 import com.project.imdang.insight.domain.exception.InsightNotFoundException;
 import com.project.imdang.insight.domain.exception.MemberNotFoundException;
 import com.project.imdang.insight.domain.mapper.InsightDataMapper;
 import com.project.imdang.insight.domain.ports.output.repository.AccuseRepository;
+import com.project.imdang.insight.domain.ports.output.repository.InsightImageRepository;
 import com.project.imdang.insight.domain.ports.output.repository.InsightRepository;
 import com.project.imdang.insight.domain.ports.output.repository.RecommendRepository;
 import com.project.imdang.member.domain.client.MemberData;
@@ -18,12 +20,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @Component
 public class DetailInsightQueryHandler {
 
     private final InsightRepository insightRepository;
+    private final InsightImageRepository insightImageRepository;
     private final InsightDataMapper insightDataMapper;
 
     private final RecommendRepository recommendRepository;
@@ -39,6 +44,9 @@ public class DetailInsightQueryHandler {
         Insight insight = insightRepository.findById(insightId)
                 .orElseThrow(() -> new InsightNotFoundException(insightId));
 
+        // 이미지 가져오기
+        List<InsightImage> images = insightImageRepository.findByInsightId(insightId);
+
         MemberId requestedBy = detailInsightQuery.getMemberId();
         boolean recommended = recommendRepository.findByRecommendMemberIdAndRecommendedInsightId(requestedBy, insightId).isPresent();
         boolean accused = accuseRepository.findByAccuseMemberIdAndAccusedInsightId(requestedBy, insightId).isPresent();
@@ -47,6 +55,6 @@ public class DetailInsightQueryHandler {
                 .orElseThrow(() -> new MemberNotFoundException(insightCreatedBy));
         String memberNickname = member.getNickname();
         return insightDataMapper.insightToDetailInsightResponse(
-                insight, memberNickname, recommended, accused, insightCreatedBy.equals(requestedBy));
+                insight, memberNickname, recommended, accused, insightCreatedBy.equals(requestedBy), images);
     }
 }
