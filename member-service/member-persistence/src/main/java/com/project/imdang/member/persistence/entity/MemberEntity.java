@@ -2,7 +2,7 @@ package com.project.imdang.member.persistence.entity;
 
 import com.project.imdang.common.domain.valueobject.Gender;
 import com.project.imdang.common.domain.valueobject.MemberStatus;
-import com.project.imdang.common.domain.valueobject.OAuthType;
+import com.project.imdang.common.domain.valueobject.OAuthProvider;
 import com.project.imdang.common.domain.valueobject.PenaltyPeriod;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
@@ -36,17 +36,17 @@ public class MemberEntity {
     @Column(columnDefinition = "CHAR(36)")
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID id;
-    private String authId;
+    private String oAuthId;
 
     @Enumerated(EnumType.STRING)
-    private OAuthType authType;
+    private OAuthProvider oAuthProvider;
 
     private String nickname;
     private String birthDate;
     private Gender gender;
     private String deviceToken;
 
-    private int insightCount;
+//    private Integer insightCount;
 
     private String refreshToken;
     private Boolean isLogin;

@@ -11,5 +11,4 @@ import lombok.Getter;
 public class MyPageInfoResult {
     private String nickname;
     private Integer insightCount;
-    private Integer requestCount;
 }

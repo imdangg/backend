@@ -11,7 +11,8 @@ public class MemberDataMapper {
     public MyPageInfoResult memberToDetailMyPageResponse(Member member) {
         return MyPageInfoResult.builder()
                 .nickname(member.getNickname())
-                .insightCount(member.getInsightCount())
+                // TODO
+                .insightCount(null)
                 .build();
     }
 
@@ -22,7 +23,8 @@ public class MemberDataMapper {
                 .birthDate(member.getBirthDate())
                 .gender(member.getGender() != null ? member.getGender().name() : null)
                 .deviceToken(member.getDeviceToken())
-                .insightCount(member.getInsightCount())
+                // TODO
+                .insightCount(null)
                 .build();
     }
 }

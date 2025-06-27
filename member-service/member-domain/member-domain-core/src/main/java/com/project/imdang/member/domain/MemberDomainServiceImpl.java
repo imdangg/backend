@@ -1,7 +1,7 @@
 package com.project.imdang.member.domain;
 
 import com.project.imdang.common.domain.valueobject.Gender;
-import com.project.imdang.common.domain.valueobject.OAuthType;
+import com.project.imdang.common.domain.valueobject.OAuthProvider;
 import com.project.imdang.member.domain.entity.Member;
 import com.project.imdang.member.domain.valueobject.AccusePenaltyPolicy;
 
@@ -14,8 +14,8 @@ public class MemberDomainServiceImpl implements MemberDomainService {
     }
 
     @Override
-    public Member createMember(String oAuthId, OAuthType oAuthType) {
-        return Member.createNewMember(oAuthId, oAuthType);
+    public Member createMember(String oAuthId, OAuthProvider oAuthProvider) {
+        return Member.createNewMember(oAuthId, oAuthProvider);
     }
 
     @Override
@@ -40,10 +40,5 @@ public class MemberDomainServiceImpl implements MemberDomainService {
     public Member storeRefreshToken(Member member, String refreshToken) {
         member.storeRefreshToken(refreshToken);
         return member;
-    }
-
-    @Override
-    public Member increaseInsightCount(Member member) {
-        return member.increaseInsightCount();
     }
 }

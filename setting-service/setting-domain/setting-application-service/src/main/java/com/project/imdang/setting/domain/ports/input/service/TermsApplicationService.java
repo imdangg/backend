@@ -8,5 +8,5 @@ import java.util.List;
 public interface TermsApplicationService {
 
     List<TermsResult> listTerms();
-    void agreeTerms(AgreeTermsCommand agreeTermsCommand);
+    Boolean agreeTerms(AgreeTermsCommand agreeTermsCommand);
 }

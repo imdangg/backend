@@ -25,7 +25,7 @@ public class TermsApplicationServiceImpl implements TermsApplicationService {
     }
 
     @Override
-    public void agreeTerms(AgreeTermsCommand agreeTermsCommand) {
-        agreeTermsCommandHandler.agreeTerms(agreeTermsCommand);
+    public Boolean agreeTerms(AgreeTermsCommand agreeTermsCommand) {
+        return agreeTermsCommandHandler.agreeTerms(agreeTermsCommand);
     }
 }

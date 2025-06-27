@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.project.imdang.common.application.Property.DEFAULT_SI_DO;
+import static com.project.imdang.common.application.constant.Property.DEFAULT_SI_DO;
 
 @Slf4j
 @RequestMapping("/districts")

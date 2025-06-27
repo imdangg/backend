@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,7 +21,7 @@ public class UpdateNotificationAsCheckedHandler {
     private final NotificationRepository notificationRepository;
 
     @Transactional
-    public void updateAsChecked(UUID receiverId) {
+    public Boolean updateAsChecked(MemberId receiverId) {
         List<Notification> uncheckedNotification = getUncheckedNotification(receiverId);
 //        List<Notification> notifications = notificationRepository.findAllByIds(notificationIds);
 
@@ -30,9 +29,9 @@ public class UpdateNotificationAsCheckedHandler {
 //        notificationRepository.updateIsChecked(notificationIds, Boolean.TRUE);
         uncheckedNotification.forEach(notification -> {
             notificationDomainService.updateNotificationAsChecked(notification);
-            log.info("Notification[id: {}] is updated as checked.", notification.getId().getValue());
             save(notification);
         });
+        return true;
     }
 
     // TODO - ASYNC
@@ -46,8 +45,7 @@ public class UpdateNotificationAsCheckedHandler {
         log.info("Notification[id: {}] is saved.", saved.getId().getValue());
     }
 
-    private List<Notification> getUncheckedNotification(UUID _receiverId) {
-        MemberId receiverId = new MemberId(_receiverId);
+    private List<Notification> getUncheckedNotification(MemberId receiverId) {
        return notificationRepository.findAllByReceiverIdAndIsChecked(receiverId, Boolean.FALSE);
     }
 }

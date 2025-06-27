@@ -4,7 +4,7 @@ import com.project.imdang.common.domain.entity.AggregateRoot;
 import com.project.imdang.common.domain.valueobject.Gender;
 import com.project.imdang.common.domain.valueobject.MemberId;
 import com.project.imdang.common.domain.valueobject.MemberStatus;
-import com.project.imdang.common.domain.valueobject.OAuthType;
+import com.project.imdang.common.domain.valueobject.OAuthProvider;
 import com.project.imdang.common.domain.valueobject.Penalty;
 import com.project.imdang.common.domain.valueobject.PenaltyPeriod;
 import com.project.imdang.member.domain.valueobject.AccusePenaltyPolicy;
@@ -17,14 +17,12 @@ import java.util.UUID;
 public class Member extends AggregateRoot<MemberId> {
 
     private final String oAuthId;
-    private final OAuthType oAuthType;
+    private final OAuthProvider oAuthProvider;
 
     private String nickname;
     private String birthDate;
     private Gender gender;
     private String deviceToken;
-
-    private int insightCount;
 
     private String refreshToken;
     private Boolean isLogin;
@@ -34,11 +32,11 @@ public class Member extends AggregateRoot<MemberId> {
     private MemberStatus status;
     private PenaltyPeriod penaltyPeriod;
 
-    public static Member createNewMember(String oAuthId, OAuthType oAuthType) {
+    public static Member createNewMember(String oAuthId, OAuthProvider oAuthProvider) {
         return Member.builder()
                 .id(new MemberId(UUID.randomUUID()))
                 .oAuthId(oAuthId)
-                .oAuthType(oAuthType)
+                .oAuthProvider(oAuthProvider)
                 .isDeleted(Boolean.FALSE)
                 .isLogin(Boolean.TRUE)
                 .status(MemberStatus.ACTIVE)
@@ -52,8 +50,7 @@ public class Member extends AggregateRoot<MemberId> {
                   Gender gender,
                   String deviceToken,
                   String oAuthId,
-                  OAuthType oAuthType,
-                  int insightCount,
+                  OAuthProvider oAuthProvider,
                   String refreshToken,
                   Boolean isLogin, 
                   Boolean isDeleted,
@@ -66,8 +63,7 @@ public class Member extends AggregateRoot<MemberId> {
         this.gender = gender;
         this.deviceToken = deviceToken;
         this.oAuthId = oAuthId;
-        this.oAuthType = oAuthType;
-        this.insightCount = insightCount;
+        this.oAuthProvider = oAuthProvider;
         this.refreshToken = refreshToken;
         this.isLogin = isLogin;
         this.isDeleted = isDeleted;
@@ -112,10 +108,5 @@ public class Member extends AggregateRoot<MemberId> {
     public void liftPenalty() {
         this.status = MemberStatus.ACTIVE;
         this.penaltyPeriod = null;
-    }
-
-    public Member increaseInsightCount() {
-        this.insightCount++;
-        return this;
     }
 }

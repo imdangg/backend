@@ -28,7 +28,7 @@ public class AgreeTermsCommandHandler {
 //    private final TermsDataMapper termsDataMapper;
 
     @Transactional
-    public void agreeTerms(AgreeTermsCommand agreeTermsCommand) {
+    public Boolean agreeTerms(AgreeTermsCommand agreeTermsCommand) {
         Set<TermsId> termsIds = agreeTermsCommand.getTermsIds();
         MemberId memberId = agreeTermsCommand.getMemberId();
         List<Terms> terms = termsRepository.findAllByIds(termsIds);
@@ -39,6 +39,7 @@ public class AgreeTermsCommandHandler {
             save(termsAgreement);
             log.info("Terms[id: {}] is agreed by Member[id: {}].", termsAgreement.getTermsId().getValue(), termsAgreement.getMemberId().getValue());
         });
+        return true;
     }
 
     private void save(TermsAgreement termsAgreement) {

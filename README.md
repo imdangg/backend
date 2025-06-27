@@ -52,8 +52,65 @@
     - 사용자가 Python으로 시나리오를 작성하여 웹 애플리케이션의 성능을 측정~~
   - ~~Monitoring~~
 ## + admin 페이지
-### + 예외 응답
-### + 응답 클래스 정의
+
+## 코딩 컨벤션
+### 1) 패키지 구조
+```text
+com.example.project
+├── common         // 공통 유틸, 응답 클래스 등
+├── config         // 설정
+├── domain
+│   └── member
+│       ├── controller
+│       ├── service
+│       ├── repository
+│       ├── entity
+│       └── dto
+└── global         // 예외, 인터셉터, 보안, 에러 핸들링 등
+```
+### 2) 클래스 네이밍
+| 유형             | 접미사 예시                       | 예시 이름                     |
+| -------------- | ---------------------------- | ------------------------- |
+| Entity         | `Entity` (또는 없음)             | `Member`, `Order`         |
+| Repository     | `Repository`                 | `MemberRepository`        |
+| Service        | `Service`                    | `MemberService`           |
+| Controller     | `Controller`                 | `MemberController`        |
+| DTO (입력값)      | `Request` / `Command`        | `CreateMemberRequest`     |
+| DTO (출력값)      | `Response` / `Result`        | `MemberInfoResponse`      |
+| API 응답 Wrapper | `ApiResult` / `BaseResponse` | `ApiResult<T>`            |
+| Exception      | `Exception`                  | `MemberNotFoundException` |
+
+### 3) API URL
+- 항상 복수형 명사 사용
+- 'me'는 인증된 사용자 표현
+
+| 기능       | URL 예시                    |
+| -------- | ------------------------- |
+| 회원 조회    | `GET /members/{id}`       |
+| 내 정보 조회  | `GET /members/me`         |
+| 회원 생성    | `POST /members`           |
+| 마이페이지 조회 | `GET /members/me/my-page` |
+| 로그인      | `POST /auth/login`        |
+
+### 4) 코드 스타일(Java)
+#### * 생성자 주입 방식
+#### * 비즈니스 로직 작성
+- 리턴 타입은 void X → 성공 여부를 판단할 수 있는 true/false의 `Boolean`으로 반환한다.
+### 5) 예외 처리
+- 모든 예외는 `GlobalExceptionHandler`에서 처리한다.
+
+### 6) 응답 포맷
+```text
+{
+  "code": "SUCCESS",
+  "message": "요청이 성공했습니다.",
+  "data": {
+    "nickname": "yk",
+    "point": 1000
+  }
+}
+```
+
 ## 3. 모듈 구조 및 도메인 모델링
 ### # backend(rootProject)
 

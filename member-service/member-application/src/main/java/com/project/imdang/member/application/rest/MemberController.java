@@ -1,127 +1,131 @@
 package com.project.imdang.member.application.rest;
 
+import com.project.imdang.common.application.response.ApiResponse;
 import com.project.imdang.common.domain.valueobject.MemberId;
-import com.project.imdang.member.application.dto.member.OAuthWithdrawRequest;
+import com.project.imdang.member.application.dto.member.JoinRequest;
+import com.project.imdang.member.application.dto.member.WithdrawRequest;
+import com.project.imdang.member.domain.dto.member.JoinCommand;
 import com.project.imdang.member.domain.dto.member.MemberResult;
 import com.project.imdang.member.domain.dto.member.MyPageInfoResult;
-import com.project.imdang.member.domain.dto.member.apple.AppleWithdrawCommand;
-import com.project.imdang.member.domain.dto.member.google.GoogleWithdrawCommand;
-import com.project.imdang.member.domain.dto.member.kakao.KakaoWithdrawCommand;
+import com.project.imdang.member.domain.dto.member.WithdrawCommand;
 import com.project.imdang.member.domain.ports.input.service.MemberApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
 
+import static com.project.imdang.common.application.constant.RequestPath.DETAIL_MEMBER;
+import static com.project.imdang.common.application.constant.RequestPath.DETAIL_MY_PAGE;
+import static com.project.imdang.common.application.constant.RequestPath.JOIN_MEMBER;
+import static com.project.imdang.common.application.constant.RequestPath.LIST_MEMBER;
+import static com.project.imdang.common.application.constant.RequestPath.LOGOUT;
+import static com.project.imdang.common.application.constant.RequestPath.WITHDRAW_MEMBER;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@Tag(name = "MemberController", description = "마이페이지 API")
-@RequestMapping("/members")
+@Tag(name = "MemberController", description = "회원 API")
 public class MemberController {
     
     private final MemberApplicationService memberApplicationService;
 
-    @Operation(description = "마이페이지 API")
-    @ApiResponse(responseCode = "200", description = "마이페이지 조회 성공",
-        content = @Content(schema = @Schema(implementation = MyPageInfoResult.class)))
-    @GetMapping("/detail")
-    public ResponseEntity<MyPageInfoResult> detail(@AuthenticationPrincipal UUID memberId) {
+    @Operation(description = "마이 페이지 API")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "마이 페이지 조회 성공")
+    })
+    @GetMapping(DETAIL_MY_PAGE)
+    public ApiResponse<MyPageInfoResult> detailMyPage(@AuthenticationPrincipal UUID memberId) {
         MyPageInfoResult myPageInfoResult = memberApplicationService.detailMyPage(new MemberId(memberId));
         log.info("MyPage of Member[id : {}] is viewed.", memberId);
-        return ResponseEntity.ok(myPageInfoResult);
+        return ApiResponse.success(myPageInfoResult);
     }
 
-    @GetMapping("/info")
-    public ResponseEntity<MemberResult> info(@RequestParam UUID memberId) {
+    @Operation(description = "회원 정보 API")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "회원 정보 조회 성공")
+    })
+    @GetMapping(DETAIL_MEMBER)
+    public ApiResponse<MemberResult> detail(@RequestParam UUID memberId) {
         MemberResult memberResult = memberApplicationService.detailMember(new MemberId(memberId));
         log.info("Member[id :{}] is retrieved.", memberId);
-        return ResponseEntity.ok(memberResult);
+        return ApiResponse.success(memberResult);
     }
 
-    @GetMapping
-    public ResponseEntity<List<MemberResult>> list(@RequestParam List<UUID> memberIds) {
+    @Operation(description = "회원 목록 API")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "회원 목록 조회 성공")
+    })
+    @GetMapping(LIST_MEMBER)
+    public ApiResponse<List<MemberResult>> list(@RequestParam List<UUID> memberIds) {
         List<MemberId> ids = memberIds.stream()
                 .map(MemberId::new)
                 .toList();
         List<MemberResult> memberResults = memberApplicationService.listMember(ids);
-        return ResponseEntity.ok(memberResults);
+        return ApiResponse.success(memberResults);
     }
 
-    /**
-     * 로그아웃
-     */
-    @Operation(description = "로그아웃 API")
-    @ApiResponse(responseCode = "200", description = "로그아웃 완료")
-    @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@AuthenticationPrincipal UUID memberId) {
-        memberApplicationService.logout(new MemberId(memberId));
-        return ResponseEntity.ok().build();
+    @Operation(description = "회원가입 API")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "가입 성공")
+    })
+    @PutMapping(JOIN_MEMBER)
+    public ApiResponse<Boolean> join(@AuthenticationPrincipal UUID memberId,
+                                     @RequestBody @Valid JoinRequest joinRequest) {
+        JoinCommand joinCommand = JoinCommand.builder()
+                .memberId(new MemberId(memberId))
+                .nickname(joinRequest.nickname())
+                .birthDate(joinRequest.birthDate())
+                .gender(joinRequest.gender())
+                .deviceToken(joinRequest.deviceToken())
+                .build();
+        Boolean joinResult = memberApplicationService.join(joinCommand);
+        return ApiResponse.success(joinResult);
     }
-    
-    // TODO - API 통합
-/*
+
     @Operation(description = "회원 탈퇴 API")
-    @ApiResponse(responseCode = "200", description = "탈퇴 완료")
-    @PostMapping("/withdraw")
-    public ResponseEntity<Void> withdraw(@AuthenticationPrincipal UUID memberId, @RequestBody @Valid OAuthWithdrawCommand_ oAuthWithdrawCommand) {
-        memberApplicationService.withdraw(memberId, oAuthWithdrawCommand);
-        return ResponseEntity.ok().build();
-    }*/
-    //회원 탈퇴
-    @Operation(description = "카카오 회원 탈퇴 API")
-    @ApiResponse(responseCode = "200", description = "탈퇴 완료")
-    @PostMapping("/withdrawal/kakao")
-    public ResponseEntity<Void> withdrawKakao(@AuthenticationPrincipal UUID memberId,
-                                              @RequestBody @Valid OAuthWithdrawRequest oAuthWithdrawRequest) {
-        KakaoWithdrawCommand kakaoWithdrawCommand = KakaoWithdrawCommand.builder()
-                .memberId(new MemberId(memberId))
-                .token(oAuthWithdrawRequest.token())
-                .build();
-        memberApplicationService.withdraw(kakaoWithdrawCommand);
-        return ResponseEntity.ok().build();
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "탈퇴 완료")
+    })
+    @PostMapping(WITHDRAW_MEMBER)
+    public ApiResponse<Boolean> withdraw(@AuthenticationPrincipal UUID memberId,
+                                         @RequestBody @Valid WithdrawRequest withdrawRequest) {
+        WithdrawCommand withdrawCommand
+                = new WithdrawCommand(new MemberId(memberId), withdrawRequest.provider(), withdrawRequest.identifier());
+        Boolean withdrawResult = memberApplicationService.withdraw(withdrawCommand);
+        return ApiResponse.success(withdrawResult);
     }
 
-    //회원 탈퇴
-    @Operation(description = "구글 회원 탈퇴 API")
-    @ApiResponse(responseCode = "200", description = "탈퇴 완료")
-    @PostMapping("/withdrawal/google")
-    public ResponseEntity<Void> withdrawGoogle(@AuthenticationPrincipal UUID memberId,
-                                               @RequestBody @Valid OAuthWithdrawRequest oAuthWithdrawRequest) {
-        GoogleWithdrawCommand googleWithdrawCommand = GoogleWithdrawCommand.builder()
-                .memberId(new MemberId(memberId))
-                .token(oAuthWithdrawRequest.token())
-                .build();
-        memberApplicationService.withdraw(googleWithdrawCommand);
-        return ResponseEntity.ok().build();
-    }
-
-    //회원 탈퇴
-    @Operation(description = "애플 회원 탈퇴 API")
-    @ApiResponse(responseCode = "200", description = "탈퇴 완료")
-    @PostMapping("/withdrawal/apple")
-    public ResponseEntity<Void> withdrawApple(@AuthenticationPrincipal UUID memberId,
-                                              @RequestBody @Valid OAuthWithdrawRequest oAuthWithdrawRequest) {
-        AppleWithdrawCommand appleWithdrawCommand = AppleWithdrawCommand.builder()
-                .memberId(new MemberId(memberId))
-                .token(oAuthWithdrawRequest.token())
-                .build();
-        memberApplicationService.withdraw(appleWithdrawCommand);
-        return ResponseEntity.ok().build();
+    @Operation(description = "로그아웃 API")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "로그아웃 완료")
+    })
+    @PostMapping(LOGOUT)
+    public ApiResponse<Boolean> logout(@AuthenticationPrincipal UUID memberId) {
+        Boolean logoutResult = memberApplicationService.logout(new MemberId(memberId));
+        return ApiResponse.success(logoutResult);
     }
 }

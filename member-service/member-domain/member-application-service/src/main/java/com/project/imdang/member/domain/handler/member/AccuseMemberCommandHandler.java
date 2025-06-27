@@ -10,9 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-@Component
 @Slf4j
 @RequiredArgsConstructor
+@Component
 public class AccuseMemberCommandHandler {
 
     private final AccusePenaltyPolicy accusePenaltyPolicy;
@@ -20,9 +20,10 @@ public class AccuseMemberCommandHandler {
     private final MemberHelper memberHelper;
 
     @Transactional
-    public void accuse(MemberId memberId) {
+    public Boolean accuse(MemberId memberId) {
         Member member = memberHelper.get(memberId);
         Member accusedMember = memberDomainService.accuseMember(member, accusePenaltyPolicy);
         memberHelper.save(accusedMember);
+        return true;
     }
 }

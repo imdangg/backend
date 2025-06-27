@@ -7,7 +7,7 @@ import com.project.imdang.member.persistence.mapper.MemberPersistenceMapper;
 import com.project.imdang.member.persistence.repository.MemberJpaRepository;
 import com.project.imdang.member.domain.entity.Member;
 import com.project.imdang.member.domain.ports.output.repository.MemberRepository;
-import com.project.imdang.common.domain.valueobject.OAuthType;
+import com.project.imdang.common.domain.valueobject.OAuthProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,8 +25,8 @@ public class MemberRepositoryImpl implements MemberRepository {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Member> findByOAuthIdAndOAuthTypeAndIsDeleted(String oAuthId, OAuthType oAuthType, Boolean isDeleted) {
-        Optional<MemberEntity> memberEntity = memberJpaRepository.findByAuthIdAndAuthTypeAndIsDeleted(oAuthId, oAuthType, isDeleted);
+    public Optional<Member> findByOAuthIdAndOAuthProviderAndIsDeleted(String oAuthId, OAuthProvider oAuthProvider, Boolean isDeleted) {
+        Optional<MemberEntity> memberEntity = memberJpaRepository.findByAuthIdAndAuthTypeAndIsDeleted(oAuthId, oAuthProvider, isDeleted);
         return memberEntity.map(memberPersistenceMapper::memberEntityToMember);
     }
 

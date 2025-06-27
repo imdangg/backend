@@ -2,35 +2,19 @@ package com.project.imdang.common.application.response.code;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
 public enum ErrorCode {
 
-    INVALID_REQUEST("4000", "Invalid Request"),
-    NOT_FOUND("4040", "Not Found"),
+    BAD_REQUEST("4000", HttpStatus.BAD_REQUEST.getReasonPhrase()),
+    UNAUTHORIZED("4010", HttpStatus.UNAUTHORIZED.getReasonPhrase()),
+    FORBIDDEN("4030", HttpStatus.FORBIDDEN.getReasonPhrase()),
+    NOT_FOUND("4040", HttpStatus.NOT_FOUND.getReasonPhrase()),
     ALREADY_EXIST("4090", "Already Exist"),
-    INTERNAL_SERVER_ERROR("5000", "Internal Server Error");
+    INTERNAL_SERVER_ERROR("5000", HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
 
-//
-//    UNKNOWN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"J001",  "예상치 못한 오류가 발생했습니다."),
-//    MAL_FORMED_TOKEN("J002", HttpStatus.UNAUTHORIZED, "잘못된 JWT 서명입니다."),
-//    EXPIRED_TOKEN("J003", HttpStatus.UNAUTHORIZED, "만료된 토큰입니다."),
-//    UNSUPPORTED_TOKEN("J004", HttpStatus.UNAUTHORIZED, "지원되지 않는 토큰입니다."),
-//    ACCESS_DENIED("J005", HttpStatus.UNAUTHORIZED, "접근이 거부되었습니다."),
-//    ILLEGAL_TOKEN("J006", HttpStatus.UNAUTHORIZED, "JWT 토큰이 잘못되었습니다."),
-//    ADDITIONAL_REQUIRED_TOKEN("J007", HttpStatus.UNAUTHORIZED, "추가 정보를 입력해야 합니다.");
-
-//    private final HttpStatus httpStatus;
     private final String code;
     private final String message;
-
-    public static ErrorCode getErrorCode(String code) {
-        for (ErrorCode errorCode : ErrorCode.values()) {
-            if (errorCode.getCode().equals(code)) {
-                return errorCode;
-            }
-        }
-        throw new IllegalArgumentException("Unsupported code : " + code);
-    }
 }

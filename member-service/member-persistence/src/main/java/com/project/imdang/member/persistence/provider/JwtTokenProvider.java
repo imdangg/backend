@@ -1,90 +1,68 @@
 package com.project.imdang.member.persistence.provider;
 
-import com.project.imdang.member.domain.ports.output.provider.TokenProvider;
+import com.project.imdang.member.domain.ports.output.token.TokenProvider;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.UnsupportedJwtException;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-public final class JwtTokenProvider implements TokenProvider, InitializingBean {
+public class JwtTokenProvider implements TokenProvider {
 
-    private Key key;
+    @Value("${jwt.secret-key}")
+    private String secretKey;
+    private SecretKey key;
 
-
-    @Override
-    public void afterPropertiesSet() {
-//        byte[] keyBytes =
-//        this.key =
-//        log.info("생성 후 초기화 완료");
+    @PostConstruct
+    public void init() {
+        this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
-    public String generateAccessToken(String subject, Date expiredAt) {
+    public String generate(String subject, Date expiration) {
         return Jwts.builder()
                 .subject(subject)
-                .expiration(expiredAt)
-                .signWith(key, SignatureAlgorithm.HS512)
+                .expiration(expiration)
+                .signWith(key)
                 .compact();
     }
 
     @Override
-    public String generateRefreshToken(Date expiredAt) {
-        return Jwts.builder()
-                .subject("RefreshToken")
-                .expiration(expiredAt)
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact();
+    public void validate(String token) {
+        Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token);
     }
 
     @Override
-    public boolean verifyToken(String token) {
-        try {
-            Jws<Claims> claims = Jwts.parser()
-                    .setSigningKey(key).build()
-                    .parseClaimsJws(token);
-            return claims.getBody().getExpiration().after(new Date());
-        } catch (SecurityException | MalformedJwtException e) {
-            log.warn("잘못된 JWT 서명입니다.");
-            throw e;
-        } catch (ExpiredJwtException e) {
-            log.warn("만료된 JWT 토큰입니다.");
-            throw e;
-        } catch (UnsupportedJwtException e) {
-            log.warn("지원되지 않는 JWT 토큰입니다.");
-            throw e;
-        } catch (IllegalArgumentException e) {
-            log.warn("JWT 토큰이 잘못되었습니다.");
-            throw e;
-        } catch (Exception e) {
-            log.warn("예외가 발생했습니다.");
-            throw e;
-        }
-    }
-
-    public String extractSubject(String accessToken) {
-        Claims claims = parseClaims(accessToken);
+    public String extractSubject(String token) {
+        Claims claims = getClaims(key, token);
         return claims.getSubject();
     }
 
-    private Claims parseClaims(String accessToken) {
+    @Override
+    public Map<String, Object> extractClaims(String token) {
+        Claims claims = getClaims(key, token);
+        return claims.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    private Claims getClaims(SecretKey key, String token) {
         return Jwts.parser()
-                .setSigningKey(key)
+                .verifyWith(key)
                 .build()
-                .parseClaimsJws(accessToken)
-                .getBody();
+                .parseSignedClaims(token)
+                .getPayload();
     }
 }

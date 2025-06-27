@@ -1,11 +1,11 @@
 package com.project.imdang.member.domain.handler;
 
 import com.project.imdang.common.domain.valueobject.MemberId;
+import com.project.imdang.common.domain.valueobject.OAuthProvider;
 import com.project.imdang.member.domain.entity.Member;
 import com.project.imdang.member.domain.exception.MemberDomainException;
 import com.project.imdang.member.domain.exception.MemberNotFoundException;
 import com.project.imdang.member.domain.ports.output.repository.MemberRepository;
-import com.project.imdang.common.domain.valueobject.OAuthType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -28,8 +28,8 @@ public class MemberHelper {
         return memberRepository.findByNickname(nickname);
     }
 
-    public Optional<Member> getByOAuthIdAndOAuthTypeAndIsDeleted(String oAuthId, OAuthType oAuthType, Boolean isDeleted) {
-        return memberRepository.findByOAuthIdAndOAuthTypeAndIsDeleted(oAuthId, oAuthType, isDeleted);
+    public Optional<Member> getByOAuthIdAndOAuthProviderAndIsDeleted(String oAuthId, OAuthProvider oAuthProvider, Boolean isDeleted) {
+        return memberRepository.findByOAuthIdAndOAuthProviderAndIsDeleted(oAuthId, oAuthProvider, isDeleted);
     }
 
     public Member save(Member member) {

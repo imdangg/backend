@@ -47,7 +47,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static com.project.imdang.common.application.Property.DEFAULT_SI_DO;
+import static com.project.imdang.common.application.constant.Property.DEFAULT_SI_DO;
 
 @Slf4j
 @RequestMapping("/insights")
