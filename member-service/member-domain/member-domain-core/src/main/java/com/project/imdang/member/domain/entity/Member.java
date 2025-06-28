@@ -31,7 +31,7 @@ public class Member extends AggregateRoot<MemberId> {
     private Boolean isLogin;
     private Boolean isDeleted;
   
-    private int accusedCount;
+    private Long accusedCount;
     private MemberStatus status;
     private PenaltyPeriod penaltyPeriod;
 
@@ -58,7 +58,7 @@ public class Member extends AggregateRoot<MemberId> {
                   String refreshToken,
                   Boolean isLogin, 
                   Boolean isDeleted,
-                  int accusedCount,
+                  Long accusedCount,
                   MemberStatus status,
                   PenaltyPeriod penaltyPeriod) {
         setId(id);

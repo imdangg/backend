@@ -63,7 +63,7 @@ public class AppleOAuthClient implements OAuthClient {
     private String keyPath;
 
     @Override
-    public OAuthProvider getProvider() {
+    public OAuthProvider getOAuthProvider() {
         return OAuthProvider.APPLE;
     }
 

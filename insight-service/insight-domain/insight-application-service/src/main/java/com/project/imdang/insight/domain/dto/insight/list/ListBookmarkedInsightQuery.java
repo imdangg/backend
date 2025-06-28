@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class ListMyInsightQuery extends PagingQuery {
+public class ListBookmarkedInsightQuery extends PagingQuery {
 
     private MemberId memberId;
     private District district;
@@ -15,7 +15,7 @@ public class ListMyInsightQuery extends PagingQuery {
     private Boolean onlyMine;
 
     @Builder
-    private ListMyInsightQuery(Integer pageNumber, Integer pageSize, String direction, String[] properties,
+    private ListBookmarkedInsightQuery(Integer pageNumber, Integer pageSize, String direction, String[] properties,
                                MemberId memberId,
                                String siDo, String siGunGu, String eupMyeonDong,
                                String apartmentComplexName, Boolean onlyMine) {

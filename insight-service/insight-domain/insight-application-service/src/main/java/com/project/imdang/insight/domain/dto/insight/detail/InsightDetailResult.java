@@ -48,9 +48,9 @@ public class InsightDetailResult {
 
     private Boolean recommended;        // 로그인한 사용자가 추천했는가?
     private Boolean accused;            // 로그인한 사용자가 신고했는가?
-    private Integer recommendedCount;   //추천수
-    private Integer accusedCount;       //신고수
-    private Integer viewCount;          //조회수
+    private Long recommendedCount;   //추천수
+    private Long accusedCount;       //신고수
+    private Long viewCount;          //조회수
 
 //    private Integer score;
     private ZonedDateTime createdAt;

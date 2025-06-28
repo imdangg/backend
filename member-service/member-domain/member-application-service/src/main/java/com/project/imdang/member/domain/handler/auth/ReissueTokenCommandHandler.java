@@ -34,9 +34,13 @@ public class ReissueTokenCommandHandler {
             throw new MemberDomainException("Invalid Token!");
         }
 
-        TokenResult tokenResult = tokenHandler.generateToken(memberId);
+        String reissuedAccessToken = tokenHandler.generateAccessToken(memberId.getValue());
+        String reissuedRefreshToken = tokenHandler.generateRefreshToken(memberId.getValue());
         log.info("Member[id: {}] token is reissued.", member.getId().getValue());
-        memberHelper.save(memberDomainService.storeRefreshToken(member, tokenResult.getRefreshToken()));
-        return tokenResult;
+        memberHelper.save(memberDomainService.storeRefreshToken(member, reissuedRefreshToken));
+        return TokenResult.builder()
+                .accessToken(reissuedAccessToken)
+                .refreshToken(reissuedRefreshToken)
+                .build();
     }
 }

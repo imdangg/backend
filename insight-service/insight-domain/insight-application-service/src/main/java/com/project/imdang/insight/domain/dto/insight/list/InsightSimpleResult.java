@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InsightSimpleResult {
     private InsightId insightId;
-    private Integer recommendedCount;
+    private Long recommendedCount;
     private Address address;
     private String title;
 }

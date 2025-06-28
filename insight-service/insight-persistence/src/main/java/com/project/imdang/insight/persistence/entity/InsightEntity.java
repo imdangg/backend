@@ -95,11 +95,11 @@ public class InsightEntity {
     @Column(columnDefinition = "json")
     private ComplexEnvironment complexEnvironment;
 
-    private int recommendedCount;
-    private int accusedCount;
-    private int viewCount;
+    private Long recommendedCount;
+    private Long accusedCount;
+    private Long viewCount;
 
-    private int score;
+    private Integer score;
 
     // TODO - BaseEntity?
     private ZonedDateTime createdAt;

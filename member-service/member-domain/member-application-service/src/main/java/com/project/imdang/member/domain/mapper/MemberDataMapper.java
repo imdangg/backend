@@ -23,6 +23,7 @@ public class MemberDataMapper {
                 .birthDate(member.getBirthDate())
                 .gender(member.getGender() != null ? member.getGender().name() : null)
                 .deviceToken(member.getDeviceToken())
+                .refreshToken(member.getRefreshToken())
                 // TODO
                 .insightCount(null)
                 .build();

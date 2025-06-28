@@ -31,7 +31,7 @@ public class KakaoOAuthClient implements OAuthClient {
     private String withdrawUrl;
 
     @Override
-    public OAuthProvider getProvider() {
+    public OAuthProvider getOAuthProvider() {
         return OAuthProvider.KAKAO;
     }
 

@@ -13,18 +13,18 @@ public class AccusePenaltyPolicyImpl implements AccusePenaltyPolicy {
 
     @Override
     public void apply(Member member) {
-        int accusedCount = member.getAccusedCount();
+        Long accusedCount = member.getAccusedCount();
         Penalty penalty = getPenalty(accusedCount);
         if (penalty != null) {
             member.applyPenalty(penalty);
         }
     }
 
-    private Penalty getPenalty(int accusedCount) {
+    private Penalty getPenalty(Long accusedCount) {
         Penalty penalty = null;
-        if (accusedCount == 30) {
+        if (accusedCount == 30L) {
             penalty = TEMPORARY_BANNED;
-        } else if (accusedCount == 50) {
+        } else if (accusedCount == 50L) {
             penalty = PERMANENT_BANNED;
         }
         return penalty;

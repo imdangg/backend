@@ -7,8 +7,8 @@ export default function DetailInsight() {
     const [insight, setInsight] = useState(null);
     const [recommended, setRecommended] = useState(null);
     const [accused, setAccused] = useState(null);
-    const [myInsights, setMyInsights] = useState([]);
-    const [myInsightId, setMyInsightId] = useState(null);
+    const [myInsights, setBookmarkedInsights] = useState([]);
+    const [myInsightId, setBookmarkedInsightId] = useState(null);
 
     useEffect(() => {
         fetchInsight(id)
@@ -23,8 +23,8 @@ export default function DetailInsight() {
             });
     }, [recommended, accused]);
 
-    const handleChooseMyInsight = (myInsightId) => {
-        setMyInsightId(myInsightId);
+    const handleChooseBookmarkedInsight = (myInsightId) => {
+        setBookmarkedInsightId(myInsightId);
     }
 
     const handleConfirm = () => {};

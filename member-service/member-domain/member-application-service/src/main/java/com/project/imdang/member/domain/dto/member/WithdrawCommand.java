@@ -7,7 +7,7 @@ import lombok.Builder;
 @Builder
 public record WithdrawCommand(
         MemberId memberId,
-        OAuthProvider provider,
+        OAuthProvider oAuthProvider,
         String identifier
 ) {
 }

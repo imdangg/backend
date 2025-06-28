@@ -23,10 +23,10 @@ public interface InsightApplicationService {
     List<ApartmentComplexResult> listMyVisitedApartmentComplex(MemberId memberId);
     Page<District> listDistrict(String siDo, String siGunGu, Integer pageNumber, Integer pageSize);
 
-    List<MyDistrictResult> listMyInsightDistrict(MemberId memberId);
-    List<MyApartmentComplexResult> listMyInsightApartmentComplexByDistrict(MemberId memberId, String siDo, String siGunGu, String eupMyeonDong);
-    Page<InsightResult> listMyInsight(ListMyInsightQuery listMyInsightQuery);
-    Page<InsightResult> listMyInsightCreatedByMe(ListMyInsightCreatedByMeQuery listMyInsightCreatedByMeQuery);
+    List<DistrictOfBookmarkedInsightResult> listBookmarkedInsightDistrict(MemberId memberId);
+    List<ApartmentComplexOfBookmarkedInsightResult> listBookmarkedInsightApartmentComplexByDistrict(MemberId memberId, String siDo, String siGunGu, String eupMyeonDong);
+    Page<InsightResult> listBookmarkedInsight(ListBookmarkedInsightQuery listBookmarkedInsightQuery);
+    Page<InsightResult> listBookmarkedInsightCreatedByMe(ListBookmarkedInsightCreatedByMeQuery listBookmarkedInsightCreatedByMeQuery);
 
     InsightDetailResult detailInsight(DetailInsightQuery detailInsightQuery);
     // = uploadInsight

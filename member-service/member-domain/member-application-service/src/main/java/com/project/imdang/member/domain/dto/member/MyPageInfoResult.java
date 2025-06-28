@@ -10,5 +10,5 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MyPageInfoResult {
     private String nickname;
-    private Integer insightCount;
+    private Long insightCount;
 }

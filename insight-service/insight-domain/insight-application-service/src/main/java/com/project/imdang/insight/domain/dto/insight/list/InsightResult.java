@@ -16,7 +16,7 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InsightResult {
     private InsightId insightId;
-    private Integer recommendedCount;
+    private Long recommendedCount;
     private Address address;
     private String title;
     private String mainImage;

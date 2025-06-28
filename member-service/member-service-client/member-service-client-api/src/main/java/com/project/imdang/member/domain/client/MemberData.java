@@ -19,7 +19,7 @@ public class MemberData {
     private String birthDate;
     private String gender;
     private String deviceToken;
-    private int accusedCount;
-    private int insightCount;
+    private Long accusedCount;
+    private Long insightCount;
     private LocalDate latestInsightCreateDate;
 }

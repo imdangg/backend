@@ -1,46 +1,45 @@
-package com.project.imdang.jwt;
+package com.project.imdang.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
+import com.project.imdang.member.domain.handler.auth.TokenHandler;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.crypto.SecretKey;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
+import java.util.Map;
+import java.util.UUID;
 
 import static com.project.imdang.common.application.constant.Header.AUTHORIZATION;
+import static com.project.imdang.common.application.constant.RequestPath.DETAIL_MEMBER;
+import static com.project.imdang.common.application.constant.RequestPath.LIST_MEMBER;
+import static com.project.imdang.common.application.constant.RequestPath.LOGIN;
 
 
 @Slf4j
 @RequiredArgsConstructor
-public class JwtValidateFilter extends OncePerRequestFilter {
+public class AccessTokenValidateFilter extends OncePerRequestFilter {
 
-    @Value("${jwt.secret-key}")
-    private String secretKey;
+    private final TokenHandler tokenHandler;
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         // false: 실행
         final String servletPath = request.getServletPath();
         // TODO - 제거
-        if (servletPath.equals("/members/info") || servletPath.equals("/members")) {
+        if (servletPath.equals(DETAIL_MEMBER)
+                || servletPath.equals(LIST_MEMBER)) {
             return true;
         }
-        return servletPath.startsWith("/auth");
+        return servletPath.startsWith(LOGIN);
     }
 
     @Override
@@ -51,18 +50,15 @@ public class JwtValidateFilter extends OncePerRequestFilter {
 
             try {
 
-                final String token = jwt.substring(7);
-                SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
-                Claims claims = Jwts.parser()
-                        .verifyWith(key)
-                        .build()
-                        .parseSignedClaims(token)
-                        .getPayload();
-                String username = String.valueOf(claims.get("username"));
+                final String accessToken = jwt.substring(7);
+                Map<String, Object> claims = tokenHandler.validateAndExtractClaimsFromAccessToken(accessToken);
+                String _memberId = String.valueOf(claims.get("memberId"));
+                final UUID memberId = UUID.fromString(_memberId);
+
                 // TODO
 //                String authorities = String.valueOf(claims.get("authorities"));
 //                List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
-                Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
+                Authentication authentication = new OAuthAuthenticationToken(memberId, Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
             } catch (Exception e) {

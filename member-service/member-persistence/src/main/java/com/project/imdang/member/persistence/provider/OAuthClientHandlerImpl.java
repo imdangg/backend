@@ -23,7 +23,7 @@ public class OAuthClientHandlerImpl implements OAuthClientHandler {
     @PostConstruct
     public void initialize() {
         this.oAuthClientMap = oAuthClients.stream()
-                .collect(Collectors.toUnmodifiableMap(OAuthClient::getProvider, Function.identity()));
+                .collect(Collectors.toUnmodifiableMap(OAuthClient::getOAuthProvider, Function.identity()));
     }
 
     @Override

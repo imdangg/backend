@@ -9,36 +9,27 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 
+import static com.project.imdang.common.application.constant.Header.AUTHORIZATION;
+import static com.project.imdang.common.application.constant.Header.BEARER;
+
 @Configuration("swaggerConfiguration")
 public class SwaggerConfiguration {
-
-    private static final String ACCESS_KEY = "Authorization";
-    private static final String REFRESH_KEY = "Authorization-Refresh";
 
     @Bean
     public OpenAPI openAPI() {
 
         SecurityRequirement securityRequirement = new SecurityRequirement()
-                .addList(ACCESS_KEY);
-//                .addList(REFRESH_KEY);
+                .addList(AUTHORIZATION);
 
-        //Access Token 검증
+        // Access Token 검증
         SecurityScheme accessTokenSecurityScheme = new SecurityScheme()
                 .type(SecurityScheme.Type.HTTP)
-                .scheme("Bearer")
+                .scheme(BEARER)
                 .bearerFormat("JWT")
                 .in(SecurityScheme.In.HEADER)
                 .name(HttpHeaders.AUTHORIZATION);
-
-        //Refresh Token 검증
-//        SecurityScheme refreshTokenSecurityScheme = new SecurityScheme()
-//                .type(SecurityScheme.Type.APIKEY)
-//                .in(SecurityScheme.In.HEADER)
-//                .name(refreshKey);
-
         Components components = new Components()
-                .addSecuritySchemes(ACCESS_KEY, accessTokenSecurityScheme);
-
+                .addSecuritySchemes(AUTHORIZATION, accessTokenSecurityScheme);
         return new OpenAPI()
                 .info(apiInfo())
                 .addSecurityItem(securityRequirement)

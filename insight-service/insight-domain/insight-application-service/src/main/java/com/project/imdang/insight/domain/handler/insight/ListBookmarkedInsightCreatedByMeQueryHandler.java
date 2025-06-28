@@ -3,8 +3,7 @@ package com.project.imdang.insight.domain.handler.insight;
 import com.project.imdang.common.domain.utils.PagingUtils;
 import com.project.imdang.common.domain.valueobject.MemberId;
 import com.project.imdang.insight.domain.dto.insight.list.InsightResult;
-import com.project.imdang.insight.domain.dto.insight.list.InsightSimpleResult;
-import com.project.imdang.insight.domain.dto.insight.list.ListMyInsightCreatedByMeQuery;
+import com.project.imdang.insight.domain.dto.insight.list.ListBookmarkedInsightCreatedByMeQuery;
 import com.project.imdang.insight.domain.entity.Insight;
 import com.project.imdang.insight.domain.mapper.InsightDataMapper;
 import com.project.imdang.insight.domain.ports.output.repository.InsightRepository;
@@ -24,18 +23,18 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class ListMyInsightCreatedByMeQueryHandler {
+public class ListBookmarkedInsightCreatedByMeQueryHandler {
 
     private final InsightRepository insightRepository;
     private final InsightDataMapper insightDataMapper;
     private final MemberDataResolver memberResolver;
 
     @Transactional(readOnly = true)
-    public Page<InsightResult> listMyInsightCreatedByMe(ListMyInsightCreatedByMeQuery listMyInsightCreatedByMeQuery) {
+    public Page<InsightResult> listBookmarkedInsightCreatedByMe(ListBookmarkedInsightCreatedByMeQuery listBookmarkedInsightCreatedByMeQuery) {
 
         PageRequest pageRequest = PagingUtils.getPageRequest(
-                listMyInsightCreatedByMeQuery.getPageNumber(), listMyInsightCreatedByMeQuery.getPageSize(), listMyInsightCreatedByMeQuery.getDirection(), listMyInsightCreatedByMeQuery.getProperties());
-        MemberId memberId = listMyInsightCreatedByMeQuery.getMemberId();
+                listBookmarkedInsightCreatedByMeQuery.getPageNumber(), listBookmarkedInsightCreatedByMeQuery.getPageSize(), listBookmarkedInsightCreatedByMeQuery.getDirection(), listBookmarkedInsightCreatedByMeQuery.getProperties());
+        MemberId memberId = listBookmarkedInsightCreatedByMeQuery.getMemberId();
 
         //내가 작성한 인사이트 목록 조회
         Page<Insight> insightPage = insightRepository.findAllByMemberId(memberId, pageRequest);

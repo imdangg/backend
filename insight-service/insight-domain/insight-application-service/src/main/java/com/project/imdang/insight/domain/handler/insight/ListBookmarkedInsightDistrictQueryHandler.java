@@ -2,7 +2,7 @@ package com.project.imdang.insight.domain.handler.insight;
 
 import com.project.imdang.common.domain.valueobject.District;
 import com.project.imdang.common.domain.valueobject.MemberId;
-import com.project.imdang.insight.domain.dto.insight.list.MyDistrictResult;
+import com.project.imdang.insight.domain.dto.insight.list.DistrictOfBookmarkedInsightResult;
 import com.project.imdang.insight.domain.ports.output.repository.InsightRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,12 +15,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class ListMyInsightDistrictQueryHandler {
+public class ListBookmarkedInsightDistrictQueryHandler {
 
     private final InsightRepository insightRepository;
 
     @Transactional(readOnly = true)
-    public List<MyDistrictResult> listMyInsightDistrict(MemberId memberId) {
+    public List<DistrictOfBookmarkedInsightResult> listBookmarkedInsightDistrict(MemberId memberId) {
         // 내가 작성한 인사이트 + 추천한 인사이트 지역 목록 조회
         List<Object[]> districts = insightRepository.findAllDistrictByMemberId(memberId);
 
@@ -41,7 +41,7 @@ public class ListMyInsightDistrictQueryHandler {
                     Long apartmentComplexCount = result[0];
                     Long insightCount = result[1];
 
-                    return MyDistrictResult.builder()
+                    return DistrictOfBookmarkedInsightResult.builder()
                             .siDo(siDo)
                             .siGunGu(siGunGu)
                             .eupMyeonDong(eupMyeonDong)

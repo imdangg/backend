@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {fetchDistricts} from "../api-my-insight.js";
 
-export default function MyInsight() {
+export default function BookmarkedInsight() {
     const [districts, setDistricts] = useState([]);
     const [insights, setInsights] = useState([]);
 

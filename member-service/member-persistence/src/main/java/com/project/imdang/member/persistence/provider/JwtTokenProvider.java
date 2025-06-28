@@ -29,9 +29,13 @@ public class JwtTokenProvider implements TokenProvider {
     }
 
     @Override
-    public String generate(String subject, Date expiration) {
+    public String generate(String subject,
+                           Map<String, Object> claims,
+                           Date expiration) {
         return Jwts.builder()
                 .subject(subject)
+                .claims(claims)
+                .issuedAt(new Date())
                 .expiration(expiration)
                 .signWith(key)
                 .compact();

@@ -36,8 +36,8 @@ public class MemberEntity {
     @Column(columnDefinition = "CHAR(36)")
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID id;
-    private String oAuthId;
 
+    private String oAuthId;
     @Enumerated(EnumType.STRING)
     private OAuthProvider oAuthProvider;
 
@@ -46,13 +46,13 @@ public class MemberEntity {
     private Gender gender;
     private String deviceToken;
 
-//    private Integer insightCount;
+//    private Long insightCount;
 
     private String refreshToken;
     private Boolean isLogin;
     private Boolean isDeleted;
 
-    private int accusedCount;
+    private Long accusedCount;
     @Enumerated(EnumType.STRING)
     private MemberStatus status;
 

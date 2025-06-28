@@ -1,15 +1,23 @@
 package com.project.imdang.configuration;
 
-import com.project.imdang.jwt.JwtGenerateFilter;
-import com.project.imdang.jwt.JwtValidateFilter;
-import com.project.imdang.member.persistence.provider.JwtTokenProvider;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.imdang.filter.CachingFilter;
+import com.project.imdang.member.domain.MemberDomainService;
+import com.project.imdang.member.domain.handler.MemberHelper;
+import com.project.imdang.member.domain.handler.auth.TokenHandler;
+import com.project.imdang.member.domain.ports.output.client.OAuthClientHandler;
+import com.project.imdang.security.AccessTokenValidateFilter;
 import com.project.imdang.security.CustomAccessDeniedHandler;
 import com.project.imdang.security.CustomAuthenticationEntryPoint;
+import com.project.imdang.security.OAuthAuthenticationFilter;
+import com.project.imdang.security.OAuthAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,6 +34,13 @@ import java.util.Collections;
 import java.util.function.Supplier;
 
 import static com.project.imdang.common.application.constant.Header.AUTHORIZATION;
+import static com.project.imdang.common.application.constant.RequestPath.DETAIL_MEMBER;
+import static com.project.imdang.common.application.constant.RequestPath.LIST_MEMBER;
+import static com.project.imdang.common.application.constant.RequestPath.LOGIN;
+import static com.project.imdang.common.application.constant.RequestPath.REISSUE;
+import static com.project.imdang.common.application.constant.RequestPath.SWAGGER_DOC;
+import static com.project.imdang.common.application.constant.RequestPath.SWAGGER_RESOURCE;
+import static com.project.imdang.common.application.constant.RequestPath.SWAGGER_UI;
 
 @Configuration
 @EnableWebSecurity(debug = true)
@@ -35,9 +50,23 @@ public class SecurityConfiguration {
 
     @Value("${security.allowed-ip}")
     private String allowedIp;
-    private final JwtTokenProvider jwtTokenProvider;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
+
+    // TODO - 개선
+    private final MemberDomainService memberDomainService;
+    private final MemberHelper memberHelper;
+    private final OAuthClientHandler oAuthClientHandler;
+    private final TokenHandler tokenHandler;
+
+    private final ObjectMapper objectMapper;
+
+    @Bean
+    public AuthenticationManager authenticationManager() {
+        OAuthAuthenticationProvider oAuthAuthenticationProvider
+                = new OAuthAuthenticationProvider(memberDomainService, memberHelper, oAuthClientHandler, tokenHandler);
+        return new ProviderManager(oAuthAuthenticationProvider);
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -68,15 +97,13 @@ public class SecurityConfiguration {
 //                )
                 .sessionManagement(sessionManagementConfigurer -> sessionManagementConfigurer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // 인증 후 실행
-                .addFilterAfter(new JwtGenerateFilter(), BasicAuthenticationFilter.class) // UsernamePasswordAuthenticationFilter.class
-                // 인증 전 실행
-                .addFilterBefore(new JwtValidateFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new AccessTokenValidateFilter(tokenHandler), BasicAuthenticationFilter.class)
+                .addFilterBefore(new OAuthAuthenticationFilter(authenticationManager(), objectMapper), BasicAuthenticationFilter.class)
+                .addFilterBefore(new CachingFilter(), BasicAuthenticationFilter.class)
                 .authorizeHttpRequests(registry -> registry
-                        .requestMatchers("/members", "/members/info").permitAll()
+                        .requestMatchers(LIST_MEMBER, DETAIL_MEMBER).permitAll()
 //                        .access(this::hasIpAddress)
-                        .requestMatchers("/auth/kakao", "/auth/google", "/auth/apple", "/auth/reissue",
-                                "/swagger-resources/**", "/swagger-ui/**","/v3/api-docs/**", "/apartment-complexes").permitAll()
+                        .requestMatchers(LOGIN, REISSUE, SWAGGER_RESOURCE, SWAGGER_UI, SWAGGER_DOC).permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(exceptionHandlingConfigurer -> exceptionHandlingConfigurer
                                 .authenticationEntryPoint(customAuthenticationEntryPoint)

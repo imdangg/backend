@@ -17,5 +17,6 @@ public class MemberResult {
     private String birthDate;
     private String gender;
     private String deviceToken;
-    private Integer insightCount;
+    private String refreshToken;
+    private Long insightCount;
 }

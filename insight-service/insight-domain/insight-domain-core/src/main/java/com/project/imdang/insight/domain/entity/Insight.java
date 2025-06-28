@@ -43,13 +43,13 @@ public class Insight extends AggregateRoot<InsightId> {
     // 단지 환경
     private ComplexEnvironment complexEnvironment;
 
-    private int recommendedCount;
+    private Long recommendedCount;
     // 신고 횟수
-    private int accusedCount;
-    private int viewCount;
+    private Long accusedCount;
+    private Long viewCount;
 
     // 완성도
-    private int score;
+    private Integer score;
     private ZonedDateTime createdAt;
     // TODO - CHECK : updatedAt;
 
@@ -69,10 +69,10 @@ public class Insight extends AggregateRoot<InsightId> {
                    String summary,
                    Infra infra,
                    ComplexEnvironment complexEnvironment,
-                   int recommendedCount,
-                   int accusedCount,
-                   int viewCount,
-                   int score,
+                   Long recommendedCount,
+                   Long accusedCount,
+                   Long viewCount,
+                   Integer score,
                    ZonedDateTime createdAt,
                    boolean isDeleted) {
         setId(id);
@@ -100,9 +100,9 @@ public class Insight extends AggregateRoot<InsightId> {
         InsightId insightId = new InsightId(UUID.randomUUID());
         setId(insightId);
         this.mainImage = mainImage;
-        this.recommendedCount = 0;
-        this.accusedCount = 0;
-        this.viewCount = 0;
+        this.recommendedCount = 0L;
+        this.accusedCount = 0L;
+        this.viewCount = 0L;
         this.createdAt = ZonedDateTime.now();
     }
 

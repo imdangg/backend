@@ -24,7 +24,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberApplicationServiceImpl implements MemberApplicationService {
 
-    private final LogoutCommandHandler logoutCommandHandler;
     private final WithdrawCommandHandler withdrawCommandHandler;
     private final JoinCommandHandler joinCommandHandler;
     private final ListMemberQueryHandler listMemberQueryHandler;
@@ -56,11 +55,6 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
     @Override
     public Boolean withdraw(WithdrawCommand withdrawCommand) {
         return withdrawCommandHandler.withdraw(withdrawCommand);
-    }
-
-    @Override
-    public Boolean logout(MemberId memberId) {
-        return logoutCommandHandler.logout(memberId);
     }
 
     @Override

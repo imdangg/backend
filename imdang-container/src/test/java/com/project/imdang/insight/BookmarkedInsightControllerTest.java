@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest(classes = TestConfiguration.class)
-public class MyInsightControllerTest {
+public class BookmarkedInsightControllerTest {
 
 
     @Autowired
@@ -34,11 +34,11 @@ public class MyInsightControllerTest {
 
     @BeforeEach
     void init() {
-        // given
-        Mockito.when(jwtTokenProvider.verifyToken(memberToken))
-                .thenReturn(true);
-        Mockito.when(jwtTokenProvider.extractSubject(memberToken))
-                .thenReturn(String.valueOf(TestData.memberId));
+//        // given
+//        Mockito.when(jwtTokenProvider.verifyToken(memberToken))
+//                .thenReturn(true);
+//        Mockito.when(jwtTokenProvider.extractSubject(memberToken))
+//                .thenReturn(String.valueOf(TestData.memberId));
     }
 
     @Test

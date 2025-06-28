@@ -1,11 +1,10 @@
 package com.project.imdang.insight.application.rest;
 
+import com.project.imdang.common.application.response.ApiResponse;
 import com.project.imdang.common.domain.valueobject.File;
 import com.project.imdang.common.domain.valueobject.InsightId;
 import com.project.imdang.common.domain.valueobject.MemberId;
-import com.project.imdang.common.application.response.ApiResponse;
 import com.project.imdang.insight.application.dto.insight.AccuseInsightRequest;
-import com.project.imdang.insight.domain.dto.insight.list.ApartmentComplexResult;
 import com.project.imdang.insight.application.dto.insight.CreateInsightRequest;
 import com.project.imdang.insight.application.dto.insight.DeleteInsightRequest;
 import com.project.imdang.insight.application.dto.insight.RecommendInsightRequest;
@@ -16,7 +15,9 @@ import com.project.imdang.insight.domain.dto.insight.create.CreateInsightCommand
 import com.project.imdang.insight.domain.dto.insight.delete.DeleteInsightCommand;
 import com.project.imdang.insight.domain.dto.insight.detail.DetailInsightQuery;
 import com.project.imdang.insight.domain.dto.insight.detail.InsightDetailResult;
+import com.project.imdang.insight.domain.dto.insight.list.ApartmentComplexResult;
 import com.project.imdang.insight.domain.dto.insight.list.InsightResult;
+import com.project.imdang.insight.domain.dto.insight.list.ListBookmarkedInsightCreatedByMeQuery;
 import com.project.imdang.insight.domain.dto.insight.list.ListInsightByApartmentComplexQuery;
 import com.project.imdang.insight.domain.dto.insight.list.ListInsightByDateQuery;
 import com.project.imdang.insight.domain.dto.insight.list.ListInsightByDistrictQuery;
@@ -25,18 +26,16 @@ import com.project.imdang.insight.domain.dto.insight.recommend.RecommendInsightC
 import com.project.imdang.insight.domain.dto.insight.update.UpdateInsightCommand;
 import com.project.imdang.insight.domain.ports.input.service.InsightApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,9 +48,20 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.project.imdang.common.application.constant.Property.DEFAULT_SI_DO;
+import static com.project.imdang.common.application.constant.RequestPath.ACCUSE_INSIGHT;
+import static com.project.imdang.common.application.constant.RequestPath.CREATE_INSIGHT;
+import static com.project.imdang.common.application.constant.RequestPath.DELETE_INSIGHT;
+import static com.project.imdang.common.application.constant.RequestPath.DETAIL_INSIGHT;
+import static com.project.imdang.common.application.constant.RequestPath.LIST_APARTMENT_COMPLEX_OF_INSIGHT_CREATED_BY_ME;
+import static com.project.imdang.common.application.constant.RequestPath.LIST_INSIGHT;
+import static com.project.imdang.common.application.constant.RequestPath.LIST_INSIGHT_BY_APARTMENT_COMPLEX;
+import static com.project.imdang.common.application.constant.RequestPath.LIST_INSIGHT_BY_DATE;
+import static com.project.imdang.common.application.constant.RequestPath.LIST_INSIGHT_BY_DISTRICT;
+import static com.project.imdang.common.application.constant.RequestPath.LIST_INSIGHT_CREATED_BY_ME;
+import static com.project.imdang.common.application.constant.RequestPath.RECOMMEND_INSIGHT;
+import static com.project.imdang.common.application.constant.RequestPath.UPDATE_INSIGHT;
 
 @Slf4j
-@RequestMapping("/insights")
 @RequiredArgsConstructor
 @RestController
 @Tag(name = "InsightController", description = "인사이트 API")
@@ -60,21 +70,37 @@ public class InsightController {
     private final InsightApplicationService insightApplicationService;
     private final InsightRequestResolver resolver;
 
-    // 내가 다녀온 apartmentComplexName 리스트 API
-    @Operation(description = "내가 다녀온 아파트 단지 이름 목록 조회 API")
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "내가 다녀온 아파트 단지 이름 목록 조회 성공")
-    @GetMapping("/created-by-me/apartment-complexes")
-    public ResponseEntity<ApiResponse<List<ApartmentComplexResult>>> listByMyVisitedApartmentComplex(@AuthenticationPrincipal UUID memberId) {
-        List<ApartmentComplexResult> apartmentComplexes = insightApplicationService.listMyVisitedApartmentComplex(new MemberId(memberId));
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(apartmentComplexes));
+    // 최신순, 인기순(추천수 순)
+    // /insights?page=1&size=20&sort=createdAt,desc
+    @Operation(description = "추천수 TOP 10 인사이트 목록 조회 API")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "추천수 TOP 10 인사이트 목록 조회 성공")
+    })
+    @GetMapping(LIST_INSIGHT)
+    public ApiResponse<Page<InsightResult>> list(@RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
+                                                 @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+        ListInsightQuery listInsightQuery = ListInsightQuery.builder()
+                .pageNumber(pageNumber)
+                .pageSize(pageSize)
+                .direction("DESC")
+                .properties(new String[]{"recommendedCount"})
+                .build();
+        Page<InsightResult> insightResults = insightApplicationService.listInsight(listInsightQuery);
+        return ApiResponse.success(insightResults);
     }
 
-    @Operation(description = "오늘 새롭게 올라온 인사이트 목록 조회 API")
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "인사이트 목록이 조회되었습니다.")
-    @GetMapping("/by-date")
-    public ResponseEntity<ApiResponse<Page<InsightResult>>> listByDate(@RequestParam(name = "date", required = false) LocalDate date,
-                                                          @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
-                                                          @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+    @Operation(description = "날짜별 인사이트 목록 조회 API")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "날짜별 인사이트 목록 조회 성공")
+    })
+    @GetMapping(LIST_INSIGHT_BY_DATE)
+    public ApiResponse<Page<InsightResult>> listByDate(@RequestParam(name = "date", required = false) LocalDate date,
+                                                       @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
+                                                       @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
         ListInsightByDateQuery listInsightByDateQuery = ListInsightByDateQuery.builder()
                 .date(date == null ? LocalDate.now() : date)
                 .pageNumber(pageNumber)
@@ -83,33 +109,20 @@ public class InsightController {
                 .properties(new String[]{"createdAt"})
                 .build();
         Page<InsightResult> insightResults = insightApplicationService.listInsightByDate(listInsightByDateQuery);
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(insightResults));
-    }
-
-    // 최신순, 인기순(추천수 순)
-    // /insights?page=1&size=20&sort=createdAt,desc
-    @Operation(description = "추천수 TOP 10 인사이트 목록 조회 API")
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "인사이트 목록이 조회되었습니다.")
-    @GetMapping
-    public ResponseEntity<ApiResponse<Page<InsightResult>>> list(@RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
-                                                    @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
-        ListInsightQuery listInsightQuery = ListInsightQuery.builder()
-                .pageNumber(pageNumber)
-                .pageSize(pageSize)
-                .direction("DESC")
-                .properties(new String[]{"recommendedCount"})
-                .build();
-        Page<InsightResult> insightResults = insightApplicationService.listInsight(listInsightQuery);
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(insightResults));
+        return ApiResponse.success(insightResults);
     }
 
     @Operation(description = "지역별 인사이트 목록 조회 API")
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "지역별 인사이트 목록 조회 성공")
-    @GetMapping("/by-district")
-    public ResponseEntity<ApiResponse<Page<InsightResult>>> listByDistrict(@RequestParam(name = "siGunGu") String siGunGu,
-                                                              @RequestParam(name = "eupMyeonDong") String eupMyeonDong,
-                                                              @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
-                                                              @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "지역별 인사이트 목록 조회 성공")
+    })
+    @GetMapping(LIST_INSIGHT_BY_DISTRICT)
+    public ApiResponse<Page<InsightResult>> listByDistrict(@RequestParam(name = "siGunGu") String siGunGu,
+                                                           @RequestParam(name = "eupMyeonDong") String eupMyeonDong,
+                                                           @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
+                                                           @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 
         ListInsightByDistrictQuery listInsightByDistrictQuery = ListInsightByDistrictQuery.builder()
                 .siDo(DEFAULT_SI_DO)
@@ -121,15 +134,19 @@ public class InsightController {
                 .properties(new String[]{"createdAt"})
                 .build();
         Page<InsightResult> insightResults = insightApplicationService.listInsightByDistrict(listInsightByDistrictQuery);
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(insightResults));
+        return ApiResponse.success(insightResults);
     }
 
     @Operation(description = "아파트 단지별 인사이트 목록 조회 API")
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "아파트 단지별 인사이트 목록이 조회되었습니다.")
-    @GetMapping("/by-apartment-complex")
-    public ResponseEntity<ApiResponse<Page<InsightResult>>> listByApartmentComplex(@RequestParam(name = "apartmentComplexName") String apartmentComplexName,
-                                                                      @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
-                                                                      @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "아파트 단지별 인사이트 목록 조회 성공")
+    })
+    @GetMapping(LIST_INSIGHT_BY_APARTMENT_COMPLEX)
+    public ApiResponse<Page<InsightResult>> listByApartmentComplex(@RequestParam(name = "apartmentComplexName") String apartmentComplexName,
+                                                                   @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
+                                                                   @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
 
         ListInsightByApartmentComplexQuery listInsightByApartmentComplexQuery = ListInsightByApartmentComplexQuery.builder()
                 .apartmentComplexName(apartmentComplexName)
@@ -139,38 +156,76 @@ public class InsightController {
                 .properties(new String[]{"createdAt"})
                 .build();
         Page<InsightResult> insightResults = insightApplicationService.listInsightByApartmentComplex(listInsightByApartmentComplexQuery);
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(insightResults));
+        return ApiResponse.success(insightResults);
+    }
+
+    @Operation(description = "내가 작성한 인사이트 목록 조회 API")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "내가 작성한 인사이트 목록 조회 성공")
+    })
+    @GetMapping(LIST_INSIGHT_CREATED_BY_ME)
+    public ApiResponse<Page<InsightResult>> listCreatedByMe(@AuthenticationPrincipal UUID memberId,
+                                                            // TODO - PagingQuery
+                                                            @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
+                                                            @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
+                                                            @RequestParam(name = "direction", defaultValue = "DESC") String direction,
+                                                            @RequestParam(name = "properties", defaultValue = "created_at") String[] properties) {
+
+        ListBookmarkedInsightCreatedByMeQuery listBookmarkedInsightCreatedByMeQuery = ListBookmarkedInsightCreatedByMeQuery.builder()
+                .memberId(new MemberId(memberId))
+                .pageNumber(pageNumber)
+                .pageSize(pageSize)
+                .direction(direction)
+                .properties(properties)
+                .build();
+        Page<InsightResult> insights = insightApplicationService.listBookmarkedInsightCreatedByMe(listBookmarkedInsightCreatedByMeQuery);
+        return ApiResponse.success(insights);
+    }
+
+    // 내가 다녀온 apartmentComplexName 리스트 API
+    @Operation(description = "내가 작성한 인사이트의 아파트 단지 목록 조회 API")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "내가 작성한 인사이트의 아파트 단지 목록 조회 성공")
+    })
+    @GetMapping(LIST_APARTMENT_COMPLEX_OF_INSIGHT_CREATED_BY_ME)
+    public ApiResponse<List<ApartmentComplexResult>> listByMyVisitedApartmentComplex(@AuthenticationPrincipal UUID memberId) {
+        List<ApartmentComplexResult> apartmentComplexes = insightApplicationService.listMyVisitedApartmentComplex(new MemberId(memberId));
+        return ApiResponse.success(apartmentComplexes);
     }
 
     // 상세
     @Operation(description = "인사이트 상세 조회 API")
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "인사이트가 조회 되었습니다.")
-    @GetMapping("/detail")
-    public ResponseEntity<ApiResponse<InsightDetailResult>> detail(@AuthenticationPrincipal UUID memberId,
-                                                      @RequestParam(name = "insightId") UUID insightId) {
+    @GetMapping(DETAIL_INSIGHT)
+    public ApiResponse<InsightDetailResult> detail(@AuthenticationPrincipal UUID memberId,
+                                                   @RequestParam(name = "insightId") UUID insightId) {
         DetailInsightQuery detailInsightQuery = new DetailInsightQuery(new InsightId(insightId), new MemberId(memberId));
         InsightDetailResult insightDetailResult = insightApplicationService.detailInsight(detailInsightQuery);
         log.info("Returning detail of insight[id: {}].", insightDetailResult.getInsightId());
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(insightDetailResult));
+        return ApiResponse.success(insightDetailResult);
     }
 
     @Operation(description = "인사이트 작성 API")
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "인사이트가 작성 완료")
-    @PostMapping("/create")
-    public ResponseEntity<Void> createInsight(@AuthenticationPrincipal UUID memberId,
+    @PostMapping(CREATE_INSIGHT)
+    public ApiResponse<Void> createInsight(@AuthenticationPrincipal UUID memberId,
                                               @RequestPart("createInsightCommand") @Valid CreateInsightRequest createInsightRequest,
                                               @RequestPart("mainImage") MultipartFile mainImage) {
         File file = validateFile(mainImage);
         CreateInsightCommand createInsightCommand = resolver.toCreateInsightCommand(memberId, file, createInsightRequest);
         InsightId insightId = insightApplicationService.createInsight(createInsightCommand);
         log.info("Insight[id: {}] is created.", insightId);
-        return ResponseEntity.ok().build();
+        return ApiResponse.success(null);
     }
 
     @Operation(description = "인사이트 수정 API")
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "인사이트가 수정되었습니다.")
-    @PostMapping("/update")
-    public ResponseEntity<Void> updateInsight(@AuthenticationPrincipal UUID memberId,
+    @PostMapping(UPDATE_INSIGHT)
+    public ApiResponse<Void> updateInsight(@AuthenticationPrincipal UUID memberId,
                                                // TODO - CHANGE
                                                @RequestPart("updateInsightCommand") @Valid UpdateInsightRequest updateInsightRequest,
                                                @RequestPart(value = "mainImage", required = false) MultipartFile mainImage) {
@@ -178,13 +233,13 @@ public class InsightController {
         UpdateInsightCommand updateInsightCommand = resolver.toUpdateInsightCommand(memberId, file, updateInsightRequest);
         InsightId insightId = insightApplicationService.updateInsight(updateInsightCommand);
         log.info("Insight[id: {}] is updated.", insightId);
-        return ResponseEntity.ok().build();
+        return ApiResponse.success(null);
     }
 
     @Operation(description = "인사이트 삭제 API")
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "인사이트가 삭제되었습니다.")
-    @PostMapping("/delete")
-    public ResponseEntity<Void> deleteInsight(@AuthenticationPrincipal UUID memberId,
+    @PostMapping(DELETE_INSIGHT)
+    public ApiResponse<Void> deleteInsight(@AuthenticationPrincipal UUID memberId,
                                               @RequestBody @Valid DeleteInsightRequest deleteInsightRequest) {
         DeleteInsightCommand deleteInsightCommand = DeleteInsightCommand.builder()
                 .memberId(new MemberId(memberId))
@@ -192,13 +247,13 @@ public class InsightController {
                 .build();
         InsightId insightId = insightApplicationService.deleteInsight(deleteInsightCommand);
         log.info("Insight[id: {}] is deleted.", insightId);
-        return ResponseEntity.ok().build();
+        return ApiResponse.success(null);
     }
 
     @Operation(description = "인사이트 추천 API")
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "인사이트가 추천되었습니다.")
-    @PostMapping("/recommend")
-    public ResponseEntity<Void> recommendInsight(@AuthenticationPrincipal UUID memberId,
+    @PostMapping(RECOMMEND_INSIGHT)
+    public ApiResponse<Void> recommendInsight(@AuthenticationPrincipal UUID memberId,
                                                  @RequestBody @Valid RecommendInsightRequest recommendInsightRequest) {
 
         RecommendInsightCommand recommendInsightCommand = RecommendInsightCommand.builder()
@@ -207,13 +262,13 @@ public class InsightController {
                 .build();
         InsightId insightId = insightApplicationService.recommendInsight(recommendInsightCommand);
         log.info("Insight[id: {}] is recommended.", insightId);
-        return ResponseEntity.ok().build();
+        return ApiResponse.success(null);
     }
 
     @Operation(description = "인사이트 신고 API")
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "인사이트가 신고되었습니다.")
-    @PostMapping("/accuse")
-    public ResponseEntity<Void> accuseInsight(@AuthenticationPrincipal UUID memberId,
+    @PostMapping(ACCUSE_INSIGHT)
+    public ApiResponse<Void> accuseInsight(@AuthenticationPrincipal UUID memberId,
                                               @RequestBody @Valid AccuseInsightRequest accuseInsightRequest) {
         AccuseInsightCommand accuseInsightCommand = AccuseInsightCommand.builder()
                 .accuseMemberId(new MemberId(memberId))
@@ -221,7 +276,7 @@ public class InsightController {
                 .build();
         InsightId insightId = insightApplicationService.accuseInsight(accuseInsightCommand);
         log.info("Insight[id: {}] is accused.", insightId);
-        return ResponseEntity.ok().build();
+        return ApiResponse.success(null);
     }
 
     private File validateFile(MultipartFile file) {

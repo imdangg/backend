@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Member {
     private String id;
-//    private int accusedCount;
+//    private long accusedCount;
     private LocalDate penaltyFrom;
     private LocalDate penaltyTo;
 

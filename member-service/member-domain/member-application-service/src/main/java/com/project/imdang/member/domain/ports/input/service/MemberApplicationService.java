@@ -17,7 +17,5 @@ public interface MemberApplicationService {
 
     Boolean join(JoinCommand joinCommand);
     Boolean withdraw(WithdrawCommand withdrawCommand);
-    Boolean logout(MemberId memberId);
-
     Boolean accuseMember(MemberId memberId);
 }

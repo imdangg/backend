@@ -5,7 +5,7 @@ import java.util.Map;
 
 public interface TokenProvider {
 
-    String generate(String subject, Date expiration);
+    String generate(String subject, Map<String, Object> claims, Date expiration);
     void validate(String token);
 
     String extractSubject(String token);

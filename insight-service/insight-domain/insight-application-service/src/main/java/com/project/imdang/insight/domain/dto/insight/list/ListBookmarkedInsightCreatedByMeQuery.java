@@ -1,5 +1,6 @@
 package com.project.imdang.insight.domain.dto.insight.list;
 
+import com.project.imdang.common.domain.valueobject.MemberId;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,11 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MyDistrictResult {
-    private String siDo; // 시/도 (예: 서울특별시)
-    private String siGunGu; // 시/군/구 (예: 종로구)
-    private String eupMyeonDong; // 읍/면/동 (예: 효제동)
+public class ListBookmarkedInsightCreatedByMeQuery {
 
-    private Long apartmentComplexCount;
-    private Long insightCount;
+    private MemberId memberId;
+
+    private Integer pageNumber;
+    private Integer pageSize;
+    private String direction;
+    private String[] properties;
 }

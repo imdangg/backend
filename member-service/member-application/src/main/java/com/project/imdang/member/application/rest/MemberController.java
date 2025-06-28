@@ -30,7 +30,6 @@ import static com.project.imdang.common.application.constant.RequestPath.DETAIL_
 import static com.project.imdang.common.application.constant.RequestPath.DETAIL_MY_PAGE;
 import static com.project.imdang.common.application.constant.RequestPath.JOIN_MEMBER;
 import static com.project.imdang.common.application.constant.RequestPath.LIST_MEMBER;
-import static com.project.imdang.common.application.constant.RequestPath.LOGOUT;
 import static com.project.imdang.common.application.constant.RequestPath.WITHDRAW_MEMBER;
 
 @RestController
@@ -112,20 +111,8 @@ public class MemberController {
     public ApiResponse<Boolean> withdraw(@AuthenticationPrincipal UUID memberId,
                                          @RequestBody @Valid WithdrawRequest withdrawRequest) {
         WithdrawCommand withdrawCommand
-                = new WithdrawCommand(new MemberId(memberId), withdrawRequest.provider(), withdrawRequest.identifier());
+                = new WithdrawCommand(new MemberId(memberId), withdrawRequest.oAuthProvider(), withdrawRequest.identifier());
         Boolean withdrawResult = memberApplicationService.withdraw(withdrawCommand);
         return ApiResponse.success(withdrawResult);
-    }
-
-    @Operation(description = "로그아웃 API")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                    responseCode = "200",
-                    description = "로그아웃 완료")
-    })
-    @PostMapping(LOGOUT)
-    public ApiResponse<Boolean> logout(@AuthenticationPrincipal UUID memberId) {
-        Boolean logoutResult = memberApplicationService.logout(new MemberId(memberId));
-        return ApiResponse.success(logoutResult);
     }
 }

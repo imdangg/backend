@@ -8,19 +8,28 @@ import com.project.imdang.insight.domain.dto.insight.create.CreateInsightCommand
 import com.project.imdang.insight.domain.dto.insight.delete.DeleteInsightCommand;
 import com.project.imdang.insight.domain.dto.insight.detail.DetailInsightQuery;
 import com.project.imdang.insight.domain.dto.insight.detail.InsightDetailResult;
-import com.project.imdang.insight.domain.dto.insight.list.*;
+import com.project.imdang.insight.domain.dto.insight.list.ApartmentComplexOfBookmarkedInsightResult;
+import com.project.imdang.insight.domain.dto.insight.list.ApartmentComplexResult;
+import com.project.imdang.insight.domain.dto.insight.list.DistrictOfBookmarkedInsightResult;
+import com.project.imdang.insight.domain.dto.insight.list.InsightResult;
+import com.project.imdang.insight.domain.dto.insight.list.ListBookmarkedInsightCreatedByMeQuery;
+import com.project.imdang.insight.domain.dto.insight.list.ListBookmarkedInsightQuery;
+import com.project.imdang.insight.domain.dto.insight.list.ListInsightByApartmentComplexQuery;
+import com.project.imdang.insight.domain.dto.insight.list.ListInsightByDateQuery;
+import com.project.imdang.insight.domain.dto.insight.list.ListInsightByDistrictQuery;
+import com.project.imdang.insight.domain.dto.insight.list.ListInsightQuery;
 import com.project.imdang.insight.domain.dto.insight.recommend.RecommendInsightCommand;
 import com.project.imdang.insight.domain.dto.insight.update.UpdateInsightCommand;
 import com.project.imdang.insight.domain.handler.insight.AccuseInsightCommandHandler;
 import com.project.imdang.insight.domain.handler.insight.CreateInsightCommandHandler;
 import com.project.imdang.insight.domain.handler.insight.DeleteInsightCommandHandler;
 import com.project.imdang.insight.domain.handler.insight.DetailInsightQueryHandler;
+import com.project.imdang.insight.domain.handler.insight.ListBookmarkedInsightApartmentComplexByDistrictQueryHandler;
+import com.project.imdang.insight.domain.handler.insight.ListBookmarkedInsightCreatedByMeQueryHandler;
+import com.project.imdang.insight.domain.handler.insight.ListBookmarkedInsightDistrictQueryHandler;
+import com.project.imdang.insight.domain.handler.insight.ListBookmarkedInsightQueryHandler;
 import com.project.imdang.insight.domain.handler.insight.ListDistrictQueryHandler;
 import com.project.imdang.insight.domain.handler.insight.ListInsightQueryHandler;
-import com.project.imdang.insight.domain.handler.insight.ListMyInsightApartmentComplexByDistrictQueryHandler;
-import com.project.imdang.insight.domain.handler.insight.ListMyInsightCreatedByMeQueryHandler;
-import com.project.imdang.insight.domain.handler.insight.ListMyInsightDistrictQueryHandler;
-import com.project.imdang.insight.domain.handler.insight.ListMyInsightQueryHandler;
 import com.project.imdang.insight.domain.handler.insight.ListMyVisitedApartmentComplexQueryHandler;
 import com.project.imdang.insight.domain.handler.insight.RecommendInsightCommandHandler;
 import com.project.imdang.insight.domain.handler.insight.UpdateInsightCommandHandler;
@@ -41,10 +50,10 @@ public class InsightApplicationServiceImpl implements InsightApplicationService 
     private final ListMyVisitedApartmentComplexQueryHandler listMyVisitedApartmentComplexQueryHandler;
     private final ListDistrictQueryHandler listDistrictQueryHandler;
 
-    private final ListMyInsightDistrictQueryHandler listMyInsightDistrictQueryHandler;
-    private final ListMyInsightApartmentComplexByDistrictQueryHandler listMyInsightApartmentComplexByDistrictQueryHandler;
-    private final ListMyInsightQueryHandler listMyInsightQueryHandler;
-    private final ListMyInsightCreatedByMeQueryHandler listMyInsightCreatedByMeQueryHandler;
+    private final ListBookmarkedInsightDistrictQueryHandler listBookmarkedInsightDistrictQueryHandler;
+    private final ListBookmarkedInsightApartmentComplexByDistrictQueryHandler listBookmarkedInsightApartmentComplexByDistrictQueryHandler;
+    private final ListBookmarkedInsightQueryHandler listBookmarkedInsightQueryHandler;
+    private final ListBookmarkedInsightCreatedByMeQueryHandler listBookmarkedInsightCreatedByMeQueryHandler;
 
     private final DetailInsightQueryHandler detailInsightQueryHandler;
     private final CreateInsightCommandHandler createInsightCommandHandler;
@@ -85,28 +94,28 @@ public class InsightApplicationServiceImpl implements InsightApplicationService 
     }
 
     @Override
-    public List<MyDistrictResult> listMyInsightDistrict(MemberId memberId) {
-        return listMyInsightDistrictQueryHandler.listMyInsightDistrict(memberId);
+    public List<DistrictOfBookmarkedInsightResult> listBookmarkedInsightDistrict(MemberId memberId) {
+        return listBookmarkedInsightDistrictQueryHandler.listBookmarkedInsightDistrict(memberId);
     }
 
     @Override
-    public List<MyApartmentComplexResult> listMyInsightApartmentComplexByDistrict(MemberId memberId, String siDo, String siGunGu, String eupMyeonDong) {
+    public List<ApartmentComplexOfBookmarkedInsightResult> listBookmarkedInsightApartmentComplexByDistrict(MemberId memberId, String siDo, String siGunGu, String eupMyeonDong) {
         final District district = District.builder()
                 .siDo(siDo)
                 .siGunGu(siGunGu)
                 .eupMyeonDong(eupMyeonDong)
                 .build();
-        return listMyInsightApartmentComplexByDistrictQueryHandler.listMyInsightApartmentComplexByDistrict(memberId, district);
+        return listBookmarkedInsightApartmentComplexByDistrictQueryHandler.listBookmarkedInsightApartmentComplexByDistrict(memberId, district);
     }
 
     @Override
-    public Page<InsightResult> listMyInsight(ListMyInsightQuery listMyInsightQuery) {
-        return listMyInsightQueryHandler.listMyInsight(listMyInsightQuery);
+    public Page<InsightResult> listBookmarkedInsight(ListBookmarkedInsightQuery listBookmarkedInsightQuery) {
+        return listBookmarkedInsightQueryHandler.listBookmarkedInsight(listBookmarkedInsightQuery);
     }
 
     @Override
-    public Page<InsightResult> listMyInsightCreatedByMe(ListMyInsightCreatedByMeQuery listMyInsightCreatedByMeQuery) {
-        return listMyInsightCreatedByMeQueryHandler.listMyInsightCreatedByMe(listMyInsightCreatedByMeQuery);
+    public Page<InsightResult> listBookmarkedInsightCreatedByMe(ListBookmarkedInsightCreatedByMeQuery listBookmarkedInsightCreatedByMeQuery) {
+        return listBookmarkedInsightCreatedByMeQueryHandler.listBookmarkedInsightCreatedByMe(listBookmarkedInsightCreatedByMeQuery);
     }
 
     @Override

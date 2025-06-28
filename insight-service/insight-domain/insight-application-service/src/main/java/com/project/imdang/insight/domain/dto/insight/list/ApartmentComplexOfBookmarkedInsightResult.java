@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MyApartmentComplexResult {
+public class ApartmentComplexOfBookmarkedInsightResult {
     private String apartmentComplexName;
     private Long insightCount;
 }

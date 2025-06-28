@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class MockOAuthClient implements OAuthClient {
 
     @Override
-    public OAuthProvider getProvider() {
+    public OAuthProvider getOAuthProvider() {
         return OAuthProvider.MOCK;
     }
 
