@@ -4,7 +4,10 @@ import com.project.imdang.insight.domain.dto.insight.create.CreateInsightCommand
 import com.project.imdang.insight.domain.dto.insight.detail.InsightDetailResult;
 import com.project.imdang.insight.domain.dto.insight.list.InsightResult;
 import com.project.imdang.insight.domain.entity.Insight;
+import com.project.imdang.insight.domain.entity.InsightImage;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class InsightDataMapper {
@@ -15,7 +18,20 @@ public class InsightDataMapper {
                 .recommendedCount(insight.getRecommendedCount())
                 .address(insight.getAddress())
                 .title(insight.getTitle())
-                .mainImage(insight.getMainImage())
+                .memberNickname(memberNickname)
+                .createdAt(insight.getCreatedAt())
+                .build();
+    }
+
+    public InsightResult insightToInsightResponse(Insight insight, String memberNickname, List<InsightImage> images) {
+        return InsightResult.builder()
+                .insightId(insight.getId())
+                .recommendedCount(insight.getRecommendedCount())
+                .address(insight.getAddress())
+                .title(insight.getTitle())
+                .images(images.stream().map(InsightImage::getImage).toList())
+                .types(images.stream().map(InsightImage::getType).toList())
+                .sortNums(images.stream().map(InsightImage::getSortNum).toList())
                 .memberNickname(memberNickname)
                 .createdAt(insight.getCreatedAt())
                 .build();
@@ -34,7 +50,6 @@ public class InsightDataMapper {
                 .summary(createInsightCommand.getSummary())
                 .infra(createInsightCommand.getInfra())
                 .complexEnvironment(createInsightCommand.getComplexEnvironment())
-                .score(createInsightCommand.getScore())
                 .build();
     }
 
@@ -42,12 +57,12 @@ public class InsightDataMapper {
                                                               String memberNickname,
                                                               Boolean recommended,
                                                               Boolean accused,
-                                                              Boolean createdByMe) {
+                                                              Boolean createdByMe,
+                                                              List<InsightImage> images) {
         return InsightDetailResult.builder()
                 .memberId(insight.getMemberId())
                 .memberNickname(memberNickname)
                 .insightId(insight.getId())
-                .mainImage(insight.getMainImage())
                 .title(insight.getTitle())
                 .address(insight.getAddress())
                 .apartmentComplex(insight.getApartmentComplex())
@@ -65,6 +80,9 @@ public class InsightDataMapper {
                 .viewCount(insight.getViewCount())
                 .createdAt(insight.getCreatedAt())
                 .createdByMe(createdByMe)
+                .images(images.stream().map(InsightImage::getImage).toList())
+                .types(images.stream().map(InsightImage::getType).toList())
+                .sortNums(images.stream().map(InsightImage::getSortNum).toList())
                 .build();
     }
 }

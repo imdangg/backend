@@ -1,11 +1,6 @@
 package com.project.imdang.insight.application.mapper;
 
-import com.project.imdang.common.domain.valueobject.Address;
-import com.project.imdang.common.domain.valueobject.ApartmentComplex;
-import com.project.imdang.common.domain.valueobject.ComplexEnvironment;
-import com.project.imdang.common.domain.valueobject.File;
-import com.project.imdang.common.domain.valueobject.Infra;
-import com.project.imdang.common.domain.valueobject.MemberId;
+import com.project.imdang.common.domain.valueobject.*;
 import com.project.imdang.insight.application.dto.insight.AddressDTO;
 import com.project.imdang.insight.application.dto.insight.ApartmentComplexDTO;
 import com.project.imdang.insight.application.dto.insight.ComplexEnvironmentDTO;
@@ -17,6 +12,7 @@ import com.project.imdang.insight.domain.dto.insight.update.UpdateInsightCommand
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -24,12 +20,11 @@ import java.util.UUID;
 public class InsightRequestResolver {
 
     public CreateInsightCommand toCreateInsightCommand(UUID memberId,
-                                                       File mainImage,
+                                                       List<File> mainImages,
                                                        CreateInsightRequest createInsightRequest) {
         return CreateInsightCommand.builder()
                 .memberId(new MemberId(memberId))
-                .score(createInsightRequest.getScore())
-                .mainImage(mainImage)
+                .images(mainImages)
                 .title(createInsightRequest.getTitle())
                 .address(toAddress(createInsightRequest.getAddress()))
                 .apartmentComplex(toApartmentComplex(createInsightRequest.getApartmentComplex()))
@@ -44,12 +39,12 @@ public class InsightRequestResolver {
     }
 
     public UpdateInsightCommand toUpdateInsightCommand(UUID memberId,
-                                                       File mainImage,
+                                                       List<File> mainImage,
                                                        UpdateInsightRequest updateInsightRequest) {
         return UpdateInsightCommand.builder()
+                .insightId(new InsightId(updateInsightRequest.getInsightId()))
                 .memberId(new MemberId(memberId))
-                .score(updateInsightRequest.getScore())
-                .mainImage(mainImage)
+                .images(mainImage)
                 .title(updateInsightRequest.getTitle())
                 .address(toAddress(updateInsightRequest.getAddress()))
                 .apartmentComplex(toApartmentComplex(updateInsightRequest.getApartmentComplex()))

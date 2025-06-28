@@ -13,7 +13,6 @@ public class InsightPersistenceMapper {
         return InsightEntity.builder()
                 .id(insight.getId().getValue())
                 .memberId(insight.getMemberId().getValue())
-                .mainImage(insight.getMainImage())
                 .title(insight.getTitle())
                 .address(insight.getAddress())
                 .apartmentComplex(insight.getApartmentComplex())
@@ -27,8 +26,8 @@ public class InsightPersistenceMapper {
                 .recommendedCount(insight.getRecommendedCount())
                 .accusedCount(insight.getAccusedCount())
                 .viewCount(insight.getViewCount())
-                .score(insight.getScore())
                 .createdAt(insight.getCreatedAt())
+                .isDeleted(insight.isDeleted())
                 .build();
     }
 
@@ -36,7 +35,6 @@ public class InsightPersistenceMapper {
         return Insight.builder()
                 .id(new InsightId(insightEntity.getId()))
                 .memberId(new MemberId(insightEntity.getMemberId()))
-                .mainImage(insightEntity.getMainImage())
                 .title(insightEntity.getTitle())
                 .address(insightEntity.getAddress())
                 .apartmentComplex(insightEntity.getApartmentComplex())
@@ -50,7 +48,6 @@ public class InsightPersistenceMapper {
                 .recommendedCount(insightEntity.getRecommendedCount())
                 .accusedCount(insightEntity.getAccusedCount())
                 .viewCount(insightEntity.getViewCount())
-                .score(insightEntity.getScore())
                 .createdAt(insightEntity.getCreatedAt())
                 .build();
     }

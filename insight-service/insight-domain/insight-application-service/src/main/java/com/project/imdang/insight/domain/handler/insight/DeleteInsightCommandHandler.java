@@ -31,7 +31,7 @@ public class DeleteInsightCommandHandler {
         // validation
         MemberId deletedBy = deleteInsightCommand.getMemberId();
         InsightDeletedEvent insightDeletedEvent = insightDomainService.deleteInsight(insight, deletedBy);
-        Insight deletedInsight = insightHelper.save(insightDeletedEvent.getInsight());
+        Insight deletedInsight = insightHelper.delete(insightDeletedEvent.getInsight());
 
         final InsightId deletedInsightId = deletedInsight.getId();
         log.info("Insight[id: {}] is deleted.", deletedInsightId.getValue());

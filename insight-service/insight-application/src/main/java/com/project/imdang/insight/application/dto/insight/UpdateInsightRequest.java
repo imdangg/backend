@@ -8,14 +8,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.Set;
 import java.util.UUID;
 
+@Builder
+@AllArgsConstructor
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UpdateInsightRequest {
@@ -24,11 +24,6 @@ public class UpdateInsightRequest {
 
         private AddressDTO address;
         private ApartmentComplexDTO apartmentComplex;
-
-        @Schema(description = "인사이트 작성 점수")
-        @NotNull
-        @PositiveOrZero
-        private int score;
 
         @Schema(description = "제목")
         @NotBlank

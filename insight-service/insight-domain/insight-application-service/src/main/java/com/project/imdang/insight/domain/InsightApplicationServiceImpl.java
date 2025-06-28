@@ -69,6 +69,11 @@ public class InsightApplicationServiceImpl implements InsightApplicationService 
     }
 
     @Override
+    public Page<InsightResult> listWithImages(ListInsightQuery listInsightQuery) {
+        return listInsightQueryHandler.listWithImages(listInsightQuery);
+    }
+
+    @Override
     public Page<InsightResult> listInsightByDate(ListInsightByDateQuery listInsightByDateQuery) {
         return listInsightQueryHandler.listByDate(listInsightByDateQuery);
     }

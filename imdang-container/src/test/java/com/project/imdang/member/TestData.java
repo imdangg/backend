@@ -18,6 +18,5 @@ public final class TestData {
             .birthDate("2024-12-31")
             .gender(Gender.MALE)
             .deviceToken(fcmToken)
-            .insightCount(1)
             .build();
 }

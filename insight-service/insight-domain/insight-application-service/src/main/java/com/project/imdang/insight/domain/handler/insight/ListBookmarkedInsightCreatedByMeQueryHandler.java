@@ -1,11 +1,14 @@
 package com.project.imdang.insight.domain.handler.insight;
 
 import com.project.imdang.common.domain.utils.PagingUtils;
+import com.project.imdang.common.domain.valueobject.InsightId;
 import com.project.imdang.common.domain.valueobject.MemberId;
 import com.project.imdang.insight.domain.dto.insight.list.InsightResult;
 import com.project.imdang.insight.domain.dto.insight.list.ListBookmarkedInsightCreatedByMeQuery;
 import com.project.imdang.insight.domain.entity.Insight;
+import com.project.imdang.insight.domain.entity.InsightImage;
 import com.project.imdang.insight.domain.mapper.InsightDataMapper;
+import com.project.imdang.insight.domain.ports.output.repository.InsightImageRepository;
 import com.project.imdang.insight.domain.ports.output.repository.InsightRepository;
 import com.project.imdang.member.domain.client.MemberData;
 import com.project.imdang.member.domain.client.MemberDataResolver;
@@ -26,6 +29,7 @@ import java.util.stream.Collectors;
 public class ListBookmarkedInsightCreatedByMeQueryHandler {
 
     private final InsightRepository insightRepository;
+    private final InsightImageRepository insightImageRepository;
     private final InsightDataMapper insightDataMapper;
     private final MemberDataResolver memberResolver;
 
@@ -38,11 +42,21 @@ public class ListBookmarkedInsightCreatedByMeQueryHandler {
 
         //내가 작성한 인사이트 목록 조회
         Page<Insight> insightPage = insightRepository.findAllByMemberId(memberId, pageRequest);
+        List<Insight> insights = insightPage.getContent();
+        List<InsightId> insightIds = insights.stream()
+                .map(Insight::getId)
+                .toList();
+
+        // 이미지 조회 및 맵핑
+        List<InsightImage> images = insightImageRepository.findByInsightIdIn(insightIds);
+        Map<InsightId, List<InsightImage>> imageMap = images.stream()
+                .collect(Collectors.groupingBy(InsightImage::getInsightId));
         Map<MemberId, String> memberNicknameMap = getMemberNicknameMap(insightPage.getContent());
 
         return insightPage.map(insight -> {
-            String memberNickname = memberNicknameMap.get(insight.getMemberId());
-            return insightDataMapper.insightToInsightResponse(insight, memberNickname);
+            List<InsightImage> matchedImages = imageMap.getOrDefault(insight.getId(), List.of());
+            String nickname = memberNicknameMap.get(insight.getMemberId());
+            return insightDataMapper.insightToInsightResponse(insight, nickname, matchedImages);
         });
     }
 

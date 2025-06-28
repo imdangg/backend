@@ -15,13 +15,14 @@ import com.project.imdang.insight.domain.event.InsightRecommendedEvent;
 import com.project.imdang.insight.domain.event.InsightUpdatedEvent;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 public interface InsightDomainService {
-    Insight createInsight(Insight insight, String mainImage);
+    Insight createInsight(Insight insight, List<String> uploadImages);
     InsightUpdatedEvent updateInsight(Insight insight,
                                       MemberId memberId,
-                                      String mainImage,
+                                      List<String> mainImage,
                                       String title,
                                       Address address,
                                       ApartmentComplex apartmentComplex,
@@ -31,8 +32,7 @@ public interface InsightDomainService {
                                       Access access,
                                       String summary,
                                       Infra infra,
-                                      ComplexEnvironment complexEnvironment,
-                                      int score);
+                                      ComplexEnvironment complexEnvironment);
     InsightDeletedEvent deleteInsight(Insight insight, MemberId deletedBy);
     InsightRecommendedEvent recommendInsight(Insight insight, MemberId recommendedBy);
     InsightAccusedEvent accuseInsight(Insight insight, MemberId accusedBy);

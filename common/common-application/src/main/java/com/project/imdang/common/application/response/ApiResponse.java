@@ -1,7 +1,9 @@
 package com.project.imdang.common.application.response;
 
 import com.project.imdang.common.application.response.code.ErrorCode;
+import lombok.Getter;
 
+@Getter // fix/EZTX-23 HttpMediaTypeNotAcceptableException 해결
 public class ApiResponse<T> {
     // NOTE: HttpStatus는 Spring의 ResponseEntity로 설정
     private final T data;
