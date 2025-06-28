@@ -44,7 +44,7 @@ public interface InsightJpaRepository extends JpaRepository<InsightEntity, UUID>
             "and i.address_eup_myeon_dong = :eupMyeonDong",
             nativeQuery = true)
     Tuple countAllByMemberIdAndDistrict(@Param("memberId") String memberId,
-                                        @Param("sido") String siDo,
+                                        @Param("siDo") String siDo,
                                         @Param("siGunGu") String siGunGu,
                                         @Param("eupMyeonDong") String eupMyeonDong);
 
@@ -57,7 +57,7 @@ public interface InsightJpaRepository extends JpaRepository<InsightEntity, UUID>
             "and i.address_eup_myeon_dong = :eupMyeonDong " +
             "group by i.complex_name", nativeQuery = true)
     List<Object[]> findAllApartmentComplexAndInsightCountByMemberIdAndDistrict(@Param("memberId") String memberId,
-                                                                               @Param("sido") String siDo,
+                                                                               @Param("siDo") String siDo,
                                                                                @Param("siGunGu") String siGunGu,
                                                                                @Param("eupMyeonDong") String eupMyeonDong);
     @Query(value = "select i.* from insight i " +
@@ -86,7 +86,7 @@ public interface InsightJpaRepository extends JpaRepository<InsightEntity, UUID>
                     "and i.address_si_do = :siDo and i.address_si_gun_gu = :siGunGu and i.address_eup_myeon_dong = :eupMyeonDong ",
             nativeQuery = true)
     Page<InsightEntity> findAllByMemberIdAndDistrictAndOnlyMine(@Param("memberId") String memberId,
-                                                 @Param("sido") String siDo,
+                                                 @Param("siDo") String siDo,
                                                  @Param("siGunGu") String siGunGu,
                                                  @Param("eupMyeonDong") String eupMyeonDong, Pageable pageable);
 
@@ -98,7 +98,7 @@ public interface InsightJpaRepository extends JpaRepository<InsightEntity, UUID>
                     "and i.address_si_do = :siDo and i.address_si_gun_gu = :siGunGu and i.address_eup_myeon_dong = :eupMyeonDong ",
             nativeQuery = true)
     Page<InsightEntity> findAllByMemberIdAndDistrict(@Param("memberId") String memberId,
-                                                     @Param("sido") String siDo,
+                                                     @Param("siDo") String siDo,
                                                      @Param("siGunGu") String siGunGu,
                                                      @Param("eupMyeonDong") String eupMyeonDong, Pageable pageable);
 

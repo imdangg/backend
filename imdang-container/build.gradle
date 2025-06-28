@@ -13,6 +13,7 @@ jar {
 
 dependencies {
     implementation project(':insight-service:insight-application')
+    implementation project(':insight-service:insight-messaging:publisher')
     implementation project(':insight-service:insight-persistence')
     implementation project(':insight-service:insight-domain:insight-application-service')
     implementation project(':insight-service:insight-domain:insight-domain-core')
