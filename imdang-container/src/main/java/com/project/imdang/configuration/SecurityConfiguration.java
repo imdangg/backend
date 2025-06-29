@@ -90,6 +90,7 @@ public class SecurityConfiguration {
                             corsConfiguration.setExposedHeaders(Arrays.asList(AUTHORIZATION));
                             return corsConfiguration;
                         }))
+                .csrf(AbstractHttpConfigurer::disable)
                 // CSRF 활성화
 //                .csrf(csrfConfigurer -> csrfConfigurer
                         // TODO - CsrfTokenRepository: Session -> DB OR Cookie로 변경
