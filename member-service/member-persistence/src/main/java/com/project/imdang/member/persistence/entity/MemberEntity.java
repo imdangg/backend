@@ -22,6 +22,7 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Builder
@@ -52,6 +53,7 @@ public class MemberEntity {
     private Boolean isLogin;
     private Boolean isDeleted;
 
+    private LocalDate latestInsightCreateDate;
     private Long accusedCount;
     @Enumerated(EnumType.STRING)
     private MemberStatus status;

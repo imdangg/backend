@@ -13,7 +13,7 @@ import java.util.UUID;
 @FeignClient(name = "memberFeignClient", url = "http://localhost:8080/members")
 public interface MemberFeignClient {
 
-    @GetMapping("/info")
+    @GetMapping("/detail")
     ResponseEntity<MemberData> getMemberData(@RequestParam("memberId") UUID memberId);
 
     @GetMapping

@@ -5,13 +5,7 @@ import com.project.imdang.member.domain.dto.member.JoinCommand;
 import com.project.imdang.member.domain.dto.member.MemberResult;
 import com.project.imdang.member.domain.dto.member.MyPageInfoResult;
 import com.project.imdang.member.domain.dto.member.WithdrawCommand;
-import com.project.imdang.member.domain.handler.member.AccuseMemberCommandHandler;
-import com.project.imdang.member.domain.handler.member.DetailMemberQueryHandler;
-import com.project.imdang.member.domain.handler.member.DetailMyPageInfoQueryHandler;
-import com.project.imdang.member.domain.handler.member.JoinCommandHandler;
-import com.project.imdang.member.domain.handler.member.ListMemberQueryHandler;
-import com.project.imdang.member.domain.handler.member.LogoutCommandHandler;
-import com.project.imdang.member.domain.handler.member.WithdrawCommandHandler;
+import com.project.imdang.member.domain.handler.member.*;
 import com.project.imdang.member.domain.ports.input.service.MemberApplicationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +25,7 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
     private final DetailMyPageInfoQueryHandler detailMyPageInfoQueryHandler;
 
     private final AccuseMemberCommandHandler accuseMemberCommandHandler;
+    private final UpdateMemberCommandHandler updateMemberCommandHandler;
 
     @Override
     public MyPageInfoResult detailMyPage(MemberId memberId) {
@@ -60,5 +55,10 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
     @Override
     public Boolean accuseMember(MemberId memberId) {
         return accuseMemberCommandHandler.accuse(memberId);
+    }
+
+    @Override
+    public Boolean updateMember(MemberId memberId) {
+        return updateMemberCommandHandler.update(memberId);
     }
 }

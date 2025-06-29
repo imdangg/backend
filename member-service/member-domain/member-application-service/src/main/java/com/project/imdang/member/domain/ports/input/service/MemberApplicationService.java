@@ -18,4 +18,5 @@ public interface MemberApplicationService {
     Boolean join(JoinCommand joinCommand);
     Boolean withdraw(WithdrawCommand withdrawCommand);
     Boolean accuseMember(MemberId memberId);
+    Boolean updateMember(MemberId memberId);
 }
