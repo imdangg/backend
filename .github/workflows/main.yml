@@ -59,8 +59,8 @@ jobs:
       - name: Build and Test
         run: ./gradlew imdang-container:clean imdang-container:assemble
 
-      - name: Build Batch Module
-        run: ./gradlew batch:clean batch:assemble
+#      - name: Build Batch Module
+#        run: ./gradlew batch:clean batch:assemble
 
       # 빌드 파일을 zip 형식으로 압축 - S3에서는 jar 저장이 안되기 때문에 zip으로 생성
 #      - name: Make zip file
