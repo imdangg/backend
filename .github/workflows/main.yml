@@ -63,9 +63,9 @@ jobs:
 #        run: ./gradlew batch:clean batch:assemble
 
       # 빌드 파일을 zip 형식으로 압축 - S3에서는 jar 저장이 안되기 때문에 zip으로 생성
-#      - name: Make zip file
-#        run: zip -r ./$GITHUB_SHA.zip .
-#        shell: bash
+      - name: Make zip file
+        run: zip -r ./$GITHUB_SHA.zip .
+        shell: bash
 
       # backend(root)/
       # -- imdang-container/
@@ -74,11 +74,11 @@ jobs:
       # ---- build/libs/batch.jar
       # -- build.gradle
       # -- .github/workflows/main.yml
-      - name: Make zip file
-        run: |
-          mkdir deploy
-          cp imdang-container/build/libs/*.jar deploy/
-          cp batch/build/libs/*.jar
+#      - name: Make zip file
+#        run: |
+#          mkdir deploy
+#          cp imdang-container/build/libs/*.jar deploy/
+#          cp batch/build/libs/*.jar
 
       # AWS 권한
       - name: AWS credential 설정
