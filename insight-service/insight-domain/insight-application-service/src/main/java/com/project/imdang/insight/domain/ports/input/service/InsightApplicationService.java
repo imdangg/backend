@@ -17,6 +17,7 @@ import java.util.List;
 
 public interface InsightApplicationService {
     Page<InsightResult> listInsight(ListInsightQuery listInsightQuery);
+    Page<InsightResult> listWithImages(ListInsightQuery listInsightQuery);
     Page<InsightResult> listInsightByDate(ListInsightByDateQuery listInsightByDateQuery);
     Page<InsightResult> listInsightByDistrict(ListInsightByDistrictQuery listInsightByDistrictQuery);
     Page<InsightResult> listInsightByApartmentComplex(ListInsightByApartmentComplexQuery listInsightByApartmentComplexQuery);

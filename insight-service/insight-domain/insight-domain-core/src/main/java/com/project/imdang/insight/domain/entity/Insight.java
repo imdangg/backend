@@ -17,15 +17,18 @@ import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Getter
 public class Insight extends AggregateRoot<InsightId> {
 
     private final MemberId memberId;  // createdBy
 
-    private String mainImage;
+    private List<InsightImage> images;
     private String title;
 
     private Address address;
@@ -48,8 +51,6 @@ public class Insight extends AggregateRoot<InsightId> {
     private Long accusedCount;
     private Long viewCount;
 
-    // 완성도
-    private Integer score;
     private ZonedDateTime createdAt;
     // TODO - CHECK : updatedAt;
 
@@ -58,7 +59,7 @@ public class Insight extends AggregateRoot<InsightId> {
     @Builder
     public Insight(InsightId id,
                    MemberId memberId,
-                   String mainImage,
+                   List<InsightImage> images,
                    String title,
                    Address address,
                    ApartmentComplex apartmentComplex,
@@ -72,12 +73,11 @@ public class Insight extends AggregateRoot<InsightId> {
                    Long recommendedCount,
                    Long accusedCount,
                    Long viewCount,
-                   Integer score,
                    ZonedDateTime createdAt,
                    boolean isDeleted) {
         setId(id);
         this.memberId = memberId;
-        this.mainImage = mainImage;
+        this.images = images;
         this.title = title;
         this.address = address;
         this.apartmentComplex = apartmentComplex;
@@ -91,15 +91,14 @@ public class Insight extends AggregateRoot<InsightId> {
         this.recommendedCount = recommendedCount;
         this.accusedCount = accusedCount;
         this.viewCount = viewCount;
-        this.score = score;
         this.createdAt = createdAt;
         this.isDeleted = isDeleted;
     }
 
-    public void initialize(String mainImage) {
+    public void initialize(List<String> imageUrls) {
         InsightId insightId = new InsightId(UUID.randomUUID());
         setId(insightId);
-        this.mainImage = mainImage;
+        urlsToInsightImages(insightId, imageUrls);
         this.recommendedCount = 0L;
         this.accusedCount = 0L;
         this.viewCount = 0L;
@@ -107,7 +106,7 @@ public class Insight extends AggregateRoot<InsightId> {
     }
 
     public Insight update(MemberId updatedBy,
-                          String mainImage,
+                          List<InsightImage> images,
                           String title,
                           Address address,
                           ApartmentComplex apartmentComplex,
@@ -117,15 +116,14 @@ public class Insight extends AggregateRoot<InsightId> {
                           Access access,
                           String summary,
                           Infra infra,
-                          ComplexEnvironment complexEnvironment,
-                          int score) {
+                          ComplexEnvironment complexEnvironment) {
 
         if (!updatedBy.equals(this.memberId)) {
             throw new InsightDomainException("Author does not match!");
         }
 
-        if (mainImage != null) {
-            this.mainImage = mainImage;
+        if (images != null) {
+            this.images = images;
         }
         this.title = title;
         this.address = address;
@@ -137,7 +135,6 @@ public class Insight extends AggregateRoot<InsightId> {
         this.summary = summary;
         this.infra = infra;
         this.complexEnvironment = complexEnvironment;
-        this.score = score;
         return this;
     }
 
@@ -160,5 +157,20 @@ public class Insight extends AggregateRoot<InsightId> {
     // TODO - 동시성 체크
     public void view() {
         this.viewCount++;
+    }
+
+    public void urlsToInsightImages(InsightId insightId, List<String> imageUrls) {
+        this.images = IntStream.range(0, imageUrls.size())
+                .mapToObj(i -> InsightImage.createNewInsightImage(
+                        insightId,
+                        0, // type: 메인이미지
+                        i, // 정렬 순서
+                        imageUrls.get(i)
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public void setImages(List<InsightImage> images) {
+        this.images = images;
     }
 }

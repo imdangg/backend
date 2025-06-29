@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Builder
@@ -30,7 +31,7 @@ public class InsightDetailResult {
 
     private InsightId insightId;    //인사이트ID
 
-    private String mainImage;       //메인 이미지
+    private List<String> mainImage;       //메인 이미지
     //TODO : 추가 이미지
     private String title;           //제목
 
@@ -55,4 +56,7 @@ public class InsightDetailResult {
 //    private Integer score;
     private ZonedDateTime createdAt;
     private Boolean createdByMe;
+    private List<String> images;        // image URL 리스트
+    private List<Integer> types;        // 이미지 타입 리스트
+    private List<Integer> sortNums;     // 정렬 순서 리스트
 }

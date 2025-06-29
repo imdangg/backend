@@ -43,6 +43,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -87,7 +88,7 @@ public class InsightController {
                 .direction("DESC")
                 .properties(new String[]{"recommendedCount"})
                 .build();
-        Page<InsightResult> insightResults = insightApplicationService.listInsight(listInsightQuery);
+        Page<InsightResult> insightResults = insightApplicationService.listWithImages(listInsightQuery);
         return ApiResponse.success(insightResults);
     }
 
@@ -171,7 +172,7 @@ public class InsightController {
                                                             @RequestParam(name = "pageNumber", defaultValue = "0") Integer pageNumber,
                                                             @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
                                                             @RequestParam(name = "direction", defaultValue = "DESC") String direction,
-                                                            @RequestParam(name = "properties", defaultValue = "created_at") String[] properties) {
+                                                            @RequestParam(name = "properties", defaultValue = "createdAt") String[] properties) {
 
         ListBookmarkedInsightCreatedByMeQuery listBookmarkedInsightCreatedByMeQuery = ListBookmarkedInsightCreatedByMeQuery.builder()
                 .memberId(new MemberId(memberId))
@@ -213,10 +214,10 @@ public class InsightController {
     @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "인사이트가 작성 완료")
     @PostMapping(CREATE_INSIGHT)
     public ApiResponse<Void> createInsight(@AuthenticationPrincipal UUID memberId,
-                                              @RequestPart("createInsightCommand") @Valid CreateInsightRequest createInsightRequest,
-                                              @RequestPart("mainImage") MultipartFile mainImage) {
-        File file = validateFile(mainImage);
-        CreateInsightCommand createInsightCommand = resolver.toCreateInsightCommand(memberId, file, createInsightRequest);
+                                              @RequestPart("createInsightRequest") @Valid CreateInsightRequest createInsightRequest,
+                                              @RequestPart("mainImages") List<MultipartFile> mainImages) {
+        List<File> files = validateFiles(mainImages);
+        CreateInsightCommand createInsightCommand = resolver.toCreateInsightCommand(memberId, files, createInsightRequest);
         InsightId insightId = insightApplicationService.createInsight(createInsightCommand);
         log.info("Insight[id: {}] is created.", insightId);
         return ApiResponse.success(null);
@@ -227,10 +228,10 @@ public class InsightController {
     @PostMapping(UPDATE_INSIGHT)
     public ApiResponse<Void> updateInsight(@AuthenticationPrincipal UUID memberId,
                                                // TODO - CHANGE
-                                               @RequestPart("updateInsightCommand") @Valid UpdateInsightRequest updateInsightRequest,
-                                               @RequestPart(value = "mainImage", required = false) MultipartFile mainImage) {
-        File file = validateFile(mainImage);
-        UpdateInsightCommand updateInsightCommand = resolver.toUpdateInsightCommand(memberId, file, updateInsightRequest);
+                                               @RequestPart("updateInsightRequest") @Valid UpdateInsightRequest updateInsightRequest,
+                                               @RequestPart(value = "mainImages", required = false) List<MultipartFile> mainImages) {
+        List<File> files = validateFiles(mainImages);
+        UpdateInsightCommand updateInsightCommand = resolver.toUpdateInsightCommand(memberId, files, updateInsightRequest);
         InsightId insightId = insightApplicationService.updateInsight(updateInsightCommand);
         log.info("Insight[id: {}] is updated.", insightId);
         return ApiResponse.success(null);
@@ -303,6 +304,43 @@ public class InsightController {
             // TODO - 예외 처리
             throw new RuntimeException(e);
         }
+    }
+
+    private List<File> validateFiles(List<MultipartFile> files) {
+        if (files == null || files.isEmpty()) {
+            // TODO - 예외 처리
+            throw new RuntimeException("No files detected.");
+        }
+
+        List<File> result = new ArrayList<>();
+        for (MultipartFile multipartFile : files) {
+            if (multipartFile.isEmpty()) {
+                // TODO - 예외 처리
+                throw new RuntimeException("One of the files is empty.");
+            }
+
+            String originalFilename = multipartFile.getOriginalFilename();
+            if (originalFilename == null) {
+                throw new RuntimeException("One of the files has no filename.");
+            }
+
+            validateFileExtension(originalFilename); // 기존 확장자 검증 재사용
+
+            try {
+                File file = File.builder()
+                        .originalFilename(originalFilename)
+                        .size(multipartFile.getSize())
+                        .contentType(multipartFile.getContentType())
+                        .inputStream(multipartFile.getInputStream())
+                        .build();
+
+                result.add(file);
+            } catch (IOException e) {
+                throw new RuntimeException("File processing error: " + e.getMessage(), e);
+            }
+        }
+
+        return result;
     }
 
     private void validateFileExtension(String originalFilename) {

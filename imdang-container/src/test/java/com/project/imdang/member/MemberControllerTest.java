@@ -40,8 +40,8 @@ public class MemberControllerTest {
     @Test
     void info() throws Exception {
         //given
-        Mockito.when(jwtTokenProvider.verifyToken(accessToken))
-                        .thenReturn(true);
+//        Mockito.when(jwtTokenProvider.verifyToken(accessToken))
+//                        .thenReturn(true);
 
         Mockito.when(jwtTokenProvider.extractSubject(accessToken))
                 .thenReturn(String.valueOf(memberId));

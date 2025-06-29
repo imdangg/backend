@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Repository
@@ -23,9 +24,10 @@ public interface InsightJpaRepository extends JpaRepository<InsightEntity, UUID>
 
     Page<InsightEntity> findAll(Specification specification, Pageable pageable);
     Page<InsightEntity> findAllByCreatedAtBetween(ZonedDateTime start, ZonedDateTime end, Pageable pageable);
+    List<InsightEntity> findAllByIdIn(Set<UUID> ids);
 
     @Query("select distinct i.apartmentComplex from InsightEntity i where i.memberId = :memberId")
-    List<ApartmentComplex> findDistinctApartmentComplexByMemberId(UUID memberId);
+    List<ApartmentComplex> findDistinctApartmentComplexByMemberId(@Param("memberId") UUID memberId);
 
     @Query(value = "select distinct i.address_si_do, i.address_si_gun_gu, i.address_eup_myeon_dong " +
             "from insight i " +

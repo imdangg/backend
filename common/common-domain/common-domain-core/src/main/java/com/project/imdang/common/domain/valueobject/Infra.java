@@ -44,6 +44,6 @@ public class Infra {
     }
 
     public enum Surroundings {
-        해당_없음, 강, 산, 공원, 산책로, 식당가, 시장
+        해당_없음, 강, 산, 공원, 산책로, 식당가, 시장, 교회 // fix/EZTX-23 기존 개발 DB에 교회 데이터가 있어 추가함
     }
 }

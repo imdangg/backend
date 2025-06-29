@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -31,14 +33,14 @@ public class UpdateInsightCommandHandler {
 
         InsightId insightId = updateInsightCommand.getInsightId();
         Insight insight = insightHelper.get(insightId);
+        List<String> uploadImages = uploadImages(updateInsightCommand.getImages());
 
         // validation check
         MemberId updatedBy = updateInsightCommand.getMemberId();
-        String mainImage = uploadImage(updateInsightCommand.getMainImage());
         InsightUpdatedEvent insightUpdatedEvent = insightDomainService.updateInsight(
                 insight,
                 updatedBy,
-                mainImage,
+                uploadImages,
                 updateInsightCommand.getTitle(),
                 updateInsightCommand.getAddress(),
                 updateInsightCommand.getApartmentComplex(),
@@ -48,11 +50,10 @@ public class UpdateInsightCommandHandler {
                 updateInsightCommand.getAccess(),
                 updateInsightCommand.getSummary(),
                 updateInsightCommand.getInfra(),
-                updateInsightCommand.getComplexEnvironment(),
-                updateInsightCommand.getScore());
+                updateInsightCommand.getComplexEnvironment());
         Insight updated = insightUpdatedEvent.getInsight();
         log.info("Insight[id: {}] is updated.", updated.getId().getValue());
-        Insight savedInsight = insightHelper.save(updated);
+        Insight savedInsight = insightHelper.update(updated);
         return savedInsight.getId();
     }
 
@@ -64,5 +65,18 @@ public class UpdateInsightCommandHandler {
             throw new InsightDomainException(e.getMessage());
         }
         return mainImage;
+    }
+
+    private List<String> uploadImages(List<File> imageFiles) {
+        List<String> uploadedImages = new ArrayList<>();
+        for (File imageFile : imageFiles) {
+            try {
+                String uploadedUrl = fileService.upload(imageFile);
+                uploadedImages.add(uploadedUrl);
+            } catch (IOException e) {
+                throw new InsightDomainException("이미지 업로드 실패: " + e.getMessage());
+            }
+        }
+        return uploadedImages;
     }
 }

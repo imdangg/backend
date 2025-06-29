@@ -16,6 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Builder
@@ -24,8 +25,7 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreateInsightCommand {
     private MemberId memberId; // createdBy
-    private int score;
-    private File mainImage;
+    private List<File> images;
 
     private String title;
     private Address address;
