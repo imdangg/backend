@@ -2,11 +2,6 @@
 
 ## 1. 프로젝트 개요 (Overview)
 - 임장 후기 공유 플랫폼
-[Link]
-
-### # 주요 기능
-- 인사이트 등록/수정
-- 인사이트 교환(교환 요청/수락/거절)
 
 ## 2. 시스템 아키텍처 (System Architecture)
 ### # 개요
@@ -69,20 +64,21 @@ com.example.project
 └── global         // 예외, 인터셉터, 보안, 에러 핸들링 등
 ```
 ### 2) 클래스 네이밍
-| 유형             | 접미사 예시                       | 예시 이름                     |
-| -------------- | ---------------------------- | ------------------------- |
-| Entity         | `Entity` (또는 없음)             | `Member`, `Order`         |
-| Repository     | `Repository`                 | `MemberRepository`        |
-| Service        | `Service`                    | `MemberService`           |
-| Controller     | `Controller`                 | `MemberController`        |
-| DTO (입력값)      | `Request` / `Command`        | `CreateMemberRequest`     |
-| DTO (출력값)      | `Response` / `Result`        | `MemberInfoResponse`      |
-| API 응답 Wrapper | `ApiResult` / `BaseResponse` | `ApiResult<T>`            |
+| 유형                        | 접미사 예시                       | 예시 이름                     |
+|---------------------------| ---------------------------- |---------------------------|
+| Entity                    | `Entity` (또는 없음)             | `Member`, `Order`         |
+| Repository                | `Repository`                 | `MemberRepository`        |
+| Service                   | `Service`                    | `MemberService`           |
+| Controller                | `Controller`                 | `MemberController`        |
+| DTO (Controller 입력값)      | `Request`       | `CreateMemberRequest`     |
+| DTO (Service/Handler 입력값) | `Command`        | `CreateMemberCommand`     |
+| DTO (출력값)                 | `Response` / `Result`        | `MemberResult`            |
+| API 응답 Wrapper | `ApiResponse<T>` | `ApiResponse<T>`          |
 | Exception      | `Exception`                  | `MemberNotFoundException` |
 
 ### 3) API URL
 - 항상 복수형 명사 사용
-- 'me'는 인증된 사용자 표현
+- URL은 모두 RequestPath.java에 정의해서 사용한다.
 
 | 기능       | URL 예시                    |
 | -------- | ------------------------- |
@@ -132,7 +128,6 @@ com.example.project
 ### # setting-service
 - 알림 관련 서비스
 - `Notification`
-### ~~# admin-service~~
 ### # common
 - 각 모듈에서 공통적으로 사용하는 클래스 모음
 ### # batch
@@ -149,3 +144,9 @@ com.example.project
   - 프로젝트 빌드
   - AWS S3에 zip으로 업로드
   - AWS CodeDeploy를 통해 EC2에 배포
+
+## 7. Git Flow
+- 각자 작업 브랜치 생성 ex) feature/yk/{task-number}
+- 각 작업 브랜치에서 작업 후 origin/feature/yk/{task-number}로 push
+- develop으로 PR 생성해서 review
+- approve 받으면 merge

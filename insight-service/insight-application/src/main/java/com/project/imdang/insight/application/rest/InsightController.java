@@ -198,9 +198,12 @@ public class InsightController {
         return ApiResponse.success(apartmentComplexes);
     }
 
-    // 상세
     @Operation(description = "인사이트 상세 조회 API")
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "인사이트가 조회 되었습니다.")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "인사이트 상세 조회 성공")
+    })
     @GetMapping(DETAIL_INSIGHT)
     public ApiResponse<InsightDetailResult> detail(@AuthenticationPrincipal UUID memberId,
                                                    @RequestParam(name = "insightId") UUID insightId) {
@@ -211,11 +214,15 @@ public class InsightController {
     }
 
     @Operation(description = "인사이트 작성 API")
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "인사이트가 작성 완료")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "인사이트 작성 성공")
+    })
     @PostMapping(CREATE_INSIGHT)
     public ApiResponse<Void> createInsight(@AuthenticationPrincipal UUID memberId,
-                                              @RequestPart("createInsightRequest") @Valid CreateInsightRequest createInsightRequest,
-                                              @RequestPart("mainImages") List<MultipartFile> mainImages) {
+                                          @RequestPart("createInsightRequest") @Valid CreateInsightRequest createInsightRequest,
+                                          @RequestPart("mainImages") List<MultipartFile> mainImages) {
         List<File> files = validateFiles(mainImages);
         CreateInsightCommand createInsightCommand = resolver.toCreateInsightCommand(memberId, files, createInsightRequest);
         InsightId insightId = insightApplicationService.createInsight(createInsightCommand);
@@ -224,12 +231,16 @@ public class InsightController {
     }
 
     @Operation(description = "인사이트 수정 API")
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "인사이트가 수정되었습니다.")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "인사이트 수정 성공")
+    })
     @PostMapping(UPDATE_INSIGHT)
     public ApiResponse<Void> updateInsight(@AuthenticationPrincipal UUID memberId,
-                                               // TODO - CHANGE
-                                               @RequestPart("updateInsightRequest") @Valid UpdateInsightRequest updateInsightRequest,
-                                               @RequestPart(value = "mainImages", required = false) List<MultipartFile> mainImages) {
+                                           // TODO - CHANGE
+                                           @RequestPart("updateInsightRequest") @Valid UpdateInsightRequest updateInsightRequest,
+                                           @RequestPart(value = "mainImages", required = false) List<MultipartFile> mainImages) {
         List<File> files = validateFiles(mainImages);
         UpdateInsightCommand updateInsightCommand = resolver.toUpdateInsightCommand(memberId, files, updateInsightRequest);
         InsightId insightId = insightApplicationService.updateInsight(updateInsightCommand);
@@ -238,10 +249,14 @@ public class InsightController {
     }
 
     @Operation(description = "인사이트 삭제 API")
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "인사이트가 삭제되었습니다.")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "인사이트 삭제 성공")
+    })
     @PostMapping(DELETE_INSIGHT)
     public ApiResponse<Void> deleteInsight(@AuthenticationPrincipal UUID memberId,
-                                              @RequestBody @Valid DeleteInsightRequest deleteInsightRequest) {
+                                           @RequestBody @Valid DeleteInsightRequest deleteInsightRequest) {
         DeleteInsightCommand deleteInsightCommand = DeleteInsightCommand.builder()
                 .memberId(new MemberId(memberId))
                 .insightId(new InsightId(deleteInsightRequest.getInsightId()))
@@ -252,10 +267,14 @@ public class InsightController {
     }
 
     @Operation(description = "인사이트 추천 API")
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "인사이트가 추천되었습니다.")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "인사이트 추천 성공")
+    })
     @PostMapping(RECOMMEND_INSIGHT)
     public ApiResponse<Void> recommendInsight(@AuthenticationPrincipal UUID memberId,
-                                                 @RequestBody @Valid RecommendInsightRequest recommendInsightRequest) {
+                                              @RequestBody @Valid RecommendInsightRequest recommendInsightRequest) {
 
         RecommendInsightCommand recommendInsightCommand = RecommendInsightCommand.builder()
                 .recommendMemberId(new MemberId(memberId))
@@ -267,10 +286,14 @@ public class InsightController {
     }
 
     @Operation(description = "인사이트 신고 API")
-    @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "인사이트가 신고되었습니다.")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "인사이트 신고 성공")
+    })
     @PostMapping(ACCUSE_INSIGHT)
     public ApiResponse<Void> accuseInsight(@AuthenticationPrincipal UUID memberId,
-                                              @RequestBody @Valid AccuseInsightRequest accuseInsightRequest) {
+                                           @RequestBody @Valid AccuseInsightRequest accuseInsightRequest) {
         AccuseInsightCommand accuseInsightCommand = AccuseInsightCommand.builder()
                 .accuseMemberId(new MemberId(memberId))
                 .insightId(new InsightId(accuseInsightRequest.getInsightId()))
