@@ -41,4 +41,10 @@ public class MemberDomainServiceImpl implements MemberDomainService {
         member.storeRefreshToken(refreshToken);
         return member;
     }
+
+    @Override
+    public Member updateMember(Member member) {
+        member.updateInsightCreateDate();
+        return member;
+    }
 }

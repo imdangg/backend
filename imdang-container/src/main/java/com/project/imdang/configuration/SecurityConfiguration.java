@@ -91,10 +91,8 @@ public class SecurityConfiguration {
                             return corsConfiguration;
                         }))
                 // CSRF 활성화
-//                .csrf(csrfConfigurer -> csrfConfigurer
-                        // TODO - CsrfTokenRepository: Session -> DB OR Cookie로 변경
-//                        .disable()
-//                )
+                // TODO - CsrfTokenRepository: Session -> DB OR Cookie로 변경
+                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sessionManagementConfigurer -> sessionManagementConfigurer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new AccessTokenValidateFilter(tokenHandler), BasicAuthenticationFilter.class)
