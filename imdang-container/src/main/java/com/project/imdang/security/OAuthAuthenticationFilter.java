@@ -1,6 +1,8 @@
 package com.project.imdang.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.imdang.common.application.response.ApiResponse;
+import com.project.imdang.common.application.response.code.ErrorCode;
 import com.project.imdang.common.domain.valueobject.OAuthProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -35,24 +37,41 @@ public class OAuthAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        Map<String, Object> requestBody = parseRequestBodyToMap(request);
-        OAuthProvider oAuthProvider = (OAuthProvider) requestBody.get("provider");
-        String identifier = (String) requestBody.get("token");
-        OAuthAuthenticationToken oAuthAuthenticationToken = new OAuthAuthenticationToken(oAuthProvider, identifier);
-
         try {
-            Authentication authenticatedToken = authenticationManager.authenticate(oAuthAuthenticationToken);
-            SecurityContextHolder.getContext().setAuthentication(authenticatedToken);
+            Map<String, Object> requestBody = parseRequestBodyToMap(request);
+            String name = (String) requestBody.get("provider");
+            OAuthProvider oAuthProvider = OAuthProvider.getProvider(name);
+            String identifier = (String) requestBody.get("token");
+            OAuthAuthenticationToken oAuthAuthenticationToken = new OAuthAuthenticationToken(oAuthProvider, identifier);
+
+            try {
+                Authentication authenticatedToken = authenticationManager.authenticate(oAuthAuthenticationToken);
+                SecurityContextHolder.getContext().setAuthentication(authenticatedToken);
+            } catch (Exception e) {
+                // TODO
+                throw new BadCredentialsException("Invalid Token!");
+            }
+            filterChain.doFilter(request, response);
+
         } catch (Exception e) {
-            // TODO
-            throw new BadCredentialsException("Invalid Token!");
+            e.printStackTrace();
+            response.setContentType("application/json;charset=UTF-8");
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            ApiResponse<Void> error = ApiResponse.error(ErrorCode.FORBIDDEN);
+            response.getWriter().print(objectMapper.writeValueAsString(error));
+            response.getWriter().flush();
+            response.getWriter().close();
         }
-        filterChain.doFilter(request, response);
     }
 
     private Map<String, Object> parseRequestBodyToMap(HttpServletRequest request) throws IOException {
-        ContentCachingRequestWrapper wrapper = (ContentCachingRequestWrapper) request;
-        byte[] body = wrapper.getContentAsByteArray();
+        byte[] body;
+        if (request instanceof ContentCachingRequestWrapper) {
+            ContentCachingRequestWrapper wrapper = (ContentCachingRequestWrapper) request;
+            body = wrapper.getContentAsByteArray();
+        } else {
+            body = request.getInputStream().readAllBytes();
+        }
         return objectMapper.readValue(body, Map.class);
     }
 }

@@ -40,12 +40,10 @@ public class OAuthAuthenticationProvider implements AuthenticationProvider {
         Optional<Member> optional = memberHelper.getByOAuthIdAndOAuthProviderAndIsDeleted(oAuthInfo.getId(), oAuthProvider, Boolean.FALSE);
         // deleted 되지 않은 사용자라면 가져오고, 아니라면 새로 생성
         Member member;
-        boolean isJoined = false;
         if (optional.isEmpty()) {
             member = memberDomainService.createMember(oAuthInfo.getId(), oAuthProvider);
         } else {
             member = optional.get();
-            isJoined = (member.getNickname() != null);
         }
 
         final UUID memberId = member.getId().getValue();

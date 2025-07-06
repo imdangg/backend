@@ -28,5 +28,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         ApiResponse<Void> error = (accessDeniedException != null && accessDeniedException.getMessage() != null) ?
                 ApiResponse.error(ErrorCode.FORBIDDEN, accessDeniedException.getMessage()) : ApiResponse.error(ErrorCode.FORBIDDEN);
         response.getWriter().print(objectMapper.writeValueAsString(error));
+        response.getWriter().flush();
+        response.getWriter().close();
     }
 }

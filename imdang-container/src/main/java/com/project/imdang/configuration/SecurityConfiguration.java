@@ -13,29 +13,23 @@ import com.project.imdang.security.OAuthAuthenticationFilter;
 import com.project.imdang.security.OAuthAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextHolderFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.function.Supplier;
 
 import static com.project.imdang.common.application.constant.Header.AUTHORIZATION;
-import static com.project.imdang.common.application.constant.RequestPath.DETAIL_MEMBER;
-import static com.project.imdang.common.application.constant.RequestPath.LIST_MEMBER;
 import static com.project.imdang.common.application.constant.RequestPath.LOGIN;
 import static com.project.imdang.common.application.constant.RequestPath.REISSUE;
 import static com.project.imdang.common.application.constant.RequestPath.SWAGGER_DOC;
@@ -48,8 +42,6 @@ import static com.project.imdang.common.application.constant.RequestPath.SWAGGER
 @Slf4j
 public class SecurityConfiguration {
 
-    @Value("${security.allowed-ip}")
-    private String allowedIp;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
@@ -91,26 +83,18 @@ public class SecurityConfiguration {
                             return corsConfiguration;
                         }))
                 // CSRF 활성화
-                // TODO - CsrfTokenRepository: Session -> DB OR Cookie로 변경
-                 .csrf(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sessionManagementConfigurer -> sessionManagementConfigurer
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new AccessTokenValidateFilter(tokenHandler), BasicAuthenticationFilter.class)
                 .addFilterBefore(new OAuthAuthenticationFilter(authenticationManager(), objectMapper), BasicAuthenticationFilter.class)
-                .addFilterBefore(new CachingFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new CachingFilter(), SecurityContextHolderFilter.class)
                 .authorizeHttpRequests(registry -> registry
-                        .requestMatchers(LIST_MEMBER, DETAIL_MEMBER).permitAll()
-//                        .access(this::hasIpAddress)
                         .requestMatchers(LOGIN, REISSUE, SWAGGER_RESOURCE, SWAGGER_UI, SWAGGER_DOC).permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(exceptionHandlingConfigurer -> exceptionHandlingConfigurer
                                 .authenticationEntryPoint(customAuthenticationEntryPoint)
                                 .accessDeniedHandler(customAccessDeniedHandler))
                 .build();
-    }
-
-    private AuthorizationDecision hasIpAddress(Supplier<Authentication> authentication, RequestAuthorizationContext object) {
-        log.info("Local Request[IP : {}] is requested", object.getRequest().getRemoteAddr());
-        return new AuthorizationDecision(allowedIp.matches(object.getRequest().getRemoteAddr()));
     }
 }

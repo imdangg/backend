@@ -19,8 +19,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.project.imdang.common.application.constant.Header.AUTHORIZATION;
-import static com.project.imdang.common.application.constant.RequestPath.DETAIL_MEMBER;
-import static com.project.imdang.common.application.constant.RequestPath.LIST_MEMBER;
 import static com.project.imdang.common.application.constant.RequestPath.LOGIN;
 
 
@@ -34,11 +32,6 @@ public class AccessTokenValidateFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         // false: 실행
         final String servletPath = request.getServletPath();
-        // TODO - 제거
-        if (servletPath.equals(DETAIL_MEMBER)
-                || servletPath.equals(LIST_MEMBER)) {
-            return true;
-        }
         return servletPath.startsWith(LOGIN);
     }
 

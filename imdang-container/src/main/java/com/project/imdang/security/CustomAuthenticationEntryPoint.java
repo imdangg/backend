@@ -26,7 +26,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         ApiResponse<Void> error = (authException != null && authException.getMessage() != null) ?
-                ApiResponse.error(ErrorCode.NOT_FOUND, authException.getMessage()) : ApiResponse.error(ErrorCode.NOT_FOUND);
+                ApiResponse.error(ErrorCode.UNAUTHORIZED, authException.getMessage()) : ApiResponse.error(ErrorCode.UNAUTHORIZED);
         response.getWriter().print(objectMapper.writeValueAsString(error));
     }
 }
