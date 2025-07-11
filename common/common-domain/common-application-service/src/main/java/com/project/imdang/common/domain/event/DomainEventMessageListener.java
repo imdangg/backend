@@ -6,7 +6,7 @@ public abstract class DomainEventMessageListener<E extends DomainEventMessage> {
 
     public abstract void process(E domainEventMessage);
 
-    @EventListener
+
     public void handle(E domainEventMessage) {
         try {
             process(domainEventMessage);

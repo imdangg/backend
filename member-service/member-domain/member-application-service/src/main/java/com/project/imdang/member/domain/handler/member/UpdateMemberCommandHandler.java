@@ -21,8 +21,8 @@ public class UpdateMemberCommandHandler {
     @Transactional
     public Boolean update(MemberId memberId) {
         Member member = memberHelper.get(memberId);
-        Member accusedMember = memberDomainService.updateMember(member);
-        memberHelper.save(accusedMember);
+        Member updatedMember = memberDomainService.updateMember(member);
+        memberHelper.save(updatedMember);
         return true;
     }
 }

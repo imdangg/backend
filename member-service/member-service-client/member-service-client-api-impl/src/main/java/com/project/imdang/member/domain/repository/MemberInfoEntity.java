@@ -14,6 +14,7 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Builder
@@ -35,4 +36,5 @@ public class MemberInfoEntity {
     private String deviceToken;
 
     private Long accusedCount;
+    private LocalDate latestInsightCreateDate;
 }

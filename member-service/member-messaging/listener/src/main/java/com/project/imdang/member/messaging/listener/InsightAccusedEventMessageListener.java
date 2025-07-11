@@ -5,6 +5,7 @@ import com.project.imdang.common.domain.valueobject.MemberId;
 import com.project.imdang.insight.messaging.message.InsightAccusedEventMessage;
 import com.project.imdang.member.domain.ports.input.service.MemberApplicationService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -15,6 +16,11 @@ public class InsightAccusedEventMessageListener extends DomainEventMessageListen
 
     public InsightAccusedEventMessageListener(MemberApplicationService memberApplicationService) {
         this.memberApplicationService = memberApplicationService;
+    }
+
+    @EventListener
+    public void handle(InsightAccusedEventMessage event) {
+        super.handle(event);
     }
 
     @Override

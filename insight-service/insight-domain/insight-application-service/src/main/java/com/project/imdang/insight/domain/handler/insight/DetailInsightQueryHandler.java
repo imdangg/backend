@@ -48,7 +48,7 @@ public class DetailInsightQueryHandler {
                 .orElseThrow(() -> new MemberNotFoundException(requestedBy));
 
         // 작성한 인사이트가 없거나, 최신 작성 날짜가 한달 이상인 경우
-        if (requestMember.getInsightCount() < 1 || requestMember.getLatestInsightCreateDate().isBefore(LocalDate.now().minusDays(30))) {
+        if (requestMember.getLatestInsightCreateDate() == null || requestMember.getLatestInsightCreateDate().isBefore(LocalDate.now().minusDays(30))) {
             throw new InsightDomainException("Latest insight create Date is before one month");
         }
 

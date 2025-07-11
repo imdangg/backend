@@ -69,7 +69,7 @@ public interface InsightJpaRepository extends JpaRepository<InsightEntity, UUID>
                     "where i.member_id = :memberId " +
                     "and i.complex_name = :apartmentComplexName",
             nativeQuery = true)
-    Page<InsightEntity> findAllByMemberIdAndApartmentComplexAndOnlyMine(String memberId, String apartmentComplexName, PageRequest pageRequest);
+    Page<InsightEntity> findAllByMemberIdAndApartmentComplexAndOnlyMine(@Param("memberId") String memberId, @Param("apartmentComplexName") String apartmentComplexName, PageRequest pageRequest);
 
     @Query(value = "select i.* from insight i left join recommend r on i.id = r.recommended_insight_id " +
             "where (i.member_id = :memberId or r.recommend_member_id = :memberId) " +
@@ -78,7 +78,7 @@ public interface InsightJpaRepository extends JpaRepository<InsightEntity, UUID>
                     "where (i.member_id = :memberId or r.recommend_member_id = :memberId) " +
                     "and i.complex_id = :apartmentComplexName",
             nativeQuery = true)
-    Page<InsightEntity> findAllByMemberIdAndApartmentComplex(String memberId, String apartmentComplexName, PageRequest pageRequest);
+    Page<InsightEntity> findAllByMemberIdAndApartmentComplex(@Param("memberId") String memberId, @Param("apartmentComplexName") String apartmentComplexName, PageRequest pageRequest);
 
     @Query(value = "select i.* from insight i " +
             "where i.member_id = :memberId " +

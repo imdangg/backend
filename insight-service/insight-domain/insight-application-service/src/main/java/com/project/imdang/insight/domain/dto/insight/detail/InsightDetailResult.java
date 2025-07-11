@@ -31,8 +31,6 @@ public class InsightDetailResult {
 
     private InsightId insightId;    //인사이트ID
 
-    private List<String> mainImage;       //메인 이미지
-    //TODO : 추가 이미지
     private String title;           //제목
 
     private Address address;    //단지 주소
@@ -53,7 +51,7 @@ public class InsightDetailResult {
     private Long accusedCount;       //신고수
     private Long viewCount;          //조회수
 
-//    private Integer score;
+
     private ZonedDateTime createdAt;
     private Boolean createdByMe;
     private List<String> images;        // image URL 리스트

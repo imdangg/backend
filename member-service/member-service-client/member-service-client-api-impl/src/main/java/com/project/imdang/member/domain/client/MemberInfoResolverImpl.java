@@ -30,6 +30,7 @@ public class MemberInfoResolverImpl implements MemberDataResolver {
                 .gender(entity.getGender().name())
                 .deviceToken(entity.getDeviceToken())
                 .accusedCount(entity.getAccusedCount())
+                .latestInsightCreateDate(entity.getLatestInsightCreateDate())
                 .build());
     }
 
@@ -46,6 +47,7 @@ public class MemberInfoResolverImpl implements MemberDataResolver {
                         .gender(entity.getGender().name())
                         .deviceToken(entity.getDeviceToken())
                         .accusedCount(entity.getAccusedCount())
+                        .latestInsightCreateDate(entity.getLatestInsightCreateDate())
                         .build())
                 .collect(Collectors.toList());
     }
