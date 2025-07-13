@@ -2,6 +2,7 @@ package com.project.imdang.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.imdang.common.application.response.ApiResponse;
+import com.project.imdang.common.application.response.Response;
 import com.project.imdang.common.application.response.code.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,10 +24,8 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-        response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         ApiResponse<Void> error = (authException != null && authException.getMessage() != null) ?
                 ApiResponse.error(ErrorCode.UNAUTHORIZED, authException.getMessage()) : ApiResponse.error(ErrorCode.UNAUTHORIZED);
-        response.getWriter().print(objectMapper.writeValueAsString(error));
+        Response.json(response, HttpServletResponse.SC_UNAUTHORIZED, objectMapper.writeValueAsString(error));
     }
 }

@@ -60,7 +60,7 @@ public class MemberController {
                     description = "회원 정보 조회 성공")
     })
     @GetMapping(DETAIL_MEMBER)
-    public ApiResponse<MemberResult> detail(@RequestParam UUID memberId) {
+    public ApiResponse<MemberResult> detail(@RequestParam("memberId") UUID memberId) {
         MemberResult memberResult = memberApplicationService.detailMember(new MemberId(memberId));
         log.info("Member[id :{}] is retrieved.", memberId);
         return ApiResponse.success(memberResult);
@@ -73,7 +73,7 @@ public class MemberController {
                     description = "회원 목록 조회 성공")
     })
     @GetMapping(LIST_MEMBER)
-    public ApiResponse<List<MemberResult>> list(@RequestParam List<UUID> memberIds) {
+    public ApiResponse<List<MemberResult>> list(@RequestParam("memberIds") List<UUID> memberIds) {
         List<MemberId> ids = memberIds.stream()
                 .map(MemberId::new)
                 .toList();
@@ -107,7 +107,7 @@ public class MemberController {
                     responseCode = "200",
                     description = "탈퇴 완료")
     })
-    @PostMapping(WITHDRAW_MEMBER)
+    @PutMapping(WITHDRAW_MEMBER)
     public ApiResponse<Boolean> withdraw(@AuthenticationPrincipal UUID memberId,
                                          @RequestBody @Valid WithdrawRequest withdrawRequest) {
         WithdrawCommand withdrawCommand

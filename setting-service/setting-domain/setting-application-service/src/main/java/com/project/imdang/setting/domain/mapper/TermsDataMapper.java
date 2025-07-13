@@ -9,7 +9,7 @@ public class TermsDataMapper {
 
     public TermsResult termsToTermsResult(Terms terms) {
         return TermsResult.builder()
-                .termsId(terms.getId())
+                .termsId(terms.getId().getValue())
                 .title(terms.getTitle())
                 .url(terms.getUrl())
                 .isEssential(terms.getIsEssential())

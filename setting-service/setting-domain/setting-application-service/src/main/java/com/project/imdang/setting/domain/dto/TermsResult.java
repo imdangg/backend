@@ -1,6 +1,5 @@
 package com.project.imdang.setting.domain.dto;
 
-import com.project.imdang.common.domain.valueobject.TermsId;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TermsResult {
-    private TermsId termsId;
+    private Long termsId;
     private String title;
     private String url;
     private Boolean isEssential;

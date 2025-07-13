@@ -58,6 +58,28 @@ public class LoginController {
         return ApiResponse.success(loginResult);
     }
 
+    @Operation(description = "로그인 테스트 API")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "로그인 성공")
+    })
+    @PostMapping("/login-test")
+    public ApiResponse<LoginResult> loginTest(@AuthenticationPrincipal UUID memberId) {
+
+        // TODO - handler로 수정
+        MemberResult memberResult = memberApplicationService.detailMember(new MemberId(memberId));
+        boolean isJoined = memberResult.getNickname() != null;
+        final String accessToken = tokenHandler.generateAccessToken(memberId);
+        LoginResult loginResult = LoginResult.builder()
+                .memberId(memberId)
+                .isJoined(isJoined)
+                .accessToken(accessToken)
+                .refreshToken(memberResult.getRefreshToken())
+                .build();
+        return ApiResponse.success(loginResult);
+    }
+
     @Operation(description = "토큰 재발급 API")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(

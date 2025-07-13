@@ -25,7 +25,8 @@ public class WithdrawCommandHandler {
         final MemberId memberId = withdrawCommand.memberId();
         Member member = memberHelper.getByIdAndIsDeleted(memberId);
         // 2. 탈퇴 처리
-        oAuthClientHandler.withdraw(withdrawCommand.oAuthProvider(), withdrawCommand.identifier());
+        // TODO - CHECK
+//        oAuthClientHandler.withdraw(withdrawCommand.oAuthProvider(), withdrawCommand.identifier());
         // 3. 사용자 삭제 및 토큰 만료
         Member withdrew = memberDomainService.withdraw(member);
         Member saved = memberHelper.save(withdrew);

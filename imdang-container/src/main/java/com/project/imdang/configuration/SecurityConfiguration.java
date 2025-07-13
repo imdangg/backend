@@ -1,6 +1,8 @@
 package com.project.imdang.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.imdang.common.application.response.ApiResponse;
+import com.project.imdang.common.application.response.Response;
 import com.project.imdang.filter.CachingFilter;
 import com.project.imdang.member.domain.MemberDomainService;
 import com.project.imdang.member.domain.handler.MemberHelper;
@@ -11,6 +13,7 @@ import com.project.imdang.security.CustomAccessDeniedHandler;
 import com.project.imdang.security.CustomAuthenticationEntryPoint;
 import com.project.imdang.security.OAuthAuthenticationFilter;
 import com.project.imdang.security.OAuthAuthenticationProvider;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -90,11 +93,16 @@ public class SecurityConfiguration {
                 .addFilterBefore(new OAuthAuthenticationFilter(authenticationManager(), objectMapper), BasicAuthenticationFilter.class)
                 .addFilterBefore(new CachingFilter(), SecurityContextHolderFilter.class)
                 .authorizeHttpRequests(registry -> registry
-                        .requestMatchers(LOGIN, REISSUE, SWAGGER_RESOURCE, SWAGGER_UI, SWAGGER_DOC).permitAll()
+                        .requestMatchers(LOGIN, "/login-test", REISSUE, SWAGGER_RESOURCE, SWAGGER_UI, SWAGGER_DOC).permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(exceptionHandlingConfigurer -> exceptionHandlingConfigurer
                                 .authenticationEntryPoint(customAuthenticationEntryPoint)
                                 .accessDeniedHandler(customAccessDeniedHandler))
+                .logout(logoutConfigurer -> logoutConfigurer
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            ApiResponse<Void> success = ApiResponse.success(null);
+                            Response.json(response, HttpServletResponse.SC_OK, objectMapper.writeValueAsString(success));
+                }))
                 .build();
     }
 }

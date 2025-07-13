@@ -2,6 +2,7 @@ package com.project.imdang.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.imdang.common.application.response.ApiResponse;
+import com.project.imdang.common.application.response.Response;
 import com.project.imdang.common.application.response.code.ErrorCode;
 import com.project.imdang.common.domain.valueobject.OAuthProvider;
 import jakarta.servlet.FilterChain;
@@ -30,8 +31,8 @@ public class OAuthAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         // false: 실행
-        String servletPath = request.getServletPath();
-        return !servletPath.startsWith(LOGIN);
+        String pathInfo = request.getPathInfo();
+        return !pathInfo.startsWith(LOGIN);
     }
 
     @Override
@@ -55,12 +56,9 @@ public class OAuthAuthenticationFilter extends OncePerRequestFilter {
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.setContentType("application/json;charset=UTF-8");
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+
             ApiResponse<Void> error = ApiResponse.error(ErrorCode.FORBIDDEN);
-            response.getWriter().print(objectMapper.writeValueAsString(error));
-            response.getWriter().flush();
-            response.getWriter().close();
+            Response.json(response, HttpServletResponse.SC_FORBIDDEN, objectMapper.writeValueAsString(error));
         }
     }
 

@@ -18,7 +18,7 @@ public class MemberDataMapper {
 
     public MemberResult memberToDetailMemberResponse(Member member){
         return MemberResult.builder()
-                .memberId(member.getId())
+                .memberId(member.getId().getValue())
                 .nickname(member.getNickname())
                 .birthDate(member.getBirthDate())
                 .gender(member.getGender() != null ? member.getGender().name() : null)

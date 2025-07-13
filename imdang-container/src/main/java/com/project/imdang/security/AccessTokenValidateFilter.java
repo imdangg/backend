@@ -31,8 +31,8 @@ public class AccessTokenValidateFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         // false: 실행
-        final String servletPath = request.getServletPath();
-        return servletPath.startsWith(LOGIN);
+        final String pathInfo = request.getPathInfo();
+        return pathInfo.startsWith(LOGIN);
     }
 
     @Override

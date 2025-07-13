@@ -7,12 +7,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @Builder
 public class MemberResult {
-    private MemberId memberId;
+    private UUID memberId;
     private String nickname;
     private String birthDate;
     private String gender;
