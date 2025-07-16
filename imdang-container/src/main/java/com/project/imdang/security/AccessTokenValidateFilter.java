@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.project.imdang.common.application.constant.Header.AUTHORIZATION;
-import static com.project.imdang.common.application.constant.RequestPath.LOGIN;
+import static com.project.imdang.common.application.constant.RequestPath.*;
 
 
 @Slf4j
@@ -31,7 +31,7 @@ public class AccessTokenValidateFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         // false: 실행
-        final String pathInfo = request.getPathInfo();
+        final String pathInfo = request.getRequestURI();
         return pathInfo.startsWith(LOGIN);
     }
 

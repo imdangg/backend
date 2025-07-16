@@ -31,7 +31,7 @@ public class OAuthAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         // false: 실행
-        String pathInfo = request.getPathInfo();
+        String pathInfo = request.getRequestURI();
         return !pathInfo.startsWith(LOGIN);
     }
 
