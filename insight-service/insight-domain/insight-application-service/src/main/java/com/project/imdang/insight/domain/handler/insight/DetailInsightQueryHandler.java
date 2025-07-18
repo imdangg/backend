@@ -47,15 +47,20 @@ public class DetailInsightQueryHandler {
         MemberData requestMember = memberResolver.resolve(requestedBy)
                 .orElseThrow(() -> new MemberNotFoundException(requestedBy));
 
-        // 작성한 인사이트가 없거나, 최신 작성 날짜가 한달 이상인 경우
-        if (requestMember.getLatestInsightCreateDate() == null || requestMember.getLatestInsightCreateDate().isBefore(LocalDate.now().minusDays(30))) {
-            throw new InsightDomainException("Latest insight create Date is before one month");
-        }
-
         //인사이트 객체
         InsightId insightId = detailInsightQuery.getInsightId();
         Insight insight = insightRepository.findById(insightId)
                 .orElseThrow(() -> new InsightNotFoundException(insightId));
+        MemberId insightCreatedBy = insight.getMemberId();
+
+        //조회 유효성 검사
+        checkValidate(requestMember, insightCreatedBy);
+
+        //인사이트 작성자 정보 얻기
+        MemberData member = memberResolver.resolve(insightCreatedBy)
+                .orElseThrow(() -> new MemberNotFoundException(insightCreatedBy));
+        String memberNickname = member.getNickname();
+
         // 이미지 가져오기
         List<InsightImage> images = insightImageRepository.findByInsightId(insightId);
         //해당 인사이트 추천 여부 검사
@@ -63,13 +68,19 @@ public class DetailInsightQueryHandler {
         //해당 인사이트 신고 여부 검사
         boolean accused = accuseRepository.findByAccuseMemberIdAndAccusedInsightId(requestedBy, insightId).isPresent();
 
-        //인사이트 작성자 정보 얻기
-        MemberId insightCreatedBy = insight.getMemberId();
-        MemberData member = memberResolver.resolve(insightCreatedBy)
-                .orElseThrow(() -> new MemberNotFoundException(insightCreatedBy));
-        String memberNickname = member.getNickname();
 
         return insightDataMapper.insightToDetailInsightResponse(
                 insight, memberNickname, recommended, accused, insightCreatedBy.equals(requestedBy), images);
+    }
+
+    //조회 가능한지 검사
+    private void checkValidate(MemberData requestMember, MemberId insightCreatedBy) {
+        // 내가 작성한 게시물이 아닌 경우
+        if (!requestMember.getMemberId().equals(insightCreatedBy.getValue())) {
+            // 작성한 인사이트가 없거나, 최신 작성 날짜가 한달 이상인 경우
+            if (requestMember.getLatestInsightCreateDate() == null || requestMember.getLatestInsightCreateDate().isBefore(LocalDate.now().minusDays(30))) {
+                throw new InsightDomainException("Latest insight create Date is before one month");
+            }
+        }
     }
 }
