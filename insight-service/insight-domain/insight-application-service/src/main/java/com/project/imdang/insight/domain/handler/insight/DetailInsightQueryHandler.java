@@ -9,6 +9,7 @@ import com.project.imdang.insight.domain.entity.InsightImage;
 import com.project.imdang.insight.domain.exception.InsightDomainException;
 import com.project.imdang.insight.domain.exception.InsightNotFoundException;
 import com.project.imdang.insight.domain.exception.MemberNotFoundException;
+import com.project.imdang.insight.domain.helper.RecommendHelper;
 import com.project.imdang.insight.domain.mapper.InsightDataMapper;
 import com.project.imdang.insight.domain.ports.output.repository.AccuseRepository;
 import com.project.imdang.insight.domain.ports.output.repository.InsightImageRepository;
@@ -33,7 +34,7 @@ public class DetailInsightQueryHandler {
     private final InsightImageRepository insightImageRepository;
     private final InsightDataMapper insightDataMapper;
 
-    private final RecommendRepository recommendRepository;
+    private final RecommendHelper recommendHelper;
     private final AccuseRepository accuseRepository;
 
     private final MemberDataResolver memberResolver;
@@ -64,10 +65,9 @@ public class DetailInsightQueryHandler {
         // 이미지 가져오기
         List<InsightImage> images = insightImageRepository.findByInsightId(insightId);
         //해당 인사이트 추천 여부 검사
-        boolean recommended = recommendRepository.findByRecommendMemberIdAndRecommendedInsightId(requestedBy, insightId).isPresent();
+        boolean recommended = recommendHelper.getByRecommendMemberIdAndRecommendedInsightId(requestedBy, insightId).isPresent();
         //해당 인사이트 신고 여부 검사
         boolean accused = accuseRepository.findByAccuseMemberIdAndAccusedInsightId(requestedBy, insightId).isPresent();
-
 
         return insightDataMapper.insightToDetailInsightResponse(
                 insight, memberNickname, recommended, accused, insightCreatedBy.equals(requestedBy), images);

@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface RecommendRepository {
     Optional<Recommend> findByRecommendMemberIdAndRecommendedInsightId(MemberId recommendMemberId, InsightId recommendedInsightId);
     Recommend save(Recommend recommend);
+    void delete(Recommend recommend);
 }

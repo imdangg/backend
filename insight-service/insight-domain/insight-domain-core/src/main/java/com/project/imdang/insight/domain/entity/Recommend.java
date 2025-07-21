@@ -15,7 +15,7 @@ public class Recommend extends BaseEntity<RecommendId> {
     private final MemberId recommendMemberId;      // recommendedBy
 
     private final InsightId recommendedInsightId;
-    private final MemberId recommendedMemberId;
+    private final MemberId recommendedMemberId; //추천 받은 MemberID (인사이트 작성자)
     private final ZonedDateTime createdAt;
 
     @Builder

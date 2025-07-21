@@ -27,11 +27,15 @@ public class InsightHelper {
         if (insightResult.isEmpty()) {
             throw new InsightNotFoundException(insightId);
         }
-        return insightResult.get();
+        List<InsightImage> insightImages = insightImageRepository.findByInsightId(insightId);
+        Insight insight = insightResult.get();
+        insight.setImages(insightImages);
+        return insight;
     }
 
     public Insight save(Insight insight) {
         Insight saved = insightRepository.save(insight);
+
         List<InsightImage> imageSaved = insightImageRepository.saveAll(insight.getImages()); // 추가됨.
         if (saved == null || imageSaved == null) {
             String errorMessage = "Could not save insight!";
