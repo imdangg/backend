@@ -9,10 +9,7 @@ import com.project.imdang.common.domain.valueobject.MemberId;
 import com.project.imdang.common.domain.valueobject.VisitMethod;
 import com.project.imdang.common.domain.valueobject.VisitTime;
 import com.project.imdang.insight.domain.entity.Insight;
-import com.project.imdang.insight.domain.event.InsightAccusedEvent;
-import com.project.imdang.insight.domain.event.InsightDeletedEvent;
-import com.project.imdang.insight.domain.event.InsightRecommendedEvent;
-import com.project.imdang.insight.domain.event.InsightUpdatedEvent;
+import com.project.imdang.insight.domain.event.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -35,6 +32,7 @@ public interface InsightDomainService {
                                       ComplexEnvironment complexEnvironment);
     InsightDeletedEvent deleteInsight(Insight insight, MemberId deletedBy);
     InsightRecommendedEvent recommendInsight(Insight insight, MemberId recommendedBy);
+    InsightUnRecommendedEvent unRecommendInsight(Insight insight, MemberId recommendedBy);
     InsightAccusedEvent accuseInsight(Insight insight, MemberId accusedBy);
 
     void viewInsight(Insight insight);

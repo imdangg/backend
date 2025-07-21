@@ -12,10 +12,7 @@ import com.project.imdang.insight.domain.entity.Accuse;
 import com.project.imdang.insight.domain.entity.Insight;
 import com.project.imdang.insight.domain.entity.InsightImage;
 import com.project.imdang.insight.domain.entity.Recommend;
-import com.project.imdang.insight.domain.event.InsightAccusedEvent;
-import com.project.imdang.insight.domain.event.InsightDeletedEvent;
-import com.project.imdang.insight.domain.event.InsightRecommendedEvent;
-import com.project.imdang.insight.domain.event.InsightUpdatedEvent;
+import com.project.imdang.insight.domain.event.*;
 import com.project.imdang.insight.domain.exception.InsightDomainException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -77,6 +74,14 @@ public class InsightDomainServiceImpl implements InsightDomainService {
         log.info("Insight[id: {}] is recommended.", insight.getId().getValue());
         return new InsightRecommendedEvent(insight, recommend, recommend.getCreatedAt());
     }
+
+    @Override
+    public InsightUnRecommendedEvent unRecommendInsight(Insight insight, MemberId recommendedBy) {
+        insight.unRecommend();
+        log.info("Insight[id: {}] is recommended.", insight.getId().getValue());
+        return new InsightUnRecommendedEvent(insight, null, ZonedDateTime.now(ZoneId.of("UTC")));
+    }
+
 
     @Override
     public InsightAccusedEvent accuseInsight(Insight insight, MemberId accusedBy) {

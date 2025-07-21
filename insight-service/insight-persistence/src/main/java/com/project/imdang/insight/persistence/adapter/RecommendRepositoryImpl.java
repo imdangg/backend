@@ -31,4 +31,10 @@ public class RecommendRepositoryImpl implements RecommendRepository {
         RecommendEntity saved = recommendJpaRepository.save(recommendEntity);
         return recommendPersistenceMapper.recommendEntityToRecommend(saved);
     }
+
+    @Override
+    public void delete(Recommend recommend) {
+        RecommendEntity recommendEntity = recommendPersistenceMapper.recommendToRecommendEntity(recommend);
+        recommendJpaRepository.delete(recommendEntity);
+    }
 }

@@ -29,6 +29,11 @@ public class RecommendHelper {
         return saved;
     }
 
+    public void delete(Recommend recommend) {
+        recommendRepository.delete(recommend);
+        log.info("Recommend[id: {}] is deleted.", recommend.getId().getValue());
+    }
+
     public Optional<Recommend> getByRecommendMemberIdAndRecommendedInsightId(MemberId recommendMemberId, InsightId recommendedInsightId) {
         return recommendRepository.findByRecommendMemberIdAndRecommendedInsightId(recommendMemberId, recommendedInsightId);
     }
