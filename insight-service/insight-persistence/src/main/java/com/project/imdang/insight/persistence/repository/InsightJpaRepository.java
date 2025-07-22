@@ -76,7 +76,7 @@ public interface InsightJpaRepository extends JpaRepository<InsightEntity, UUID>
             "and i.complex_id = :apartmentComplexName \n-- #pageRequest\n",
             countQuery = "select count(*) from insight i left join recommend r on i.id = r.recommended_insight_id " +
                     "where (i.member_id = :memberId or r.recommend_member_id = :memberId) " +
-                    "and i.complex_id = :apartmentComplexName",
+                    "and i.complex_name = :apartmentComplexName",
             nativeQuery = true)
     Page<InsightEntity> findAllByMemberIdAndApartmentComplex(@Param("memberId") String memberId, @Param("apartmentComplexName") String apartmentComplexName, PageRequest pageRequest);
 
