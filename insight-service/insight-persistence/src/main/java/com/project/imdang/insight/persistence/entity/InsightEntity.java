@@ -39,7 +39,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter @Setter
-@Table(name = "insight_test")
+@Table(name = "insight")
 @Entity
 public class InsightEntity {
 
