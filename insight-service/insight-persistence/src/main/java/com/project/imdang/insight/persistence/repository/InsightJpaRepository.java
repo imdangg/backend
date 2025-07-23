@@ -73,7 +73,7 @@ public interface InsightJpaRepository extends JpaRepository<InsightEntity, UUID>
 
     @Query(value = "select i.* from insight i left join recommend r on i.id = r.recommended_insight_id " +
             "where (i.member_id = :memberId or r.recommend_member_id = :memberId) " +
-            "and i.complex_id = :apartmentComplexName \n-- #pageRequest\n",
+            "and i.complex_name = :apartmentComplexName \n-- #pageRequest\n",
             countQuery = "select count(*) from insight i left join recommend r on i.id = r.recommended_insight_id " +
                     "where (i.member_id = :memberId or r.recommend_member_id = :memberId) " +
                     "and i.complex_name = :apartmentComplexName",
