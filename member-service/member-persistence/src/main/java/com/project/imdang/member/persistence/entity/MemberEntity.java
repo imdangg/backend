@@ -1,9 +1,6 @@
 package com.project.imdang.member.persistence.entity;
 
-import com.project.imdang.common.domain.valueobject.Gender;
-import com.project.imdang.common.domain.valueobject.MemberStatus;
-import com.project.imdang.common.domain.valueobject.OAuthProvider;
-import com.project.imdang.common.domain.valueobject.PenaltyPeriod;
+import com.project.imdang.common.domain.valueobject.*;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
@@ -57,6 +54,11 @@ public class MemberEntity {
     private Long accusedCount;
     @Enumerated(EnumType.STRING)
     private MemberStatus status;
+
+    @Enumerated(EnumType.STRING)
+    private Budget budget;
+    @Enumerated(EnumType.STRING)
+    private MonthIncome monthIncome;
 
     @Embedded
     @AttributeOverrides({

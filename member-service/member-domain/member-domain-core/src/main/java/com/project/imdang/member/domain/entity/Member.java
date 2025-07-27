@@ -1,12 +1,7 @@
 package com.project.imdang.member.domain.entity;
 
 import com.project.imdang.common.domain.entity.AggregateRoot;
-import com.project.imdang.common.domain.valueobject.Gender;
-import com.project.imdang.common.domain.valueobject.MemberId;
-import com.project.imdang.common.domain.valueobject.MemberStatus;
-import com.project.imdang.common.domain.valueobject.OAuthProvider;
-import com.project.imdang.common.domain.valueobject.Penalty;
-import com.project.imdang.common.domain.valueobject.PenaltyPeriod;
+import com.project.imdang.common.domain.valueobject.*;
 import com.project.imdang.member.domain.valueobject.AccusePenaltyPolicy;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,6 +29,9 @@ public class Member extends AggregateRoot<MemberId> {
     private Long accusedCount;
     private MemberStatus status;
     private PenaltyPeriod penaltyPeriod;
+
+    private Budget budget;
+    private MonthIncome monthIncome;
 
     public static Member createNewMember(String oAuthId, OAuthProvider oAuthProvider) {
         return Member.builder()
