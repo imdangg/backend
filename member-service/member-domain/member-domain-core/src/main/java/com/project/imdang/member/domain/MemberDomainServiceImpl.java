@@ -62,11 +62,17 @@ public class MemberDomainServiceImpl implements MemberDomainService {
 
     @Override
     public ActualLiving setActualLivingCondition(MemberId memberId, LivingPerson livingPerson, ChildrenPlan childrenPlan, SchoolDistrict schoolDistrict, Traffic traffic, CommutingArea commutingArea, InfraNew infra, Environment environment) {
-        return null;
+        return ActualLiving.createNewActualLiving(memberId, livingPerson, childrenPlan, commutingArea, traffic, schoolDistrict, infra, environment);
     }
 
     @Override
     public GapInvestment setGapInvestmentCondition(MemberId memberId, HopeGap hopeGap, InvestmentPlan investmentPlan, ApartmentSquare apartmentSquare, Household household, HouseType houseType, CommutingArea commutingArea, InfraNew infra, Environment environment) {
-        return null;
+        return GapInvestment.createNewGapInvestment(memberId, hopeGap, investmentPlan, apartmentSquare, household, houseType, commutingArea, infra, environment);
+    }
+
+    @Override
+    public Member setPriority(Member member, String firstRank, String secondRank, String thirdRank) {
+        member.setPriority(firstRank, secondRank, thirdRank);
+        return member;
     }
 }

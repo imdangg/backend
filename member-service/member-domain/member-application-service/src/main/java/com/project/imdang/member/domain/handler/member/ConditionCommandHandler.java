@@ -11,6 +11,7 @@ import com.project.imdang.member.domain.dto.member.PriorityCommand;
 import com.project.imdang.member.domain.entity.ActualLiving;
 import com.project.imdang.member.domain.entity.GapInvestment;
 import com.project.imdang.member.domain.entity.Member;
+import com.project.imdang.member.domain.exception.MemberDomainException;
 import com.project.imdang.member.domain.handler.MemberHelper;
 import com.project.imdang.member.domain.ports.output.repository.ConditionRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,12 +34,14 @@ public class ConditionCommandHandler {
         final MemberId memberId = conditionCommand.getMemberId();
         Member member = memberHelper.get(memberId);
 
-        // 2. 조건 정보 저장
-        //2-1. 공통 조건 저장
+        // 2. 우선순위 저장
+        member = memberDomainService.setPriority(member, priorityCommand.getFirstPriority(), priorityCommand.getSecondPriority(), priorityCommand.getThirdPriority());
+        // 3. 조건 정보 저장
+        //3-1. 공통 조건 저장
         member = memberDomainService.setCommonCondition(member, conditionCommand.getPurpose(), conditionCommand.getBudget(), conditionCommand.getMonthIncome());
         memberHelper.save(member);
 
-        //실거주인 경우
+        //3-2.실거주인 경우
         if (conditionCommand.getPurpose() == Purpose.LIVING) {
             ActualLivingConditionCommand actualLivingConditionCommand = (ActualLivingConditionCommand) conditionCommand;
             ActualLiving actualLiving = memberDomainService.setActualLivingCondition(
@@ -51,6 +54,7 @@ public class ConditionCommandHandler {
                     actualLivingConditionCommand.getInfra(),
                     actualLivingConditionCommand.getEnvironment()
             );
+            saveAC(actualLiving);
         }
         //갭투자인 경우
         else if (conditionCommand.getPurpose() == Purpose.GAP_INVESTMENT){
@@ -66,18 +70,31 @@ public class ConditionCommandHandler {
                     gapInvestmentConditionCommand.getInfra(),
                     gapInvestmentConditionCommand.getEnvironment()
             );
+            saveGC(gapInvestment);
         }
-        // 3. 우선순위 저장
-        // 4. 저장
         return true;
     }
 
-    private void convertStringToEnum(String nickname) {
-         if (memberHelper.getByNickname(nickname).isPresent()) {
-             String errorMessage = "Nickname is already used!";
-             log.error(errorMessage);
-             throw new DomainException(errorMessage);
-         }
+
+    private ActualLiving saveAC(ActualLiving actualLiving) {
+        ActualLiving savedActualLiving = conditionRepository.saveActualLiving(actualLiving);
+        if (savedActualLiving == null) {
+            String errorMessage = "Could not save ActualLiving Contidition!";
+            log.error(errorMessage);
+            throw new MemberDomainException(errorMessage);
+        }
+        log.info("Member[id : {}] ActualLiving Condition is saved.", actualLiving.getMemberId().getValue());
+        return savedActualLiving;
     }
 
+    private GapInvestment saveGC(GapInvestment gapInvestment) {
+        GapInvestment savedGapInvestment = conditionRepository.saveGapInvestment(gapInvestment);
+        if (savedGapInvestment == null) {
+            String errorMessage = "Could not save GapInvestment Contidition!";
+            log.error(errorMessage);
+            throw new MemberDomainException(errorMessage);
+        }
+        log.info("Member[id : {}] GapInvestment Condition is saved.", gapInvestment.getMemberId().getValue());
+        return savedGapInvestment;
+    }
 }

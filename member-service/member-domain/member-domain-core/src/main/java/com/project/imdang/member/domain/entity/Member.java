@@ -34,6 +34,10 @@ public class Member extends AggregateRoot<MemberId> {
     private Budget budget;
     private MonthIncome monthIncome;
 
+    private String firstPriority;
+    private String secondPriority;
+    private String thirdPriority;
+
     public static Member createNewMember(String oAuthId, OAuthProvider oAuthProvider) {
         return Member.builder()
                 .id(new MemberId(UUID.randomUUID()))
@@ -62,7 +66,10 @@ public class Member extends AggregateRoot<MemberId> {
                   PenaltyPeriod penaltyPeriod,
                   Purpose purpose,
                   Budget budget,
-                  MonthIncome monthIncome) {
+                  MonthIncome monthIncome,
+                  String firstPriority,
+                  String secondPriority,
+                  String thirdPriority) {
         setId(id);
         this.nickname = nickname;
         this.birthDate = birthDate;
@@ -80,6 +87,9 @@ public class Member extends AggregateRoot<MemberId> {
         this.purpose = purpose;
         this.budget = budget;
         this.monthIncome = monthIncome;
+        this.firstPriority = firstPriority;
+        this.secondPriority = secondPriority;
+        this.thirdPriority = thirdPriority;
     }
 
     public void join(String nickname, String birthDate, Gender gender, String deviceToken) {
@@ -129,6 +139,13 @@ public class Member extends AggregateRoot<MemberId> {
         this.purpose = purpose;
         this.budget = budget;
         this.monthIncome = monthIncome;
+        return this;
+    }
+
+    public Member setPriority(String firstPriority, String secondPriority, String thirdPriority) {
+        this.firstPriority = firstPriority;
+        this.secondPriority = secondPriority;
+        this.thirdPriority = thirdPriority;
         return this;
     }
 }

@@ -29,6 +29,6 @@ public interface MemberDomainService {
     Member setCommonCondition(Member member,Purpose purpose, Budget budget, MonthIncome monthIncome);
 
     ActualLiving setActualLivingCondition(MemberId memberId, LivingPerson livingPerson, ChildrenPlan childrenPlan, SchoolDistrict schoolDistrict, Traffic traffic, CommutingArea commutingArea, InfraNew infra, Environment environment);
-
     GapInvestment setGapInvestmentCondition(MemberId memberId, HopeGap hopeGap, InvestmentPlan investmentPlan, ApartmentSquare apartmentSquare, Household household, HouseType houseType, CommutingArea commutingArea, InfraNew infra, Environment environment);
+    Member setPriority(Member member, String firstRank, String secondRank, String thirdRank);
 }

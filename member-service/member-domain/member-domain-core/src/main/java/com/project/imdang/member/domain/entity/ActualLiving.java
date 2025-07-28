@@ -11,8 +11,6 @@ import com.project.imdang.member.domain.valueobject.ActualLivingId;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.ZonedDateTime;
-
 @Getter
 public class ActualLiving extends AggregateRoot<ActualLivingId> {
 
@@ -36,5 +34,18 @@ public class ActualLiving extends AggregateRoot<ActualLivingId> {
         this.schoolDistrict = schoolDistrict;
         this.infra = infra;
         this.environment = environment;
+    }
+
+    public static ActualLiving createNewActualLiving(MemberId memberId, LivingPerson livingPerson, ChildrenPlan childrenPlan, CommutingArea commutingArea, Traffic traffic, SchoolDistrict schoolDistrict, InfraNew infra, Environment environment) {
+        return ActualLiving.builder()
+                .memberId(memberId)
+                .livingPerson(livingPerson)
+                .childrenPlan(childrenPlan)
+                .commutingArea(commutingArea)
+                .traffic(traffic)
+                .schoolDistrict(schoolDistrict)
+                .infra(infra)
+                .environment(environment)
+                .build();
     }
 }

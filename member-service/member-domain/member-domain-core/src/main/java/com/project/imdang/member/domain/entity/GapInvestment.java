@@ -7,6 +7,10 @@ import com.project.imdang.common.domain.valueobject.Environment;
 import com.project.imdang.common.domain.valueobject.InfraNew;
 import com.project.imdang.common.domain.valueobject.MemberId;
 import com.project.imdang.common.domain.valueobject.gapInvestment.*;
+import com.project.imdang.common.domain.valueobject.living.ChildrenPlan;
+import com.project.imdang.common.domain.valueobject.living.LivingPerson;
+import com.project.imdang.common.domain.valueobject.living.SchoolDistrict;
+import com.project.imdang.common.domain.valueobject.living.Traffic;
 import com.project.imdang.member.domain.valueobject.GapInvestmentId;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,5 +40,19 @@ public class GapInvestment extends AggregateRoot<GapInvestmentId> {
         this.commutingArea = commutingArea;
         this.infra = infra;
         this.environment = environment;
+    }
+
+    public static GapInvestment createNewGapInvestment(MemberId memberId, HopeGap hopeGap, InvestmentPlan investmentPlan, ApartmentSquare apartmentSquare, Household household, HouseType houseType, CommutingArea commutingArea, InfraNew infra, Environment environment) {
+        return GapInvestment.builder()
+                .memberId(memberId)
+                .hopeGap(hopeGap)
+                .investmentPlan(investmentPlan)
+                .apartmentSquare(apartmentSquare)
+                .household(household)
+                .houseType(houseType)
+                .commutingArea(commutingArea)
+                .infra(infra)
+                .environment(environment)
+                .build();
     }
 }

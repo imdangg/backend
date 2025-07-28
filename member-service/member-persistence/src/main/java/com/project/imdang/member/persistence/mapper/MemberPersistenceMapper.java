@@ -29,6 +29,9 @@ public class MemberPersistenceMapper {
                 .purpose(member.getPurpose())
                 .budget(member.getBudget())
                 .monthIncome(member.getMonthIncome())
+                .firstPriority(member.getFirstPriority())
+                .secondPriority(member.getSecondPriority())
+                .thirdPriority(member.getThirdPriority())
                 .build();
     }
 
@@ -53,6 +56,9 @@ public class MemberPersistenceMapper {
                 .purpose(memberEntity.getPurpose())
                 .budget(memberEntity.getBudget())
                 .monthIncome(memberEntity.getMonthIncome())
+                .firstPriority(memberEntity.getFirstPriority())
+                .secondPriority(memberEntity.getSecondPriority())
+                .thirdPriority(memberEntity.getThirdPriority())
                 .build();
     }
 }

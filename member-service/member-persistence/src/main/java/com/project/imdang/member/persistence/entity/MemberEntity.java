@@ -62,6 +62,10 @@ public class MemberEntity {
     @Enumerated(EnumType.STRING)
     private MonthIncome monthIncome;
 
+    private String firstPriority;
+    private String secondPriority;
+    private String thirdPriority;
+
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "from", column = @Column(name = "penalty_from")),
