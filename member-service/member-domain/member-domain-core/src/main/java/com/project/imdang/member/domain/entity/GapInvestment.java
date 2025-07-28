@@ -25,7 +25,8 @@ public class GapInvestment extends AggregateRoot<GapInvestmentId> {
     private Environment environment;
 
     @Builder
-    public GapInvestment(MemberId memberId, HopeGap hopeGap, InvestmentPlan investmentPlan, ApartmentSquare apartmentSquare, Household household, HouseType houseType, CommutingArea commutingArea, InfraNew infra, Environment environment) {
+    public GapInvestment(GapInvestmentId id, MemberId memberId, HopeGap hopeGap, InvestmentPlan investmentPlan, ApartmentSquare apartmentSquare, Household household, HouseType houseType, CommutingArea commutingArea, InfraNew infra, Environment environment) {
+        setId(id);
         this.memberId = memberId;
         this.hopeGap = hopeGap;
         this.investmentPlan = investmentPlan;

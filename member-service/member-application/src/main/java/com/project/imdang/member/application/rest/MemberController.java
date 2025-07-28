@@ -2,12 +2,11 @@ package com.project.imdang.member.application.rest;
 
 import com.project.imdang.common.application.response.ApiResponse;
 import com.project.imdang.common.domain.valueobject.MemberId;
+import com.project.imdang.common.domain.valueobject.Purpose;
+import com.project.imdang.member.application.dto.member.ConditionRequest;
 import com.project.imdang.member.application.dto.member.JoinRequest;
 import com.project.imdang.member.application.dto.member.WithdrawRequest;
-import com.project.imdang.member.domain.dto.member.JoinCommand;
-import com.project.imdang.member.domain.dto.member.MemberResult;
-import com.project.imdang.member.domain.dto.member.MyPageInfoResult;
-import com.project.imdang.member.domain.dto.member.WithdrawCommand;
+import com.project.imdang.member.domain.dto.member.*;
 import com.project.imdang.member.domain.ports.input.service.MemberApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -26,11 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.UUID;
 
-import static com.project.imdang.common.application.constant.RequestPath.DETAIL_MEMBER;
-import static com.project.imdang.common.application.constant.RequestPath.DETAIL_MY_PAGE;
-import static com.project.imdang.common.application.constant.RequestPath.JOIN_MEMBER;
-import static com.project.imdang.common.application.constant.RequestPath.LIST_MEMBER;
-import static com.project.imdang.common.application.constant.RequestPath.WITHDRAW_MEMBER;
+import static com.project.imdang.common.application.constant.RequestPath.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -98,6 +93,62 @@ public class MemberController {
                 .deviceToken(joinRequest.deviceToken())
                 .build();
         Boolean joinResult = memberApplicationService.join(joinCommand);
+        return ApiResponse.success(joinResult);
+    }
+
+    @Operation(description = "조건/우선순위 설정 API")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "200",
+                    description = "조건/우선순위 설정 성공")
+    })
+    @PutMapping(CONDITION_MEMBER)
+    public ApiResponse<Boolean> condition(@AuthenticationPrincipal UUID memberId,
+                                     @RequestBody @Valid ConditionRequest conditionRequest) {
+
+        Purpose purpose = conditionRequest.purpose();
+        ConditionCommand conditionCommand = null;
+        //실거주
+        if (purpose == Purpose.LIVING) {
+            conditionCommand = ActualLivingConditionCommand.builder()
+                    .memberId(new MemberId(memberId))
+                    .purpose(conditionRequest.purpose())
+                    .budget(conditionRequest.budget())
+                    .monthIncome(conditionRequest.monthIncome())
+                    .livingPerson(conditionRequest.livingPerson())
+                    .childrenPlan(conditionRequest.childrenPlan())
+                    .commutingArea(conditionRequest.commutingArea())
+                    .traffic(conditionRequest.traffic())
+                    .schoolDistrict(conditionRequest.schoolDistrict())
+                    .infra(conditionRequest.infra())
+                    .environment(conditionRequest.environment())
+                    .build();
+        }
+        //갭투자
+        else if (purpose == Purpose.GAP_INVESTMENT) {
+            conditionCommand = GapInvestmentConditionCommand.builder()
+                    .memberId(new MemberId(memberId))
+                    .purpose(conditionRequest.purpose())
+                    .budget(conditionRequest.budget())
+                    .monthIncome(conditionRequest.monthIncome())
+                    .hopeGap(conditionRequest.hopeGap())
+                    .investmentPlan(conditionRequest.investmentPlan())
+                    .apartmentSquare(conditionRequest.apartmentSquare())
+                    .household(conditionRequest.household())
+                    .houseType(conditionRequest.houseType())
+                    .commutingArea(conditionRequest.commutingArea())
+                    .infra(conditionRequest.infra())
+                    .environment(conditionRequest.environment())
+                    .build();
+        }
+
+        PriorityCommand priorityCommand = PriorityCommand.builder()
+                .firstPriority(conditionRequest.firstPriority())
+                .secondPriority(conditionRequest.secondPriority())
+                .thirdPriority(conditionRequest.thirdPriority())
+                .build();
+
+        Boolean joinResult = memberApplicationService.condition(conditionCommand, priorityCommand);
         return ApiResponse.success(joinResult);
     }
 

@@ -2,10 +2,7 @@
 package com.project.imdang.member.domain.entity;
 
 import com.project.imdang.common.domain.entity.AggregateRoot;
-import com.project.imdang.common.domain.valueobject.CommutingArea;
-import com.project.imdang.common.domain.valueobject.Environment;
-import com.project.imdang.common.domain.valueobject.InfraNew;
-import com.project.imdang.common.domain.valueobject.MemberId;
+import com.project.imdang.common.domain.valueobject.*;
 import com.project.imdang.common.domain.valueobject.living.ChildrenPlan;
 import com.project.imdang.common.domain.valueobject.living.LivingPerson;
 import com.project.imdang.common.domain.valueobject.living.SchoolDistrict;
@@ -13,6 +10,8 @@ import com.project.imdang.common.domain.valueobject.living.Traffic;
 import com.project.imdang.member.domain.valueobject.ActualLivingId;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.time.ZonedDateTime;
 
 @Getter
 public class ActualLiving extends AggregateRoot<ActualLivingId> {
@@ -27,7 +26,8 @@ public class ActualLiving extends AggregateRoot<ActualLivingId> {
     private Environment environment;
 
     @Builder
-    public ActualLiving(MemberId memberId, LivingPerson livingPerson, ChildrenPlan childrenPlan, CommutingArea commutingArea, Traffic traffic, SchoolDistrict schoolDistrict, InfraNew infra, Environment environment) {
+    public ActualLiving(ActualLivingId id, MemberId memberId, LivingPerson livingPerson, ChildrenPlan childrenPlan, CommutingArea commutingArea, Traffic traffic, SchoolDistrict schoolDistrict, InfraNew infra, Environment environment) {
+        setId(id);
         this.memberId = memberId;
         this.livingPerson = livingPerson;
         this.childrenPlan = childrenPlan;
