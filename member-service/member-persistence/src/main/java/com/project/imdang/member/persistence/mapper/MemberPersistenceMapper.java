@@ -26,6 +26,9 @@ public class MemberPersistenceMapper {
                 .accusedCount(member.getAccusedCount())
                 .status(member.getStatus())
                 .penaltyPeriod(member.getPenaltyPeriod())
+                .purpose(member.getPurpose())
+                .budget(member.getBudget())
+                .monthIncome(member.getMonthIncome())
                 .build();
     }
 
@@ -47,6 +50,9 @@ public class MemberPersistenceMapper {
                 .accusedCount(memberEntity.getAccusedCount())
                 .status(memberEntity.getStatus())
                 .penaltyPeriod(memberEntity.getPenaltyPeriod())
+                .purpose(memberEntity.getPurpose())
+                .budget(memberEntity.getBudget())
+                .monthIncome(memberEntity.getMonthIncome())
                 .build();
     }
 }

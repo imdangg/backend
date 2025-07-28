@@ -30,6 +30,7 @@ public class Member extends AggregateRoot<MemberId> {
     private MemberStatus status;
     private PenaltyPeriod penaltyPeriod;
 
+    private Purpose purpose;
     private Budget budget;
     private MonthIncome monthIncome;
 
@@ -58,7 +59,10 @@ public class Member extends AggregateRoot<MemberId> {
                   Boolean isDeleted,
                   Long accusedCount,
                   MemberStatus status,
-                  PenaltyPeriod penaltyPeriod) {
+                  PenaltyPeriod penaltyPeriod,
+                  Purpose purpose,
+                  Budget budget,
+                  MonthIncome monthIncome) {
         setId(id);
         this.nickname = nickname;
         this.birthDate = birthDate;
@@ -73,6 +77,9 @@ public class Member extends AggregateRoot<MemberId> {
         this.accusedCount = accusedCount;
         this.status = status;
         this.penaltyPeriod = penaltyPeriod;
+        this.purpose = purpose;
+        this.budget = budget;
+        this.monthIncome = monthIncome;
     }
 
     public void join(String nickname, String birthDate, Gender gender, String deviceToken) {
@@ -115,6 +122,13 @@ public class Member extends AggregateRoot<MemberId> {
 
     public Member updateInsightCreateDate() {
         this.latestInsightCreateDate = LocalDate.now();
+        return this;
+    }
+
+    public Member setCommonCondition(Purpose purpose, Budget budget, MonthIncome monthIncome) {
+        this.purpose = purpose;
+        this.budget = budget;
+        this.monthIncome = monthIncome;
         return this;
     }
 }

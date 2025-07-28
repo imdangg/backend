@@ -56,6 +56,8 @@ public class MemberEntity {
     private MemberStatus status;
 
     @Enumerated(EnumType.STRING)
+    private Purpose purpose;
+    @Enumerated(EnumType.STRING)
     private Budget budget;
     @Enumerated(EnumType.STRING)
     private MonthIncome monthIncome;
