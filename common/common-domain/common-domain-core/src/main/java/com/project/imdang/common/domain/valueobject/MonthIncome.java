@@ -1,7 +1,11 @@
 package com.project.imdang.common.domain.valueobject;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Arrays;
 
 @Getter
 @RequiredArgsConstructor
@@ -10,4 +14,17 @@ public enum MonthIncome {
     UNDER_7M("700만원 이하"), UNDER_8M("800만원 이하"), UPPER_10M("1000만원 이상");
 
     private final String value;
+
+    @JsonCreator
+    public static MonthIncome fromValue(String value) {
+        return Arrays.stream(MonthIncome.values())
+                .filter(mi -> mi.getValue().equals(value))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Unknown value: " + value));
+    }
+
+    @JsonValue
+    public String toValue() {
+        return value;
+    }
 }
