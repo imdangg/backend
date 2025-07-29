@@ -18,9 +18,12 @@ import java.util.UUID;
 public class GapInvestmentEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(columnDefinition = "CHAR(36)")
     private UUID memberId;
+
     @Enumerated(EnumType.STRING)
     private HopeGap hopeGap;
     @Enumerated(EnumType.STRING)

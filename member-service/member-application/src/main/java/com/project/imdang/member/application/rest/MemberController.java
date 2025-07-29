@@ -102,7 +102,7 @@ public class MemberController {
                     responseCode = "200",
                     description = "조건/우선순위 설정 성공")
     })
-    @PutMapping(CONDITION_MEMBER)
+    @PostMapping(CONDITION_MEMBER)
     public ApiResponse<Boolean> condition(@AuthenticationPrincipal UUID memberId,
                                      @RequestBody @Valid ConditionRequest conditionRequest) {
 
