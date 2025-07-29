@@ -188,7 +188,7 @@ class InsightControllerTest {
                                 .gender("0")
                                 .deviceToken("dummy-token")
                                 .accusedCount(0L)
-                                .insightCount(5L)
+                                //.insightCount(5L)
                                 .latestInsightCreateDate(LocalDate.of(2025, 6, 28))
                                 .build()
                 ));

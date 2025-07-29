@@ -26,6 +26,13 @@ public class MemberPersistenceMapper {
                 .accusedCount(member.getAccusedCount())
                 .status(member.getStatus())
                 .penaltyPeriod(member.getPenaltyPeriod())
+                .purpose(member.getPurpose())
+                .budget(member.getBudget())
+                .monthIncome(member.getMonthIncome())
+                .firstPriority(member.getFirstPriority())
+                .secondPriority(member.getSecondPriority())
+                .thirdPriority(member.getThirdPriority())
+                .interestDistrict(member.getInterestDistrict())
                 .build();
     }
 
@@ -47,6 +54,13 @@ public class MemberPersistenceMapper {
                 .accusedCount(memberEntity.getAccusedCount())
                 .status(memberEntity.getStatus())
                 .penaltyPeriod(memberEntity.getPenaltyPeriod())
+                .purpose(memberEntity.getPurpose())
+                .budget(memberEntity.getBudget())
+                .monthIncome(memberEntity.getMonthIncome())
+                .firstPriority(memberEntity.getFirstPriority())
+                .secondPriority(memberEntity.getSecondPriority())
+                .thirdPriority(memberEntity.getThirdPriority())
+                .interestDistrict(memberEntity.getInterestDistrict())
                 .build();
     }
 }
