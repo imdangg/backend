@@ -7,7 +7,7 @@ import com.project.imdang.common.domain.valueobject.living.LivingPerson;
 import com.project.imdang.common.domain.valueobject.living.SchoolDistrict;
 import com.project.imdang.common.domain.valueobject.living.Traffic;
 
-public record ConditionRequest(
+public record OnboardingRequest(
         Purpose purpose,
         Budget budget,
         MonthIncome monthIncome,
@@ -25,6 +25,7 @@ public record ConditionRequest(
         Environment environment,
         String firstPriority,
         String secondPriority,
-        String thirdPriority
+        String thirdPriority,
+        String interestDistrict
 ) {
 }

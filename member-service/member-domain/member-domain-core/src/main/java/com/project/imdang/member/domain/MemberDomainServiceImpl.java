@@ -75,4 +75,10 @@ public class MemberDomainServiceImpl implements MemberDomainService {
         member.setPriority(firstRank, secondRank, thirdRank);
         return member;
     }
+
+    @Override
+    public Member setInterestDistrict(Member member, String interestDistrict) {
+        member.setInterestDistrict(interestDistrict);
+        return member;
+    }
 }

@@ -3,7 +3,7 @@ package com.project.imdang.member.application.rest;
 import com.project.imdang.common.application.response.ApiResponse;
 import com.project.imdang.common.domain.valueobject.MemberId;
 import com.project.imdang.common.domain.valueobject.Purpose;
-import com.project.imdang.member.application.dto.member.ConditionRequest;
+import com.project.imdang.member.application.dto.member.OnboardingRequest;
 import com.project.imdang.member.application.dto.member.JoinRequest;
 import com.project.imdang.member.application.dto.member.WithdrawRequest;
 import com.project.imdang.member.domain.dto.member.*;
@@ -104,51 +104,55 @@ public class MemberController {
     })
     @PostMapping(CONDITION_MEMBER)
     public ApiResponse<Boolean> condition(@AuthenticationPrincipal UUID memberId,
-                                     @RequestBody @Valid ConditionRequest conditionRequest) {
+                                     @RequestBody @Valid OnboardingRequest onboardingRequest) {
 
-        Purpose purpose = conditionRequest.purpose();
+        Purpose purpose = onboardingRequest.purpose();
         ConditionCommand conditionCommand = null;
         //실거주
         if (purpose == Purpose.LIVING) {
             conditionCommand = ActualLivingConditionCommand.builder()
                     .memberId(new MemberId(memberId))
-                    .purpose(conditionRequest.purpose())
-                    .budget(conditionRequest.budget())
-                    .monthIncome(conditionRequest.monthIncome())
-                    .livingPerson(conditionRequest.livingPerson())
-                    .childrenPlan(conditionRequest.childrenPlan())
-                    .commutingArea(conditionRequest.commutingArea())
-                    .traffic(conditionRequest.traffic())
-                    .schoolDistrict(conditionRequest.schoolDistrict())
-                    .infra(conditionRequest.infra())
-                    .environment(conditionRequest.environment())
+                    .purpose(onboardingRequest.purpose())
+                    .budget(onboardingRequest.budget())
+                    .monthIncome(onboardingRequest.monthIncome())
+                    .livingPerson(onboardingRequest.livingPerson())
+                    .childrenPlan(onboardingRequest.childrenPlan())
+                    .commutingArea(onboardingRequest.commutingArea())
+                    .traffic(onboardingRequest.traffic())
+                    .schoolDistrict(onboardingRequest.schoolDistrict())
+                    .infra(onboardingRequest.infra())
+                    .environment(onboardingRequest.environment())
                     .build();
         }
         //갭투자
         else if (purpose == Purpose.GAP_INVESTMENT) {
             conditionCommand = GapInvestmentConditionCommand.builder()
                     .memberId(new MemberId(memberId))
-                    .purpose(conditionRequest.purpose())
-                    .budget(conditionRequest.budget())
-                    .monthIncome(conditionRequest.monthIncome())
-                    .hopeGap(conditionRequest.hopeGap())
-                    .investmentPlan(conditionRequest.investmentPlan())
-                    .apartmentSquare(conditionRequest.apartmentSquare())
-                    .household(conditionRequest.household())
-                    .houseType(conditionRequest.houseType())
-                    .commutingArea(conditionRequest.commutingArea())
-                    .infra(conditionRequest.infra())
-                    .environment(conditionRequest.environment())
+                    .purpose(onboardingRequest.purpose())
+                    .budget(onboardingRequest.budget())
+                    .monthIncome(onboardingRequest.monthIncome())
+                    .hopeGap(onboardingRequest.hopeGap())
+                    .investmentPlan(onboardingRequest.investmentPlan())
+                    .apartmentSquare(onboardingRequest.apartmentSquare())
+                    .household(onboardingRequest.household())
+                    .houseType(onboardingRequest.houseType())
+                    .commutingArea(onboardingRequest.commutingArea())
+                    .infra(onboardingRequest.infra())
+                    .environment(onboardingRequest.environment())
                     .build();
         }
 
+        //우선순위
         PriorityCommand priorityCommand = PriorityCommand.builder()
-                .firstPriority(conditionRequest.firstPriority())
-                .secondPriority(conditionRequest.secondPriority())
-                .thirdPriority(conditionRequest.thirdPriority())
+                .firstPriority(onboardingRequest.firstPriority())
+                .secondPriority(onboardingRequest.secondPriority())
+                .thirdPriority(onboardingRequest.thirdPriority())
                 .build();
 
-        Boolean joinResult = memberApplicationService.condition(conditionCommand, priorityCommand);
+        //관심동네
+        InterestDistrictCommand interestDistrictCommand = new InterestDistrictCommand(onboardingRequest.interestDistrict());
+
+        Boolean joinResult = memberApplicationService.condition(conditionCommand, priorityCommand, interestDistrictCommand);
         return ApiResponse.success(joinResult);
     }
 

@@ -32,6 +32,7 @@ public class MemberPersistenceMapper {
                 .firstPriority(member.getFirstPriority())
                 .secondPriority(member.getSecondPriority())
                 .thirdPriority(member.getThirdPriority())
+                .interestDistrict(member.getInterestDistrict())
                 .build();
     }
 
@@ -59,6 +60,7 @@ public class MemberPersistenceMapper {
                 .firstPriority(memberEntity.getFirstPriority())
                 .secondPriority(memberEntity.getSecondPriority())
                 .thirdPriority(memberEntity.getThirdPriority())
+                .interestDistrict(memberEntity.getInterestDistrict())
                 .build();
     }
 }

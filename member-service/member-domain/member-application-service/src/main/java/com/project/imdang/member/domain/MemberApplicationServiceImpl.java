@@ -61,7 +61,7 @@ public class MemberApplicationServiceImpl implements MemberApplicationService {
     }
 
     @Override
-    public Boolean condition(ConditionCommand conditionCommand, PriorityCommand priorityCommand) {
-        return conditionCommandHandler.condition(conditionCommand, priorityCommand);
+    public Boolean condition(ConditionCommand conditionCommand, PriorityCommand priorityCommand, InterestDistrictCommand interestDistrictCommand) {
+        return conditionCommandHandler.condition(conditionCommand, priorityCommand, interestDistrictCommand);
     }
 }

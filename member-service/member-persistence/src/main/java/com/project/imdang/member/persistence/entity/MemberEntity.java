@@ -66,6 +66,8 @@ public class MemberEntity {
     private String secondPriority;
     private String thirdPriority;
 
+    private String interestDistrict;
+
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name = "from", column = @Column(name = "penalty_from")),

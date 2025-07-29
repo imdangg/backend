@@ -17,5 +17,5 @@ public interface MemberApplicationService {
     Boolean accuseMember(MemberId memberId);
     Boolean updateMember(MemberId memberId);
 
-    Boolean condition(ConditionCommand conditionCommand, PriorityCommand priorityCommand);
+    Boolean condition(ConditionCommand conditionCommand, PriorityCommand priorityCommand, InterestDistrictCommand interestDistrictCommand);
 }

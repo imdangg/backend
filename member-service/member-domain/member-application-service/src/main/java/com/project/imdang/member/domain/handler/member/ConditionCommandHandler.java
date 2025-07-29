@@ -4,10 +4,7 @@ import com.project.imdang.common.domain.exception.DomainException;
 import com.project.imdang.common.domain.valueobject.MemberId;
 import com.project.imdang.common.domain.valueobject.Purpose;
 import com.project.imdang.member.domain.MemberDomainService;
-import com.project.imdang.member.domain.dto.member.ActualLivingConditionCommand;
-import com.project.imdang.member.domain.dto.member.ConditionCommand;
-import com.project.imdang.member.domain.dto.member.GapInvestmentConditionCommand;
-import com.project.imdang.member.domain.dto.member.PriorityCommand;
+import com.project.imdang.member.domain.dto.member.*;
 import com.project.imdang.member.domain.entity.ActualLiving;
 import com.project.imdang.member.domain.entity.GapInvestment;
 import com.project.imdang.member.domain.entity.Member;
@@ -29,19 +26,24 @@ public class ConditionCommandHandler {
     private final ConditionRepository conditionRepository;
 
     @Transactional
-    public Boolean condition(ConditionCommand conditionCommand, PriorityCommand priorityCommand) {
+    public Boolean condition(ConditionCommand conditionCommand, PriorityCommand priorityCommand, InterestDistrictCommand interestDistrictCommand) {
         // 1. 토큰에서 유저 정보 추출 후 검증
         final MemberId memberId = conditionCommand.getMemberId();
         Member member = memberHelper.get(memberId);
 
         // 2. 우선순위 저장
         member = memberDomainService.setPriority(member, priorityCommand.getFirstPriority(), priorityCommand.getSecondPriority(), priorityCommand.getThirdPriority());
-        // 3. 조건 정보 저장
-        //3-1. 공통 조건 저장
+
+        // 3. 관심동네 저장
+        if (interestDistrictCommand.getInterestDistrict() != null) {
+            member = memberDomainService.setInterestDistrict(member, interestDistrictCommand.getInterestDistrict());
+        }
+
+        //4-1. 공통 조건 저장
         member = memberDomainService.setCommonCondition(member, conditionCommand.getPurpose(), conditionCommand.getBudget(), conditionCommand.getMonthIncome());
         memberHelper.save(member);
 
-        //3-2.실거주인 경우
+        //4-2. 실거주인 경우
         if (conditionCommand.getPurpose() == Purpose.LIVING) {
             ActualLivingConditionCommand actualLivingConditionCommand = (ActualLivingConditionCommand) conditionCommand;
             ActualLiving actualLiving = memberDomainService.setActualLivingCondition(
@@ -56,7 +58,7 @@ public class ConditionCommandHandler {
             );
             saveAC(actualLiving);
         }
-        //갭투자인 경우
+        //4-2. 갭투자인 경우
         else if (conditionCommand.getPurpose() == Purpose.GAP_INVESTMENT){
             GapInvestmentConditionCommand gapInvestmentConditionCommand = (GapInvestmentConditionCommand) conditionCommand;
             GapInvestment gapInvestment = memberDomainService.setGapInvestmentCondition(
