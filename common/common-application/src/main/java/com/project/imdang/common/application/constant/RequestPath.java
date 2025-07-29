@@ -60,7 +60,7 @@ public final class RequestPath {
     public static final String LIST_MEMBER = MEMBER;
 
     public static final String JOIN_MEMBER = MEMBER + "/join";
-    public static final String CONDITION_MEMBER = MEMBER + "/condition";
+    public static final String CONDITION_MEMBER = MEMBER + "/onboarding";
     public static final String WITHDRAW_MEMBER = MEMBER + "/withdraw";
 
     // ******************* terms *******************
