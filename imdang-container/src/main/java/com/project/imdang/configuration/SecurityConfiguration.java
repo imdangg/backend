@@ -93,7 +93,7 @@ public class SecurityConfiguration {
                 .addFilterBefore(new OAuthAuthenticationFilter(authenticationManager(), objectMapper), BasicAuthenticationFilter.class)
                 .addFilterBefore(new CachingFilter(), SecurityContextHolderFilter.class)
                 .authorizeHttpRequests(registry -> registry
-                        .requestMatchers(LOGIN, "/login-test", REISSUE, SWAGGER_RESOURCE, SWAGGER_UI, SWAGGER_DOC).permitAll()
+                        .requestMatchers(LOGIN,  REISSUE, SWAGGER_RESOURCE, SWAGGER_UI, SWAGGER_DOC).permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(exceptionHandlingConfigurer -> exceptionHandlingConfigurer
                                 .authenticationEntryPoint(customAuthenticationEntryPoint)
