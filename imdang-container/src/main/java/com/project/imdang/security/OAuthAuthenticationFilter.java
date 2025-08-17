@@ -57,7 +57,7 @@ public class OAuthAuthenticationFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             e.printStackTrace();
 
-            ApiResponse<Void> error = ApiResponse.error(ErrorCode.FORBIDDEN);
+            ApiResponse<Void> error = ApiResponse.error(ErrorCode.FORBIDDEN, e.getMessage());
             Response.json(response, HttpServletResponse.SC_FORBIDDEN, objectMapper.writeValueAsString(error));
         }
     }
